@@ -28,12 +28,16 @@ export default function Vergleich() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".verg-head", start: "top 82%" },
       });
-      gsap.from(".verg-table", {
-        y: 34,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".verg-table", start: "top 84%" },
+      // Only the layout that's visible at this breakpoint is animated; trigger
+      // off the section root since the hidden layout has no measurable box.
+      gsap.utils.toArray<HTMLElement>(".verg-table").forEach((el) => {
+        gsap.from(el, {
+          y: 34,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
       });
     },
     { scope: root },
@@ -49,7 +53,8 @@ export default function Vergleich() {
           subtitle="Kein Angriff auf andere Agenturen — sondern die Punkte, an denen Kunden uns immer wieder sagen, dass es bei ihnen vorher anders war."
         />
 
-        <div className="verg-table mt-14 overflow-x-auto no-scrollbar">
+        {/* Table — md and up */}
+        <div className="verg-table mt-14 hidden overflow-x-auto no-scrollbar md:block">
           <div className="min-w-[760px] overflow-hidden rounded-[20px] border border-line bg-white">
             {/* header */}
             <div className="flex items-center gap-6 border-b border-line bg-[#f6f5f3] px-7 py-[18px] font-mono text-[11px] font-medium uppercase tracking-[0.9px]">
@@ -78,6 +83,42 @@ export default function Vergleich() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Stacked cards — mobile */}
+        <div className="verg-table mt-12 flex flex-col gap-3.5 md:hidden">
+          {ROWS.map((r) => (
+            <div
+              key={r.c}
+              className="overflow-hidden rounded-[18px] border border-line bg-white"
+            >
+              <p className="border-b border-[#eeedea] bg-[#f6f5f3] px-5 py-3 text-[15px] font-medium tracking-[-0.1px] text-ink">
+                {r.c}
+              </p>
+              <div className="flex items-start gap-2.5 px-5 py-3.5">
+                <X className="mt-0.5 size-[17px] shrink-0 text-[#c1bdb6]" strokeWidth={2} />
+                <span className="flex-1">
+                  <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.9px] text-[#a8a49d]">
+                    Üblich am Markt
+                  </span>
+                  <span className="mt-0.5 block text-[14px] leading-[21px] text-[#7d7973]">
+                    {r.a}
+                  </span>
+                </span>
+              </div>
+              <div className="flex items-start gap-2.5 border-t border-[#eeedea] bg-[#fbf6ee] px-5 py-3.5">
+                <Check className="mt-0.5 size-[17px] shrink-0 text-[#94713f]" strokeWidth={2.4} />
+                <span className="flex-1">
+                  <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.9px] text-[#94713f]">
+                    Bei TyloTech
+                  </span>
+                  <span className="mt-0.5 block text-[14px] leading-[21px] text-ink">
+                    {r.b}
+                  </span>
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </Container>
     </section>

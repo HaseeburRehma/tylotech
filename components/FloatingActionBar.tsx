@@ -83,10 +83,10 @@ export default function FloatingActionBar() {
         {/* Divider */}
         <span className="hidden h-6 w-px bg-[#01475c] lg:block" />
 
-        {/* CTA */}
+        {/* CTA — hidden on the smallest screens where the nav CTA already shows */}
         <Link
           href="#kontakt"
-          className="flex h-11 items-center justify-center rounded-full bg-accent px-5 text-[14.5px] font-medium text-white transition-colors hover:bg-[#c79a5c]"
+          className="hidden h-11 items-center justify-center rounded-full bg-accent px-5 text-[14.5px] font-medium text-white transition-colors hover:bg-[#c79a5c] sm:flex"
         >
           Jetzt anfragen
         </Link>
