@@ -96,7 +96,7 @@ function LocalCard() {
         {RANKS.map((r) => (
           <div
             key={r.kw}
-            className="grid grid-cols-[1fr_auto_64px] items-center gap-3 border-b border-line/70 py-3 text-[13px]"
+            className="rank-row grid grid-cols-[1fr_auto_64px] items-center gap-3 border-b border-line/70 py-3 text-[13px]"
           >
             <span className="truncate text-ink/80">{r.kw}</span>
             <span className="font-semibold text-ink">{r.pos}</span>
@@ -174,20 +174,26 @@ const SNIPPETS = [
 function ContentCard() {
   return (
     <Card title="Inhalte in Ihrer Sprache" subtitle="nicht aus der Schablone">
-      <div className="flex items-center gap-2 rounded-xl border border-line bg-page px-3 py-2.5">
-        <span className="flex-1 text-[13px] text-ink/50">
+      <div className="content-block flex items-center gap-2 rounded-xl border border-line bg-page px-3 py-2.5">
+        <span
+          className="type-text flex-1 whitespace-nowrap text-[13px] text-ink/50"
+          data-text="Anzeigentext, Ton: sachlich"
+        >
           Anzeigentext, Ton: sachlich
         </span>
         <button
           aria-label="Generieren"
-          className="grid size-7 place-items-center rounded-lg bg-accent text-ink"
+          className="grid size-7 shrink-0 place-items-center rounded-lg bg-accent text-ink"
         >
           <ArrowRight className="size-4" />
         </button>
       </div>
       <div className="mt-3 space-y-2">
         {SNIPPETS.map((s) => (
-          <div key={s.label} className="rounded-xl border border-line px-3 py-2.5">
+          <div
+            key={s.label}
+            className="content-block rounded-xl border border-line px-3 py-2.5"
+          >
             <p className="text-[9px] font-medium uppercase tracking-[0.1em] text-ink/40">
               {s.label}
             </p>
@@ -233,7 +239,7 @@ function IntegrationsCard() {
         {TOOLS.map((slug) => (
           <div
             key={slug}
-            className="grid aspect-square place-items-center rounded-[10px] border border-line bg-page"
+            className="tool-tile grid aspect-square place-items-center rounded-[10px] border border-line bg-page transition-transform duration-200 hover:-translate-y-0.5 hover:border-ink/20"
           >
             <BrandIcon slug={slug} size={18} />
           </div>
@@ -298,7 +304,7 @@ function ReachCard() {
         {TAGS.map((t) => (
           <span
             key={t}
-            className="rounded-full border border-line px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.06em] text-ink/60"
+            className="reach-tag rounded-full border border-line px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.06em] text-ink/60"
           >
             {t}
           </span>
@@ -388,6 +394,68 @@ export default function Praxis() {
           },
         });
       }
+
+      // local-ranking rows slide in before their trend bars fill
+      gsap.from(".rank-row", {
+        x: -14,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.out",
+        stagger: 0.08,
+        scrollTrigger: st,
+      });
+
+      // content card — input + snippets rise in, then the prompt types itself
+      gsap.from(".content-block", {
+        y: 16,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power3.out",
+        stagger: 0.12,
+        scrollTrigger: st,
+      });
+      const typeEl = root.current?.querySelector<HTMLElement>(".type-text");
+      if (typeEl) {
+        const full = typeEl.dataset.text ?? typeEl.textContent ?? "";
+        const obj = { i: 0 };
+        gsap.to(obj, {
+          i: full.length,
+          duration: 1.1,
+          ease: "none",
+          delay: 0.35,
+          scrollTrigger: st,
+          onStart: () => {
+            typeEl.textContent = "";
+          },
+          onUpdate: () => {
+            typeEl.textContent = full.slice(0, Math.round(obj.i));
+          },
+          onComplete: () => {
+            typeEl.textContent = full;
+          },
+        });
+      }
+
+      // integration tiles pop in, wave from top-left
+      gsap.from(".tool-tile", {
+        scale: 0.5,
+        opacity: 0,
+        duration: 0.45,
+        ease: "back.out(1.7)",
+        stagger: { each: 0.028, from: "start", grid: "auto" },
+        scrollTrigger: st,
+      });
+
+      // reach tags spring in one after another
+      gsap.from(".reach-tag", {
+        scale: 0.7,
+        y: 10,
+        opacity: 0,
+        duration: 0.5,
+        ease: "back.out(1.6)",
+        stagger: 0.07,
+        scrollTrigger: st,
+      });
 
       // dotted globe — materialize from centre, then a soft continuous twinkle
       gsap.from(".dome-dot", {
