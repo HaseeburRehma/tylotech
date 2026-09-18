@@ -43,6 +43,28 @@ export default function Team() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".team-head", start: "top 82%" },
       });
+
+      // Avatar selector rises in as a unit (its buttons carry an opacity class,
+      // so animating the row container keeps GSAP off that conflict).
+      gsap.from(".team-avatars", {
+        y: 24,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        clearProps: "opacity,transform",
+        scrollTrigger: { trigger: ".team-avatars", start: "top 92%" },
+      });
+
+      // The whole card strip rises into view (animating the scroller, not the
+      // cards, keeps the active-card scale transform untouched).
+      gsap.from(".team-carousel", {
+        y: 48,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        clearProps: "transform",
+        scrollTrigger: { trigger: ".team-carousel", start: "top 88%" },
+      });
     },
     { scope: root },
   );
@@ -63,13 +85,13 @@ export default function Team() {
         </div>
 
         {/* Avatar selector */}
-        <div className="mt-10 flex justify-center gap-3.5">
+        <div className="team-avatars mt-10 flex justify-center gap-3.5">
           {MEMBERS.map((m, i) => (
             <button
               key={m.name}
               onClick={() => go(i)}
               aria-label={m.name}
-              className={`size-12 overflow-hidden rounded-full border-2 transition-all ${
+              className={`team-avatar size-12 overflow-hidden rounded-full border-2 transition-[border-color,opacity] ${
                 active === i
                   ? "border-accent"
                   : "border-transparent opacity-55 hover:opacity-100"
@@ -85,7 +107,7 @@ export default function Team() {
       {/* Carousel */}
       <div
         ref={scroller}
-        className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto px-[calc(50%-150px)] pb-4"
+        className="team-carousel no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto px-[calc(50%-150px)] pb-4"
       >
         {MEMBERS.map((m, i) => (
           <div

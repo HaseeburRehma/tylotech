@@ -44,6 +44,16 @@ export default function Zahlen() {
         scrollTrigger: { trigger: ".zahlen-grid", start: "top 82%" },
       });
 
+      // Trust tags spring in after the stat cards land
+      gsap.from(".zahlen-tag", {
+        y: 12,
+        opacity: 0,
+        duration: 0.5,
+        ease: "back.out(1.6)",
+        stagger: 0.1,
+        scrollTrigger: { trigger: ".zahlen-tags", start: "top 90%" },
+      });
+
       // Count-up
       cards.forEach((card, i) => {
         const el = card.querySelector<HTMLElement>(".zahlen-num");
@@ -101,9 +111,9 @@ export default function Zahlen() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[14px] text-white/70">
+        <div className="zahlen-tags mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[14px] text-white/70">
           {TAGS.map((t) => (
-            <span key={t} className="flex items-center gap-2">
+            <span key={t} className="zahlen-tag flex items-center gap-2">
               <span className="size-1.5 rounded-full bg-accent" />
               {t}
             </span>

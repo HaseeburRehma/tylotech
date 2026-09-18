@@ -34,6 +34,30 @@ export default function Leistungen() {
         stagger: 0.08,
         scrollTrigger: { trigger: ".leist-grid", start: "top 82%" },
       });
+
+      // Illustrations spring in, then settle into a slow idle float. The float
+      // lives on the <img>; the hover tilt lives on its wrapper, so they never
+      // fight over the same transform.
+      const illus = gsap.utils.toArray<HTMLElement>(".leist-illu");
+      gsap.from(illus, {
+        scale: 0.72,
+        rotate: -6,
+        opacity: 0,
+        duration: 0.7,
+        ease: "back.out(1.6)",
+        stagger: 0.09,
+        scrollTrigger: { trigger: ".leist-grid", start: "top 80%" },
+      });
+      illus.forEach((el, i) => {
+        gsap.to(el, {
+          y: -9,
+          duration: 2.6 + (i % 3) * 0.35,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true,
+          delay: 1 + i * 0.12,
+        });
+      });
     },
     { scope: root },
   );
@@ -58,14 +82,16 @@ export default function Leistungen() {
               key={s.title}
               className="leist-cell group flex min-h-[420px] flex-col justify-between bg-page px-10 pb-11 pt-12 transition-colors hover:bg-white"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={s.img}
-                alt={s.title}
-                width={200}
-                height={200}
-                className="size-[200px] object-contain transition-transform duration-300 ease-out group-hover:-translate-y-1.5 group-hover:rotate-2"
-              />
+              <div className="transition-transform duration-300 ease-out group-hover:-translate-y-1.5 group-hover:rotate-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  width={200}
+                  height={200}
+                  className="leist-illu size-[200px] object-contain"
+                />
+              </div>
               <div>
                 <h3 className="font-display text-[32px] font-semibold leading-[38px] tracking-[-0.8px] text-ink">
                   {s.title}
