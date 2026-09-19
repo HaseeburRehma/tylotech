@@ -40,7 +40,7 @@ function Card({
 
 function Tile({ children }: { children: React.ReactNode }) {
   return (
-    <div className="chan-tile grid aspect-square place-items-center rounded-[14px] border border-line bg-page transition-transform duration-200 hover:-translate-y-0.5 hover:border-ink/20">
+    <div className="chan-tile grid aspect-square place-items-center rounded-[14px] border border-line bg-page transition-[border-color,box-shadow] duration-200 hover:border-ink/20 hover:shadow-[0_6px_16px_-8px_rgba(15,14,13,0.25)]">
       {children}
     </div>
   );
@@ -239,7 +239,7 @@ function IntegrationsCard() {
         {TOOLS.map((slug) => (
           <div
             key={slug}
-            className="tool-tile grid aspect-square place-items-center rounded-[10px] border border-line bg-page transition-transform duration-200 hover:-translate-y-0.5 hover:border-ink/20"
+            className="tool-tile grid aspect-square place-items-center rounded-[10px] border border-line bg-page transition-[border-color,box-shadow] duration-200 hover:border-ink/20 hover:shadow-[0_6px_16px_-8px_rgba(15,14,13,0.25)]"
           >
             <BrandIcon slug={slug} size={18} />
           </div>
@@ -342,16 +342,21 @@ export default function Praxis() {
         scrollTrigger: { trigger: ".praxis-grid", start: "top 78%" },
       });
 
-      const st = { trigger: ".praxis-grid", start: "top 70%" };
+      // Fresh trigger config per tween — sharing one object across several
+      // ScrollTriggers lets GSAP mutate it and cross-wire them.
+      const st = () => ({ trigger: ".praxis-grid", start: "top 70%" });
 
-      // channel tiles pop in
+      // channel tiles pop in (immediateRender:false + clearProps so a tile is
+      // never left frozen at its shrunken start scale)
       gsap.from(".chan-tile", {
         scale: 0.55,
         opacity: 0,
         duration: 0.5,
         ease: "back.out(1.7)",
         stagger: { each: 0.045, from: "start" },
-        scrollTrigger: st,
+        immediateRender: false,
+        clearProps: "transform",
+        scrollTrigger: st(),
       });
 
       // stat bar chart grows up
@@ -363,7 +368,7 @@ export default function Praxis() {
           duration: 0.9,
           ease: "power3.out",
           stagger: 0.05,
-          scrollTrigger: st,
+          scrollTrigger: st(),
         },
       );
 
@@ -376,7 +381,7 @@ export default function Praxis() {
           duration: 1,
           ease: "power3.out",
           stagger: 0.09,
-          scrollTrigger: st,
+          scrollTrigger: st(),
         },
       );
 
@@ -388,7 +393,7 @@ export default function Praxis() {
           n: 63,
           duration: 1.6,
           ease: "power2.out",
-          scrollTrigger: st,
+          scrollTrigger: st(),
           onUpdate: () => {
             numEl.textContent = `+${Math.round(obj.n)} %`;
           },
@@ -402,7 +407,7 @@ export default function Praxis() {
         duration: 0.5,
         ease: "power3.out",
         stagger: 0.08,
-        scrollTrigger: st,
+        scrollTrigger: st(),
       });
 
       // content card — input + snippets rise in, then the prompt types itself
@@ -412,7 +417,7 @@ export default function Praxis() {
         duration: 0.5,
         ease: "power3.out",
         stagger: 0.12,
-        scrollTrigger: st,
+        scrollTrigger: st(),
       });
       const typeEl = root.current?.querySelector<HTMLElement>(".type-text");
       if (typeEl) {
@@ -423,7 +428,7 @@ export default function Praxis() {
           duration: 1.1,
           ease: "none",
           delay: 0.35,
-          scrollTrigger: st,
+          scrollTrigger: st(),
           onStart: () => {
             typeEl.textContent = "";
           },
@@ -443,7 +448,9 @@ export default function Praxis() {
         duration: 0.45,
         ease: "back.out(1.7)",
         stagger: { each: 0.028, from: "start", grid: "auto" },
-        scrollTrigger: st,
+        immediateRender: false,
+        clearProps: "transform",
+        scrollTrigger: st(),
       });
 
       // reach tags spring in one after another
@@ -454,7 +461,7 @@ export default function Praxis() {
         duration: 0.5,
         ease: "back.out(1.6)",
         stagger: 0.07,
-        scrollTrigger: st,
+        scrollTrigger: st(),
       });
 
       // dotted globe — materialize from centre, then a soft continuous twinkle
@@ -464,7 +471,7 @@ export default function Praxis() {
         duration: 0.6,
         ease: "back.out(2)",
         stagger: { each: 0.008, from: "center", grid: "auto" },
-        scrollTrigger: st,
+        scrollTrigger: st(),
       });
       gsap.to(".dome-dot", {
         opacity: "random(0.2, 0.95)",
