@@ -40,7 +40,7 @@ function Card({
 
 function Tile({ children }: { children: React.ReactNode }) {
   return (
-    <div className="chan-tile group grid aspect-square cursor-pointer place-items-center rounded-[14px] border border-line bg-page transition-[border-color,box-shadow] duration-200 [&_svg]:transition-transform [&_svg]:duration-200 hover:border-ink/20 hover:shadow-[0_6px_16px_-8px_rgba(15,14,13,0.25)] group-hover:[&_svg]:scale-110 hover:[&_svg]:scale-110">
+    <div className="chan-tile group grid aspect-square cursor-pointer place-items-center rounded-[14px] border border-line bg-page transition-[box-shadow,background-color,transform] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_12px_26px_-10px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.16] active:translate-y-0 active:scale-95">
       {children}
     </div>
   );
@@ -192,12 +192,16 @@ function ContentCard() {
         {SNIPPETS.map((s) => (
           <div
             key={s.label}
-            className="content-block rounded-xl border border-line px-3 py-2.5"
+            className="content-block group/snip relative cursor-pointer overflow-hidden rounded-xl border border-line px-3 py-2.5 transition-[box-shadow,background-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:bg-[rgba(209,170,113,0.06)] hover:shadow-[0_10px_22px_-12px_rgba(209,170,113,0.6),inset_0_0_0_1.5px_rgba(209,170,113,0.45)]"
           >
-            <p className="text-[9px] font-medium uppercase tracking-[0.1em] text-ink/40">
+            {/* accent bar that grows on hover */}
+            <span className="pointer-events-none absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 bg-accent transition-transform duration-300 ease-out group-hover/snip:scale-y-100" />
+            <p className="text-[9px] font-medium uppercase tracking-[0.1em] text-ink/40 transition-colors duration-200 group-hover/snip:text-[#94713f]">
               {s.label}
             </p>
-            <p className="mt-1 text-[13px] leading-snug text-ink/80">{s.text}</p>
+            <p className="mt-1 text-[13px] leading-snug text-ink/80 transition-colors duration-200 group-hover/snip:text-ink">
+              {s.text}
+            </p>
           </div>
         ))}
       </div>
@@ -239,7 +243,7 @@ function IntegrationsCard() {
         {TOOLS.map((slug) => (
           <div
             key={slug}
-            className="tool-tile grid aspect-square cursor-pointer place-items-center rounded-[10px] border border-line bg-page transition-[border-color,box-shadow] duration-200 [&_svg]:transition-transform [&_svg]:duration-200 hover:border-ink/20 hover:shadow-[0_6px_16px_-8px_rgba(15,14,13,0.25)] hover:[&_svg]:scale-110"
+            className="tool-tile group grid aspect-square cursor-pointer place-items-center rounded-[10px] border border-line bg-page transition-[box-shadow,background-color,transform] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_10px_22px_-9px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.18] active:translate-y-0 active:scale-95"
           >
             <BrandIcon slug={slug} size={18} />
           </div>
@@ -261,9 +265,16 @@ const TAGS = [
   "Prozesse",
 ];
 
-/* Animated rotating half-globe of dots (canvas), with a highlighted meridian
-   that swings to the active category. */
-function DomeCanvas({ active }: { active: number }) {
+/* Animated rotating half-globe of dots (canvas): a highlighted meridian sweeps
+   to the active category, a glowing marker rides the rim, and a click sends a
+   bright ripple washing up the dome. */
+function DomeCanvas({
+  active,
+  pulse,
+}: {
+  active: number;
+  pulse: { current: number };
+}) {
   const ref = useRef<HTMLCanvasElement>(null);
   const activeRef = useRef(active);
   activeRef.current = active;
@@ -275,14 +286,14 @@ function DomeCanvas({ active }: { active: number }) {
     if (!ctx) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const N = 520;
+    const N = 900;
     const golden = Math.PI * (3 - Math.sqrt(5));
     const pts = Array.from({ length: N }, (_, i) => {
       const y = 1 - (i / (N - 1)) * 2;
       const r = Math.sqrt(1 - y * y);
       const th = golden * i;
-      // azimuth of each point, used to highlight the active category slice
-      return { x: Math.cos(th) * r, y, z: Math.sin(th) * r, az: Math.atan2(Math.sin(th) * r, Math.cos(th) * r) };
+      // az = atan2(z, x) = th (mod 2π) — used to pick out the active slice
+      return { x: Math.cos(th) * r, y, z: Math.sin(th) * r, az: th % (Math.PI * 2) };
     });
 
     let dpr = 1;
@@ -297,50 +308,153 @@ function DomeCanvas({ active }: { active: number }) {
     ro.observe(canvas);
 
     let angle = 0;
-    let targetHi = (active / TAGS.length) * Math.PI * 2;
-    let hi = targetHi;
+    let hi = (active / TAGS.length) * Math.PI * 2;
     let raf = 0;
+    const PULSE_MS = 850;
+
+    // project a sphere point (own frame) to screen — shared by dots + arcs
+    const project = (
+      x: number,
+      y: number,
+      z: number,
+      cosA: number,
+      sinA: number,
+      cx: number,
+      cy: number,
+      R: number,
+    ) => {
+      const x1 = x * cosA - z * sinA;
+      const z1 = x * sinA + z * cosA;
+      const sx = cx + x1 * R;
+      // slight z-lift bends the flat rim into a shallow ellipse (fake tilt)
+      const sy = cy - y * R * 0.94 + z1 * R * 0.06;
+      return { sx, sy, z1 };
+    };
 
     const draw = () => {
       const w = canvas.width;
       const h = canvas.height;
       ctx.clearRect(0, 0, w, h);
       const cx = w / 2;
-      const cy = h * 0.96;
-      const R = Math.min(w * 0.5, h * 0.98);
+      const cy = h * 0.97;
+      const R = Math.min(w * 0.47, h * 0.95);
       const cosA = Math.cos(angle);
       const sinA = Math.sin(angle);
 
-      targetHi = (activeRef.current / TAGS.length) * Math.PI * 2;
-      // shortest-path ease toward the active meridian
+      const targetHi = (activeRef.current / TAGS.length) * Math.PI * 2;
       let diff = targetHi - hi;
       while (diff > Math.PI) diff -= Math.PI * 2;
       while (diff < -Math.PI) diff += Math.PI * 2;
-      hi += diff * 0.08;
+      hi += diff * 0.1;
 
+      const since = performance.now() - pulse.current;
+      const pulsing = since >= 0 && since < PULSE_MS;
+      const pp = pulsing ? since / PULSE_MS : 1; // 0 → 1 ripple front (by height)
+
+      // faint grounding rim ellipse
+      ctx.beginPath();
+      for (let i = 0; i <= 64; i++) {
+        const th = (i / 64) * Math.PI * 2;
+        const { sx, sy } = project(
+          Math.cos(th),
+          0.02,
+          Math.sin(th),
+          cosA,
+          sinA,
+          cx,
+          cy,
+          R,
+        );
+        i === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy);
+      }
+      ctx.strokeStyle = "rgba(209,170,113,0.16)";
+      ctx.lineWidth = 1 * dpr;
+      ctx.stroke();
+
+      // dots
       for (const p of pts) {
-        if (p.y < -0.04) continue; // upper hemisphere → dome
-        const x1 = p.x * cosA - p.z * sinA;
-        const z1 = p.x * sinA + p.z * cosA;
-        const sx = cx + x1 * R;
-        const sy = cy - p.y * R * 0.92;
-        const d = (z1 + 1) / 2; // depth 0..1
-        // is this dot near the active meridian (after rotation)?
-        let da = (p.az + angle) - hi;
+        if (p.y < -0.06) continue; // upper hemisphere → dome
+        const { sx, sy, z1 } = project(p.x, p.y, p.z, cosA, sinA, cx, cy, R);
+        const d = (z1 + 1) / 2; // depth 0 (back) → 1 (front)
+
+        let da = p.az + angle - hi;
         while (da > Math.PI) da -= Math.PI * 2;
         while (da < -Math.PI) da += Math.PI * 2;
-        const near = Math.max(0, 1 - Math.abs(da) / 0.5);
-        const size = (0.5 + d * 1.3 + near * 0.9) * dpr;
-        const alpha = 0.16 + d * 0.6 + near * 0.35;
+        const near = Math.max(0, 1 - Math.abs(da) / 0.42);
+
+        // ripple: a bright band travelling up the dome by height on click
+        let ring = 0;
+        if (pulsing) {
+          ring = Math.max(0, 1 - Math.abs(p.y - pp) * 3.2) * (1 - pp * 0.85);
+        }
+
+        const size = (0.5 + d * 1.35 + near * 1.0 + ring * 1.4) * dpr;
+        const alpha = Math.min(1, 0.14 + d * 0.55 + near * 0.42 + ring * 0.55);
+        const lift = Math.min(1, near + ring); // colour warmth
+        const rr = 205 + Math.round(lift * 35);
+        const gg = 168 + Math.round(lift * 45);
+        const bb = 112 + Math.round(lift * 70);
         ctx.beginPath();
         ctx.arc(sx, sy, size, 0, Math.PI * 2);
-        // muted gold → bright gold on the active slice
-        const rr = 209 + Math.round(near * 30);
-        const gg = 170 + Math.round(near * 40);
-        const bb = 113 + Math.round(near * 60);
-        ctx.fillStyle = `rgba(${rr},${gg},${bb},${Math.min(1, alpha)})`;
+        ctx.fillStyle = `rgba(${rr},${gg},${bb},${alpha})`;
         ctx.fill();
       }
+
+      // bright active meridian: pole → front rim at screen-azimuth `hi`
+      const alphaAz = hi - angle; // own-frame azimuth so (az + angle) = hi
+      const marker = project(
+        Math.cos(0.07) * Math.cos(alphaAz),
+        Math.sin(0.07),
+        Math.cos(0.07) * Math.sin(alphaAz),
+        cosA,
+        sinA,
+        cx,
+        cy,
+        R,
+      );
+      const front = (marker.z1 + 1) / 2; // 0 behind → 1 in front
+      const arcA = 0.25 + 0.7 * front;
+      ctx.beginPath();
+      for (let i = 0; i <= 28; i++) {
+        const psi = (i / 28) * (Math.PI / 2) * 0.99;
+        const { sx, sy } = project(
+          Math.cos(psi) * Math.cos(alphaAz),
+          Math.sin(psi),
+          Math.cos(psi) * Math.sin(alphaAz),
+          cosA,
+          sinA,
+          cx,
+          cy,
+          R,
+        );
+        i === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy);
+      }
+      ctx.strokeStyle = `rgba(214,182,130,${arcA})`;
+      ctx.lineWidth = 1.5 * dpr;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      // glowing marker at the rim end of the active meridian
+      const pulseBoost = pulsing ? 1 - pp : 0;
+      const mr = (3.4 + pulseBoost * 3) * dpr;
+      const grad = ctx.createRadialGradient(
+        marker.sx,
+        marker.sy,
+        0,
+        marker.sx,
+        marker.sy,
+        mr * 3,
+      );
+      grad.addColorStop(0, `rgba(224,190,132,${0.55 * arcA + pulseBoost * 0.4})`);
+      grad.addColorStop(1, "rgba(224,190,132,0)");
+      ctx.beginPath();
+      ctx.arc(marker.sx, marker.sy, mr * 3, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(marker.sx, marker.sy, mr, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(230,198,140,${arcA})`;
+      ctx.fill();
 
       if (!reduce) angle += 0.005;
       raf = requestAnimationFrame(draw);
@@ -354,11 +468,24 @@ function DomeCanvas({ active }: { active: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <canvas ref={ref} className="h-[132px] w-full" aria-hidden />;
+  return <canvas ref={ref} className="h-[140px] w-full" aria-hidden />;
 }
 
 function ReachCard() {
   const [active, setActive] = useState(1);
+  const pulse = useRef(0);
+
+  const pick = (i: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    setActive(i);
+    pulse.current = performance.now(); // fire the dome ripple
+    // springy pop on the clicked tag
+    gsap.fromTo(
+      e.currentTarget,
+      { scale: 0.84 },
+      { scale: 1, duration: 0.55, ease: "elastic.out(1, 0.5)", clearProps: "transform" },
+    );
+  };
+
   return (
     <Card title="Digitalisierung berührt alles" subtitle="nicht nur das Marketing">
       <div className="flex flex-wrap gap-2">
@@ -366,11 +493,11 @@ function ReachCard() {
           <button
             key={t}
             type="button"
-            onClick={() => setActive(i)}
-            className={`reach-tag rounded-full border px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.06em] transition-colors ${
+            onClick={(e) => pick(i, e)}
+            className={`reach-tag rounded-full border px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.06em] transition-colors duration-200 ${
               active === i
-                ? "border-accent bg-[rgba(209,170,113,0.14)] text-[#94713f]"
-                : "border-line text-ink/60 hover:border-ink/25 hover:text-ink/80"
+                ? "border-accent bg-[rgba(209,170,113,0.14)] text-[#94713f] shadow-[0_4px_14px_-6px_rgba(209,170,113,0.7)]"
+                : "border-line text-ink/60 hover:border-accent/40 hover:bg-[rgba(209,170,113,0.05)] hover:text-ink/80"
             }`}
           >
             {t}
@@ -378,7 +505,7 @@ function ReachCard() {
         ))}
       </div>
       <div className="mt-1">
-        <DomeCanvas active={active} />
+        <DomeCanvas active={active} pulse={pulse} />
       </div>
     </Card>
   );
@@ -484,6 +611,7 @@ export default function Praxis() {
         duration: 0.5,
         ease: "power3.out",
         stagger: 0.12,
+        clearProps: "transform",
         scrollTrigger: st(),
       });
       const typeEl = root.current?.querySelector<HTMLElement>(".type-text");
