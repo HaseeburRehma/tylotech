@@ -97,7 +97,7 @@ export default function FAQ() {
             return (
               <div
                 key={item.q}
-                className={`faq-item rounded-[18px] border bg-white transition-all ${
+                className={`faq-item rounded-[18px] border bg-white transition-[border-color,box-shadow] duration-200 ${
                   on
                     ? "border-[#cbc8c2] shadow-[0_2px_5px_-1px_rgba(15,14,13,0.05)]"
                     : "border-line"
