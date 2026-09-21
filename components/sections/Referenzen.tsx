@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
 import { gsap, useGSAP } from "@/lib/gsap";
@@ -94,6 +95,15 @@ function Media({ media }: { media: Media }) {
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
+  const scroller = useRef<HTMLDivElement>(null);
+
+  const slide = (dir: 1 | -1) => {
+    const el = scroller.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>(".ref-card");
+    const step = card ? card.offsetWidth + 24 : el.clientWidth * 0.9;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
 
   useGSAP(
     () => {
@@ -130,19 +140,42 @@ export default function Referenzen() {
   return (
     <section id="referenzen" ref={root} className="bg-[#001620] py-24 text-white">
       <Container>
-        <SectionHeading
-          dark
-          className="ref-head"
-          eyebrow="Referenzen"
-          title="Arbeiten, die weiterlaufen, wenn wir nicht mehr im Raum sind."
-          subtitle="Drei Projekte aus der Zusammenarbeit mit Unternehmen, die Sie im Zweifel selbst anrufen können."
-        />
+        <div className="flex items-end justify-between gap-6">
+          <SectionHeading
+            dark
+            className="ref-head"
+            eyebrow="Referenzen"
+            title="Arbeiten, die weiterlaufen, wenn wir nicht mehr im Raum sind."
+            subtitle="Drei Projekte aus der Zusammenarbeit mit Unternehmen, die Sie im Zweifel selbst anrufen können."
+          />
+          <div className="hidden shrink-0 gap-2.5 lg:flex">
+            <button
+              type="button"
+              aria-label="Zurück"
+              onClick={() => slide(-1)}
+              className="grid size-11 place-items-center rounded-full border border-[#0a4a5f] text-white/80 transition-colors hover:border-accent hover:text-white"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+            <button
+              type="button"
+              aria-label="Weiter"
+              onClick={() => slide(1)}
+              className="grid size-11 place-items-center rounded-full border border-[#0a4a5f] text-white/80 transition-colors hover:border-accent hover:text-white"
+            >
+              <ChevronRight className="size-5" />
+            </button>
+          </div>
+        </div>
 
-        <div className="ref-grid mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          ref={scroller}
+          className="ref-grid no-scrollbar -mx-6 mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-2 md:mx-0 md:px-0"
+        >
           {CASES.map((c) => (
             <article
               key={c.title}
-              className="ref-card group flex flex-col overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60 transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)]"
+              className="ref-card group flex w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60 transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)] sm:w-[400px] lg:w-[calc((100%-3rem)/3)]"
             >
               <Media media={c.media} />
               <div className="flex flex-1 flex-col gap-4 px-7 py-[26px]">

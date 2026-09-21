@@ -42,12 +42,34 @@ function GlobeCanvas() {
     let angle = 0;
     let raf = 0;
 
-    // pointer parallax — the sphere leans toward the cursor
+    const host = (canvas.parentElement ?? canvas) as HTMLElement;
+
+    // pointer parallax (hover) + drag-to-rotate with momentum
     let targetMX = 0;
     let targetMY = 0;
     let mx = 0;
     let my = 0;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    let velX = 0;
+    let velY = 0;
+    let dragRotY = 0; // added Y-rotation from drag
+    let dragRotX = 0; // added tilt from drag
+    const clampTilt = (v: number) => Math.max(-0.85, Math.min(0.85, v));
+
     const onMove = (e: PointerEvent) => {
+      if (dragging) {
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        dragRotY += dx * 0.006;
+        dragRotX = clampTilt(dragRotX + dy * 0.006);
+        velX = dx * 0.006;
+        velY = dy * 0.006;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        return;
+      }
       const rect = canvas.getBoundingClientRect();
       targetMX = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
       targetMY = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
@@ -56,9 +78,31 @@ function GlobeCanvas() {
       targetMX = 0;
       targetMY = 0;
     };
-    const host = canvas.parentElement ?? canvas;
+    const onDown = (e: PointerEvent) => {
+      dragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      velX = 0;
+      velY = 0;
+      host.style.cursor = "grabbing";
+      try {
+        host.setPointerCapture(e.pointerId);
+      } catch {
+        /* capture unsupported — drag still works via move/up */
+      }
+    };
+    const onUp = () => {
+      dragging = false;
+      host.style.cursor = "grab";
+    };
+    host.style.cursor = "grab";
+    host.style.touchAction = "pan-y";
+    host.style.userSelect = "none";
     host.addEventListener("pointermove", onMove);
     host.addEventListener("pointerleave", onLeave);
+    host.addEventListener("pointerdown", onDown);
+    host.addEventListener("pointerup", onUp);
+    host.addEventListener("pointercancel", onUp);
 
     const draw = () => {
       const w = canvas.width;
@@ -68,11 +112,19 @@ function GlobeCanvas() {
       const cy = h / 2;
       const R = Math.min(w * 0.34, h * 0.46);
 
+      // momentum after release
+      if (!dragging) {
+        dragRotY += velX;
+        dragRotX = clampTilt(dragRotX + velY);
+        velX *= 0.94;
+        velY *= 0.94;
+      }
       mx += (targetMX - mx) * 0.06;
       my += (targetMY - my) * 0.06;
-      const cosA = Math.cos(angle + mx * 0.6);
-      const sinA = Math.sin(angle + mx * 0.6);
-      const tilt = baseTilt + my * 0.32;
+      const rotY = angle + dragRotY + mx * 0.5;
+      const cosA = Math.cos(rotY);
+      const sinA = Math.sin(rotY);
+      const tilt = clampTilt(baseTilt + dragRotX + my * 0.25);
       const cosT = Math.cos(tilt);
       const sinT = Math.sin(tilt);
 
@@ -111,6 +163,9 @@ function GlobeCanvas() {
       ro.disconnect();
       host.removeEventListener("pointermove", onMove);
       host.removeEventListener("pointerleave", onLeave);
+      host.removeEventListener("pointerdown", onDown);
+      host.removeEventListener("pointerup", onUp);
+      host.removeEventListener("pointercancel", onUp);
     };
   }, []);
 
