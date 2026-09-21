@@ -2,12 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 /* ------------------------------------------------------------------ */
 /* Rotating dot sphere (canvas) — draggable, hover-parts, scroll-fills  */
 /* ------------------------------------------------------------------ */
-function GlobeCanvas() {
+function GlobeCanvas({ progress }: { progress: { current: number } }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -121,12 +121,9 @@ function GlobeCanvas() {
       const R = Math.min(w * 0.32, h * 0.5);
       const RAD = R * 0.42;
 
-      // scroll-fill: 0 when the sphere is entering from the bottom, 1 when it
-      // sits in view. Fills on scroll-down, empties on scroll-up.
-      const rect = canvas.getBoundingClientRect();
-      const vh = window.innerHeight || 1;
-      const target = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.8)));
-      prog += (target - prog) * 0.12;
+      // scroll-fill driven by the shared ScrollTrigger progress (in sync with
+      // the connector lines/nodes). Fills on scroll-down, empties on scroll-up.
+      prog += (progress.current - prog) * 0.14;
 
       if (!dragging) {
         dragRotY += velX;
@@ -239,9 +236,21 @@ const VH = 560;
 /* ------------------------------------------------------------------ */
 export default function Globe() {
   const root = useRef<HTMLDivElement>(null);
+  const progress = useRef(0);
 
   useGSAP(
     () => {
+      // one master trigger drives the whole fill: dots colour-fill, lines draw,
+      // nodes fill — all in sync as the sphere scrolls up through the viewport.
+      const FILL = { trigger: root.current, start: "top 82%", end: "center 56%" };
+      ScrollTrigger.create({
+        ...FILL,
+        scrub: 0.4,
+        onUpdate: (self) => {
+          progress.current = self.progress;
+        },
+      });
+
       gsap.from(".glb-copy > *", {
         y: 20,
         opacity: 0,
@@ -259,31 +268,15 @@ export default function Globe() {
         scrollTrigger: { trigger: root.current, start: "top 68%" },
       });
 
-      // Everything below is SCRUBBED to scroll: the gold line fills from the
-      // label to the node on scroll-down and empties on scroll-up, the node
-      // fills gold as the line reaches it. Matches the dot colour-fill.
-      const st = () => ({
-        trigger: root.current,
-        start: "top 85%",
-        end: "top 22%",
-        scrub: 0.5,
-      });
+      // One-shot reveals for the base line + node outline; the gold line-draw
+      // and node-fill themselves are scroll-driven in the rAF below (in sync
+      // with the dot colour-fill), filling on scroll-down, emptying on scroll-up.
       gsap.from(".glb-base", {
         opacity: 0,
         duration: 0.6,
         stagger: 0.05,
         scrollTrigger: { trigger: root.current, start: "top 88%" },
       });
-      gsap.fromTo(
-        ".glb-hi",
-        { strokeDashoffset: 1 },
-        { strokeDashoffset: 0, ease: "none", stagger: 0.05, scrollTrigger: st() },
-      );
-      gsap.fromTo(
-        ".glb-node-fill",
-        { opacity: 0, scale: 0.2, transformOrigin: "center" },
-        { opacity: 1, scale: 1, ease: "none", stagger: 0.05, scrollTrigger: st() },
-      );
       gsap.from(".glb-node", {
         opacity: 0,
         scale: 0,
@@ -297,6 +290,42 @@ export default function Globe() {
     { scope: root },
   );
 
+  // Draw the gold connector lines + fill the nodes straight from the shared
+  // scroll progress — same source as the dot colour-fill, so they stay in sync.
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const hi = [...el.querySelectorAll<SVGPathElement>(".glb-hi")];
+    const nf = [...el.querySelectorAll<SVGElement>(".glb-node-fill")];
+    const lens = hi.map((p) => {
+      try {
+        return p.getTotalLength();
+      } catch {
+        return 0;
+      }
+    });
+    let p = 0;
+    let raf = 0;
+    const tick = () => {
+      p += (progress.current - p) * 0.14;
+      for (let i = 0; i < hi.length; i++) {
+        const len = lens[i] || (lens[i] = hi[i].getTotalLength());
+        if (!len) continue;
+        const lp = Math.max(0, Math.min(1, p * 1.12 - i * 0.015));
+        hi[i].style.strokeDasharray = String(len);
+        hi[i].style.strokeDashoffset = String(len * (1 - lp));
+      }
+      for (let i = 0; i < nf.length; i++) {
+        const lp = Math.max(0, Math.min(1, p * 1.12 - i * 0.015));
+        nf[i].style.opacity = String(lp);
+        nf[i].style.transform = `scale(${0.3 + 0.7 * lp})`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <section
       id="reichweite"
@@ -306,7 +335,7 @@ export default function Globe() {
       <Container className="relative">
         <div className="relative mx-auto w-full max-w-[1280px]">
           <div className="relative mx-auto aspect-square max-w-[440px] lg:aspect-[1200/560] lg:max-w-none">
-            <GlobeCanvas />
+            <GlobeCanvas progress={progress} />
 
             {/* connector lines + nodes (desktop only) */}
             <svg
@@ -332,9 +361,8 @@ export default function Globe() {
                       stroke="#d1aa71"
                       strokeWidth={1.8}
                       strokeLinecap="round"
-                      pathLength={1}
-                      strokeDasharray="1 1"
-                      strokeDashoffset={1}
+                      strokeDasharray={2000}
+                      strokeDashoffset={2000}
                     />
                     <rect
                       className="glb-node"
