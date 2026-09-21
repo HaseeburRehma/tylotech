@@ -5,7 +5,7 @@ import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 /* ------------------------------------------------------------------ */
-/* Rotating dot sphere (canvas) — single-hue, depth-shaded like finseo */
+/* Rotating dot sphere (canvas) — draggable, hover-parts, like finseo   */
 /* ------------------------------------------------------------------ */
 function GlobeCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -18,7 +18,7 @@ function GlobeCanvas() {
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const N = 1300;
+    const N = 1500;
     const golden = Math.PI * (3 - Math.sqrt(5));
     const pts = Array.from({ length: N }, (_, i) => {
       const y = 1 - (i / (N - 1)) * 2;
@@ -38,27 +38,34 @@ function GlobeCanvas() {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    const baseTilt = -0.38;
+    const baseTilt = -0.32;
     let angle = 0;
     let raf = 0;
 
     const host = (canvas.parentElement ?? canvas) as HTMLElement;
 
-    // pointer parallax (hover) + drag-to-rotate with momentum
+    // pointer parallax + repulsion (hover) + drag-to-rotate with momentum
     let targetMX = 0;
     let targetMY = 0;
     let mx = 0;
     let my = 0;
+    let pcx = -9999; // pointer position in canvas pixels
+    let pcy = -9999;
+    let pointerInside = false;
     let dragging = false;
     let lastX = 0;
     let lastY = 0;
     let velX = 0;
     let velY = 0;
-    let dragRotY = 0; // added Y-rotation from drag
-    let dragRotX = 0; // added tilt from drag
+    let dragRotY = 0;
+    let dragRotX = 0;
     const clampTilt = (v: number) => Math.max(-0.85, Math.min(0.85, v));
 
     const onMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      pcx = (e.clientX - rect.left) * dpr;
+      pcy = (e.clientY - rect.top) * dpr;
+      pointerInside = true;
       if (dragging) {
         const dx = e.clientX - lastX;
         const dy = e.clientY - lastY;
@@ -70,13 +77,13 @@ function GlobeCanvas() {
         lastY = e.clientY;
         return;
       }
-      const rect = canvas.getBoundingClientRect();
       targetMX = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
       targetMY = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
     };
     const onLeave = () => {
       targetMX = 0;
       targetMY = 0;
+      pointerInside = false;
     };
     const onDown = (e: PointerEvent) => {
       dragging = true;
@@ -110,9 +117,9 @@ function GlobeCanvas() {
       ctx.clearRect(0, 0, w, h);
       const cx = w / 2;
       const cy = h / 2;
-      const R = Math.min(w * 0.34, h * 0.46);
+      const R = Math.min(w * 0.32, h * 0.5);
+      const RAD = R * 0.5; // repulsion radius (canvas px)
 
-      // momentum after release
       if (!dragging) {
         dragRotY += velX;
         dragRotX = clampTilt(dragRotX + velY);
@@ -121,12 +128,13 @@ function GlobeCanvas() {
       }
       mx += (targetMX - mx) * 0.06;
       my += (targetMY - my) * 0.06;
-      const rotY = angle + dragRotY + mx * 0.5;
+      const rotY = angle + dragRotY + mx * 0.35;
       const cosA = Math.cos(rotY);
       const sinA = Math.sin(rotY);
-      const tilt = clampTilt(baseTilt + dragRotX + my * 0.25);
+      const tilt = clampTilt(baseTilt + dragRotX + my * 0.18);
       const cosT = Math.cos(tilt);
       const sinT = Math.sin(tilt);
+      const repel = pointerInside && !dragging;
 
       for (const p of pts) {
         const x1 = p.x * cosA - p.z * sinA;
@@ -135,26 +143,38 @@ function GlobeCanvas() {
         const z2 = p.y * sinT + z1 * cosT;
 
         const d = Math.pow((z2 + 1) / 2, 1.3); // 0 back → 1 front
-        const sx = cx + x1 * R;
-        const sy = cy + y2 * R;
+        let sx = cx + x1 * R;
+        let sy = cy + y2 * R;
         const size = (0.5 + d * 1.8) * dpr;
-        const alpha = 0.1 + d * 0.88;
+        let alpha = 0.1 + d * 0.88;
 
-        // dim gold in back → bright cream in front (accent dots a touch warmer)
+        // cursor pushes dots away and fades them — a "hole" follows the mouse
+        if (repel) {
+          const ddx = sx - pcx;
+          const ddy = sy - pcy;
+          const dist = Math.hypot(ddx, ddy);
+          if (dist < RAD) {
+            const f = 1 - dist / RAD;
+            const push = f * f * RAD * 0.45;
+            const inv = 1 / (dist || 1);
+            sx += ddx * inv * push;
+            sy += ddy * inv * push;
+            alpha *= 1 - f * 0.9;
+          }
+        }
+
+        if (alpha <= 0.01) continue;
         const rr = Math.round((p.accent ? 90 : 70) + (242 - (p.accent ? 90 : 70)) * d);
         const gg = Math.round((p.accent ? 74 : 62) + ((p.accent ? 208 : 224) - (p.accent ? 74 : 62)) * d);
         const bb = Math.round((p.accent ? 44 : 46) + ((p.accent ? 150 : 188) - (p.accent ? 44 : 46)) * d);
-
         ctx.beginPath();
         ctx.arc(sx, sy, size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${rr},${gg},${bb},${alpha})`;
         ctx.fill();
       }
 
-      if (!reduce) {
-        angle += 0.0015;
-        raf = requestAnimationFrame(draw);
-      }
+      if (!reduce) angle += 0.0014;
+      raf = requestAnimationFrame(draw);
     };
     draw();
 
@@ -178,19 +198,19 @@ function GlobeCanvas() {
 type Lbl = {
   t: string;
   side: "left" | "right";
-  lx: number; // line start (label end)
+  lx: number;
   ly: number;
-  nx: number; // node (sphere edge)
+  nx: number;
   ny: number;
 };
 
 const LABELS: Lbl[] = [
-  { t: "Vertrieb", side: "left", lx: 232, ly: 92, nx: 372, ny: 166 },
-  { t: "Marketing", side: "left", lx: 205, ly: 280, nx: 350, ny: 280 },
-  { t: "Recruiting", side: "left", lx: 232, ly: 468, nx: 372, ny: 394 },
-  { t: "Kundenerlebnis", side: "right", lx: 968, ly: 92, nx: 828, ny: 166 },
-  { t: "Reputation", side: "right", lx: 995, ly: 280, nx: 850, ny: 280 },
-  { t: "Prozesse", side: "right", lx: 968, ly: 468, nx: 828, ny: 394 },
+  { t: "Vertrieb", side: "left", lx: 210, ly: 96, nx: 356, ny: 168 },
+  { t: "Marketing", side: "left", lx: 180, ly: 280, nx: 322, ny: 280 },
+  { t: "Recruiting", side: "left", lx: 210, ly: 464, nx: 356, ny: 392 },
+  { t: "Kundenerlebnis", side: "right", lx: 990, ly: 96, nx: 844, ny: 168 },
+  { t: "Reputation", side: "right", lx: 1020, ly: 280, nx: 878, ny: 280 },
+  { t: "Prozesse", side: "right", lx: 990, ly: 464, nx: 844, ny: 392 },
 ];
 
 const VW = 1200;
@@ -218,16 +238,27 @@ export default function Globe() {
         stagger: 0.1,
         scrollTrigger: { trigger: root.current, start: "top 68%" },
       });
-      // draw the faint connector lines in
+      // faint white track fades in; gold line DRAWS from label → node as the
+      // section scrolls in (scroll progress on all six connectors)
+      gsap.from(".glb-base", {
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.05,
+        scrollTrigger: { trigger: root.current, start: "top 80%" },
+      });
       gsap.fromTo(
-        ".glb-base",
+        ".glb-hi",
         { strokeDashoffset: 1 },
         {
           strokeDashoffset: 0,
-          duration: 0.9,
-          ease: "power2.out",
-          stagger: 0.09,
-          scrollTrigger: { trigger: root.current, start: "top 68%" },
+          ease: "none",
+          stagger: 0.06,
+          scrollTrigger: {
+            trigger: root.current,
+            start: "top 85%",
+            end: "center 62%",
+            scrub: true,
+          },
         },
       );
       gsap.from(".glb-node", {
@@ -237,21 +268,8 @@ export default function Globe() {
         duration: 0.5,
         ease: "back.out(2)",
         stagger: 0.09,
-        delay: 0.5,
-        scrollTrigger: { trigger: root.current, start: "top 68%" },
+        scrollTrigger: { trigger: root.current, start: "top 60%" },
       });
-      // gold pulse travelling along each line toward the sphere, looping
-      gsap.fromTo(
-        ".glb-pulse",
-        { strokeDashoffset: 1 },
-        {
-          strokeDashoffset: -1,
-          duration: 2.4,
-          ease: "none",
-          repeat: -1,
-          stagger: 0.4,
-        },
-      );
     },
     { scope: root },
   );
@@ -263,9 +281,8 @@ export default function Globe() {
       className="relative overflow-hidden bg-[#001620] py-24 text-white"
     >
       <Container className="relative">
-        <div className="relative mx-auto w-full max-w-[1120px]">
-          {/* aspect box that holds sphere + lines (desktop wide, mobile taller) */}
-          <div className="relative mx-auto aspect-square max-w-[420px] lg:aspect-[1200/560] lg:max-w-none">
+        <div className="relative mx-auto w-full max-w-[1280px]">
+          <div className="relative mx-auto aspect-square max-w-[440px] lg:aspect-[1200/560] lg:max-w-none">
             <GlobeCanvas />
 
             {/* legibility vignette */}
@@ -273,14 +290,15 @@ export default function Globe() {
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  "radial-gradient(closest-side, rgba(0,22,32,0.74) 32%, transparent 72%)",
+                  "radial-gradient(closest-side, rgba(0,22,32,0.72) 30%, transparent 70%)",
               }}
             />
 
             {/* connector lines + nodes (desktop only) */}
             <svg
               viewBox={`0 0 ${VW} ${VH}`}
-              className="absolute inset-0 hidden size-full lg:block"
+              preserveAspectRatio="none"
+              className="pointer-events-none absolute inset-0 hidden size-full lg:block"
               fill="none"
               aria-hidden
             >
@@ -291,21 +309,19 @@ export default function Globe() {
                     <path
                       className="glb-base"
                       d={d}
-                      stroke="rgba(255,255,255,0.18)"
+                      stroke="rgba(255,255,255,0.16)"
                       strokeWidth={1}
-                      pathLength={1}
-                      strokeDasharray="1 1"
                     />
                     <path
-                      className="glb-pulse"
+                      className="glb-hi"
                       d={d}
                       stroke="#d1aa71"
                       strokeWidth={1.6}
                       strokeLinecap="round"
                       pathLength={1}
-                      strokeDasharray="0.16 0.84"
+                      strokeDasharray="1 1"
+                      strokeDashoffset={1}
                     />
-                    {/* square node at the sphere edge */}
                     <rect
                       className="glb-node"
                       x={l.nx - 5}
@@ -323,16 +339,17 @@ export default function Globe() {
             </svg>
 
             {/* center copy */}
-            <div className="glb-copy absolute inset-0 z-10 grid place-items-center px-6 text-center">
+            <div className="glb-copy pointer-events-none absolute inset-0 z-10 grid place-items-center px-6 text-center">
               <div>
-                <p className="eyebrow mb-4 flex items-center justify-center gap-2.5 text-[#d8b682]">
+                <p className="eyebrow mb-3 flex items-center justify-center gap-2.5 text-[#d8b682]">
                   <span className="size-[7px] rounded-[2px] bg-accent" />
                   Reichweite
                 </p>
-                <h2 className="display-m text-white">Digitalisierung berührt alles.</h2>
-                <p className="mx-auto mt-4 max-w-[380px] text-[16px] leading-[26px] text-[#b3d6e2]">
-                  Nicht nur das Marketing — jeder Bereich Ihres Unternehmens hängt
-                  daran.
+                <h2 className="font-display text-[clamp(1.7rem,2.3vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-white">
+                  Digitalisierung berührt alles.
+                </h2>
+                <p className="mx-auto mt-3 max-w-[330px] text-[14px] leading-[22px] text-[#b3d6e2]">
+                  Nicht nur das Marketing — jeder Bereich Ihres Unternehmens.
                 </p>
               </div>
             </div>
