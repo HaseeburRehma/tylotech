@@ -488,24 +488,27 @@ function ReachCard() {
 
   return (
     <Card title="Digitalisierung berührt alles" subtitle="nicht nur das Marketing">
-      <div className="flex flex-wrap gap-2">
-        {TAGS.map((t, i) => (
-          <button
-            key={t}
-            type="button"
-            onClick={(e) => pick(i, e)}
-            className={`reach-tag rounded-full border px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.06em] transition-colors duration-200 ${
-              active === i
-                ? "border-accent bg-[rgba(209,170,113,0.14)] text-[#94713f] shadow-[0_4px_14px_-6px_rgba(209,170,113,0.7)]"
-                : "border-line text-ink/60 hover:border-accent/40 hover:bg-[rgba(209,170,113,0.05)] hover:text-ink/80"
-            }`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-      <div className="mt-1">
-        <DomeCanvas active={active} pulse={pulse} />
+      <div className="flex h-full flex-col">
+        <div className="flex flex-wrap gap-2">
+          {TAGS.map((t, i) => (
+            <button
+              key={t}
+              type="button"
+              onClick={(e) => pick(i, e)}
+              className={`reach-tag rounded-full border px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.06em] transition-colors duration-200 ${
+                active === i
+                  ? "border-accent bg-[rgba(209,170,113,0.14)] text-[#94713f] shadow-[0_4px_14px_-6px_rgba(209,170,113,0.7)]"
+                  : "border-line text-ink/60 hover:border-accent/40 hover:bg-[rgba(209,170,113,0.05)] hover:text-ink/80"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+        {/* dome sits flush at the bottom edge of the card */}
+        <div className="-mx-6 -mb-6 mt-auto">
+          <DomeCanvas active={active} pulse={pulse} />
+        </div>
       </div>
     </Card>
   );
