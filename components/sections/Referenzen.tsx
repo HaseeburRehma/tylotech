@@ -55,7 +55,7 @@ const CASES: Case[] = [
 
 function Media({ media }: { media: Media }) {
   return (
-    <div className="relative h-[230px] overflow-hidden bg-[#e5e3df]">
+    <div className="relative h-[230px] overflow-hidden bg-[#031a26]">
       {media.kind === "full" ? (
         <>
           <span
@@ -128,9 +128,10 @@ export default function Referenzen() {
   );
 
   return (
-    <section id="referenzen" ref={root} className="bg-page py-24">
+    <section id="referenzen" ref={root} className="bg-[#001620] py-24 text-white">
       <Container>
         <SectionHeading
+          dark
           className="ref-head"
           eyebrow="Referenzen"
           title="Arbeiten, die weiterlaufen, wenn wir nicht mehr im Raum sind."
@@ -141,7 +142,7 @@ export default function Referenzen() {
           {CASES.map((c) => (
             <article
               key={c.title}
-              className="ref-card group flex flex-col overflow-hidden rounded-[20px] border border-line bg-white transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)]"
+              className="ref-card group flex flex-col overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60 transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)]"
             >
               <Media media={c.media} />
               <div className="flex flex-1 flex-col gap-4 px-7 py-[26px]">
@@ -149,26 +150,26 @@ export default function Referenzen() {
                   {c.tags.map((t) => (
                     <span
                       key={t}
-                      className="ref-tag flex h-6 items-center rounded-full bg-[#eeedea] px-2.5 text-[12px] font-medium text-[#5c5954]"
+                      className="ref-tag flex h-6 items-center rounded-full bg-white/[0.06] px-2.5 text-[12px] font-medium text-[#b3d6e2]"
                     >
                       {t}
                     </span>
                   ))}
                 </div>
-                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-ink">
+                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-white">
                   {c.title}
                 </h3>
-                <p className="text-[14px] leading-[22px] text-[#5c5954]">{c.body}</p>
+                <p className="text-[14px] leading-[22px] text-[#b3d6e2]">{c.body}</p>
                 {c.metrics && (
                   <>
-                    <div className="mt-auto h-px w-full bg-[#eeedea]" />
+                    <div className="mt-auto h-px w-full bg-white/10" />
                     <div className="flex gap-6">
                       {c.metrics.map((m) => (
                         <div key={m.label} className="flex-1">
-                          <p className="font-display text-[22px] font-bold leading-[28px] tracking-[-0.4px] text-[#94713f]">
+                          <p className="font-display text-[22px] font-bold leading-[28px] tracking-[-0.4px] text-[#d8b682]">
                             {m.value}
                           </p>
-                          <p className="text-[13px] leading-[18px] text-[#7d7973]">
+                          <p className="text-[13px] leading-[18px] text-[#7fbacd]">
                             {m.label}
                           </p>
                         </div>

@@ -70,15 +70,15 @@ export default function Team() {
   );
 
   return (
-    <section id="team" ref={root} className="overflow-hidden bg-page py-24">
+    <section id="team" ref={root} className="overflow-hidden bg-[#001620] py-24 text-white">
       <Container>
         <div className="team-head mx-auto max-w-[880px] text-center">
-          <p className="eyebrow mb-6 flex items-center justify-center gap-2.5 text-[#94713f]">
+          <p className="eyebrow mb-6 flex items-center justify-center gap-2.5 text-[#d8b682]">
             <span className="size-[7px] rounded-[2px] bg-accent" />
             Team
           </p>
-          <h2 className="display-l text-ink">Die Menschen, mit denen Sie arbeiten.</h2>
-          <p className="mx-auto mt-6 max-w-[620px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#5c5954]">
+          <h2 className="display-l text-white">Die Menschen, mit denen Sie arbeiten.</h2>
+          <p className="mx-auto mt-6 max-w-[620px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#b3d6e2]">
             Kein Account-Manager, der weiterleitet. Sie sprechen direkt mit den
             Leuten, die an Ihrem Projekt bauen.
           </p>
@@ -126,7 +126,7 @@ export default function Team() {
             <img src={m.img} alt={m.name} className="absolute inset-0 size-full object-cover" />
             <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-[#001620]/0 to-[#001620]/[0.88]" />
             {active !== i && (
-              <div className="absolute inset-0 bg-page/50 transition-opacity" />
+              <div className="absolute inset-0 bg-[#001620]/55 transition-opacity" />
             )}
             <div className="absolute inset-x-6 bottom-9">
               <p className="font-display text-[20px] font-semibold leading-[26px] tracking-[-0.2px] text-white">

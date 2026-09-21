@@ -51,29 +51,30 @@ export default function Branchen() {
   );
 
   return (
-    <section id="branchen" ref={root} className="bg-page py-24">
+    <section id="branchen" ref={root} className="bg-[#001620] text-white py-24">
       <Container>
         <SectionHeading
+          dark
           className="branchen-head"
           eyebrow="Branchen"
           title="Wo wir uns auskennen."
           subtitle="Wir arbeiten nicht für jeden. In diesen sechs Bereichen kennen wir die Abläufe so gut, dass wir vom ersten Tag an mitreden können."
         />
 
-        <div className="branchen-grid mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-[22px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        <div className="branchen-grid mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-[22px] border border-[#0a4a5f] bg-[#0a4a5f] sm:grid-cols-2 lg:grid-cols-3">
           {INDUSTRIES.map(({ icon: Icon, title, body }) => (
             <div
               key={title}
-              className="branchen-cell group flex flex-col gap-[22px] bg-white px-8 pb-[34px] pt-8 transition-colors hover:bg-[#fcfbfa]"
+              className="branchen-cell group flex flex-col gap-[22px] bg-[#04283a]/60 px-8 pb-[34px] pt-8 transition-colors hover:bg-white/[0.06]"
             >
               <span className="branchen-icon grid size-[72px] place-items-center rounded-[18px] bg-gradient-to-br from-[#35768a] to-[#0d3646] text-white shadow-sm transition-shadow duration-300 group-hover:shadow-[0_14px_28px_-10px_rgba(13,54,70,0.55)]">
                 <Icon className="size-8" strokeWidth={1.6} />
               </span>
               <div>
-                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-ink">
+                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-white">
                   {title}
                 </h3>
-                <p className="mt-2.5 text-[14px] leading-[22px] text-[#5c5954]">
+                <p className="mt-2.5 text-[14px] leading-[22px] text-[#b3d6e2]">
                   {body}
                 </p>
               </div>

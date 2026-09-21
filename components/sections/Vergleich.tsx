@@ -44,9 +44,10 @@ export default function Vergleich() {
   );
 
   return (
-    <section id="vergleich" ref={root} className="bg-page py-24">
+    <section id="vergleich" ref={root} className="bg-[#001620] py-24 text-white">
       <Container>
         <SectionHeading
+          dark
           className="verg-head"
           eyebrow="Unterschied"
           title="Woran Sie merken, dass es anders läuft."
@@ -55,30 +56,30 @@ export default function Vergleich() {
 
         {/* Table — md and up */}
         <div className="verg-table mt-14 hidden overflow-x-auto no-scrollbar md:block">
-          <div className="min-w-[760px] overflow-hidden rounded-[20px] border border-line bg-white">
+          <div className="min-w-[760px] overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60">
             {/* header */}
-            <div className="flex items-center gap-6 border-b border-line bg-[#f6f5f3] px-7 py-[18px] font-mono text-[11px] font-medium uppercase tracking-[0.9px]">
-              <span className="flex-1 text-[#7d7973]" />
-              <span className="w-[280px] shrink-0 text-[#7d7973]">Üblich am Markt</span>
-              <span className="w-[300px] shrink-0 text-[#94713f]">Bei TyloTech</span>
+            <div className="flex items-center gap-6 border-b border-[#0a4a5f] bg-white/[0.04] px-7 py-[18px] font-mono text-[11px] font-medium uppercase tracking-[0.9px]">
+              <span className="flex-1 text-[#7fbacd]" />
+              <span className="w-[280px] shrink-0 text-[#7fbacd]">Üblich am Markt</span>
+              <span className="w-[300px] shrink-0 text-[#d8b682]">Bei TyloTech</span>
             </div>
             {ROWS.map((r) => (
               <div
                 key={r.c}
-                className={`flex items-center gap-6 border-b border-[#eeedea] px-7 py-5 last:border-b-0 ${
-                  r.hl ? "bg-[#f6f5f3]" : "bg-white"
+                className={`flex items-center gap-6 border-b border-white/10 px-7 py-5 last:border-b-0 ${
+                  r.hl ? "bg-white/[0.03]" : "bg-transparent"
                 }`}
               >
-                <span className="flex-1 text-[16px] font-medium tracking-[-0.1px] text-ink">
+                <span className="flex-1 text-[16px] font-medium tracking-[-0.1px] text-white">
                   {r.c}
                 </span>
                 <span className="flex w-[280px] shrink-0 items-center gap-2.5">
-                  <X className="size-[18px] shrink-0 text-[#c1bdb6]" strokeWidth={2} />
-                  <span className="text-[14px] leading-[22px] text-[#7d7973]">{r.a}</span>
+                  <X className="size-[18px] shrink-0 text-white/30" strokeWidth={2} />
+                  <span className="text-[14px] leading-[22px] text-[#7fbacd]">{r.a}</span>
                 </span>
                 <span className="flex w-[300px] shrink-0 items-center gap-2.5">
-                  <Check className="size-[18px] shrink-0 text-[#94713f]" strokeWidth={2.4} />
-                  <span className="text-[14px] leading-[22px] text-ink">{r.b}</span>
+                  <Check className="size-[18px] shrink-0 text-[#d8b682]" strokeWidth={2.4} />
+                  <span className="text-[14px] leading-[22px] text-white">{r.b}</span>
                 </span>
               </div>
             ))}
@@ -90,29 +91,29 @@ export default function Vergleich() {
           {ROWS.map((r) => (
             <div
               key={r.c}
-              className="overflow-hidden rounded-[18px] border border-line bg-white"
+              className="overflow-hidden rounded-[18px] border border-[#0a4a5f] bg-[#04283a]/60"
             >
-              <p className="border-b border-[#eeedea] bg-[#f6f5f3] px-5 py-3 text-[15px] font-medium tracking-[-0.1px] text-ink">
+              <p className="border-b border-white/10 bg-white/[0.04] px-5 py-3 text-[15px] font-medium tracking-[-0.1px] text-white">
                 {r.c}
               </p>
               <div className="flex items-start gap-2.5 px-5 py-3.5">
-                <X className="mt-0.5 size-[17px] shrink-0 text-[#c1bdb6]" strokeWidth={2} />
+                <X className="mt-0.5 size-[17px] shrink-0 text-white/30" strokeWidth={2} />
                 <span className="flex-1">
-                  <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.9px] text-[#a8a49d]">
+                  <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.9px] text-[#5f8ea0]">
                     Üblich am Markt
                   </span>
-                  <span className="mt-0.5 block text-[14px] leading-[21px] text-[#7d7973]">
+                  <span className="mt-0.5 block text-[14px] leading-[21px] text-[#7fbacd]">
                     {r.a}
                   </span>
                 </span>
               </div>
-              <div className="flex items-start gap-2.5 border-t border-[#eeedea] bg-[#fbf6ee] px-5 py-3.5">
-                <Check className="mt-0.5 size-[17px] shrink-0 text-[#94713f]" strokeWidth={2.4} />
+              <div className="flex items-start gap-2.5 border-t border-white/10 bg-[rgba(209,170,113,0.1)] px-5 py-3.5">
+                <Check className="mt-0.5 size-[17px] shrink-0 text-[#d8b682]" strokeWidth={2.4} />
                 <span className="flex-1">
-                  <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.9px] text-[#94713f]">
+                  <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.9px] text-[#d8b682]">
                     Bei TyloTech
                   </span>
-                  <span className="mt-0.5 block text-[14px] leading-[21px] text-ink">
+                  <span className="mt-0.5 block text-[14px] leading-[21px] text-white">
                     {r.b}
                   </span>
                 </span>

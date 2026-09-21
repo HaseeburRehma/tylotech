@@ -68,20 +68,20 @@ export default function FAQ() {
   );
 
   return (
-    <section id="faq" ref={root} className="bg-page py-24">
+    <section id="faq" ref={root} className="bg-[#001620] py-24 text-white">
       <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[400px_1fr]">
         <div className="faq-left">
-          <p className="eyebrow mb-[18px] flex items-center gap-2.5 text-[#94713f]">
+          <p className="eyebrow mb-[18px] flex items-center gap-2.5 text-[#d8b682]">
             <span className="size-[7px] rounded-[2px] bg-accent" />
             Häufige Fragen
           </p>
-          <h2 className="display-m text-ink">Fragen, die uns fast jeder stellt.</h2>
+          <h2 className="display-m text-white">Fragen, die uns fast jeder stellt.</h2>
 
-          <div className="mt-8 rounded-[18px] border border-line bg-white p-6">
-            <p className="text-[16px] font-medium text-ink">
+          <div className="mt-8 rounded-[18px] border border-[#0a4a5f] bg-[#04283a]/60 p-6">
+            <p className="text-[16px] font-medium text-white">
               Ihre Frage steht nicht dabei?
             </p>
-            <p className="mt-2 text-[14px] leading-[22px] text-[#5c5954]">
+            <p className="mt-2 text-[14px] leading-[22px] text-[#b3d6e2]">
               Rufen Sie einfach an — 0211 15847697. Sie sprechen direkt mit
               jemandem, der antworten kann.
             </p>
@@ -97,10 +97,10 @@ export default function FAQ() {
             return (
               <div
                 key={item.q}
-                className={`faq-item rounded-[18px] border bg-white transition-[border-color,box-shadow] duration-200 ${
+                className={`faq-item rounded-[18px] border bg-[#04283a]/60 transition-[border-color,box-shadow] duration-200 ${
                   on
-                    ? "border-[#cbc8c2] shadow-[0_2px_5px_-1px_rgba(15,14,13,0.05)]"
-                    : "border-line"
+                    ? "border-[#0e6883] shadow-[0_2px_5px_-1px_rgba(15,14,13,0.05)]"
+                    : "border-[#0a4a5f]"
                 }`}
               >
                 <button
@@ -108,12 +108,12 @@ export default function FAQ() {
                   className="flex w-full items-center gap-6 py-[26px] pl-8 pr-6 text-left"
                   aria-expanded={on}
                 >
-                  <span className="flex-1 font-display text-[20px] font-semibold leading-[26px] tracking-[-0.2px] text-ink">
+                  <span className="flex-1 font-display text-[20px] font-semibold leading-[26px] tracking-[-0.2px] text-white">
                     {item.q}
                   </span>
                   <span
                     className={`grid size-11 shrink-0 place-items-center rounded-full transition-colors ${
-                      on ? "bg-[#002e3d] text-white" : "bg-[#f6f5f3] text-ink"
+                      on ? "bg-[#002e3d] text-white" : "bg-white/[0.06] text-white"
                     }`}
                   >
                     {on ? <Minus className="size-5" /> : <Plus className="size-5" />}
@@ -124,7 +124,7 @@ export default function FAQ() {
                   style={{ gridTemplateRows: on ? "1fr" : "0fr" }}
                 >
                   <div className="min-h-0">
-                    <p className="pb-[26px] pl-8 pr-[68px] text-[16px] leading-[26px] text-[#5c5954]">
+                    <p className="pb-[26px] pl-8 pr-[68px] text-[16px] leading-[26px] text-[#b3d6e2]">
                       {item.a}
                     </p>
                   </div>

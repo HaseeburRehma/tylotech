@@ -35,10 +35,10 @@ const STEPS = [
 ];
 
 const CELL_BORDERS = [
-  "border-b md:border-r border-line",
-  "border-b border-line",
-  "border-b md:border-b-0 md:border-r border-line",
-  "border-line",
+  "border-b md:border-r border-[#0a4a5f]",
+  "border-b border-[#0a4a5f]",
+  "border-b md:border-b-0 md:border-r border-[#0a4a5f]",
+  "border-[#0a4a5f]",
 ];
 
 export default function Ablauf() {
@@ -83,17 +83,17 @@ export default function Ablauf() {
   );
 
   return (
-    <section id="ablauf" ref={root} className="bg-page py-24">
+    <section id="ablauf" ref={root} className="bg-[#001620] text-white py-24">
       <Container>
         <div className="ablauf-head mx-auto max-w-[640px] text-center">
-          <p className="eyebrow mb-[18px] flex items-center justify-center gap-2.5 text-[#94713f]">
+          <p className="eyebrow mb-[18px] flex items-center justify-center gap-2.5 text-[#d8b682]">
             <span className="size-[7px] rounded-[2px] bg-accent" />
             So läuft es ab
           </p>
-          <h2 className="display-l text-ink">
+          <h2 className="display-l text-white">
             Vier Schritte bis zur Zusammenarbeit.
           </h2>
-          <p className="mt-[18px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#5c5954]">
+          <p className="mt-[18px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#b3d6e2]">
             Kein Vertrieb, der Sie durch einen Funnel schiebt. Nach dem dritten
             Schritt wissen Sie genau, was Sie bekommen und was es kostet.
           </p>
@@ -110,11 +110,11 @@ export default function Ablauf() {
               )}
             >
               <Icon className="ablauf-icon size-6 text-accent" strokeWidth={1.6} />
-              <p className="eyebrow mt-6 text-ink/45">{step}</p>
-              <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.015em] text-ink">
+              <p className="eyebrow mt-6 text-[#7fbacd]">{step}</p>
+              <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.015em] text-white">
                 {title}
               </h3>
-              <p className="mt-2.5 max-w-[420px] text-[15px] leading-relaxed text-ink/55">
+              <p className="mt-2.5 max-w-[420px] text-[15px] leading-relaxed text-[#7fbacd]">
                 {body}
               </p>
             </div>

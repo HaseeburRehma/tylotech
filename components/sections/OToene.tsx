@@ -60,9 +60,10 @@ export default function OToene() {
   );
 
   return (
-    <section id="otoene" ref={root} className="bg-page py-24">
+    <section id="otoene" ref={root} className="bg-[#001620] py-24 text-white">
       <Container>
         <SectionHeading
+          dark
           className="oton-head"
           eyebrow="O-Töne"
           title="Hören Sie es von den Kunden selbst."
@@ -96,15 +97,15 @@ export default function OToene() {
             <Quote className="size-[30px] fill-accent text-accent" strokeWidth={0} />
             <p
               key={active}
-              className="mt-[18px] font-display text-[32px] font-semibold leading-[38px] tracking-[-0.8px] text-ink"
+              className="mt-[18px] font-display text-[32px] font-semibold leading-[38px] tracking-[-0.8px] text-white"
             >
               {v.quote}
             </p>
-            <p className="mt-[18px] text-[14px] font-medium text-[#7d7973]">
+            <p className="mt-[18px] text-[14px] font-medium text-[#7fbacd]">
               {v.person}
             </p>
 
-            <div className="my-6 h-px w-full bg-[#eeedea]" />
+            <div className="my-6 h-px w-full bg-white/10" />
 
             <div className="flex flex-col gap-2.5">
               {VOICES.map((voice, i) => {
@@ -115,30 +116,30 @@ export default function OToene() {
                     onClick={() => setActive(i)}
                     className={`flex items-center gap-3.5 rounded-[16px] px-3.5 py-3 text-left transition-colors ${
                       on
-                        ? "border-[1.5px] border-accent bg-[#fbf6ee]"
-                        : "border border-[#eeedea] bg-white hover:bg-[#faf9f7]"
+                        ? "border-[1.5px] border-accent bg-[rgba(209,170,113,0.12)]"
+                        : "border border-[#0a4a5f] bg-[#04283a]/60 hover:bg-white/[0.06]"
                     }`}
                   >
                     <span
                       className={`grid size-11 shrink-0 place-items-center rounded-full border text-[14px] font-medium ${
                         on
-                          ? "border-accent bg-[#fbf6ee] text-[#94713f]"
-                          : "border-[#eeedea] bg-[#f6f5f3] text-[#5c5954]"
+                          ? "border-accent bg-[rgba(209,170,113,0.14)] text-[#d8b682]"
+                          : "border-[#0a4a5f] bg-white/[0.06] text-[#7fbacd]"
                       }`}
                     >
                       {voice.initials}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[16px] font-medium tracking-[-0.1px] text-ink">
+                      <span className="block truncate text-[16px] font-medium tracking-[-0.1px] text-white">
                         {voice.name}
                       </span>
-                      <span className="block truncate text-[13px] text-[#7d7973]">
+                      <span className="block truncate text-[13px] text-[#7fbacd]">
                         {voice.firma}
                       </span>
                     </span>
                     <span
                       className={`grid size-9 shrink-0 place-items-center rounded-full ${
-                        on ? "bg-accent text-[#001620]" : "bg-[#f6f5f3] text-ink/50"
+                        on ? "bg-accent text-[#001620]" : "bg-white/[0.06] text-white/50"
                       }`}
                     >
                       <Play className="size-4 translate-x-px fill-current" />

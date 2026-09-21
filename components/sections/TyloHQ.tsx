@@ -286,18 +286,18 @@ export default function TyloHQ() {
   );
 
   return (
-    <section id="tylohq" ref={root} className="bg-page py-24">
+    <section id="tylohq" ref={root} className="bg-[#001620] py-24 text-white">
       <Container>
         <div className="hq-head mx-auto max-w-[680px] text-center">
-          <p className="eyebrow mb-4 flex items-center justify-center gap-2 text-ink/55">
+          <p className="eyebrow mb-4 flex items-center justify-center gap-2 text-[#d8b682]">
             <span className="size-1.5 rounded-full bg-accent" />
             TyloHQ
           </p>
-          <h2 className="display-m text-balance text-ink">
+          <h2 className="display-m text-balance text-white">
             Ihr Projekt läuft nicht mehr über{" "}
             <span className="whitespace-nowrap">E-Mail.</span>
           </h2>
-          <p className="mt-4 text-[18px] leading-relaxed text-ink/60">
+          <p className="mt-4 text-[18px] leading-relaxed text-[#b3d6e2]">
             TyloHQ ist die Plattform, auf der wir mit Ihnen arbeiten:
             Echtzeit-Zahlen aus Meta, Google und SEO, Inhalte und Freigaben an
             einem Ort — und ein Team, das Sie erreichen, ohne zu suchen.
@@ -311,13 +311,13 @@ export default function TyloHQ() {
         <div className="hq-features mx-auto mt-16 grid max-w-[980px] grid-cols-1 gap-8 md:grid-cols-3">
           {FEATURES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="hq-feature">
-              <span className="grid size-10 place-items-center rounded-xl border border-line bg-white text-ink/70">
+              <span className="grid size-10 place-items-center rounded-xl border-[#0a4a5f] bg-[#04283a]/60 text-[#d8b682]">
                 <Icon className="size-5" strokeWidth={1.6} />
               </span>
-              <h3 className="mt-4 text-[17px] font-semibold tracking-[-0.01em] text-ink">
+              <h3 className="mt-4 text-[17px] font-semibold tracking-[-0.01em] text-white">
                 {title}
               </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink/55">
+              <p className="mt-2 text-[15px] leading-relaxed text-[#7fbacd]">
                 {body}
               </p>
             </div>
@@ -330,7 +330,7 @@ export default function TyloHQ() {
           </Button>
           <Link
             href="#login"
-            className="text-[15px] font-medium tracking-[-0.01em] text-ink/70 transition-colors hover:text-ink"
+            className="text-[15px] font-medium tracking-[-0.01em] text-[#b3d6e2] transition-colors hover:text-white"
           >
             Kunden-Login
           </Link>
