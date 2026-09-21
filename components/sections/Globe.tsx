@@ -42,6 +42,16 @@ function GlobeCanvas() {
     let angle = 0;
     let raf = 0;
 
+    // scroll velocity briefly "fills" the dots (brighten), then it settles
+    let boost = 0;
+    let lastScroll = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      boost = Math.min(1, boost + Math.abs(y - lastScroll) * 0.012);
+      lastScroll = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     const host = (canvas.parentElement ?? canvas) as HTMLElement;
 
     // pointer parallax + repulsion (hover) + drag-to-rotate with momentum
@@ -118,7 +128,9 @@ function GlobeCanvas() {
       const cx = w / 2;
       const cy = h / 2;
       const R = Math.min(w * 0.32, h * 0.5);
-      const RAD = R * 0.5; // repulsion radius (canvas px)
+      const RAD = R * 0.42; // repulsion radius (canvas px)
+      boost *= 0.9; // decay the scroll fill
+      const fill = 1 + boost * 0.7;
 
       if (!dragging) {
         dragRotY += velX;
@@ -146,20 +158,20 @@ function GlobeCanvas() {
         let sx = cx + x1 * R;
         let sy = cy + y2 * R;
         const size = (0.5 + d * 1.8) * dpr;
-        let alpha = 0.1 + d * 0.88;
+        let alpha = Math.min(1, (0.1 + d * 0.88) * fill);
 
-        // cursor pushes dots away and fades them — a "hole" follows the mouse
+        // cursor gently parts the dots — a soft fade + slight drift (subtle)
         if (repel) {
           const ddx = sx - pcx;
           const ddy = sy - pcy;
           const dist = Math.hypot(ddx, ddy);
           if (dist < RAD) {
             const f = 1 - dist / RAD;
-            const push = f * f * RAD * 0.45;
+            const push = f * f * RAD * 0.14;
             const inv = 1 / (dist || 1);
             sx += ddx * inv * push;
             sy += ddy * inv * push;
-            alpha *= 1 - f * 0.9;
+            alpha *= 1 - f * 0.6;
           }
         }
 
@@ -181,6 +193,7 @@ function GlobeCanvas() {
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      window.removeEventListener("scroll", onScroll);
       host.removeEventListener("pointermove", onMove);
       host.removeEventListener("pointerleave", onLeave);
       host.removeEventListener("pointerdown", onDown);
@@ -238,8 +251,8 @@ export default function Globe() {
         stagger: 0.1,
         scrollTrigger: { trigger: root.current, start: "top 68%" },
       });
-      // faint white track fades in; gold line DRAWS from label → node as the
-      // section scrolls in (scroll progress on all six connectors)
+      // faint white track fades in; a gold segment travels each line — filling
+      // in at the label and emptying out at the node — tied to scroll.
       gsap.from(".glb-base", {
         opacity: 0,
         duration: 0.6,
@@ -250,14 +263,14 @@ export default function Globe() {
         ".glb-hi",
         { strokeDashoffset: 1 },
         {
-          strokeDashoffset: 0,
+          strokeDashoffset: -0.34,
           ease: "none",
-          stagger: 0.06,
+          stagger: 0.05,
           scrollTrigger: {
             trigger: root.current,
-            start: "top 85%",
-            end: "center 62%",
-            scrub: true,
+            start: "top 92%",
+            end: "bottom 28%",
+            scrub: 0.5,
           },
         },
       );
@@ -316,10 +329,10 @@ export default function Globe() {
                       className="glb-hi"
                       d={d}
                       stroke="#d1aa71"
-                      strokeWidth={1.6}
+                      strokeWidth={1.8}
                       strokeLinecap="round"
                       pathLength={1}
-                      strokeDasharray="1 1"
+                      strokeDasharray="0.34 0.66"
                       strokeDashoffset={1}
                     />
                     <rect
