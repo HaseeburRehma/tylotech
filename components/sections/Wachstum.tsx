@@ -45,6 +45,26 @@ export default function Wachstum() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".hebel-grid", start: "top 82%" },
       });
+      gsap.from(".hebel-icon", {
+        scale: 0.5,
+        opacity: 0,
+        duration: 0.55,
+        ease: "back.out(1.7)",
+        stagger: 0.1,
+        clearProps: "transform",
+        scrollTrigger: { trigger: ".hebel-grid", start: "top 78%" },
+      });
+      gsap.fromTo(
+        ".hebel-accent",
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.1,
+          scrollTrigger: { trigger: ".hebel-grid", start: "top 80%" },
+        },
+      );
     },
     { scope: root },
   );
@@ -65,9 +85,9 @@ export default function Wachstum() {
               key={title}
               className="hebel-card group relative overflow-hidden rounded-[20px] border border-line bg-white p-7"
             >
-              <span className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-80" />
+              <span className="hebel-accent absolute inset-x-0 top-0 h-[3px] origin-center bg-gradient-to-r from-transparent via-accent to-transparent opacity-80" />
 
-              <span className="grid size-11 place-items-center rounded-xl border border-line bg-page text-ink/70 transition-colors group-hover:text-ink">
+              <span className="hebel-icon grid size-11 place-items-center rounded-xl border border-line bg-page text-ink/70 transition-colors group-hover:text-ink">
                 <Icon className="size-5" strokeWidth={1.6} />
               </span>
 

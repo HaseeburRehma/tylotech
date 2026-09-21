@@ -45,6 +45,26 @@ export default function Warum() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".warum-grid", start: "top 82%" },
       });
+      gsap.from(".warum-icon", {
+        scale: 0.5,
+        opacity: 0,
+        duration: 0.55,
+        ease: "back.out(1.7)",
+        stagger: 0.1,
+        clearProps: "transform",
+        scrollTrigger: { trigger: ".warum-grid", start: "top 78%" },
+      });
+      gsap.fromTo(
+        ".warum-accent",
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.1,
+          scrollTrigger: { trigger: ".warum-grid", start: "top 80%" },
+        },
+      );
     },
     { scope: root },
   );
@@ -66,9 +86,9 @@ export default function Warum() {
               className="warum-card group relative overflow-hidden rounded-[20px] border border-line bg-white p-7"
             >
               {/* gold top accent */}
-              <span className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-80" />
+              <span className="warum-accent absolute inset-x-0 top-0 h-[3px] origin-center bg-gradient-to-r from-transparent via-accent to-transparent opacity-80" />
 
-              <span className="grid size-11 place-items-center rounded-xl border border-line bg-page text-ink/70 transition-colors group-hover:text-ink">
+              <span className="warum-icon grid size-11 place-items-center rounded-xl border border-line bg-page text-ink/70 transition-colors group-hover:text-ink">
                 <Icon className="size-5" strokeWidth={1.6} />
               </span>
 

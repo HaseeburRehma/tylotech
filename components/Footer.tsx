@@ -1,7 +1,11 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
 import { MapPin, Mail, Phone, Camera, Play, X } from "lucide-react";
 import Container from "./ui/Container";
 import MosaicBackdrop from "./MosaicBackdrop";
+import { gsap, useGSAP } from "@/lib/gsap";
 
 const COLS = [
   {
@@ -47,14 +51,40 @@ function Social({ label, children }: { label: string; children: React.ReactNode 
 }
 
 export default function Footer() {
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.from(".footer-reveal", {
+        y: 28,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        stagger: 0.1,
+        scrollTrigger: { trigger: root.current, start: "top 90%" },
+      });
+      gsap.from(".footer-bottom", {
+        opacity: 0,
+        y: 12,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ".footer-bottom", start: "top 98%" },
+      });
+    },
+    { scope: root },
+  );
+
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#001620] pb-8 pt-16 text-white">
+    <footer
+      ref={root}
+      className="relative overflow-hidden border-t border-white/10 bg-[#001620] pb-8 pt-16 text-white"
+    >
       <MosaicBackdrop fade="radial-gradient(100% 120% at 50% 0%, #000 35%, transparent 82%)" />
 
       <Container className="relative">
         <div className="grid grid-cols-2 gap-y-10 md:grid-cols-4 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1">
+          <div className="footer-reveal col-span-2 md:col-span-4 lg:col-span-1">
             <Link href="#top" className="inline-flex">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -106,7 +136,7 @@ export default function Footer() {
 
           {/* Link columns */}
           {COLS.map((col) => (
-            <div key={col.title}>
+            <div key={col.title} className="footer-reveal">
               <p className="eyebrow mb-4 text-white/45">{col.title}</p>
               <ul className="space-y-2.5">
                 {col.links.map((l) => (
@@ -124,7 +154,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-[13px] text-white/50 md:flex-row">
+        <div className="footer-bottom mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-[13px] text-white/50 md:flex-row">
           <p>© 2026 TyloTech · Alle Rechte vorbehalten</p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             {BOTTOM_TAGS.map((t) => (

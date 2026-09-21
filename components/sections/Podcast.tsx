@@ -59,6 +59,18 @@ export default function Podcast() {
         ease: "power3.out",
         scrollTrigger: { trigger: ".podcast-video", start: "top 85%" },
       });
+      // play button breathing ring
+      gsap.fromTo(
+        ".podcast-pulse",
+        { scale: 0.9, opacity: 0.5 },
+        {
+          scale: 1.9,
+          opacity: 0,
+          duration: 1.9,
+          ease: "power1.out",
+          repeat: -1,
+        },
+      );
     },
     { scope: root },
   );
@@ -129,6 +141,9 @@ export default function Podcast() {
                 style={{ backgroundImage: `url(https://i.ytimg.com/vi/${YT_ID}/maxresdefault.jpg)` }}
               />
               <span className="absolute inset-0 bg-[#001620]/25 transition-colors group-hover:bg-[#001620]/10" />
+              <span className="pointer-events-none absolute inset-0 grid place-items-center">
+                <span className="podcast-pulse size-16 rounded-full bg-accent/30" />
+              </span>
               <span className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-accent text-[#001620] shadow-lg transition-transform group-hover:scale-110">
                 <Play className="size-7 translate-x-0.5 fill-current" />
               </span>

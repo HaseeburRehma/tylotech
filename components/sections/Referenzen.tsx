@@ -56,6 +56,16 @@ export default function Referenzen() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".ref-grid", start: "top 82%" },
       });
+      gsap.from(".ref-tag", {
+        y: 8,
+        opacity: 0,
+        scale: 0.85,
+        duration: 0.4,
+        ease: "back.out(1.6)",
+        stagger: 0.05,
+        clearProps: "transform",
+        scrollTrigger: { trigger: ".ref-grid", start: "top 78%" },
+      });
     },
     { scope: root },
   );
@@ -86,7 +96,7 @@ export default function Referenzen() {
                   {c.tags.map((t) => (
                     <span
                       key={t}
-                      className="flex h-6 items-center rounded-full bg-[#eeedea] px-2.5 text-[12px] font-medium text-[#5c5954]"
+                      className="ref-tag flex h-6 items-center rounded-full bg-[#eeedea] px-2.5 text-[12px] font-medium text-[#5c5954]"
                     >
                       {t}
                     </span>

@@ -26,6 +26,24 @@ export default function FinalCTA() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".cta-in", start: "top 85%" },
       });
+      gsap.from(".cta-tag", {
+        y: 10,
+        opacity: 0,
+        scale: 0.85,
+        duration: 0.45,
+        ease: "back.out(1.6)",
+        stagger: 0.09,
+        clearProps: "transform",
+        scrollTrigger: { trigger: ".cta-tags", start: "top 92%" },
+      });
+      // gold glow slowly breathes (opacity only — never touch its centering transform)
+      gsap.to(".cta-glow", {
+        opacity: 0.4,
+        duration: 3.2,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
     },
     { scope: root },
   );
@@ -39,7 +57,7 @@ export default function FinalCTA() {
       <MosaicBackdrop fade="radial-gradient(110% 95% at 50% 45%, #000 25%, transparent 74%)" />
       {/* gold glow */}
       <div
-        className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[900px] -translate-x-1/2 -translate-y-1/3 rounded-full opacity-70"
+        className="cta-glow pointer-events-none absolute left-1/2 top-0 h-[420px] w-[900px] -translate-x-1/2 -translate-y-1/3 rounded-full opacity-70"
         style={{
           background:
             "radial-gradient(closest-side, rgba(209,170,113,0.16), transparent 70%)",
@@ -72,9 +90,9 @@ export default function FinalCTA() {
             </a>
           </div>
 
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-[13px] text-white/60">
+          <div className="cta-tags mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-[13px] text-white/60">
             {TAGS.map((t) => (
-              <span key={t} className="flex items-center gap-2">
+              <span key={t} className="cta-tag flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-accent" />
                 {t}
               </span>

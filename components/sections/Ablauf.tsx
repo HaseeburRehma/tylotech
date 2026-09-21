@@ -62,6 +62,15 @@ export default function Ablauf() {
         stagger: 0.12,
         scrollTrigger: { trigger: ".ablauf-grid", start: "top 80%" },
       });
+      gsap.from(".ablauf-icon", {
+        scale: 0.4,
+        opacity: 0,
+        duration: 0.55,
+        ease: "back.out(1.9)",
+        stagger: 0.12,
+        clearProps: "transform",
+        scrollTrigger: { trigger: ".ablauf-grid", start: "top 78%" },
+      });
       gsap.from(".ablauf-cta", {
         y: 18,
         opacity: 0,
@@ -100,7 +109,7 @@ export default function Ablauf() {
                 CELL_BORDERS[i],
               )}
             >
-              <Icon className="size-6 text-accent" strokeWidth={1.6} />
+              <Icon className="ablauf-icon size-6 text-accent" strokeWidth={1.6} />
               <p className="eyebrow mt-6 text-ink/45">{step}</p>
               <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.015em] text-ink">
                 {title}

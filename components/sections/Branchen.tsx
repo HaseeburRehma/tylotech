@@ -36,6 +36,16 @@ export default function Branchen() {
         stagger: 0.08,
         scrollTrigger: { trigger: ".branchen-grid", start: "top 82%" },
       });
+      gsap.from(".branchen-icon", {
+        scale: 0.55,
+        opacity: 0,
+        duration: 0.5,
+        ease: "back.out(1.7)",
+        stagger: 0.08,
+        immediateRender: false,
+        clearProps: "transform",
+        scrollTrigger: { trigger: ".branchen-grid", start: "top 80%" },
+      });
     },
     { scope: root },
   );
@@ -56,7 +66,7 @@ export default function Branchen() {
               key={title}
               className="branchen-cell group flex flex-col gap-[22px] bg-white px-8 pb-[34px] pt-8 transition-colors hover:bg-[#fcfbfa]"
             >
-              <span className="grid size-[72px] place-items-center rounded-[18px] bg-gradient-to-br from-[#35768a] to-[#0d3646] text-white shadow-sm transition-transform duration-300 group-hover:-translate-y-1">
+              <span className="branchen-icon grid size-[72px] place-items-center rounded-[18px] bg-gradient-to-br from-[#35768a] to-[#0d3646] text-white shadow-sm transition-shadow duration-300 group-hover:shadow-[0_14px_28px_-10px_rgba(13,54,70,0.55)]">
                 <Icon className="size-8" strokeWidth={1.6} />
               </span>
               <div>
