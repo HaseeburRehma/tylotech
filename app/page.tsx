@@ -6,6 +6,7 @@ import Warum from "@/components/sections/Warum";
 import Leistungen from "@/components/sections/Leistungen";
 import Zahlen from "@/components/sections/Zahlen";
 import Wachstum from "@/components/sections/Wachstum";
+import Globe from "@/components/sections/Globe";
 import Ablauf from "@/components/sections/Ablauf";
 import Arbeitsweise from "@/components/sections/Arbeitsweise";
 import TyloHQ from "@/components/sections/TyloHQ";
@@ -33,6 +34,7 @@ export default function Home() {
         <Leistungen />
         <Zahlen />
         <Wachstum />
+        <Globe />
         <Ablauf />
         <Arbeitsweise />
         <TyloHQ />

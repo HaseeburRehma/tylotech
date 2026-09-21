@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
+import CookieBanner from "@/components/CookieBanner";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <ScrollProgress />
         <SmoothScroll>{children}</SmoothScroll>
+        <CookieBanner />
       </body>
     </html>
   );
