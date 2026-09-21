@@ -40,6 +40,22 @@ function SystemMock() {
             opacity="0.6"
           />
         ))}
+        {/* gold pulses that flow into the hub on hover */}
+        {[36, 78, 120, 162].map((py, i) => (
+          <path
+            key={`p${py}`}
+            className="aw-flow"
+            d={`M150 ${py} C 205 ${py}, 210 105, 262 105`}
+            fill="none"
+            stroke="#d1aa71"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            pathLength={1}
+            strokeDasharray="0.2 0.8"
+            strokeDashoffset={1}
+            style={{ animationDelay: `${i * 0.16}s` }}
+          />
+        ))}
       </svg>
 
       <div className="relative z-10 flex flex-col gap-2.5">
@@ -58,8 +74,8 @@ function SystemMock() {
         ))}
       </div>
 
-      <span className="sys-hub relative z-10 ml-auto flex flex-col items-center gap-1 rounded-[14px] border-[1.5px] border-accent bg-[rgba(209,170,113,0.1)] px-4 py-3.5">
-        <Layers className="size-[22px] text-[#d1aa71]" strokeWidth={1.7} />
+      <span className="sys-hub relative z-10 ml-auto flex flex-col items-center gap-1 rounded-[14px] border-[1.5px] border-accent bg-[rgba(209,170,113,0.1)] px-4 py-3.5 transition-[background-color,box-shadow] duration-300 group-hover:bg-[rgba(209,170,113,0.22)] group-hover:shadow-[0_0_34px_-6px_rgba(209,170,113,0.55)]">
+        <Layers className="size-[22px] text-[#d1aa71] transition-transform duration-300 group-hover:scale-110" strokeWidth={1.7} />
         <span className="text-[11.5px] font-medium text-[#d8b682]">Eine Ebene</span>
       </span>
     </div>
@@ -77,9 +93,9 @@ function FlowMock() {
       {rows.map((r, i) => (
         <div key={r.label} className="flex flex-col items-center">
           <div
-            className={`flow-row w-full rounded-[11px] border px-3.5 pb-3 pt-2.5 ${
+            className={`flow-row w-full rounded-[11px] border px-3.5 pb-3 pt-2.5 transition-shadow duration-300 ${
               r.hot
-                ? "border-[1.5px] border-accent bg-[rgba(209,170,113,0.1)]"
+                ? "border-[1.5px] border-accent bg-[rgba(209,170,113,0.1)] group-hover:shadow-[0_0_26px_-8px_rgba(209,170,113,0.55)]"
                 : "border-[#123f4f] bg-[#0a2c3a]"
             }`}
           >
@@ -98,7 +114,10 @@ function FlowMock() {
         </div>
       ))}
       <div className="mt-3 flex w-fit items-center gap-2 rounded-full bg-[rgba(30,120,80,0.2)] px-2.5 py-1">
-        <span className="size-1.5 rounded-full bg-[#34d399]" />
+        <span className="relative flex size-1.5 items-center justify-center">
+          <span className="absolute inline-flex size-full rounded-full bg-[#34d399] opacity-70 group-hover:animate-ping" />
+          <span className="relative size-1.5 rounded-full bg-[#34d399]" />
+        </span>
         <span className="text-[11px] font-medium text-[#6ee7b0]">
           läuft automatisch
         </span>
@@ -119,12 +138,17 @@ function ApprovalMock() {
       {rows.map((r) => (
         <div
           key={r.text}
-          className={`appr-row flex h-[46px] items-center gap-2.5 rounded-[10px] px-3 ${
-            r.done ? "bg-[rgba(209,170,113,0.1)]" : "bg-white/[0.04]"
+          className={`appr-row flex h-[46px] items-center gap-2.5 rounded-[10px] px-3 transition-colors duration-300 ${
+            r.done
+              ? "bg-[rgba(209,170,113,0.1)] group-hover:bg-[rgba(209,170,113,0.18)]"
+              : "bg-white/[0.04]"
           }`}
         >
           {r.done ? (
-            <CircleCheck className="size-[18px] shrink-0 text-[#d1aa71]" strokeWidth={2} />
+            <CircleCheck
+              className="size-[18px] shrink-0 text-[#d1aa71] transition-transform duration-300 group-hover:scale-110"
+              strokeWidth={2}
+            />
           ) : (
             <CircleHelp className="size-[18px] shrink-0 text-[#7fbacd]/70" strokeWidth={2} />
           )}
@@ -219,7 +243,7 @@ export default function Arbeitsweise() {
 
         <div className="aw-grid mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-[22px] border border-[#0e3a4a] bg-[#0e3a4a] lg:grid-cols-3">
           {CARDS.map(({ Mock, title, body }) => (
-            <article key={title} className="aw-card flex flex-col bg-[#02202c]">
+            <article key={title} className="aw-card group flex flex-col bg-[#02202c] transition-colors duration-300 hover:bg-[#02242f]">
               <div className="flex h-[258px] items-center justify-center overflow-hidden px-6">
                 <Mock />
               </div>

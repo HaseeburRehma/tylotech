@@ -38,11 +38,27 @@ function GlobeCanvas() {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    const tilt = -0.38;
-    const cosT = Math.cos(tilt);
-    const sinT = Math.sin(tilt);
+    const baseTilt = -0.38;
     let angle = 0;
     let raf = 0;
+
+    // pointer parallax — the sphere leans toward the cursor
+    let targetMX = 0;
+    let targetMY = 0;
+    let mx = 0;
+    let my = 0;
+    const onMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      targetMX = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
+      targetMY = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
+    };
+    const onLeave = () => {
+      targetMX = 0;
+      targetMY = 0;
+    };
+    const host = canvas.parentElement ?? canvas;
+    host.addEventListener("pointermove", onMove);
+    host.addEventListener("pointerleave", onLeave);
 
     const draw = () => {
       const w = canvas.width;
@@ -51,8 +67,14 @@ function GlobeCanvas() {
       const cx = w / 2;
       const cy = h / 2;
       const R = Math.min(w * 0.34, h * 0.46);
-      const cosA = Math.cos(angle);
-      const sinA = Math.sin(angle);
+
+      mx += (targetMX - mx) * 0.06;
+      my += (targetMY - my) * 0.06;
+      const cosA = Math.cos(angle + mx * 0.6);
+      const sinA = Math.sin(angle + mx * 0.6);
+      const tilt = baseTilt + my * 0.32;
+      const cosT = Math.cos(tilt);
+      const sinT = Math.sin(tilt);
 
       for (const p of pts) {
         const x1 = p.x * cosA - p.z * sinA;
@@ -87,6 +109,8 @@ function GlobeCanvas() {
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      host.removeEventListener("pointermove", onMove);
+      host.removeEventListener("pointerleave", onLeave);
     };
   }, []);
 

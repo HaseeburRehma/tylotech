@@ -156,3 +156,26 @@ html.lenis body {
     animation: none;
   }
 }
+
+/* Arbeitsweise · SystemMock — gold pulses flow into the hub on card hover */
+.aw-flow {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.group:hover .aw-flow {
+  opacity: 1;
+  animation: awFlow 1.5s linear infinite;
+}
+@keyframes awFlow {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .aw-flow {
+    animation: none;
+  }
+}

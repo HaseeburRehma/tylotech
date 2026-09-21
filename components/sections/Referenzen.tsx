@@ -6,10 +6,15 @@ import SectionHeading from "../ui/SectionHeading";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 type Metric = { value: string; label: string };
+type Media =
+  | { kind: "full"; src: string; bg: string }
+  | { kind: "logo"; bg: string; logo: string; logoW: string };
+
 type Case = {
   title: string;
   tags: string[];
   body: string;
+  media: Media;
   metrics?: Metric[];
 };
 
@@ -18,22 +23,74 @@ const CASES: Case[] = [
     title: "Crusty Slices",
     tags: ["Branding", "Web", "Performance"],
     body: "Von der ersten Filiale zur Marke, die man in der Stadt kennt — Auftritt, Bestellstrecke und Kampagnen aus einer Hand.",
+    media: { kind: "full", src: "/referenzen/crusty.gif", bg: "#c9a2ab" },
   },
   {
     title: "Fahrschule Abgefahrn",
     tags: ["Branding", "Web", "Social"],
     body: "Eine Fahrschule, die aussieht wie eine Marke — inklusive Theorieplan, den Fahrschüler tatsächlich benutzen.",
+    media: {
+      kind: "logo",
+      bg: "/referenzen/fahrschule-bg.png",
+      logo: "/referenzen/fahrschule-logo.svg",
+      logoW: "58%",
+    },
   },
   {
-    title: "Cleanpany Gebäudeservice",
-    tags: ["Local SEO", "Ads", "Web"],
-    body: "Aus unregelmäßigen Anrufen wurden planbare Anfragen — jeden Tag, nicht nur zum Monatsanfang.",
+    title: "Light of Hope",
+    tags: ["Branding", "Web", "Kampagne"],
+    body: "Eine Marke mit Haltung — vom Logo bis zur Website, die Spender und Partner vom ersten Moment an überzeugt.",
+    media: {
+      kind: "logo",
+      bg: "/referenzen/hope-bg.png",
+      logo: "/referenzen/hope-logo.png",
+      logoW: "54%",
+    },
     metrics: [
-      { value: "5–7", label: "Leads pro Tag" },
-      { value: "Täglich", label: "statt monatlich" },
+      { value: "100%", label: "eigene Zugänge" },
+      { value: "1 Team", label: "ein Ansprechpartner" },
     ],
   },
 ];
+
+function Media({ media }: { media: Media }) {
+  return (
+    <div className="relative h-[230px] overflow-hidden bg-[#e5e3df]">
+      {media.kind === "full" ? (
+        <>
+          <span
+            className="absolute inset-0"
+            style={{ background: media.bg }}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={media.src}
+            alt=""
+            className="absolute inset-0 size-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
+          />
+        </>
+      ) : (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={media.bg}
+            alt=""
+            className="absolute inset-0 size-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={media.logo}
+            alt=""
+            style={{ width: media.logoW }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)] transition-[transform,filter] duration-[500ms] ease-out group-hover:scale-[1.08] group-hover:brightness-110"
+          />
+        </>
+      )}
+      {/* subtle sheen that lightens on hover */}
+      <span className="pointer-events-none absolute inset-0 bg-[#001620]/10 transition-opacity duration-500 group-hover:opacity-0" />
+    </div>
+  );
+}
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
@@ -84,13 +141,9 @@ export default function Referenzen() {
           {CASES.map((c) => (
             <article
               key={c.title}
-              className="ref-card group flex flex-col overflow-hidden rounded-[20px] border border-line bg-white transition-shadow hover:shadow-[0_18px_40px_-20px_rgba(15,14,13,0.18)]"
+              className="ref-card group flex flex-col overflow-hidden rounded-[20px] border border-line bg-white transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)]"
             >
-              <div className="relative h-[230px] bg-gradient-to-br from-[#eeedea] to-[#e5e3df]">
-                <span className="absolute bottom-[22px] left-6 font-mono text-[11px] font-medium uppercase tracking-[1.2px] text-[#7d7973]">
-                  Projektbild
-                </span>
-              </div>
+              <Media media={c.media} />
               <div className="flex flex-1 flex-col gap-4 px-7 py-[26px]">
                 <div className="flex flex-wrap gap-2">
                   {c.tags.map((t) => (
