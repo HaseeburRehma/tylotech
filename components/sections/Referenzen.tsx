@@ -175,7 +175,7 @@ export default function Referenzen() {
           {CASES.map((c) => (
             <article
               key={c.title}
-              className="ref-card group flex w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60 transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)] sm:w-[400px] lg:w-[calc((100%-3rem)/3)]"
+              className="ref-card group flex w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60 transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)] sm:w-[400px] lg:w-[440px]"
             >
               <Media media={c.media} />
               <div className="flex flex-1 flex-col gap-4 px-7 py-[26px]">
