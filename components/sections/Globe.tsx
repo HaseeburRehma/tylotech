@@ -5,7 +5,7 @@ import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 /* ------------------------------------------------------------------ */
-/* Rotating dot sphere (canvas) — draggable, hover-parts, like finseo   */
+/* Rotating dot sphere (canvas) — draggable, hover-parts, scroll-fills  */
 /* ------------------------------------------------------------------ */
 function GlobeCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -41,25 +41,16 @@ function GlobeCanvas() {
     const baseTilt = -0.32;
     let angle = 0;
     let raf = 0;
-
-    // scroll velocity briefly "fills" the dots (brighten), then it settles
-    let boost = 0;
-    let lastScroll = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      boost = Math.min(1, boost + Math.abs(y - lastScroll) * 0.012);
-      lastScroll = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    let prog = 0; // eased scroll-fill progress (0 grey/empty → 1 gold/full)
 
     const host = (canvas.parentElement ?? canvas) as HTMLElement;
 
-    // pointer parallax + repulsion (hover) + drag-to-rotate with momentum
+    // pointer parallax + gentle repulsion + drag-to-rotate
     let targetMX = 0;
     let targetMY = 0;
     let mx = 0;
     let my = 0;
-    let pcx = -9999; // pointer position in canvas pixels
+    let pcx = -9999;
     let pcy = -9999;
     let pointerInside = false;
     let dragging = false;
@@ -128,9 +119,14 @@ function GlobeCanvas() {
       const cx = w / 2;
       const cy = h / 2;
       const R = Math.min(w * 0.32, h * 0.5);
-      const RAD = R * 0.42; // repulsion radius (canvas px)
-      boost *= 0.9; // decay the scroll fill
-      const fill = 1 + boost * 0.7;
+      const RAD = R * 0.42;
+
+      // scroll-fill: 0 when the sphere is entering from the bottom, 1 when it
+      // sits in view. Fills on scroll-down, empties on scroll-up.
+      const rect = canvas.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const target = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.8)));
+      prog += (target - prog) * 0.12;
 
       if (!dragging) {
         dragRotY += velX;
@@ -158,9 +154,16 @@ function GlobeCanvas() {
         let sx = cx + x1 * R;
         let sy = cy + y2 * R;
         const size = (0.5 + d * 1.8) * dpr;
-        let alpha = Math.min(1, (0.1 + d * 0.88) * fill);
+        // brightness ramps with scroll-fill
+        let alpha = (0.06 + d * 0.9) * (0.22 + 0.78 * prog);
 
-        // cursor gently parts the dots — a soft fade + slight drift (subtle)
+        // keep the centre clear so dots never sit behind the headline
+        const ex = (sx - cx) / (R * 0.6);
+        const ey = (sy - cy) / (R * 0.32);
+        const ed = Math.sqrt(ex * ex + ey * ey);
+        alpha *= Math.min(1, Math.max(0, (ed - 0.7) / 0.45));
+
+        // cursor gently parts the dots — a soft fade + slight drift
         if (repel) {
           const ddx = sx - pcx;
           const ddy = sy - pcy;
@@ -175,10 +178,17 @@ function GlobeCanvas() {
           }
         }
 
-        if (alpha <= 0.01) continue;
-        const rr = Math.round((p.accent ? 90 : 70) + (242 - (p.accent ? 90 : 70)) * d);
-        const gg = Math.round((p.accent ? 74 : 62) + ((p.accent ? 208 : 224) - (p.accent ? 74 : 62)) * d);
-        const bb = Math.round((p.accent ? 44 : 46) + ((p.accent ? 150 : 188) - (p.accent ? 44 : 46)) * d);
+        if (alpha <= 0.012) continue;
+        // colour interpolates cool grey (empty) → warm gold (filled) with scroll
+        const goldR = 70 + 172 * d;
+        const goldG = 62 + 162 * d;
+        const goldB = 46 + 142 * d;
+        const greyR = 96 + 70 * d;
+        const greyG = 108 + 74 * d;
+        const greyB = 120 + 66 * d;
+        const rr = Math.round(greyR + (goldR - greyR) * prog);
+        const gg = Math.round(greyG + (goldG - greyG) * prog);
+        const bb = Math.round(greyB + (goldB - greyB) * prog);
         ctx.beginPath();
         ctx.arc(sx, sy, size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${rr},${gg},${bb},${alpha})`;
@@ -193,7 +203,6 @@ function GlobeCanvas() {
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
-      window.removeEventListener("scroll", onScroll);
       host.removeEventListener("pointermove", onMove);
       host.removeEventListener("pointerleave", onLeave);
       host.removeEventListener("pointerdown", onDown);
@@ -205,8 +214,6 @@ function GlobeCanvas() {
   return <canvas ref={ref} className="absolute inset-0 size-full" aria-hidden />;
 }
 
-/* ------------------------------------------------------------------ */
-/* Labels + connector geometry (viewBox 1200 x 560, sphere at 600,280) */
 /* ------------------------------------------------------------------ */
 type Lbl = {
   t: string;
@@ -251,28 +258,31 @@ export default function Globe() {
         stagger: 0.1,
         scrollTrigger: { trigger: root.current, start: "top 68%" },
       });
-      // faint white track fades in; a gold segment travels each line — filling
-      // in at the label and emptying out at the node — tied to scroll.
+
+      // Everything below is SCRUBBED to scroll: the gold line fills from the
+      // label to the node on scroll-down and empties on scroll-up, the node
+      // fills gold as the line reaches it. Matches the dot colour-fill.
+      const st = () => ({
+        trigger: root.current,
+        start: "top 85%",
+        end: "top 22%",
+        scrub: 0.5,
+      });
       gsap.from(".glb-base", {
         opacity: 0,
         duration: 0.6,
         stagger: 0.05,
-        scrollTrigger: { trigger: root.current, start: "top 80%" },
+        scrollTrigger: { trigger: root.current, start: "top 88%" },
       });
       gsap.fromTo(
         ".glb-hi",
         { strokeDashoffset: 1 },
-        {
-          strokeDashoffset: -0.34,
-          ease: "none",
-          stagger: 0.05,
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top 92%",
-            end: "bottom 28%",
-            scrub: 0.5,
-          },
-        },
+        { strokeDashoffset: 0, ease: "none", stagger: 0.05, scrollTrigger: st() },
+      );
+      gsap.fromTo(
+        ".glb-node-fill",
+        { opacity: 0, scale: 0.2, transformOrigin: "center" },
+        { opacity: 1, scale: 1, ease: "none", stagger: 0.05, scrollTrigger: st() },
       );
       gsap.from(".glb-node", {
         opacity: 0,
@@ -280,8 +290,8 @@ export default function Globe() {
         transformOrigin: "center",
         duration: 0.5,
         ease: "back.out(2)",
-        stagger: 0.09,
-        scrollTrigger: { trigger: root.current, start: "top 60%" },
+        stagger: 0.08,
+        scrollTrigger: { trigger: root.current, start: "top 78%" },
       });
     },
     { scope: root },
@@ -297,15 +307,6 @@ export default function Globe() {
         <div className="relative mx-auto w-full max-w-[1280px]">
           <div className="relative mx-auto aspect-square max-w-[440px] lg:aspect-[1200/560] lg:max-w-none">
             <GlobeCanvas />
-
-            {/* legibility vignette */}
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(closest-side, rgba(0,22,32,0.72) 30%, transparent 70%)",
-              }}
-            />
 
             {/* connector lines + nodes (desktop only) */}
             <svg
@@ -332,7 +333,7 @@ export default function Globe() {
                       strokeWidth={1.8}
                       strokeLinecap="round"
                       pathLength={1}
-                      strokeDasharray="0.34 0.66"
+                      strokeDasharray="1 1"
                       strokeDashoffset={1}
                     />
                     <rect
@@ -345,6 +346,17 @@ export default function Globe() {
                       fill="#001620"
                       stroke="#d1aa71"
                       strokeWidth={1.4}
+                    />
+                    <rect
+                      className="glb-node-fill"
+                      x={l.nx - 2.5}
+                      y={l.ny - 2.5}
+                      width={5}
+                      height={5}
+                      rx={1}
+                      fill="#d1aa71"
+                      opacity={0}
+                      style={{ transformBox: "fill-box", transformOrigin: "center" }}
                     />
                   </g>
                 );
