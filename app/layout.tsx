@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Inter, Geist_Mono } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Inter,
+  Geist_Mono,
+  Instrument_Serif,
+} from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -24,6 +29,14 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "TyloTech — Marketing × Digitalisierung",
   description:
@@ -34,7 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="de"
-      className={`${bricolage.variable} ${inter.variable} ${geistMono.variable} antialiased`}
+      className={`${bricolage.variable} ${inter.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
     >
       <body>
         <ScrollProgress />

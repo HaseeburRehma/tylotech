@@ -2,9 +2,9 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { Star, ArrowRight } from "lucide-react";
+import { Star, ArrowRight, Megaphone } from "lucide-react";
 import Container from "../ui/Container";
-import HeroVideo from "./HeroVideo";
+import HeroVideoCard from "./HeroVideoCard";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const YT_ID = "vSIs3xcjzG4";
@@ -15,115 +15,111 @@ export default function Hero() {
   useGSAP(
     () => {
       const tl = gsap.timeline({
-        defaults: { ease: "power3.out", duration: 0.9 },
+        defaults: { ease: "power3.out", duration: 0.8 },
       });
-      tl.from(".hero-eyebrow", { y: 20, opacity: 0, duration: 0.7 })
+      tl.from(".hero-eyebrow", { y: 18, opacity: 0, duration: 0.6 })
         .from(
           ".hero-line",
-          { yPercent: 110, opacity: 0, stagger: 0.09, duration: 1 },
-          "-=0.35",
+          { yPercent: 118, opacity: 0, stagger: 0.09, duration: 0.9 },
+          "-=0.3",
         )
-        .from(".hero-copy", { y: 20, opacity: 0 }, "-=0.6")
-        .from(".hero-cta", { y: 18, opacity: 0, stagger: 0.1 }, "-=0.55")
-        .from(".hero-proof", { y: 16, opacity: 0 }, "-=0.5");
-
-      // Scroll parallax — content drifts up & fades, media eases down + scales.
-      const reduce = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      if (!reduce) {
-        gsap.to(".hero-content", {
-          yPercent: -14,
-          opacity: 0.35,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-        gsap.to(".hero-media", {
-          yPercent: 12,
-          scale: 1.1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      }
+        .from(".hero-copy", { y: 18, opacity: 0 }, "-=0.55")
+        .from(".hero-cta", { y: 16, opacity: 0, stagger: 0.1 }, "-=0.5")
+        .from(".hero-proof", { y: 14, opacity: 0 }, "-=0.45")
+        .from(
+          ".hero-media",
+          { y: 30, opacity: 0, scale: 0.96, duration: 1 },
+          "-=0.95",
+        );
     },
     { scope: root },
   );
 
   return (
-    <section id="top" ref={root} className="relative isolate overflow-hidden">
-      {/* Background video */}
-      <HeroVideo videoId={YT_ID} />
+    <section
+      id="top"
+      ref={root}
+      className="relative isolate overflow-hidden bg-page"
+    >
+      {/* soft warm backdrop */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(1100px_520px_at_88%_-8%,rgba(209,170,113,0.16),transparent_62%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_0%_115%,rgba(209,170,113,0.07),transparent_60%)]" />
+      </div>
 
-      <Container className="flex min-h-[clamp(600px,48.5vw,720px)] flex-col items-start justify-start pb-[104px] pt-[80px]">
-        <div className="hero-content flex w-[566px] max-w-full flex-col gap-[26px]">
-          <p className="hero-eyebrow eyebrow flex items-center gap-2.5 text-white">
-            <span className="size-[7px] rounded-[2px] bg-[#fbfaf9]" />
-            Marketing × Digitalisierung
+      <Container className="grid grid-cols-1 items-center gap-10 pb-16 pt-12 sm:pb-20 sm:pt-16 min-[1180px]:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] min-[1180px]:gap-14 min-[1180px]:pb-28 min-[1180px]:pt-[72px]">
+        {/* Left — copy */}
+        <div className="hero-content flex max-w-[600px] flex-col gap-6 sm:gap-7">
+          <p className="hero-eyebrow inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white/70 px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink-60 backdrop-blur-sm">
+            <Megaphone className="size-3.5 text-accent" />
+            Marketing und Digitalisierung
           </p>
 
-          <h1 className="display-l text-inverse">
-            <span className="block overflow-hidden">
+          <h1 className="font-display text-[clamp(1.9rem,6vw,3.4rem)] font-bold leading-[1.06] tracking-[-0.03em] text-ink">
+            <span className="block overflow-hidden pb-[0.05em]">
               <span className="hero-line block">Wir bauen, was Ihr</span>
             </span>
-            <span className="block overflow-hidden">
-              <span className="hero-line block">Unternehmen nach</span>
+            <span className="block overflow-hidden pb-[0.05em]">
+              <span className="hero-line block">
+                Unternehmen{" "}
+                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-accent">
+                  wirklich
+                </span>
+              </span>
             </span>
-            <span className="block overflow-hidden">
-              <span className="hero-line block">vorne bringt.</span>
+            <span className="block overflow-hidden pb-[0.05em]">
+              <span className="hero-line block">nach vorne bringt.</span>
             </span>
           </h1>
 
-          <p className="hero-copy body-xl text-white/90">
-            Marketing, Software, Digitalisierung und Unternehmensaufbau aus einer
-            Hand. Klar, direkt, ohne Kompromisse.
+          <p className="hero-copy max-w-[520px] text-[clamp(15px,1.6vw,19px)] leading-[1.6] text-ink-60">
+            Marketing, Software, Digitalisierung und Unternehmensaufbau aus
+            einer Hand. Klar, direkt, ohne Kompromisse.
           </p>
 
-          <div className="flex flex-wrap items-start gap-3.5">
+          {/* CTAs — kept on a single row at every breakpoint */}
+          <div className="flex flex-row items-stretch gap-2.5 sm:gap-3.5">
             <Link
               href="#kontakt"
-              className="hero-cta group inline-flex h-[58px] items-center justify-center gap-2.5 rounded-[14px] bg-white px-[30px] text-[16px] font-medium tracking-[-0.1px] text-ink transition-colors hover:bg-white/90"
+              className="hero-cta group inline-flex h-[clamp(46px,12.4vw,58px)] items-center justify-center gap-2 whitespace-nowrap rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[clamp(14px,3.6vw,30px)] text-[clamp(12px,3.3vw,16px)] font-medium text-ink shadow-[0_12px_28px_-12px_rgba(209,170,113,0.95)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
             >
               Jetzt anfragen
-              <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="size-[clamp(15px,4vw,20px)] transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="#audit"
-              className="hero-cta inline-flex h-[58px] items-center justify-center rounded-[14px] border border-white/55 px-[30px] text-[16px] font-medium tracking-[-0.1px] text-white transition-colors hover:border-white hover:bg-white/10"
+              className="hero-cta inline-flex h-[clamp(46px,12.4vw,58px)] items-center justify-center whitespace-nowrap rounded-[14px] border border-line bg-white px-[clamp(14px,3.6vw,30px)] text-[clamp(12px,3.3vw,16px)] font-medium text-ink shadow-[0_8px_20px_-14px_rgba(15,14,13,0.45)] transition-colors duration-200 hover:border-ink/25 hover:bg-page"
             >
               Kostenloses Audit buchen
             </Link>
           </div>
 
-          <div className="hero-proof mt-1">
-            <div className="h-px w-full bg-white/15" />
-            <div className="mt-[26px] flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-white/85">
-              <span className="flex items-center gap-3">
+          {/* Proof */}
+          <div className="hero-proof">
+            <div className="h-px w-full max-w-[520px] bg-line" />
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] text-ink-60 sm:text-[14px]">
+              <span className="flex items-center gap-2.5">
                 <span className="flex gap-[3px]">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
                       key={i}
-                      className="size-[17px] fill-accent text-accent"
+                      className="size-[16px] fill-accent text-accent"
                       strokeWidth={0}
                     />
                   ))}
                 </span>
-                <span className="text-[16px] font-medium text-inverse">5,0</span>
+                <span className="text-[15px] font-semibold text-ink">5,0</span>
                 <span>aus 31 Google-Bewertungen</span>
               </span>
-              <span className="h-5 w-px bg-white/20" />
+              <span className="hidden h-4 w-px bg-line sm:block" />
               <span>100+ Partnerunternehmen</span>
             </div>
           </div>
+        </div>
+
+        {/* Right — video */}
+        <div className="w-full max-w-[560px] min-[1180px]:max-w-none">
+          <HeroVideoCard videoId={YT_ID} label="Imagefilm" />
         </div>
       </Container>
     </section>
