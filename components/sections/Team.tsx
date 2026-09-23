@@ -18,19 +18,59 @@ export default function Team() {
   const scroller = useRef<HTMLDivElement>(null);
   const cards = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(2);
+  const paused = useRef(false);
+  const lastInteract = useRef(0);
 
-  const go = (i: number, smooth = true) => {
-    setActive(i);
-    cards.current[i]?.scrollIntoView({
-      behavior: smooth ? "smooth" : "auto",
-      inline: "center",
-      block: "nearest",
-    });
+  // Center a card by scrolling only the strip — never the page.
+  const scrollToCard = (i: number, smooth = true) => {
+    const sc = scroller.current;
+    const el = cards.current[i];
+    if (!sc || !el) return;
+    const scRect = sc.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const delta = elRect.left + elRect.width / 2 - (scRect.left + scRect.width / 2);
+    sc.scrollTo({ left: sc.scrollLeft + delta, behavior: smooth ? "smooth" : "auto" });
   };
 
+  const go = (i: number) => {
+    lastInteract.current = Date.now();
+    setActive(i);
+    scrollToCard(i);
+  };
+
+  // center the featured card on mount, without animating the page
   useEffect(() => {
-    // center the featured card without animating the page
-    cards.current[2]?.scrollIntoView({ inline: "center", block: "nearest" });
+    scrollToCard(2, false);
+  }, []);
+
+  // Auto-advance the slider while the section is visible; pause on hover and
+  // for a few seconds after any manual interaction. Honors reduced motion.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let visible = true;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        visible = e.isIntersecting;
+      },
+      { threshold: 0.25 },
+    );
+    const node = root.current;
+    if (node) io.observe(node);
+
+    const id = setInterval(() => {
+      if (!visible || paused.current) return;
+      if (Date.now() - lastInteract.current < 4500) return;
+      setActive((prev) => {
+        const next = (prev + 1) % MEMBERS.length;
+        scrollToCard(next);
+        return next;
+      });
+    }, 3400);
+
+    return () => {
+      clearInterval(id);
+      io.disconnect();
+    };
   }, []);
 
   useGSAP(
@@ -107,6 +147,12 @@ export default function Team() {
       {/* Carousel */}
       <div
         ref={scroller}
+        onPointerEnter={() => {
+          paused.current = true;
+        }}
+        onPointerLeave={() => {
+          paused.current = false;
+        }}
         className="team-carousel no-scrollbar mt-8 flex snap-x snap-mandatory items-center gap-6 overflow-x-auto px-[calc(50%-150px)] py-10"
       >
         {MEMBERS.map((m, i) => (

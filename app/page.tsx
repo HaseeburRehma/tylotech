@@ -5,7 +5,6 @@ import Praxis from "@/components/sections/Praxis";
 import Diagnose from "@/components/sections/Diagnose";
 import Wechsel from "@/components/sections/Wechsel";
 import Warum from "@/components/sections/Warum";
-import Leistungen from "@/components/sections/Leistungen";
 import Zahlen from "@/components/sections/Zahlen";
 import Wachstum from "@/components/sections/Wachstum";
 import Globe from "@/components/sections/Globe";
@@ -36,7 +35,6 @@ export default function Home() {
         <Diagnose />
         <Wechsel />
         <Warum />
-        <Leistungen />
         <Zahlen />
         <Wachstum />
         <Globe />
