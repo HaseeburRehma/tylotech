@@ -38,37 +38,51 @@ function Card({
   );
 }
 
-function Tile({ children }: { children: React.ReactNode }) {
+/* ------------------------------------------------------------------ */
+/* 1 · Channels — two auto-scrolling logo marquees                     */
+/* ------------------------------------------------------------------ */
+const ROW_TOP = ["googleads", "meta", "tiktok", "youtube"];
+const ROW_BOTTOM = ["linkedin", "instagram", "googleanalytics", "google"];
+
+function MarqueeTile({ slug }: { slug: string }) {
   return (
-    <div className="chan-tile group grid aspect-square cursor-pointer place-items-center rounded-[14px] border border-line bg-page transition-[box-shadow,background-color,transform] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_12px_26px_-10px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.16] active:translate-y-0 active:scale-95">
-      {children}
+    <div className="grid size-[clamp(58px,17vw,74px)] shrink-0 cursor-pointer place-items-center rounded-[14px] border border-line bg-page transition-[box-shadow,background-color,transform] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_12px_26px_-10px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.16] active:translate-y-0 active:scale-95">
+      <BrandIcon slug={slug} size={26} />
     </div>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* 1 · Channels                                                        */
-/* ------------------------------------------------------------------ */
-const CHANNELS = [
-  "googleads",
-  "meta",
-  "tiktok",
-  "youtube",
-  "linkedin",
-  "instagram",
-  "googleanalytics",
-  "google",
-];
+function IconMarquee({ slugs, dir }: { slugs: string[]; dir: "ltr" | "rtl" }) {
+  // one copy (list ×2) is wide enough to span the card; the track duplicates
+  // it so translating by 50% loops seamlessly.
+  const copy = [...slugs, ...slugs];
+  const track = [...copy, ...copy];
+  const anim =
+    dir === "ltr"
+      ? "animate-[marqueeRight_24s_linear_infinite]"
+      : "animate-[marqueeLeft_24s_linear_infinite]";
+  return (
+    <div
+      aria-hidden
+      className="group relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_9%,#000_91%,transparent)]"
+    >
+      <div
+        className={`flex w-max gap-3 ${anim} group-hover:[animation-play-state:paused] motion-reduce:animate-none`}
+      >
+        {track.map((slug, i) => (
+          <MarqueeTile key={i} slug={slug} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function ChannelsCard() {
   return (
     <Card title="Alle Kanäle, eine Auswertung" subtitle="statt sechs Dashboards">
-      <div className="grid grid-cols-4 gap-2.5">
-        {CHANNELS.map((slug) => (
-          <Tile key={slug}>
-            <BrandIcon slug={slug} size={26} />
-          </Tile>
-        ))}
+      <div className="flex flex-col gap-3">
+        <IconMarquee slugs={ROW_TOP} dir="ltr" />
+        <IconMarquee slugs={ROW_BOTTOM} dir="rtl" />
       </div>
     </Card>
   );
@@ -542,19 +556,6 @@ export default function Praxis() {
       // Fresh trigger config per tween — sharing one object across several
       // ScrollTriggers lets GSAP mutate it and cross-wire them.
       const st = () => ({ trigger: ".praxis-grid", start: "top 70%" });
-
-      // channel tiles pop in (immediateRender:false + clearProps so a tile is
-      // never left frozen at its shrunken start scale)
-      gsap.from(".chan-tile", {
-        scale: 0.55,
-        opacity: 0,
-        duration: 0.5,
-        ease: "back.out(1.7)",
-        stagger: { each: 0.045, from: "start" },
-        immediateRender: false,
-        clearProps: "transform",
-        scrollTrigger: st(),
-      });
 
       // stat bar chart grows up
       gsap.fromTo(
