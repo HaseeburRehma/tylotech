@@ -1,9 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { Send, Search, MessageCircle, Rocket } from "lucide-react";
+import Link from "next/link";
+import {
+  Send,
+  Search,
+  MessageCircle,
+  Rocket,
+  Workflow,
+  ArrowRight,
+} from "lucide-react";
 import Container from "../ui/Container";
-import Button from "../ui/Button";
 import { cn } from "@/lib/cn";
 import { gsap, useGSAP } from "@/lib/gsap";
 
@@ -85,15 +92,18 @@ export default function Ablauf() {
   return (
     <section id="ablauf" ref={root} className="bg-[#001620] text-white py-24">
       <Container>
-        <div className="ablauf-head mx-auto max-w-[640px] text-center">
-          <p className="eyebrow mb-[18px] flex items-center justify-center gap-2.5 text-[#d8b682]">
-            <span className="size-[7px] rounded-[2px] bg-accent" />
-            So läuft es ab
+        <div className="ablauf-head mx-auto max-w-[680px] text-center">
+          <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
+            <Workflow className="size-3.5 text-accent" />
+            So arbeiten wir
           </p>
-          <h2 className="display-l text-white">
-            Vier Schritte bis zur Zusammenarbeit.
+          <h2 className="mt-5 font-display text-[clamp(2rem,4.4vw,3.4rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
+            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#d8b682]">
+              Vier Schritte
+            </span>{" "}
+            bis zur Zusammenarbeit.
           </h2>
-          <p className="mt-[18px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#b3d6e2]">
+          <p className="mx-auto mt-5 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
             Kein Vertrieb, der Sie durch einen Funnel schiebt. Nach dem dritten
             Schritt wissen Sie genau, was Sie bekommen und was es kostet.
           </p>
@@ -122,9 +132,13 @@ export default function Ablauf() {
         </div>
 
         <div className="ablauf-cta mt-14 flex justify-center">
-          <Button href="#termin" variant="dark" withArrow>
+          <Link
+            href="#termin"
+            className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[16px] font-medium text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
+          >
             Erstgespräch buchen
-          </Button>
+            <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </div>
       </Container>
     </section>

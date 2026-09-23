@@ -1,9 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { RotateCw, Users, TrendingUp } from "lucide-react";
+import { RotateCw, Users, TrendingUp, Layers } from "lucide-react";
 import Container from "../ui/Container";
-import SectionHeading from "../ui/SectionHeading";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const LEVERS = [
@@ -72,26 +71,37 @@ export default function Wachstum() {
   return (
     <section id="hebel" ref={root} className="bg-page py-24">
       <Container>
-        <SectionHeading
-          className="hebel-head"
-          eyebrow="Drei Hebel"
-          title="Woran wir bei Ihnen zuerst drehen."
-          subtitle="Nicht alles gleichzeitig. Erst das, was am schnellsten Wirkung zeigt — und was danach von allein weiterläuft."
-        />
+        <div className="hebel-head max-w-[760px]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+            <Layers className="size-3.5 text-accent" />
+            Unser Fundament
+          </p>
+          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+            Woran wir bei Ihnen{" "}
+            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+              zuerst
+            </span>{" "}
+            drehen.
+          </h2>
+          <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+            Nicht alles gleichzeitig. Erst das, was am schnellsten Wirkung zeigt,
+            und was danach von allein weiterläuft.
+          </p>
+        </div>
 
-        <div className="hebel-grid mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="hebel-grid mt-12 grid grid-cols-1 gap-5 sm:mt-14 md:grid-cols-2 lg:grid-cols-3">
           {LEVERS.map(({ icon: Icon, title, body }) => (
             <article
               key={title}
               className="hebel-card group relative overflow-hidden rounded-[20px] border border-line bg-white p-7"
             >
-              <span className="hebel-accent absolute inset-x-0 top-0 h-[3px] origin-center bg-gradient-to-r from-transparent via-accent to-transparent opacity-80" />
+              <span className="hebel-accent absolute inset-x-0 top-0 h-[3px] origin-left bg-accent" />
 
-              <span className="hebel-icon grid size-11 place-items-center rounded-xl border border-line bg-page text-ink/70 transition-colors group-hover:text-ink">
-                <Icon className="size-5" strokeWidth={1.6} />
+              <span className="hebel-icon grid size-11 place-items-center rounded-xl bg-[rgba(209,170,113,0.14)] text-[#6b6863] transition-colors group-hover:text-[#94713f]">
+                <Icon className="size-5" strokeWidth={1.7} />
               </span>
 
-              <h3 className="mt-14 text-[19px] font-semibold leading-snug tracking-[-0.01em] text-ink">
+              <h3 className="mt-12 text-[19px] font-semibold leading-snug tracking-[-0.01em] text-ink sm:mt-14">
                 {title}
               </h3>
               <p className="mt-3 text-[15px] leading-relaxed text-ink/55">
