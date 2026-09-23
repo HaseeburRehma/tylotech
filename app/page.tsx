@@ -13,6 +13,7 @@ import Ablauf from "@/components/sections/Ablauf";
 import Arbeitsweise from "@/components/sections/Arbeitsweise";
 import TyloHQ from "@/components/sections/TyloHQ";
 import Team from "@/components/sections/Team";
+import Gruender from "@/components/sections/Gruender";
 import Podcast from "@/components/sections/Podcast";
 import Branchen from "@/components/sections/Branchen";
 import Referenzen from "@/components/sections/Referenzen";
@@ -43,6 +44,7 @@ export default function Home() {
         <Arbeitsweise />
         <TyloHQ />
         <Team />
+        <Gruender />
         <Podcast />
         <Branchen />
         <Referenzen />
