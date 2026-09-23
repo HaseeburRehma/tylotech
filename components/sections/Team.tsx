@@ -107,7 +107,7 @@ export default function Team() {
       {/* Carousel */}
       <div
         ref={scroller}
-        className="team-carousel no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto px-[calc(50%-150px)] pb-4"
+        className="team-carousel no-scrollbar mt-8 flex snap-x snap-mandatory items-center gap-6 overflow-x-auto px-[calc(50%-150px)] py-10"
       >
         {MEMBERS.map((m, i) => (
           <div
@@ -118,8 +118,8 @@ export default function Team() {
             onClick={() => go(i)}
             className={`relative aspect-[300/420] w-[300px] shrink-0 cursor-pointer snap-center overflow-hidden rounded-[22px] transition-all duration-500 ${
               active === i
-                ? "scale-[1.06] ring-[1.5px] ring-accent shadow-[0_32px_64px_-16px_rgba(15,14,13,0.18)]"
-                : "scale-100"
+                ? "z-10 scale-[1.15] ring-[1.5px] ring-accent shadow-[0_40px_80px_-24px_rgba(0,0,0,0.55)]"
+                : "scale-[0.94] opacity-90"
             }`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}

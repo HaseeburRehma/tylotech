@@ -12,6 +12,7 @@ import {
   Activity,
   Sparkles,
   FolderCheck,
+  KeyRound,
 } from "lucide-react";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
@@ -286,18 +287,25 @@ export default function TyloHQ() {
   );
 
   return (
-    <section id="tylohq" ref={root} className="bg-[#001620] py-24 text-white">
+    <section
+      id="tylohq"
+      ref={root}
+      className="border-t border-line bg-[#f3f5f6] py-20 text-ink sm:py-24"
+    >
       <Container>
         <div className="hq-head mx-auto max-w-[680px] text-center">
-          <p className="eyebrow mb-4 flex items-center justify-center gap-2 text-[#d8b682]">
-            <span className="size-1.5 rounded-full bg-accent" />
-            TyloHQ
+          <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+            <KeyRound className="size-3.5 text-accent" />
+            Ihr Zugang
           </p>
-          <h2 className="display-m text-balance text-white">
-            Ihr Projekt läuft nicht mehr über{" "}
-            <span className="whitespace-nowrap">E-Mail.</span>
+          <h2 className="mt-5 text-balance font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+            Ihr Projekt läuft{" "}
+            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+              nicht mehr über E-Mail
+            </span>
+            .
           </h2>
-          <p className="mt-4 text-[18px] leading-relaxed text-[#b3d6e2]">
+          <p className="mx-auto mt-5 max-w-[620px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
             TyloHQ ist die Plattform, auf der wir mit Ihnen arbeiten:
             Echtzeit-Zahlen aus Meta, Google und SEO, Inhalte und Freigaben an
             einem Ort — und ein Team, das Sie erreichen, ohne zu suchen.
@@ -311,13 +319,13 @@ export default function TyloHQ() {
         <div className="hq-features mx-auto mt-16 grid max-w-[980px] grid-cols-1 gap-8 md:grid-cols-3">
           {FEATURES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="hq-feature">
-              <span className="grid size-10 place-items-center rounded-xl border-[#0a4a5f] bg-[#04283a]/60 text-[#d8b682]">
+              <span className="grid size-10 place-items-center rounded-xl border border-line bg-white text-[#94713f] shadow-[0_1px_3px_rgba(15,14,13,0.04)]">
                 <Icon className="size-5" strokeWidth={1.6} />
               </span>
-              <h3 className="mt-4 text-[17px] font-semibold tracking-[-0.01em] text-white">
+              <h3 className="mt-4 text-[17px] font-semibold tracking-[-0.01em] text-ink">
                 {title}
               </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-[#7fbacd]">
+              <p className="mt-2 text-[15px] leading-relaxed text-[#5c5954]">
                 {body}
               </p>
             </div>
@@ -330,7 +338,7 @@ export default function TyloHQ() {
           </Button>
           <Link
             href="#login"
-            className="text-[15px] font-medium tracking-[-0.01em] text-[#b3d6e2] transition-colors hover:text-white"
+            className="text-[15px] font-medium tracking-[-0.01em] text-ink/60 transition-colors hover:text-ink"
           >
             Kunden-Login
           </Link>
