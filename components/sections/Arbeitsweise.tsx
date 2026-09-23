@@ -3,11 +3,9 @@
 import { useRef } from "react";
 import { Layers, CircleCheck, CircleHelp } from "lucide-react";
 import Container from "../ui/Container";
-import SectionHeading from "../ui/SectionHeading";
-import MosaicBackdrop from "../MosaicBackdrop";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-/* ---- mini flow visuals ------------------------------------------- */
+/* ---- mini flow visuals (light theme) ----------------------------- */
 
 function SystemMock() {
   const pills = [
@@ -26,7 +24,7 @@ function SystemMock() {
       >
         <defs>
           <linearGradient id="awconn" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#4a6b78" />
+            <stop offset="0%" stopColor="#c9c2b4" />
             <stop offset="100%" stopColor="#d1aa71" />
           </linearGradient>
         </defs>
@@ -37,23 +35,23 @@ function SystemMock() {
             fill="none"
             stroke="url(#awconn)"
             strokeWidth="1.5"
-            opacity="0.6"
+            opacity="0.7"
           />
         ))}
-        {/* gold pulses that flow into the hub on hover */}
+        {/* gold pulses continuously flowing into the hub */}
         {[36, 78, 120, 162].map((py, i) => (
           <path
             key={`p${py}`}
             className="aw-flow"
             d={`M150 ${py} C 205 ${py}, 210 105, 262 105`}
             fill="none"
-            stroke="#d1aa71"
+            stroke="#c79a53"
             strokeWidth="1.8"
             strokeLinecap="round"
             pathLength={1}
             strokeDasharray="0.2 0.8"
             strokeDashoffset={1}
-            style={{ animationDelay: `${i * 0.16}s` }}
+            style={{ animationDelay: `${i * 0.3}s` }}
           />
         ))}
       </svg>
@@ -62,21 +60,26 @@ function SystemMock() {
         {pills.map((p, i) => (
           <span
             key={p.t}
-            className="sys-pill flex items-center gap-2 rounded-[10px] border border-[#123f4f] bg-[#0a2c3a] px-3 py-1.5"
+            className="sys-pill flex items-center gap-2 rounded-[10px] border border-line bg-white px-3 py-1.5 shadow-[0_1px_3px_rgba(15,14,13,0.04)]"
             style={{ transform: `rotate(${(3 - i) * 1.1}deg)` }}
           >
             <span
               className="size-[6px] rounded-[3px]"
-              style={{ background: p.gold ? "#d1aa71" : "#4a6b78" }}
+              style={{ background: p.gold ? "#d1aa71" : "#b3aea6" }}
             />
-            <span className="text-[12px] font-medium text-white">{p.t}</span>
+            <span className="text-[12px] font-medium text-ink">{p.t}</span>
           </span>
         ))}
       </div>
 
-      <span className="sys-hub relative z-10 ml-auto flex flex-col items-center gap-1 rounded-[14px] border-[1.5px] border-accent bg-[rgba(209,170,113,0.1)] px-4 py-3.5 transition-[background-color,box-shadow] duration-300 group-hover:bg-[rgba(209,170,113,0.22)] group-hover:shadow-[0_0_34px_-6px_rgba(209,170,113,0.55)]">
-        <Layers className="size-[22px] text-[#d1aa71] transition-transform duration-300 group-hover:scale-110" strokeWidth={1.7} />
-        <span className="text-[11.5px] font-medium text-[#d8b682]">Eine Ebene</span>
+      <span className="sys-hub relative z-10 ml-auto flex flex-col items-center gap-1 rounded-[14px] border-[1.5px] border-accent bg-[rgba(209,170,113,0.12)] px-4 py-3.5">
+        <Layers
+          className="size-[22px] text-[#c79a53] transition-transform duration-300 group-hover:scale-110"
+          strokeWidth={1.7}
+        />
+        <span className="text-[11.5px] font-medium text-[#94713f]">
+          Eine Ebene
+        </span>
       </span>
     </div>
   );
@@ -95,30 +98,28 @@ function FlowMock() {
           <div
             className={`flow-row w-full rounded-[11px] border px-3.5 pb-3 pt-2.5 transition-shadow duration-300 ${
               r.hot
-                ? "border-[1.5px] border-accent bg-[rgba(209,170,113,0.1)] group-hover:shadow-[0_0_26px_-8px_rgba(209,170,113,0.55)]"
-                : "border-[#123f4f] bg-[#0a2c3a]"
+                ? "border-[1.5px] border-accent bg-[rgba(209,170,113,0.12)] group-hover:shadow-[0_0_26px_-8px_rgba(209,170,113,0.5)]"
+                : "border-line bg-white"
             }`}
           >
             <p
               className={`text-[9px] font-medium uppercase tracking-[0.08em] ${
-                r.hot ? "text-[#d8b682]" : "text-[#7fbacd]"
+                r.hot ? "text-[#94713f]" : "text-ink/45"
               }`}
             >
               {r.label}
             </p>
-            <p className="mt-0.5 text-[12.5px] font-medium text-white">{r.text}</p>
+            <p className="mt-0.5 text-[12.5px] font-medium text-ink">{r.text}</p>
           </div>
-          {i < rows.length - 1 && (
-            <span className="my-1 h-3 w-px bg-[#2a5566]" />
-          )}
+          {i < rows.length - 1 && <span className="my-1 h-3 w-px bg-line" />}
         </div>
       ))}
-      <div className="mt-3 flex w-fit items-center gap-2 rounded-full bg-[rgba(30,120,80,0.2)] px-2.5 py-1">
+      <div className="mt-3 flex w-fit items-center gap-2 rounded-full bg-[rgba(22,163,74,0.1)] px-2.5 py-1">
         <span className="relative flex size-1.5 items-center justify-center">
-          <span className="absolute inline-flex size-full rounded-full bg-[#34d399] opacity-70 group-hover:animate-ping" />
-          <span className="relative size-1.5 rounded-full bg-[#34d399]" />
+          <span className="absolute inline-flex size-full rounded-full bg-[#16a34a] opacity-70 group-hover:animate-ping" />
+          <span className="relative size-1.5 rounded-full bg-[#16a34a]" />
         </span>
-        <span className="text-[11px] font-medium text-[#6ee7b0]">
+        <span className="text-[11px] font-medium text-[#15803d]">
           läuft automatisch
         </span>
       </div>
@@ -134,33 +135,33 @@ function ApprovalMock() {
     { text: "Social-Plan KW 38", done: false },
   ];
   return (
-    <div className="flex h-[210px] w-full max-w-[340px] flex-col justify-center gap-2 rounded-[14px] border border-[#0e3a4a] bg-[#031a26] p-[18px]">
+    <div className="flex h-[210px] w-full max-w-[340px] flex-col justify-center gap-2 rounded-[14px] border border-line bg-white p-[18px] shadow-[0_1px_3px_rgba(15,14,13,0.04)]">
       {rows.map((r) => (
         <div
           key={r.text}
           className={`appr-row flex h-[46px] items-center gap-2.5 rounded-[10px] px-3 transition-colors duration-300 ${
             r.done
-              ? "bg-[rgba(209,170,113,0.1)] group-hover:bg-[rgba(209,170,113,0.18)]"
-              : "bg-white/[0.04]"
+              ? "bg-[rgba(209,170,113,0.12)] group-hover:bg-[rgba(209,170,113,0.2)]"
+              : "bg-black/[0.03]"
           }`}
         >
           {r.done ? (
             <CircleCheck
-              className="size-[18px] shrink-0 text-[#d1aa71] transition-transform duration-300 group-hover:scale-110"
+              className="size-[18px] shrink-0 text-[#c79a53] transition-transform duration-300 group-hover:scale-110"
               strokeWidth={2}
             />
           ) : (
-            <CircleHelp className="size-[18px] shrink-0 text-[#7fbacd]/70" strokeWidth={2} />
+            <CircleHelp className="size-[18px] shrink-0 text-ink/30" strokeWidth={2} />
           )}
-          <span className="flex-1 truncate text-[12.5px] font-medium text-white">
+          <span className="flex-1 truncate text-[12.5px] font-medium text-ink">
             {r.text}
           </span>
           {r.done ? (
-            <span className="rounded-full bg-accent px-2 py-0.5 text-[10.5px] font-medium text-[#001620]">
+            <span className="rounded-full bg-accent px-2 py-0.5 text-[10.5px] font-medium text-ink">
               freigegeben
             </span>
           ) : (
-            <span className="rounded-full bg-white/[0.08] px-2 py-0.5 text-[10.5px] font-medium text-[#7fbacd]">
+            <span className="rounded-full bg-black/[0.06] px-2 py-0.5 text-[10.5px] font-medium text-ink/50">
               offen
             </span>
           )}
@@ -210,8 +211,8 @@ export default function Arbeitsweise() {
         scrollTrigger: { trigger: ".aw-grid", start: "top 82%" },
       });
       const st = { trigger: ".aw-grid", start: "top 74%" };
-      gsap.from(".sys-pill", { x: -18, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.1, scrollTrigger: st });
-      gsap.from(".sys-hub", { scale: 0.7, opacity: 0, duration: 0.6, ease: "back.out(1.7)", delay: 0.4, scrollTrigger: st });
+      gsap.from(".sys-pill", { x: -18, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.1, clearProps: "transform", scrollTrigger: st });
+      gsap.from(".sys-hub", { scale: 0.7, opacity: 0, duration: 0.6, ease: "back.out(1.7)", delay: 0.4, clearProps: "transform", scrollTrigger: st });
       gsap.from(".flow-row", { y: 16, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.14, scrollTrigger: st });
       gsap.from(".appr-row", { x: 16, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.1, scrollTrigger: st });
     },
@@ -222,36 +223,37 @@ export default function Arbeitsweise() {
     <section
       id="arbeitsweise"
       ref={root}
-      className="relative overflow-hidden bg-[#001620] py-24 text-white"
+      className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
     >
-      <MosaicBackdrop />
-
       <Container className="relative">
-        <div className="aw-head max-w-[640px]">
-          <p className="eyebrow mb-[18px] flex items-center gap-2.5 text-[#d8b682]">
+        <div className="aw-head max-w-[680px]">
+          <p className="eyebrow mb-[18px] flex items-center gap-2.5 text-[#94713f]">
             <span className="size-[7px] rounded-[2px] bg-accent" />
             Arbeitsweise
           </p>
-          <h2 className="display-m text-white">
+          <h2 className="display-m text-ink">
             Drei Dinge, die wir anders machen.
           </h2>
-          <p className="mt-[18px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#b3d6e2]">
+          <p className="mt-[18px] text-[clamp(16px,1.6vw,18px)] leading-[1.6] tracking-[-0.1px] text-[#5c5954]">
             Kein Geheimwissen — einfach das, was nach über hundert Projekten
             übrig geblieben ist.
           </p>
         </div>
 
-        <div className="aw-grid mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-[22px] border border-[#0e3a4a] bg-[#0e3a4a] lg:grid-cols-3">
+        <div className="aw-grid mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-[22px] border border-line bg-line sm:mt-14 lg:grid-cols-3">
           {CARDS.map(({ Mock, title, body }) => (
-            <article key={title} className="aw-card group flex flex-col bg-[#02202c] transition-colors duration-300 hover:bg-[#02242f]">
+            <article
+              key={title}
+              className="aw-card group flex flex-col bg-white transition-colors duration-300 hover:bg-[#fbfaf9]"
+            >
               <div className="flex h-[258px] items-center justify-center overflow-hidden px-6">
                 <Mock />
               </div>
               <div className="px-8 pb-[34px] pt-2">
-                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-white">
+                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-ink">
                   {title}
                 </h3>
-                <p className="mt-3 text-[16px] leading-[26px] text-[#b3d6e2]">
+                <p className="mt-3 text-[16px] leading-[26px] text-[#5c5954]">
                   {body}
                 </p>
               </div>

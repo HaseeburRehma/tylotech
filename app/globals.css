@@ -175,14 +175,11 @@ html.lenis body {
   }
 }
 
-/* Arbeitsweise · SystemMock — gold pulses flow into the hub on card hover */
+/* Arbeitsweise · SystemMock — gold pulses continuously flow into the hub
+   (always active, slower), with the hub gently glowing as they arrive. */
 .aw-flow {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.group:hover .aw-flow {
   opacity: 1;
-  animation: awFlow 1.5s linear infinite;
+  animation: awFlow 2.6s linear infinite;
 }
 @keyframes awFlow {
   from {
@@ -192,8 +189,21 @@ html.lenis body {
     stroke-dashoffset: -1;
   }
 }
+.sys-hub {
+  animation: awHubGlow 2.6s ease-in-out infinite;
+}
+@keyframes awHubGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(209, 170, 113, 0);
+  }
+  50% {
+    box-shadow: 0 0 30px -6px rgba(209, 170, 113, 0.5);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .group:hover .aw-flow {
+  .aw-flow,
+  .sys-hub {
     animation: none;
   }
 }
