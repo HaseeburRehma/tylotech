@@ -1,109 +1,124 @@
 "use client";
 
 import { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CircleCheck, FolderOpen } from "lucide-react";
 import Container from "../ui/Container";
-import SectionHeading from "../ui/SectionHeading";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-type Metric = { value: string; label: string };
-type Media =
-  | { kind: "full"; src: string; bg: string }
-  | { kind: "logo"; bg: string; logo: string; logoW: string };
-
-type Case = {
-  title: string;
-  tags: string[];
-  body: string;
-  media: Media;
-  metrics?: Metric[];
+type Theme = {
+  panel: string;
+  ink: string;
+  dim: string;
+  accent: string;
+  card: string;
+  outline?: string;
 };
 
-const CASES: Case[] = [
+type Bullet = { label: string; desc: string };
+
+type Project = {
+  lead: string;
+  accent: string;
+  bullets: Bullet[];
+  url: string;
+  theme: Theme;
+};
+
+const PROJECTS: Project[] = [
   {
-    title: "Crusty Slices",
-    tags: ["Branding", "Web", "Performance"],
-    body: "Von der ersten Filiale zur Marke, die man in der Stadt kennt — Auftritt, Bestellstrecke und Kampagnen aus einer Hand.",
-    media: { kind: "full", src: "/referenzen/crusty.gif", bg: "#c9a2ab" },
-  },
-  {
-    title: "Fahrschule Abgefahrn",
-    tags: ["Branding", "Web", "Social"],
-    body: "Eine Fahrschule, die aussieht wie eine Marke — inklusive Theorieplan, den Fahrschüler tatsächlich benutzen.",
-    media: {
-      kind: "logo",
-      bg: "/referenzen/fahrschule-bg.png",
-      logo: "/referenzen/fahrschule-logo.svg",
-      logoW: "58%",
-    },
-  },
-  {
-    title: "Light of Hope",
-    tags: ["Branding", "Web", "Kampagne"],
-    body: "Eine Marke mit Haltung — vom Logo bis zur Website, die Spender und Partner vom ersten Moment an überzeugt.",
-    media: {
-      kind: "logo",
-      bg: "/referenzen/hope-bg.png",
-      logo: "/referenzen/hope-logo.png",
-      logoW: "54%",
-    },
-    metrics: [
-      { value: "100%", label: "eigene Zugänge" },
-      { value: "1 Team", label: "ein Ansprechpartner" },
+    lead: "Von der ersten Filiale zur",
+    accent: "Marke, die man kennt.",
+    bullets: [
+      { label: "Auftritt und Bestellstrecke", desc: "Eine Seite, die den Slice verkauft, statt ihn nur zu zeigen." },
+      { label: "Kampagnen mit Standortbezug", desc: "Anzeigen, die den Laden auch unter der Woche füllen." },
+      { label: "Wiederkehrbar offline", desc: "Speisekarte, Verpackung und Social aus einem Baukasten." },
     ],
+    url: "crusty-slices.com",
+    theme: {
+      panel: "#c0392b",
+      ink: "#f7ead9",
+      dim: "rgba(255,255,255,0.5)",
+      accent: "#e8a24d",
+      card: "rgba(255,255,255,0.14)",
+      outline: "rgba(255,255,255,0.55)",
+    },
+  },
+  {
+    lead: "Eine Fahrschule, die aussieht",
+    accent: "wie eine Marke.",
+    bullets: [
+      { label: "Theorieplan, den Fahrschüler benutzen", desc: "monatlich aktuell, ohne Nachfragen im Büro." },
+      { label: "Anmeldung ohne Umweg", desc: "vom Instagram-Profil bis zum Vertrag in einem Fluss." },
+      { label: "Ein Auftritt, den man weiterempfiehlt", desc: "Farbe, Ton und Bildsprache konsequent durchgezogen." },
+    ],
+    url: "abgefahrn.de",
+    theme: {
+      panel: "#111e1b",
+      ink: "#e9fff3",
+      dim: "rgba(255,255,255,0.42)",
+      accent: "#33df78",
+      card: "rgba(255,255,255,0.08)",
+      outline: "rgba(255,255,255,0.3)",
+    },
+  },
+  {
+    lead: "Aus unregelmäßigen Anrufen wurden",
+    accent: "planbare Anfragen.",
+    bullets: [
+      { label: "Local SEO für jeden Einsatzort", desc: "gefunden werden, wo der Auftrag tatsächlich entsteht." },
+      { label: "Ads auf Anfragen optimiert", desc: "nicht auf Klicks und nicht auf Reichweite." },
+      { label: "5 bis 7 Leads am Tag", desc: "täglich planbar statt nur nach Wochenanfang." },
+    ],
+    url: "cleanpany.de",
+    theme: {
+      panel: "#1f6fd0",
+      ink: "#eef5ff",
+      dim: "rgba(255,255,255,0.6)",
+      accent: "#ffffff",
+      card: "rgba(255,255,255,0.18)",
+      outline: "rgba(255,255,255,0.7)",
+    },
   },
 ];
 
-function Media({ media }: { media: Media }) {
+/* Stylised browser window mocking each project's site. */
+function BrowserMock({ url, theme }: { url: string; theme: Theme }) {
   return (
-    <div className="relative h-[230px] overflow-hidden bg-[#031a26]">
-      {media.kind === "full" ? (
-        <>
-          <span
-            className="absolute inset-0"
-            style={{ background: media.bg }}
+    <div className="w-full overflow-hidden rounded-[14px] border border-black/10 bg-white shadow-[0_34px_70px_-34px_rgba(15,14,13,0.45)]">
+      <div className="flex items-center gap-1.5 border-b border-black/5 bg-[#f3f3f2] px-3.5 py-2.5">
+        <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+        <span className="size-2.5 rounded-full bg-[#febc2e]" />
+        <span className="size-2.5 rounded-full bg-[#28c840]" />
+        <span className="ml-3 flex-1 truncate rounded-md bg-white px-2.5 py-1 font-mono text-[10px] tracking-wide text-ink/40">
+          {url}
+        </span>
+      </div>
+      <div className="relative aspect-[16/10] p-6 sm:p-7" style={{ background: theme.panel }}>
+        <div className="h-4 w-[56%] rounded-full" style={{ background: theme.ink }} />
+        <div className="mt-3 h-2.5 w-[74%] rounded-full" style={{ background: theme.dim }} />
+        <div className="mt-2 h-2.5 w-[50%] rounded-full" style={{ background: theme.dim }} />
+        <div className="mt-6 flex gap-3">
+          <div className="h-9 w-[36%] rounded-lg" style={{ background: theme.accent }} />
+          <div
+            className="h-9 w-[26%] rounded-lg border"
+            style={{ borderColor: theme.outline, background: "transparent" }}
           />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={media.src}
-            alt=""
-            className="absolute inset-0 size-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
-          />
-        </>
-      ) : (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={media.bg}
-            alt=""
-            className="absolute inset-0 size-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={media.logo}
-            alt=""
-            style={{ width: media.logoW }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.35)] transition-[transform,filter] duration-[500ms] ease-out group-hover:scale-[1.08] group-hover:brightness-110"
-          />
-        </>
-      )}
-      {/* subtle sheen that lightens on hover */}
-      <span className="pointer-events-none absolute inset-0 bg-[#001620]/10 transition-opacity duration-500 group-hover:opacity-0" />
+        </div>
+        <div className="mt-6 grid grid-cols-3 gap-2.5">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="rounded-lg p-2.5" style={{ background: theme.card }}>
+              <div className="h-1.5 w-[70%] rounded-full" style={{ background: theme.dim }} />
+              <div className="mt-1.5 h-1.5 w-[45%] rounded-full" style={{ background: theme.dim }} />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
-  const scroller = useRef<HTMLDivElement>(null);
-
-  const slide = (dir: 1 | -1) => {
-    const el = scroller.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>(".ref-card");
-    const step = card ? card.offsetWidth + 24 : el.clientWidth * 0.9;
-    el.scrollBy({ left: dir * step, behavior: "smooth" });
-  };
 
   useGSAP(
     () => {
@@ -115,103 +130,92 @@ export default function Referenzen() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".ref-head", start: "top 82%" },
       });
-      gsap.from(".ref-card", {
-        y: 34,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: { trigger: ".ref-grid", start: "top 82%" },
-      });
-      gsap.from(".ref-tag", {
-        y: 8,
-        opacity: 0,
-        scale: 0.85,
-        duration: 0.4,
-        ease: "back.out(1.6)",
-        stagger: 0.05,
-        clearProps: "transform",
-        scrollTrigger: { trigger: ".ref-grid", start: "top 78%" },
+      // Each card scales up as it rises into the stack.
+      gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card) => {
+        gsap.fromTo(
+          card,
+          { scale: 0.94, autoAlpha: 0.55 },
+          {
+            scale: 1,
+            autoAlpha: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 94%",
+              end: "top 62%",
+              scrub: true,
+            },
+          },
+        );
       });
     },
     { scope: root },
   );
 
   return (
-    <section id="referenzen" ref={root} className="bg-[#001620] py-24 text-white">
+    <section id="referenzen" ref={root} className="bg-[#f3f5f6] py-20 sm:py-24">
       <Container>
-        <div className="flex items-end justify-between gap-6">
-          <SectionHeading
-            dark
-            className="ref-head"
-            eyebrow="Referenzen"
-            title="Arbeiten, die weiterlaufen, wenn wir nicht mehr im Raum sind."
-            subtitle="Drei Projekte aus der Zusammenarbeit mit Unternehmen, die Sie im Zweifel selbst anrufen können."
-          />
-          <div className="hidden shrink-0 gap-2.5 lg:flex">
-            <button
-              type="button"
-              aria-label="Zurück"
-              onClick={() => slide(-1)}
-              className="grid size-11 place-items-center rounded-full border border-[#0a4a5f] text-white/80 transition-colors hover:border-accent hover:text-white"
-            >
-              <ChevronLeft className="size-5" />
-            </button>
-            <button
-              type="button"
-              aria-label="Weiter"
-              onClick={() => slide(1)}
-              className="grid size-11 place-items-center rounded-full border border-[#0a4a5f] text-white/80 transition-colors hover:border-accent hover:text-white"
-            >
-              <ChevronRight className="size-5" />
-            </button>
-          </div>
+        <div className="ref-head max-w-[720px]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+            <FolderOpen className="size-3.5 text-accent" />
+            Ausgewählte Projekte
+          </p>
+          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+            Arbeiten, die{" "}
+            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+              weiterlaufen
+            </span>
+            , wenn wir nicht mehr im Raum sind.
+          </h2>
+          <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+            Drei Projekte aus der Zusammenarbeit mit Unternehmen, die Sie im
+            Zweifel selbst anrufen können.
+          </p>
         </div>
 
-        <div
-          ref={scroller}
-          className="ref-grid no-scrollbar -mx-6 mt-14 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-2 md:mx-0 md:px-0"
-        >
-          {CASES.map((c) => (
-            <article
-              key={c.title}
-              className="ref-card group flex w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60 transition-shadow duration-300 hover:shadow-[0_24px_50px_-24px_rgba(15,14,13,0.22)] sm:w-[400px] lg:w-[440px]"
+        {/* stacking cards */}
+        <div className="mt-10 sm:mt-14">
+          {PROJECTS.map((p, i) => (
+            <div
+              key={p.url}
+              className="ref-sticky mb-6 lg:sticky lg:mb-10"
+              style={{ top: `${96 + i * 22}px` }}
             >
-              <Media media={c.media} />
-              <div className="flex flex-1 flex-col gap-4 px-7 py-[26px]">
-                <div className="flex flex-wrap gap-2">
-                  {c.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="ref-tag flex h-6 items-center rounded-full bg-white/[0.06] px-2.5 text-[12px] font-medium text-[#b3d6e2]"
-                    >
-                      {t}
+              <article className="ref-card grid h-auto overflow-hidden rounded-[24px] border border-line bg-white shadow-[0_36px_80px_-46px_rgba(15,14,13,0.35)] lg:h-[clamp(440px,70vh,600px)] lg:grid-cols-[1fr_1.05fr]">
+                {/* text */}
+                <div className="order-2 flex flex-col justify-center p-7 sm:p-10 lg:order-1 lg:p-12">
+                  <h3 className="font-display text-[clamp(1.45rem,2.3vw,2.1rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
+                    {p.lead}{" "}
+                    <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                      {p.accent}
                     </span>
-                  ))}
+                  </h3>
+                  <ul className="mt-6 space-y-4">
+                    {p.bullets.map((b) => (
+                      <li key={b.label} className="flex gap-3">
+                        <CircleCheck
+                          className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
+                          strokeWidth={2}
+                        />
+                        <p className="text-[14px] leading-[1.55] text-[#5c5954]">
+                          <span className="font-semibold text-ink">
+                            {b.label}:
+                          </span>{" "}
+                          {b.desc}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-white">
-                  {c.title}
-                </h3>
-                <p className="text-[14px] leading-[22px] text-[#b3d6e2]">{c.body}</p>
-                {c.metrics && (
-                  <>
-                    <div className="mt-auto h-px w-full bg-white/10" />
-                    <div className="flex gap-6">
-                      {c.metrics.map((m) => (
-                        <div key={m.label} className="flex-1">
-                          <p className="font-display text-[22px] font-bold leading-[28px] tracking-[-0.4px] text-[#d8b682]">
-                            {m.value}
-                          </p>
-                          <p className="text-[13px] leading-[18px] text-[#7fbacd]">
-                            {m.label}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            </article>
+
+                {/* browser mock */}
+                <div className="order-1 flex items-center overflow-hidden bg-[#eef1f3] p-6 sm:p-9 lg:order-2 lg:p-10">
+                  <div className="w-full lg:w-[116%]">
+                    <BrowserMock url={p.url} theme={p.theme} />
+                  </div>
+                </div>
+              </article>
+            </div>
           ))}
         </div>
       </Container>
