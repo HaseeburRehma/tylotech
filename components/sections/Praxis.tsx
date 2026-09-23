@@ -686,10 +686,10 @@ export default function Praxis() {
         <div className="praxis-grid mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           <ChannelsCard />
           <LocalCard />
-          <RequestsCard />
+          <ReachCard />
           <ContentCard />
           <IntegrationsCard />
-          <ReachCard />
+          <RequestsCard />
         </div>
       </Container>
     </section>
