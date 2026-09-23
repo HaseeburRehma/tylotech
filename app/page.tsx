@@ -3,6 +3,7 @@ import Hero from "@/components/sections/Hero";
 import TrustStrip from "@/components/sections/TrustStrip";
 import Praxis from "@/components/sections/Praxis";
 import Diagnose from "@/components/sections/Diagnose";
+import Wechsel from "@/components/sections/Wechsel";
 import Warum from "@/components/sections/Warum";
 import Leistungen from "@/components/sections/Leistungen";
 import Zahlen from "@/components/sections/Zahlen";
@@ -32,6 +33,7 @@ export default function Home() {
         <TrustStrip />
         <Praxis />
         <Diagnose />
+        <Wechsel />
         <Warum />
         <Leistungen />
         <Zahlen />
