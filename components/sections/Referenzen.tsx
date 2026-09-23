@@ -21,6 +21,7 @@ type Project = {
   accent: string;
   bullets: Bullet[];
   url: string;
+  shot: string;
   theme: Theme;
 };
 
@@ -34,6 +35,7 @@ const PROJECTS: Project[] = [
       { label: "Wiederkehrbar offline", desc: "Speisekarte, Verpackung und Social aus einem Baukasten." },
     ],
     url: "crusty-slices.com",
+    shot: "/referenzen/crusty-site.jpg",
     theme: {
       panel: "#c0392b",
       ink: "#f7ead9",
@@ -51,7 +53,8 @@ const PROJECTS: Project[] = [
       { label: "Anmeldung ohne Umweg", desc: "vom Instagram-Profil bis zum Vertrag in einem Fluss." },
       { label: "Ein Auftritt, den man weiterempfiehlt", desc: "Farbe, Ton und Bildsprache konsequent durchgezogen." },
     ],
-    url: "abgefahrn.de",
+    url: "fahrschule-abgefahrn.de",
+    shot: "/referenzen/abgefahrn-site.jpg",
     theme: {
       panel: "#111e1b",
       ink: "#e9fff3",
@@ -70,6 +73,7 @@ const PROJECTS: Project[] = [
       { label: "5 bis 7 Leads am Tag", desc: "täglich planbar statt nur nach Wochenanfang." },
     ],
     url: "cleanpany.de",
+    shot: "/referenzen/cleanpany-site.jpg",
     theme: {
       panel: "#1f6fd0",
       ink: "#eef5ff",
@@ -81,8 +85,16 @@ const PROJECTS: Project[] = [
   },
 ];
 
-/* Stylised browser window mocking each project's site. */
-function BrowserMock({ url, theme }: { url: string; theme: Theme }) {
+/* Browser window showing a live screenshot of each project's site. */
+function BrowserMock({
+  url,
+  shot,
+  theme,
+}: {
+  url: string;
+  shot: string;
+  theme: Theme;
+}) {
   return (
     <div className="w-full overflow-hidden rounded-[14px] border border-black/10 bg-white shadow-[0_34px_70px_-34px_rgba(15,14,13,0.45)]">
       <div className="flex items-center gap-1.5 border-b border-black/5 bg-[#f3f3f2] px-3.5 py-2.5">
@@ -93,25 +105,20 @@ function BrowserMock({ url, theme }: { url: string; theme: Theme }) {
           {url}
         </span>
       </div>
-      <div className="relative aspect-[16/10] p-6 sm:p-7" style={{ background: theme.panel }}>
-        <div className="h-4 w-[56%] rounded-full" style={{ background: theme.ink }} />
-        <div className="mt-3 h-2.5 w-[74%] rounded-full" style={{ background: theme.dim }} />
-        <div className="mt-2 h-2.5 w-[50%] rounded-full" style={{ background: theme.dim }} />
-        <div className="mt-6 flex gap-3">
-          <div className="h-9 w-[36%] rounded-lg" style={{ background: theme.accent }} />
-          <div
-            className="h-9 w-[26%] rounded-lg border"
-            style={{ borderColor: theme.outline, background: "transparent" }}
-          />
-        </div>
-        <div className="mt-6 grid grid-cols-3 gap-2.5">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="rounded-lg p-2.5" style={{ background: theme.card }}>
-              <div className="h-1.5 w-[70%] rounded-full" style={{ background: theme.dim }} />
-              <div className="mt-1.5 h-1.5 w-[45%] rounded-full" style={{ background: theme.dim }} />
-            </div>
-          ))}
-        </div>
+      <div
+        className="relative aspect-[16/10] overflow-hidden"
+        style={{ background: theme.panel }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={shot}
+          alt={`Website ${url}`}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+          className="absolute inset-0 h-full w-full object-cover object-top"
+        />
       </div>
     </div>
   );
@@ -211,7 +218,7 @@ export default function Referenzen() {
                 {/* browser mock */}
                 <div className="order-1 flex items-center overflow-hidden bg-[#eef1f3] p-6 sm:p-9 lg:order-2 lg:p-10">
                   <div className="w-full lg:w-[116%]">
-                    <BrowserMock url={p.url} theme={p.theme} />
+                    <BrowserMock url={p.url} shot={p.shot} theme={p.theme} />
                   </div>
                 </div>
               </article>
