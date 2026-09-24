@@ -50,35 +50,35 @@ export default function Gruender() {
       className="border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
     >
       <Container>
-        <div className="gr-card relative mx-auto max-w-[1080px] overflow-visible rounded-[28px] border border-line bg-white px-6 py-10 shadow-[0_40px_90px_-50px_rgba(15,14,13,0.3)] sm:px-10 sm:py-14 lg:px-14">
-          <div className="grid items-center gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
-            {/* portrait */}
-            <div className="gr-photo relative mx-auto w-full max-w-[300px] lg:mx-0 lg:-ml-20">
+        <div className="gr-card relative mx-auto max-w-[1120px] rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-50px_rgba(15,14,13,0.3)] sm:p-10 lg:p-12">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:gap-14">
+            {/* portrait — stacked-photo look */}
+            <div className="gr-photo relative mx-auto w-full max-w-[320px] lg:mx-0 lg:max-w-[340px]">
               <span
                 aria-hidden
-                className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-[20px] bg-[#e7eaec]"
+                className="absolute inset-0 translate-x-2.5 translate-y-3.5 rounded-[22px] bg-[#e7eaec] shadow-[0_30px_55px_-30px_rgba(15,14,13,0.45)]"
               />
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[20px] bg-ink shadow-[0_44px_80px_-30px_rgba(15,14,13,0.6)]">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] bg-ink shadow-[0_30px_60px_-26px_rgba(15,14,13,0.55)] ring-1 ring-[#d1aa71]/35">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={poster}
-                  alt="Gründer und Geschäftsführer von TyloTech"
+                  alt="Ilias El Aradi, Gründer von TyloTech"
                   onError={() =>
                     setPoster(`https://i.ytimg.com/vi/${YT_ID}/hqdefault.jpg`)
                   }
-                  className="absolute inset-0 h-full w-full object-cover object-[center_28%]"
+                  className="absolute inset-0 h-full w-full object-cover object-[center_20%]"
                 />
               </div>
             </div>
 
-            {/* letter */}
+            {/* content */}
             <div className="gr-body">
               <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
                 <UserRound className="size-3.5 text-accent" />
-                Vom Gründer
+                Der Gründer
               </p>
 
-              <h2 className="mt-5 font-display text-[clamp(1.7rem,3vw,2.4rem)] font-bold leading-[1.12] tracking-[-0.03em] text-ink">
+              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
                 Warum es{" "}
                 <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
                   TyloTech
@@ -86,50 +86,28 @@ export default function Gruender() {
                 gibt.
               </h2>
 
-              <p className="mt-5 text-[clamp(16px,1.5vw,18px)] font-semibold leading-[1.55] tracking-[-0.01em] text-ink">
-                Ich habe zu oft gesehen, wie gute Betriebe an schlechter
-                Organisation scheitern.
-              </p>
-
-              <div className="mt-4 space-y-4 text-[15px] leading-[1.65] text-[#5c5954]">
-                <p>
-                  Drei Dienstleister, drei Rechnungen, und am Ende koordiniert
-                  der Unternehmer selbst. Die Website kennt die Kampagne nicht,
-                  die Kampagne kennt die Zahlen nicht, und niemand fühlt sich
-                  zuständig, wenn etwas stehen bleibt.
-                </p>
-                <p>
-                  Deshalb haben wir TyloTech so aufgebaut, wie wir es selbst
-                  gebraucht hätten. Marketing, Software und Unternehmensaufbau
-                  unter einem Dach, ein fester Ansprechpartner und Zahlen, die
-                  jeder im Haus sehen kann.
-                </p>
-                <p>
-                  Wir nehmen nicht jedes Projekt an. Wenn wir nicht die Richtigen
-                  sind, sagen wir das im ersten Gespräch. Was wir zusagen, halten
-                  wir.
-                </p>
-              </div>
-
-              {/* quote callout */}
-              <div className="mt-6 flex items-start gap-3 rounded-[14px] border border-[rgba(209,170,113,0.35)] bg-[rgba(209,170,113,0.10)] px-5 py-4">
+              {/* quote */}
+              <div className="mt-6 flex items-start gap-4 rounded-[16px] border border-[rgba(209,170,113,0.3)] bg-[rgba(209,170,113,0.08)] px-5 py-5 sm:px-6">
                 <Quote
-                  className="mt-0.5 size-5 shrink-0 fill-[#c79a53] text-[#c79a53]"
+                  className="mt-1 size-5 shrink-0 fill-[#c79a53] text-[#c79a53]"
                   strokeWidth={0}
                 />
-                <p className="text-[15px] leading-[1.55] text-ink">
-                  <span className="font-[family-name:var(--font-instrument)] italic text-[#8a6a37]">
-                    Ein Partner, der bleibt.
-                  </span>{" "}
-                  Nicht drei, die aufeinander zeigen.
+                <p className="font-[family-name:var(--font-instrument)] text-[clamp(16px,1.6vw,19px)] italic leading-[1.5] text-ink/85">
+                  „Ich habe jeden dieser Prozesse selbst durchlaufen — Marketing,
+                  Code, Vertrieb, Aufbau. Deshalb sehen wir, was andere
+                  übersehen. Und deshalb bauen wir mit, statt nur zu beraten.“
                 </p>
               </div>
 
-              <div className="mt-7 flex items-center gap-3">
-                <span className="h-px w-9 bg-ink/25" />
-                <span className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/45">
-                  Gründer und Geschäftsführer
-                </span>
+              {/* signature */}
+              <div className="mt-8">
+                <span className="mb-4 block h-px w-9 bg-ink/25" />
+                <p className="font-display text-[18px] font-semibold tracking-[-0.01em] text-ink">
+                  Ilias El Aradi
+                </p>
+                <p className="mt-1 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/45">
+                  Gründer von TyloTech · Dein Wachstumspartner
+                </p>
               </div>
             </div>
           </div>
