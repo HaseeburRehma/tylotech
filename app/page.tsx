@@ -18,6 +18,7 @@ import Branchen from "@/components/sections/Branchen";
 import Referenzen from "@/components/sections/Referenzen";
 import OToene from "@/components/sections/OToene";
 import Stimmen from "@/components/sections/Stimmen";
+import Passt from "@/components/sections/Passt";
 import Vergleich from "@/components/sections/Vergleich";
 import FAQ from "@/components/sections/FAQ";
 import FinalCTA from "@/components/sections/FinalCTA";
@@ -48,6 +49,7 @@ export default function Home() {
         <Referenzen />
         <OToene />
         <Stimmen />
+        <Passt />
         <Vergleich />
         <FAQ />
         <FinalCTA />
