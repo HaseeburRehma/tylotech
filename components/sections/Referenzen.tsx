@@ -5,24 +5,14 @@ import { CircleCheck, FolderOpen } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-type Theme = {
-  panel: string;
-  ink: string;
-  dim: string;
-  accent: string;
-  card: string;
-  outline?: string;
-};
-
 type Bullet = { label: string; desc: string };
 
 type Project = {
   lead: string;
   accent: string;
   bullets: Bullet[];
-  url: string;
   shot: string;
-  theme: Theme;
+  alt: string;
 };
 
 const PROJECTS: Project[] = [
@@ -34,16 +24,8 @@ const PROJECTS: Project[] = [
       { label: "Kampagnen mit Standortbezug", desc: "Anzeigen, die den Laden auch unter der Woche füllen." },
       { label: "Wiederkehrbar offline", desc: "Speisekarte, Verpackung und Social aus einem Baukasten." },
     ],
-    url: "crusty-slices.com",
-    shot: "/referenzen/crusty-site.jpg",
-    theme: {
-      panel: "#c0392b",
-      ink: "#f7ead9",
-      dim: "rgba(255,255,255,0.5)",
-      accent: "#e8a24d",
-      card: "rgba(255,255,255,0.14)",
-      outline: "rgba(255,255,255,0.55)",
-    },
+    shot: "/referenzen/crusty-pf.jpg",
+    alt: "Crusty Slices Website",
   },
   {
     lead: "Eine Fahrschule, die aussieht",
@@ -53,16 +35,8 @@ const PROJECTS: Project[] = [
       { label: "Anmeldung ohne Umweg", desc: "vom Instagram-Profil bis zum Vertrag in einem Fluss." },
       { label: "Ein Auftritt, den man weiterempfiehlt", desc: "Farbe, Ton und Bildsprache konsequent durchgezogen." },
     ],
-    url: "fahrschule-abgefahrn.de",
-    shot: "/referenzen/abgefahrn-site.jpg",
-    theme: {
-      panel: "#111e1b",
-      ink: "#e9fff3",
-      dim: "rgba(255,255,255,0.42)",
-      accent: "#33df78",
-      card: "rgba(255,255,255,0.08)",
-      outline: "rgba(255,255,255,0.3)",
-    },
+    shot: "/referenzen/fahrschule-pf.jpg",
+    alt: "Fahrschule Abgefahrn Website",
   },
   {
     lead: "Aus unregelmäßigen Anrufen wurden",
@@ -72,57 +46,10 @@ const PROJECTS: Project[] = [
       { label: "Ads auf Anfragen optimiert", desc: "nicht auf Klicks und nicht auf Reichweite." },
       { label: "5 bis 7 Leads am Tag", desc: "täglich planbar statt nur nach Wochenanfang." },
     ],
-    url: "cleanpany.de",
-    shot: "/referenzen/cleanpany-site.jpg",
-    theme: {
-      panel: "#1f6fd0",
-      ink: "#eef5ff",
-      dim: "rgba(255,255,255,0.6)",
-      accent: "#ffffff",
-      card: "rgba(255,255,255,0.18)",
-      outline: "rgba(255,255,255,0.7)",
-    },
+    shot: "/referenzen/cleanpany-pf.jpg",
+    alt: "Cleanpany Gebäudeservice Website",
   },
 ];
-
-/* Browser window showing a live screenshot of each project's site. */
-function BrowserMock({
-  url,
-  shot,
-  theme,
-}: {
-  url: string;
-  shot: string;
-  theme: Theme;
-}) {
-  return (
-    <div className="w-full overflow-hidden rounded-[14px] border border-black/10 bg-white shadow-[0_34px_70px_-34px_rgba(15,14,13,0.45)]">
-      <div className="flex items-center gap-1.5 border-b border-black/5 bg-[#f3f3f2] px-3.5 py-2.5">
-        <span className="size-2.5 rounded-full bg-[#ff5f57]" />
-        <span className="size-2.5 rounded-full bg-[#febc2e]" />
-        <span className="size-2.5 rounded-full bg-[#28c840]" />
-        <span className="ml-3 flex-1 truncate rounded-md bg-white px-2.5 py-1 font-mono text-[10px] tracking-wide text-ink/40">
-          {url}
-        </span>
-      </div>
-      <div
-        className="relative aspect-[16/10] overflow-hidden"
-        style={{ background: theme.panel }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={shot}
-          alt={`Website ${url}`}
-          loading="lazy"
-          onError={(e) => {
-            e.currentTarget.style.display = "none";
-          }}
-          className="absolute inset-0 h-full w-full object-cover object-top"
-        />
-      </div>
-    </div>
-  );
-}
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
@@ -184,7 +111,7 @@ export default function Referenzen() {
         <div className="mt-10 sm:mt-14">
           {PROJECTS.map((p, i) => (
             <div
-              key={p.url}
+              key={p.shot}
               className="ref-sticky mb-6 lg:sticky lg:mb-10"
               style={{ top: `${96 + i * 22}px` }}
             >
@@ -215,11 +142,15 @@ export default function Referenzen() {
                   </ul>
                 </div>
 
-                {/* browser mock */}
-                <div className="order-1 flex items-center overflow-hidden bg-[#eef1f3] p-6 sm:p-9 lg:order-2 lg:p-10">
-                  <div className="w-full lg:w-[116%]">
-                    <BrowserMock url={p.url} shot={p.shot} theme={p.theme} />
-                  </div>
+                {/* image — fills the side edge-to-edge, no frame, no partition */}
+                <div className="relative order-1 aspect-[3/2] overflow-hidden lg:order-2 lg:aspect-auto lg:h-full">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.shot}
+                    alt={p.alt}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
+                  />
                 </div>
               </article>
             </div>
