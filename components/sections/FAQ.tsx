@@ -1,43 +1,31 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import Link from "next/link";
+import { Plus, Minus, HelpCircle, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import Button from "../ui/Button";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const ITEMS = [
   {
-    q: "Wie lange dauert es, bis erste Ergebnisse sichtbar werden?",
-    a: "Das hängt vom Kanal ab. Bezahlte Kampagnen liefern nach zwei bis drei Wochen belastbare Daten, SEO und organisches Wachstum brauchen drei bis sechs Monate. Wir legen im Strategiegespräch Zwischenziele fest, damit Sie jederzeit sehen, wo Sie stehen — statt auf einen Bericht am Quartalsende zu warten.",
+    q: "Seid ihr eine Agentur?",
+    a: "Nein. Wir sind eine Unternehmensberatung, die baut — Marketing, Software und Vertrieb aus einer Hand, mit voller Verantwortung fürs Ergebnis.",
+  },
+  {
+    q: "Was heißt „Shared Deals“?",
+    a: "Bei passenden Projekten arbeiten wir nicht nur gegen Honorar, sondern beteiligen uns am Erfolg. Wir steigen mit ein, wenn wir an das Potenzial glauben — und tragen das Risiko mit.",
+  },
+  {
+    q: "Für wen lohnt sich das?",
+    a: "Für Unternehmen mit einem funktionierenden Angebot, die wachsen wollen, aber kein System dafür haben. Die Größe ist zweitrangig — die Bereitschaft, mitzuziehen, zählt.",
   },
   {
     q: "Was kostet die Zusammenarbeit?",
-    a: "Das hängt vom Umfang ab, und wir nennen die Zahl im Erstgespräch — nicht erst im Angebot. Laufende Betreuung läuft über monatliche Pakete, Projekte über Festpreise. Was wir nicht machen: Stundenzettel, bei denen am Monatsende eine Überraschung steht.",
+    a: "Das hängt vom Umfang ab, und wir nennen die Zahl im Erstgespräch, nicht erst im Angebot. Laufende Betreuung über monatliche Pakete, Projekte über Festpreise — keine Stundenzettel mit Überraschung am Monatsende.",
   },
   {
-    q: "Arbeiten Sie auch mit kleinen Unternehmen?",
-    a: "Ja. Ein großer Teil unserer Partner sind Handwerksbetriebe, Dienstleister und inhabergeführte Unternehmen. Entscheidend ist nicht die Größe, sondern ob Sie wirklich etwas verändern wollen.",
-  },
-  {
-    q: "Bekommen wir Zugriff auf unsere Konten und Daten?",
-    a: "Ja, ohne Diskussion. Werbekonten, Analytics, Domain und Quellcode gehören Ihnen — von Anfang an und auch dann, wenn die Zusammenarbeit endet. Wir halten nichts als Pfand.",
-  },
-  {
-    q: "Wer arbeitet konkret an unserem Projekt?",
-    a: "Ein festes Team mit einem Ansprechpartner, den Sie namentlich kennen. Keine wechselnden Junior-Kräfte, kein Ticket-System, keine anonyme Support-Adresse.",
-  },
-  {
-    q: "Können wir klein anfangen?",
-    a: "Können Sie. Viele starten mit einer Website oder einem Audit und entscheiden danach, ob mehr Sinn ergibt. Wir drängen niemanden in eine Jahresbindung.",
-  },
-  {
-    q: "Was ist TyloHQ und müssen wir das nutzen?",
-    a: "TyloHQ ist unsere Plattform für Zahlen, Freigaben und Kommunikation. Sie können sie nutzen, müssen aber nicht — wer lieber telefoniert, telefoniert.",
-  },
-  {
-    q: "Wie steht es um Datenschutz und DSGVO?",
-    a: "Verarbeitung DSGVO-konform, Hosting in Deutschland. Auftragsverarbeitungsvertrag bekommen Sie vor Projektstart, nicht auf Nachfrage.",
+    q: "Wie schnell seht ihr Ergebnisse?",
+    a: "Bezahlte Kampagnen liefern nach zwei bis drei Wochen belastbare Daten, organisches Wachstum braucht länger. Wir setzen Zwischenziele, damit du jederzeit siehst, wo du stehst.",
   },
 ];
 
@@ -60,7 +48,7 @@ export default function FAQ() {
         opacity: 0,
         duration: 0.6,
         ease: "power3.out",
-        stagger: 0.06,
+        stagger: 0.08,
         scrollTrigger: { trigger: ".faq-list", start: "top 85%" },
       });
     },
@@ -68,26 +56,39 @@ export default function FAQ() {
   );
 
   return (
-    <section id="faq" ref={root} className="bg-[#001620] py-24 text-white">
-      <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[400px_1fr]">
+    <section
+      id="faq"
+      ref={root}
+      className="border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
+    >
+      <Container className="grid grid-cols-1 gap-10 lg:grid-cols-[380px_1fr] lg:gap-14">
         <div className="faq-left">
-          <p className="eyebrow mb-[18px] flex items-center gap-2.5 text-[#d8b682]">
-            <span className="size-[7px] rounded-[2px] bg-accent" />
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+            <HelpCircle className="size-3.5 text-accent" />
             Häufige Fragen
           </p>
-          <h2 className="display-m text-white">Fragen, die uns fast jeder stellt.</h2>
+          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.6vw,2.6rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+            Fragen, die uns{" "}
+            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+              fast jeder stellt.
+            </span>
+          </h2>
 
-          <div className="mt-8 rounded-[18px] border border-[#0a4a5f] bg-[#04283a]/60 p-6">
-            <p className="text-[16px] font-medium text-white">
-              Ihre Frage steht nicht dabei?
+          <div className="mt-8 rounded-[18px] border border-line bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,14,13,0.2)]">
+            <p className="text-[16px] font-semibold text-ink">
+              Deine Frage steht nicht dabei?
             </p>
-            <p className="mt-2 text-[14px] leading-[22px] text-[#b3d6e2]">
-              Rufen Sie einfach an — 0211 15847697. Sie sprechen direkt mit
-              jemandem, der antworten kann.
+            <p className="mt-2 text-[14px] leading-[1.6] text-[#5c5954]">
+              Ruf einfach an: 0211 15847097. Du sprichst direkt mit jemandem, der
+              antworten kann.
             </p>
-            <Button href="#termin" variant="dark" withArrow className="mt-5">
-              Erstgespräch buchen
-            </Button>
+            <Link
+              href="#kontakt"
+              className="group mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-5 text-[14px] font-medium text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
+            >
+              Erstgespräch sichern
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </div>
 
@@ -97,23 +98,25 @@ export default function FAQ() {
             return (
               <div
                 key={item.q}
-                className={`faq-item rounded-[18px] border bg-[#04283a]/60 transition-[border-color,box-shadow] duration-200 ${
+                className={`faq-item rounded-[18px] border bg-white transition-[border-color,box-shadow] duration-200 ${
                   on
-                    ? "border-[#0e6883] shadow-[0_2px_5px_-1px_rgba(15,14,13,0.05)]"
-                    : "border-[#0a4a5f]"
+                    ? "border-[#e6d1a4] shadow-[0_20px_44px_-30px_rgba(15,14,13,0.25)]"
+                    : "border-line"
                 }`}
               >
                 <button
                   onClick={() => setOpen(on ? -1 : i)}
-                  className="flex w-full items-center gap-6 py-[26px] pl-8 pr-6 text-left"
+                  className="flex w-full items-center gap-5 py-6 pl-7 pr-5 text-left"
                   aria-expanded={on}
                 >
-                  <span className="flex-1 font-display text-[20px] font-semibold leading-[26px] tracking-[-0.2px] text-white">
+                  <span className="flex-1 font-display text-[clamp(16px,1.4vw,19px)] font-semibold leading-snug tracking-[-0.01em] text-ink">
                     {item.q}
                   </span>
                   <span
-                    className={`grid size-11 shrink-0 place-items-center rounded-full transition-colors ${
-                      on ? "bg-[#002e3d] text-white" : "bg-white/[0.06] text-white"
+                    className={`grid size-11 shrink-0 place-items-center rounded-full transition-all duration-200 ${
+                      on
+                        ? "bg-gradient-to-b from-[#e2ba7d] to-[#c99f5c] text-white shadow-[0_8px_18px_-6px_rgba(201,159,92,0.75)]"
+                        : "bg-[#f2efe9] text-[#94713f]"
                     }`}
                   >
                     {on ? <Minus className="size-5" /> : <Plus className="size-5" />}
@@ -124,7 +127,7 @@ export default function FAQ() {
                   style={{ gridTemplateRows: on ? "1fr" : "0fr" }}
                 >
                   <div className="min-h-0">
-                    <p className="pb-[26px] pl-8 pr-[68px] text-[16px] leading-[26px] text-[#b3d6e2]">
+                    <p className="pb-6 pl-7 pr-[68px] text-[15px] leading-[1.65] text-[#5c5954]">
                       {item.a}
                     </p>
                   </div>

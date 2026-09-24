@@ -1,44 +1,33 @@
 "use client";
 
 import { useRef } from "react";
-import { Phone } from "lucide-react";
+import Link from "next/link";
+import { CalendarDays, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import Button from "../ui/Button";
-import MosaicBackdrop from "../MosaicBackdrop";
 import { gsap, useGSAP } from "@/lib/gsap";
-
-const TAGS = [
-  "Antwort in der Regel am selben Werktag",
-  "Kein Abo, keine Mindestlaufzeit",
-  "Made in Germany",
-];
 
 export default function FinalCTA() {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      gsap.from(".cta-in > *", {
-        y: 24,
+      gsap.from(".cta-panel", {
+        y: 40,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".cta-panel", start: "top 88%" },
+      });
+      gsap.from(".cta-in > *", {
+        y: 22,
+        opacity: 0,
+        duration: 0.7,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".cta-in", start: "top 85%" },
+        scrollTrigger: { trigger: ".cta-in", start: "top 90%" },
       });
-      gsap.from(".cta-tag", {
-        y: 10,
-        opacity: 0,
-        scale: 0.85,
-        duration: 0.45,
-        ease: "back.out(1.6)",
-        stagger: 0.09,
-        clearProps: "transform",
-        scrollTrigger: { trigger: ".cta-tags", start: "top 92%" },
-      });
-      // gold glow slowly breathes (opacity only — never touch its centering transform)
       gsap.to(".cta-glow", {
-        opacity: 0.4,
+        opacity: 0.5,
         duration: 3.2,
         ease: "sine.inOut",
         repeat: -1,
@@ -52,51 +41,55 @@ export default function FinalCTA() {
     <section
       id="kontakt"
       ref={root}
-      className="relative overflow-hidden bg-[#001620] py-28 text-white"
+      className="border-t border-line bg-[#f3f5f6] py-16 sm:py-20"
     >
-      <MosaicBackdrop fade="radial-gradient(110% 95% at 50% 45%, #000 25%, transparent 74%)" />
-      {/* gold glow */}
-      <div
-        className="cta-glow pointer-events-none absolute left-1/2 top-0 h-[420px] w-[900px] -translate-x-1/2 -translate-y-1/3 rounded-full opacity-70"
-        style={{
-          background:
-            "radial-gradient(closest-side, rgba(209,170,113,0.16), transparent 70%)",
-        }}
-      />
+      <Container>
+        <div className="cta-panel relative mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-gradient-to-br from-[#0b3a4d] via-[#062430] to-[#031a24] px-6 py-16 shadow-[0_50px_110px_-50px_rgba(3,26,36,0.7)] sm:px-10 sm:py-20">
+          {/* warm glow */}
+          <div
+            aria-hidden
+            className="cta-glow pointer-events-none absolute left-1/2 top-1/2 h-[440px] w-[820px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(209,170,113,0.20), transparent 72%)",
+            }}
+          />
 
-      <Container className="relative">
-        <div className="cta-in mx-auto max-w-[640px] text-center">
-          <p className="eyebrow mb-[18px] flex items-center justify-center gap-2.5 text-[#d8b682]">
-            <span className="size-[7px] rounded-[2px] bg-accent" />
-            Nächster Schritt
-          </p>
-          <h2 className="display-l text-white">Sagen Sie uns, wo es klemmt.</h2>
-          <p className="mt-[18px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#b3d6e2]">
-            Dreißig Minuten, ehrliche Einschätzung, kein Verkaufsgespräch. Wenn
-            wir nicht die Richtigen für Sie sind, sagen wir Ihnen das — und
-            meistens auch, wer es ist.
-          </p>
+          <div className="cta-in relative mx-auto max-w-[720px] text-center">
+            <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-[13px] font-medium text-white/80 backdrop-blur">
+              <CalendarDays className="size-4 text-accent" />
+              Kostenloses Erstgespräch
+            </p>
 
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
-            <Button href="#termin" variant="dark" withArrow className="bg-accent text-[#001620] hover:bg-[#c79a5c]">
-              Erstgespräch buchen
-            </Button>
-            <a
-              href="tel:+4921115847697"
-              className="inline-flex items-center gap-2.5 rounded-[10px] border border-[#075c78] bg-[#002e3d] px-7 py-4 text-[16px] font-medium tracking-[-0.01em] text-white transition-colors hover:border-[#0a6a86] hover:bg-[#013a4d]"
-            >
-              <Phone className="size-[18px]" strokeWidth={1.8} />
-              0211 15847697
-            </a>
-          </div>
+            <h2 className="mt-6 font-display text-[clamp(2rem,4.4vw,3.2rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
+              Bereit, dein Wachstum{" "}
+              <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#e5c48a]">
+                planbar
+              </span>{" "}
+              zu machen?
+            </h2>
 
-          <div className="cta-tags mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-[13px] text-white/60">
-            {TAGS.map((t) => (
-              <span key={t} className="cta-tag flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-accent" />
-                {t}
-              </span>
-            ))}
+            <p className="mx-auto mt-5 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
+              Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter
+              Hebel liegt — und ob wir zueinander passen.
+            </p>
+
+            <div className="mt-9 flex justify-center">
+              <Link
+                href="#termin"
+                className="group inline-flex items-center gap-3.5 rounded-full bg-gradient-to-b from-[#e7c179] to-[#c99f5c] py-2 pl-2 pr-7 shadow-[0_0_44px_-6px_rgba(209,170,113,0.7)] transition-[transform,filter] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
+              >
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#03202c] text-white">
+                  <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
+                </span>
+                <span className="text-[16px] text-[#1c1305]">
+                  <span className="font-[family-name:var(--font-instrument)] italic">
+                    Erstgespräch
+                  </span>{" "}
+                  <span className="font-semibold">sichern</span>
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </Container>
