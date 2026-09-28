@@ -38,7 +38,7 @@ const INDUSTRIES: Industry[] = [
     name: "Gebäudeservice & Reinigung",
     lead: "Planbare Anfragen,",
     accent: "statt Zufall.",
-    body: "Von der Unterhaltsreinigung bis zur Glasreinigung. Wir sorgen für einen Auftritt und Abläufe, die konstant Anfragen bringen — auch dann, wenn Sie gerade selbst mit anpacken.",
+    body: "Von der Unterhaltsreinigung bis zur Glasreinigung. Wir sorgen für einen Auftritt und Abläufe, die konstant Anfragen bringen — auch dann, wenn du gerade selbst mit anpackst.",
     icon: Sparkles,
     img: "/branchen/02.jpg",
     tint: "from-[#d7e2e6] to-[#a9c2ca]",
@@ -56,7 +56,7 @@ const INDUSTRIES: Industry[] = [
     name: "Fahrschulen & Bildung",
     lead: "Anmeldungen,",
     accent: "die von allein kommen.",
-    body: "Anmeldungen, Theoriepläne und ein Auftritt, den Fahrschüler weiterempfehlen. Sichtbar bei jeder Suche im Umkreis, ohne dass Sie ständig posten müssen.",
+    body: "Anmeldungen, Theoriepläne und ein Auftritt, den Fahrschüler weiterempfehlen. Sichtbar bei jeder Suche im Umkreis, ohne dass du ständig posten musst.",
     icon: GraduationCap,
     img: "/branchen/04.jpg",
     tint: "from-[#dbe0d9] to-[#b3c0ab]",
@@ -148,7 +148,7 @@ export default function Branchen() {
           <div className="br-head max-w-[720px]">
             <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
               <Briefcase className="size-3.5 text-accent" />
-              Branchen
+              Erprobt, nicht theoretisch
             </p>
             <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
               Wo wir uns{" "}
@@ -158,8 +158,10 @@ export default function Branchen() {
               .
             </h2>
             <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-              Wir arbeiten nicht für jeden. In diesen sechs Bereichen kennen wir
-              die Abläufe so gut, dass wir vom ersten Tag an mitreden können.
+              Vom Handwerksbetrieb bis zum Mittelständer — wir haben in vielen
+              Branchen gebaut und wissen, was funktioniert. Handwerk,
+              Dienstleistung, lokale Betriebe, E-Commerce, spezialisierte
+              Nischen.
             </p>
           </div>
 

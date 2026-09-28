@@ -240,9 +240,9 @@ export default function Stimmen() {
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
             Was Kunden{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              über die Zusammenarbeit
-            </span>{" "}
-            sagen.
+              sagen
+            </span>
+            .
           </h2>
           <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
             Nachlesbar bei Google, wir verlinken die Bewertungen direkt, statt

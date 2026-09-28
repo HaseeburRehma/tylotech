@@ -102,8 +102,8 @@ export default function Referenzen() {
             , wenn wir nicht mehr im Raum sind.
           </h2>
           <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            Drei Projekte aus der Zusammenarbeit mit Unternehmen, die Sie im
-            Zweifel selbst anrufen können.
+            Drei Projekte aus der Zusammenarbeit mit Unternehmen, die du im
+            Zweifel selbst anrufen kannst.
           </p>
         </div>
 

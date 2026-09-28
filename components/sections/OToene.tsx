@@ -218,10 +218,10 @@ export default function OToene() {
         <div className="oton-head max-w-[720px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
             <Quote className="size-3.5 fill-accent text-accent" strokeWidth={0} />
-            O-Töne unserer Kunden
+            Kundenstimmen
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-white">
-            Hören Sie es{" "}
+            Hör{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#d8b682]">
               von den Kunden selbst
             </span>

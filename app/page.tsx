@@ -19,7 +19,7 @@ import Referenzen from "@/components/sections/Referenzen";
 import OToene from "@/components/sections/OToene";
 import Stimmen from "@/components/sections/Stimmen";
 import Passt from "@/components/sections/Passt";
-import Vergleich from "@/components/sections/Vergleich";
+
 import FAQ from "@/components/sections/FAQ";
 import FinalCTA from "@/components/sections/FinalCTA";
 import Footer from "@/components/Footer";
@@ -35,8 +35,8 @@ export default function Home() {
         <Praxis />
         <Diagnose />
         <Wechsel />
-        <Warum />
         <Zahlen />
+        <Warum />
         <Wachstum />
         <Globe />
         <Ablauf />
@@ -50,7 +50,6 @@ export default function Home() {
         <OToene />
         <Stimmen />
         <Passt />
-        <Vergleich />
         <FAQ />
         <FinalCTA />
       </main>

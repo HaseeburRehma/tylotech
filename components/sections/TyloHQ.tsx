@@ -240,12 +240,12 @@ const FEATURES = [
   {
     icon: Activity,
     title: "Echtzeit-KPIs statt Monatsbericht",
-    body: "Meta, Google und SEO laufen in einer Ansicht zusammen. Sie sehen am Dienstag, was am Montag passiert ist — nicht drei Wochen später.",
+    body: "Meta, Google und SEO laufen in einer Ansicht zusammen. Du siehst am Dienstag, was am Montag passiert ist — nicht drei Wochen später.",
   },
   {
     icon: Sparkles,
     title: "Inhalte und Anzeigentexte in Sekunden",
-    body: "Markengerechte Texte für Anzeigen, Landingpages und SEO — auf Basis Ihrer eigenen Tonalität, nicht aus der Schablone.",
+    body: "Markengerechte Texte für Anzeigen, Landingpages und SEO — auf Basis deiner eigenen Tonalität, nicht aus der Schablone.",
   },
   {
     icon: FolderCheck,
@@ -296,19 +296,19 @@ export default function TyloHQ() {
         <div className="hq-head mx-auto max-w-[680px] text-center">
           <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <KeyRound className="size-3.5 text-accent" />
-            Ihr Zugang
+            Ergebnisse, keine Erzählungen
           </p>
           <h2 className="mt-5 text-balance font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            Ihr Projekt läuft{" "}
+            Dein Projekt läuft — und du siehst es{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              nicht mehr über E-Mail
+              in Echtzeit
             </span>
             .
           </h2>
           <p className="mx-auto mt-5 max-w-[620px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            TyloHQ ist die Plattform, auf der wir mit Ihnen arbeiten:
+            TyloHQ ist die Plattform, auf der wir mit dir arbeiten:
             Echtzeit-Zahlen aus Meta, Google und SEO, Inhalte und Freigaben an
-            einem Ort — und ein Team, das Sie erreichen, ohne zu suchen.
+            einem Ort — und ein Team, das du erreichst, ohne zu suchen.
           </p>
         </div>
 

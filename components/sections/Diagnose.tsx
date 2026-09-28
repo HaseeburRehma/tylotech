@@ -31,8 +31,8 @@ const CASES: Case[] = [
     idx: "01",
     eyebrow: "Koordination",
     finding: "Der häufigste Befund im Erstgespräch",
-    title: "Drei Dienstleister, keiner verantwortlich",
-    body: "Die Website-Agentur zeigt auf die Marketing-Agentur, die zeigt auf die IT. Am Ende koordinieren Sie selbst — und bezahlen dafür auch noch.",
+    title: "Fünf Dienstleister, keiner sieht das Ganze",
+    body: "Die Website-Agentur zeigt auf die Marketing-Agentur, die zeigt auf die IT. Am Ende koordinierst du selbst — und bezahlst dafür auch noch.",
     tags: ["Website", "Marketing", "IT"],
     from: { v: "3 Verträge", l: "heute" },
     to: { v: "1 Ansprechpartner", l: "mit TyloTech" },
@@ -57,6 +57,7 @@ const CASES: Case[] = [
     finding: "Der Grund, warum Projekte einschlafen",
     title: "Systeme, die niemand anfasst",
     body: "Tools wurden eingeführt, aber nie zu Ende gedacht. Keiner weiß, wie sie laufen — also läuft am Ende wieder alles über E-Mail und Bauchgefühl.",
+
     tags: ["CRM", "Automatisierung", "Prozesse"],
     from: { v: "Insellösungen", l: "ungenutzt" },
     to: { v: "Ein System", l: "das bleibt" },
@@ -147,20 +148,20 @@ export default function Diagnose() {
         <div className="dg-head max-w-[900px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
             <AlertCircle className="size-3.5 text-accent" />
-            Woran es wirklich liegt
+            Der Denkfehler
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,4.4vw,3.1rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
             Digitalisierung scheitert{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#d8b682]">
-              selten an der Technik
+              nicht an der Technik
             </span>
             .
           </h2>
           <p className="mt-5 max-w-[820px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-white/60">
-            Sie scheitert an Zuständigkeiten, an Dienstleistern, die nur ihren
-            Ausschnitt sehen, und an Systemen, die am Ende niemand mehr anfasst.
-            Wir haben das oft genug aufgeräumt, um zu wissen, woran es wirklich
-            liegt.
+            Sie scheitert daran, dass fünf Dienstleister nebeneinander arbeiten
+            und keiner das Ganze sieht. Einer macht Ads, einer die Website,
+            einer die Software — und niemand trägt das Ergebnis. Wir machen es
+            anders: ein Team, ein Plan, eine Verantwortung.
           </p>
         </div>
 

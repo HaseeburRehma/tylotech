@@ -9,12 +9,12 @@ const LEVERS = [
   {
     icon: RotateCw,
     title: "Effiziente Prozesse & Automatisierung",
-    body: "Wir nehmen die Handgriffe aus Ihrem Tag, die niemand machen will. Angebote, Rechnungen, Nachfassen, Reporting — einmal sauber aufgesetzt, läuft es ohne Sie.",
+    body: "Wir nehmen die Handgriffe aus deinem Tag, die niemand machen will. Angebote, Rechnungen, Nachfassen, Reporting — einmal sauber aufgesetzt, läuft es ohne dich.",
   },
   {
     icon: Users,
     title: "Smartes Recruiting & Teamaufbau",
-    body: "Gute Leute finden Sie über Stellenanzeigen allein nicht mehr. Wir bauen einen Prozess, der Bewerbungen bringt — und die Richtigen davon auch hält.",
+    body: "Gute Leute findest du über Stellenanzeigen allein nicht mehr. Wir bauen einen Prozess, der Bewerbungen bringt — und die Richtigen davon auch hält.",
   },
   {
     icon: TrendingUp,
@@ -77,7 +77,7 @@ export default function Wachstum() {
             Unser Fundament
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            Woran wir bei Ihnen{" "}
+            Woran wir bei dir{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
               zuerst
             </span>{" "}

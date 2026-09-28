@@ -176,16 +176,17 @@ const CARDS = [
     Mock: SystemMock,
     title: "Ein System statt Insellösungen",
     body: "Website, Werbekonten, CRM und Buchhaltung hängen zusammen. Eine Anfrage landet nicht in vier Postfächern, sondern an einer Stelle.",
+
   },
   {
     Mock: FlowMock,
     title: "Abläufe, die von selbst laufen",
-    body: "Auslöser, Verarbeitung, Aktion. Einmal sauber gebaut, übernimmt das System das Nachfassen — nicht Ihre Assistenz.",
+    body: "Auslöser, Verarbeitung, Aktion. Einmal sauber gebaut, übernimmt das System das Nachfassen — nicht deine Assistenz.",
   },
   {
     Mock: ApprovalMock,
     title: "Freigaben ohne Rückfragen",
-    body: "Was ansteht, sehen Sie auf einen Blick. Ein Klick genügt, und niemand muss den passenden Betreff suchen.",
+    body: "Was ansteht, siehst du auf einen Blick. Ein Klick genügt, und niemand muss den passenden Betreff suchen.",
   },
 ];
 
@@ -227,9 +228,9 @@ export default function Arbeitsweise() {
     >
       <Container className="relative">
         <div className="aw-head max-w-[680px]">
-          <p className="eyebrow mb-[18px] flex items-center gap-2.5 text-[#94713f]">
-            <span className="size-[7px] rounded-[2px] bg-accent" />
-            Arbeitsweise
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)] mb-[18px]">
+            <Layers className="size-3.5 text-accent" />
+            Unsere Arbeitsweise
           </p>
           <h2 className="display-m text-ink">
             Drei Dinge, die wir anders machen.

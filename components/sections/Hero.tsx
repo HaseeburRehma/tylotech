@@ -52,12 +52,12 @@ export default function Hero() {
         <div className="hero-content flex max-w-[600px] flex-col gap-6 sm:gap-7">
           <p className="hero-eyebrow inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white/70 px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink-60 backdrop-blur-sm">
             <Megaphone className="size-3.5 text-accent" />
-            Marketing und Digitalisierung
+            Dein Wachstumspartner
           </p>
 
           <h1 className="font-display text-[clamp(1.9rem,6vw,3.4rem)] font-bold leading-[1.06] tracking-[-0.03em] text-ink">
             <span className="block overflow-hidden pb-[0.05em]">
-              <span className="hero-line block">Wir bauen, was Ihr</span>
+              <span className="hero-line block">Wir bauen, was dein</span>
             </span>
             <span className="block overflow-hidden pb-[0.05em]">
               <span className="hero-line block">
@@ -73,24 +73,25 @@ export default function Hero() {
           </h1>
 
           <p className="hero-copy max-w-[520px] text-[clamp(15px,1.6vw,19px)] leading-[1.6] text-ink-60">
-            Marketing, Software, Digitalisierung und Unternehmensaufbau aus
-            einer Hand. Klar, direkt, ohne Kompromisse.
+            Marketing, Software und Vertrieb aus einer Hand — mit einem Team,
+            das nicht nur berät, sondern umsetzt. Und bei den richtigen Partnern
+            steigen wir sogar mit ein.
           </p>
 
-          {/* CTAs — kept on a single row at every breakpoint */}
-          <div className="flex flex-row items-stretch gap-2.5 sm:gap-3.5">
+          {/* CTAs — stacked on mobile, row on sm+ */}
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-stretch sm:gap-3.5">
             <Link
               href="#kontakt"
-              className="hero-cta group inline-flex h-[clamp(46px,12.4vw,58px)] items-center justify-center gap-2 whitespace-nowrap rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[clamp(14px,3.6vw,30px)] text-[clamp(12px,3.3vw,16px)] font-medium text-ink shadow-[0_12px_28px_-12px_rgba(209,170,113,0.95)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
+              className="hero-cta group inline-flex h-[52px] items-center justify-center gap-2 whitespace-nowrap rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[15px] font-medium text-ink shadow-[0_12px_28px_-12px_rgba(209,170,113,0.95)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04] sm:h-[58px] sm:text-[16px]"
             >
-              Jetzt anfragen
-              <ArrowRight className="size-[clamp(15px,4vw,20px)] transition-transform group-hover:translate-x-0.5" />
+              Erstgespräch sichern
+              <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="#audit"
-              className="hero-cta inline-flex h-[clamp(46px,12.4vw,58px)] items-center justify-center whitespace-nowrap rounded-[14px] border border-line bg-white px-[clamp(14px,3.6vw,30px)] text-[clamp(12px,3.3vw,16px)] font-medium text-ink shadow-[0_8px_20px_-14px_rgba(15,14,13,0.45)] transition-colors duration-200 hover:border-ink/25 hover:bg-page"
+              className="hero-cta inline-flex h-[52px] items-center justify-center whitespace-nowrap rounded-[14px] border border-line bg-white px-[30px] text-[15px] font-medium text-ink shadow-[0_8px_20px_-14px_rgba(15,14,13,0.45)] transition-colors duration-200 hover:border-ink/25 hover:bg-page sm:h-[58px] sm:text-[16px]"
             >
-              Kostenloses Audit buchen
+              So arbeiten wir
             </Link>
           </div>
 
@@ -98,6 +99,8 @@ export default function Hero() {
           <div className="hero-proof">
             <div className="h-px w-full max-w-[520px] bg-line" />
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] text-ink-60 sm:text-[14px]">
+              <span>100+ Projekte</span>
+              <span className="hidden h-4 w-px bg-line sm:block" />
               <span className="flex items-center gap-2.5">
                 <span className="flex gap-[3px]">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -109,10 +112,10 @@ export default function Hero() {
                   ))}
                 </span>
                 <span className="text-[15px] font-semibold text-ink">5,0</span>
-                <span>aus 31 Google-Bewertungen</span>
+                <span>Bewertung</span>
               </span>
               <span className="hidden h-4 w-px bg-line sm:block" />
-              <span>100+ Partnerunternehmen</span>
+              <span>vom Handwerk bis zum Mittelstand</span>
             </div>
           </div>
         </div>

@@ -19,25 +19,25 @@ const STEPS = [
     icon: Send,
     step: "Schritt 01",
     title: "Anfrage",
-    body: "Sie schildern uns in zwei Minuten, wo es klemmt. Kein Formular mit zwanzig Feldern, kein Callcenter.",
+    body: "Du meldest dich — kurz, unkompliziert. Wir schauen, ob wir zueinander passen.",
   },
   {
     icon: Search,
     step: "Schritt 02",
-    title: "Analyse und Planung",
-    body: "Wir schauen uns Zahlen, Auftritt und Abläufe an, bevor wir irgendetwas versprechen — und sagen auch, wenn nichts zu tun ist.",
+    title: "Analyse & Planung",
+    body: "Wir finden den echten Engpass in deinem Unternehmen und zeigen dir, wo dein größter Hebel liegt.",
   },
   {
     icon: MessageCircle,
     step: "Schritt 03",
-    title: "Anliegengespräch",
-    body: "Dreißig Minuten, in denen wir ehrlich sagen, was sich lohnt und was Sie sich sparen können. Kein Verkaufsgespräch.",
+    title: "Erstgespräch",
+    body: "Ehrliche Einschätzung, klare Empfehlung — kein Verkaufsgespräch, sondern ein Plan.",
   },
   {
     icon: Rocket,
     step: "Schritt 04",
-    title: "Strategie und Start",
-    body: "Fester Ansprechpartner, klarer Plan, feste Termine. Dann fangen wir an — und Sie sehen ab Woche eins, woran wir arbeiten.",
+    title: "Strategie & Start",
+    body: "Wir setzen um. Schnell, sichtbar, messbar. Du siehst ab Tag eins, was passiert.",
   },
 ];
 
@@ -104,8 +104,8 @@ export default function Ablauf() {
             bis zur Zusammenarbeit.
           </h2>
           <p className="mx-auto mt-5 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
-            Kein Vertrieb, der Sie durch einen Funnel schiebt. Nach dem dritten
-            Schritt wissen Sie genau, was Sie bekommen und was es kostet.
+            Kein Vertrieb, der dich durch einen Funnel schiebt. Nach dem dritten
+            Schritt weißt du genau, was du bekommst.
           </p>
         </div>
 
@@ -136,7 +136,7 @@ export default function Ablauf() {
             href="#termin"
             className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[16px] font-medium text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
           >
-            Erstgespräch buchen
+            Erstgespräch sichern
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>

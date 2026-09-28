@@ -9,46 +9,28 @@ type Item = { t: string; b: string; img: string; tint: string };
 
 const ITEMS: Item[] = [
   {
-    t: "Ein Ansprechpartner statt drei Dienstleister",
-    b: "Eine Person, die Ihr Projekt kennt — statt drei Verträge, die aufeinander zeigen.",
+    t: "Prozesse, die ohne dich laufen",
+    b: "Anfragen, Angebote, Nachfassen — einmal sauber aufgesetzt, läuft es, ohne dass du hinterherräumen musst.",
     img: "/wechsel/01.jpg",
     tint: "from-[#e8ddcb] to-[#d6c3a3]",
   },
   {
-    t: "Ein Plan, bevor irgendetwas gebaut wird",
-    b: "Erst Klarheit über Ziel, Zielgruppe und Weg — dann Umsetzung. Nicht umgekehrt.",
+    t: "Planbare Anfragen über eigene Kanäle",
+    b: "Kein Empfehlungsglück, keine Kaltakquise. Sondern ein System, das dir Woche für Woche qualifizierte Anfragen bringt.",
     img: "/wechsel/02.jpg",
     tint: "from-[#dde3e6] to-[#c4cfd4]",
   },
   {
-    t: "Auftritt und Kampagne entstehen zusammen",
-    b: "Website, Anzeigen und Prozesse entstehen im selben Team und im selben Zeitraum. Keine Übergabe, bei der die Hälfte verloren geht.",
+    t: "Alles messbar, alles sichtbar",
+    b: "Vorher: kein System, viel Bauchgefühl. Nachher: ein Dashboard, das dir zeigt, was läuft, was nicht läuft und was der nächste Hebel ist.",
     img: "/wechsel/03.jpg",
     tint: "from-[#e6dcc7] to-[#cdb78a]",
   },
   {
-    t: "Zahlen in Echtzeit statt im Quartalsbericht",
-    b: "Sie sehen jederzeit, was läuft — nicht erst, wenn das Quartal vorbei ist.",
+    t: "Ein Partner, der das Ergebnis trägt",
+    b: "Keine Agentur, die abrechnet und weiterleitet. Sondern ein Team, das sich am Ergebnis messen lässt — und bei echtem Potenzial sogar mit einsteigt.",
     img: "/wechsel/04.jpg",
     tint: "from-[#dfe1dc] to-[#c6cabf]",
-  },
-  {
-    t: "Änderungen in Tagen statt in Quartalen",
-    b: "Was angepasst werden muss, wird angepasst — ohne Ticket-Warteschlange.",
-    img: "/wechsel/05.jpg",
-    tint: "from-[#e9dfce] to-[#d3c1a1]",
-  },
-  {
-    t: "Derselbe Ansprechpartner nach dem Launch",
-    b: "Nach dem Go-live bleibt, wer Sie kennt. Kein Wechsel in ein anonymes Support-Team.",
-    img: "/wechsel/06.jpg",
-    tint: "from-[#dde4e4] to-[#c3d0cf]",
-  },
-  {
-    t: "Alle Zugänge gehören Ihnen, von Anfang an",
-    b: "Konten, Daten und Code laufen auf Ihren Namen. Sie sind nie abhängig von uns.",
-    img: "/wechsel/07.jpg",
-    tint: "from-[#e7ddc9] to-[#d0be9c]",
   },
 ];
 
@@ -118,15 +100,15 @@ export default function Wechsel() {
     <section
       id="wechsel"
       ref={root}
-      className="relative bg-page lg:h-[350vh]"
+      className="relative bg-page lg:h-[250vh]"
     >
       <div className="py-16 sm:py-20 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0">
         <Container className="w-full">
           {/* heading */}
           <div className="wx-head max-w-[760px]">
-            <p className="eyebrow mb-4 flex items-center gap-2.5 text-[#94713f]">
+            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)] mb-4">
               <span className="size-[7px] rounded-[2px] bg-accent" />
-              Der Wechsel
+              Wo klemmt es wirklich?
             </p>
             <h2 className="font-display text-[clamp(1.9rem,4.2vw,3rem)] font-bold leading-[1.08] tracking-[-0.03em] text-ink">
               Zwei Zustände.{" "}

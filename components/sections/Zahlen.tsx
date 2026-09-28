@@ -12,9 +12,9 @@ import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const STATS = [
-  { value: 100, decimals: 0, suffix: "+", label: "Partnerunternehmen, die mit uns arbeiten" },
-  { value: 5, decimals: 1, suffix: "", label: "Durchschnitt aus 31 Google-Bewertungen" },
-  { value: 6, decimals: 0, suffix: "", label: "Leistungsbereiche unter einem Dach" },
+  { value: 100, decimals: 0, suffix: "+", label: "Projekte umgesetzt" },
+  { value: 5, decimals: 1, suffix: "", label: "Durchschnittsbewertung" },
+  { value: 3, decimals: 0, suffix: "-in-1", label: "Marketing · Software · Vertrieb" },
 ];
 
 const TAGS: { t: string; icon: LucideIcon }[] = [
@@ -111,7 +111,7 @@ export default function Zahlen() {
             ist.
           </h2>
           <p className="mx-auto mt-5 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            Hier steht nur, was Sie selbst überprüfen können, auf Google, bei
+            Hier steht nur, was du selbst überprüfen kannst, auf Google, bei
             unseren Partnern oder in einem Gespräch.
           </p>
         </div>

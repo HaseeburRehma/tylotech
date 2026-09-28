@@ -100,7 +100,7 @@ const RANKS = [
 
 function LocalCard() {
   return (
-    <Card title="Lokal ganz oben" subtitle="dort, wo Ihre Kunden suchen">
+    <Card title="Lokal ganz oben" subtitle="dort, wo deine Kunden suchen">
       <div>
         <div className="grid grid-cols-[1fr_auto_64px] items-center gap-3 border-b border-line pb-2.5 text-[10px] font-medium uppercase tracking-[0.09em] text-ink/40">
           <span>Suchbegriff</span>
@@ -173,7 +173,7 @@ function RequestsCard() {
 const SNIPPETS = [
   {
     label: "Google Ads",
-    text: "Glänzende Büros. Ohne dass Sie daran denken müssen.",
+    text: "Glänzende Büros. Ohne dass du daran denken musst.",
   },
   {
     label: "Meta",
@@ -181,13 +181,13 @@ const SNIPPETS = [
   },
   {
     label: "Landingpage",
-    text: "Der Betrieb, den Ihre Kunden weiterempfehlen.",
+    text: "Der Betrieb, den deine Kunden weiterempfehlen.",
   },
 ];
 
 function ContentCard() {
   return (
-    <Card title="Inhalte in Ihrer Sprache" subtitle="nicht aus der Schablone">
+    <Card title="Inhalte in deiner Sprache" subtitle="nicht aus der Schablone">
       <div className="content-block flex items-center gap-2 rounded-xl border border-line bg-page px-3 py-2.5">
         <span
           className="type-text flex-1 whitespace-nowrap text-[13px] text-ink/50"
@@ -250,7 +250,7 @@ const TOOLS = [
 function IntegrationsCard() {
   return (
     <Card
-      title="An Ihre Werkzeuge angebunden"
+      title="An deine Werkzeuge angebunden"
       subtitle="kein Systembruch, kein Doppelpflegen"
     >
       <div className="grid grid-cols-6 gap-2">
@@ -672,14 +672,20 @@ export default function Praxis() {
     <section id="praxis" ref={root} className="bg-page py-24">
       <Container>
         <div className="praxis-head max-w-[640px]">
-          <p className="eyebrow mb-[18px] flex items-center gap-2.5 text-[#94713f]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <span className="size-[7px] rounded-[2px] bg-accent" />
-            In der Praxis
+            Alles sichtbar · TyloTech HQ
           </p>
-          <h2 className="display-m text-ink">So sieht das bei Ihnen aus.</h2>
-          <p className="mt-[18px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#5c5954]">
-            Keine Feature-Liste — sondern die Oberflächen und Auswertungen, mit
-            denen Sie am Ende tatsächlich arbeiten.
+          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+            Bei uns läufst du nicht{" "}
+            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+              im Blindflug.
+            </span>
+          </h2>
+          <p className="mt-4 text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+            Dein eigenes Portal zeigt dir jederzeit, was läuft — Zahlen,
+            Fortschritt, nächste Schritte. Keine Reportings per Mail, keine
+            Blackbox.
           </p>
         </div>
 

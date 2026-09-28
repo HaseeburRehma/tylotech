@@ -87,11 +87,11 @@ export default function Podcast() {
             Zum Mithören
           </p>
           <h2 className="font-display text-[clamp(2rem,3.6vw,3rem)] font-bold leading-[1.08] tracking-[-0.03em] text-ink">
-            Unser Geschäftsführer über die Zahlen, die wirklich zählen.
+            Unser Gründer über die Zahlen, die wirklich zählen.
           </h2>
           <p className="mt-5 text-[clamp(16px,1.4vw,18px)] leading-[1.6] tracking-[-0.1px] text-[#5c5954]">
             Warum Google Ads selten zu teuer sind, welche Kennzahlen wirklich über
-            Erfolg entscheiden — und woran Sie eine Agentur erkennen, die mitdenkt
+            Erfolg entscheiden — und woran du eine Agentur erkennst, die mitdenkt
             statt nur abzurechnen.
           </p>
           <div className="mt-8 flex flex-wrap gap-3.5">

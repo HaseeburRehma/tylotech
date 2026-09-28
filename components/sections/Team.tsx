@@ -113,14 +113,14 @@ export default function Team() {
     <section id="team" ref={root} className="overflow-hidden bg-[#001620] py-24 text-white">
       <Container>
         <div className="team-head mx-auto max-w-[880px] text-center">
-          <p className="eyebrow mb-6 flex items-center justify-center gap-2.5 text-[#d8b682]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70 mb-6 mx-auto">
             <span className="size-[7px] rounded-[2px] bg-accent" />
-            Team
+            Kein Callcenter
           </p>
-          <h2 className="display-l text-white">Die Menschen, mit denen Sie arbeiten.</h2>
+          <h2 className="font-display text-[clamp(1.9rem,4.4vw,3.1rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">Die Menschen, mit denen du arbeitest.</h2>
           <p className="mx-auto mt-6 max-w-[620px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#b3d6e2]">
-            Kein Account-Manager, der weiterleitet. Sie sprechen direkt mit den
-            Leuten, die an Ihrem Projekt bauen.
+            Kein Account-Manager, der weiterleitet. Du sprichst direkt mit den
+            Leuten, die an deinem Projekt bauen.
           </p>
         </div>
 
