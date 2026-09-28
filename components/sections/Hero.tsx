@@ -82,14 +82,18 @@ export default function Hero() {
           <div className="flex flex-col gap-2.5 sm:flex-row sm:items-stretch sm:gap-3.5">
             <Link
               href="#kontakt"
-              className="hero-cta group inline-flex h-[52px] items-center justify-center gap-2 whitespace-nowrap rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[15px] font-medium text-ink shadow-[0_12px_28px_-12px_rgba(209,170,113,0.95)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04] sm:h-[58px] sm:text-[16px]"
+              className="hero-cta group inline-flex h-[58px] items-center justify-center gap-2.5 whitespace-nowrap rounded-full px-7 text-[16px] font-medium tracking-[-0.006em] text-[#0f0e0d] shadow-[0_4px_14px_rgba(168,127,69,0.2),0_10px_28px_rgba(168,127,69,0.32),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(180deg,rgba(255,255,255,0.42) 0%,rgba(255,255,255,0.02) 55%,rgba(255,255,255,0) 100%),linear-gradient(90deg,#EFDCBC 0%,#D8B681 45%,#B4894D 100%)",
+              }}
             >
               Erstgespräch sichern
               <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
-              href="#audit"
-              className="hero-cta inline-flex h-[52px] items-center justify-center whitespace-nowrap rounded-[14px] border border-line bg-white px-[30px] text-[15px] font-medium text-ink shadow-[0_8px_20px_-14px_rgba(15,14,13,0.45)] transition-colors duration-200 hover:border-ink/25 hover:bg-page sm:h-[58px] sm:text-[16px]"
+              href="#ablauf"
+              className="hero-cta inline-flex h-[58px] items-center justify-center whitespace-nowrap rounded-full border border-white bg-white px-7 text-[16px] font-medium tracking-[-0.006em] text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07),inset_0_1px_1px_rgba(255,255,255,0.7)] transition-colors duration-200 hover:bg-[#fafaf9]"
             >
               So arbeiten wir
             </Link>
