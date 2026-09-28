@@ -79,7 +79,7 @@ export default function Hero() {
           </p>
 
           {/* CTAs — stacked on mobile, row on sm+ */}
-          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-stretch sm:gap-3.5">
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-3.5">
             <Link
               href="#kontakt"
               className="hero-cta group inline-flex h-[58px] items-center justify-center gap-2.5 whitespace-nowrap rounded-full px-7 text-[16px] font-medium tracking-[-0.006em] text-[#0f0e0d] shadow-[0_4px_14px_rgba(168,127,69,0.2),0_10px_28px_rgba(168,127,69,0.32),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
