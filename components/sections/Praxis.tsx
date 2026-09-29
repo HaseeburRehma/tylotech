@@ -46,7 +46,7 @@ const ROW_BOTTOM = ["linkedin", "instagram", "googleanalytics", "google"];
 
 function MarqueeTile({ slug }: { slug: string }) {
   return (
-    <div className="grid size-[clamp(58px,17vw,74px)] shrink-0 cursor-pointer place-items-center rounded-[14px] border border-line bg-page transition-[box-shadow,background-color,transform] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_12px_26px_-10px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.16] active:translate-y-0 active:scale-95">
+    <div className="grid size-[clamp(58px,17vw,74px)] shrink-0 cursor-pointer place-items-center rounded-[14px] border border-line bg-page transition-[box-shadow,background-color,translate] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_12px_26px_-10px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.16] active:translate-y-0 active:scale-95">
       <BrandIcon slug={slug} size={26} />
     </div>
   );
@@ -257,7 +257,7 @@ function IntegrationsCard() {
         {TOOLS.map((slug) => (
           <div
             key={slug}
-            className="tool-tile group grid aspect-square cursor-pointer place-items-center rounded-[10px] border border-line bg-page transition-[box-shadow,background-color,transform] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_10px_22px_-9px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.18] active:translate-y-0 active:scale-95"
+            className="tool-tile group grid aspect-square cursor-pointer place-items-center rounded-[10px] border border-line bg-page transition-[box-shadow,background-color,translate] duration-200 ease-out [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_10px_22px_-9px_rgba(209,170,113,0.55),inset_0_0_0_1.5px_rgba(209,170,113,0.6)] hover:[&_svg]:scale-[1.18] active:translate-y-0 active:scale-95"
           >
             <BrandIcon slug={slug} size={18} />
           </div>
@@ -550,6 +550,7 @@ export default function Praxis() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.08,
+        clearProps: "transform,opacity,translate,rotate,scale",
         scrollTrigger: { trigger: ".praxis-grid", start: "top 78%" , toggleActions: "restart none restart none" },
       });
 
@@ -647,6 +648,7 @@ export default function Praxis() {
         ease: "back.out(1.7)",
         stagger: { each: 0.028, from: "start", grid: "auto" },
         immediateRender: false,
+        clearProps: "transform,opacity,translate,rotate,scale",
         scrollTrigger: st(),
       });
 

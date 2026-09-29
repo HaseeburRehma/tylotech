@@ -44,6 +44,7 @@ export default function Warum() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.1,
+        clearProps: "transform,opacity,translate,rotate,scale",
         scrollTrigger: { trigger: ".warum-grid", start: "top 82%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".warum-icon", {

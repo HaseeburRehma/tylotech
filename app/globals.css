@@ -100,19 +100,20 @@ html.lenis body {
   opacity: 0;
 }
 
-/* Uniform card hover-lift across sections */
+/* Uniform card hover-lift across sections.
+   Uses CSS `translate` (not `transform`) so GSAP can own `transform` without conflict. */
 .praxis-card,
 .warum-card,
 .hebel-card {
   transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.35s ease,
     border-color 0.35s ease;
 }
 .praxis-card:hover,
 .warum-card:hover,
 .hebel-card:hover {
-  transform: translateY(-4px);
+  translate: 0 -4px;
   border-color: #d6d2cb;
   box-shadow: 0 18px 40px -20px rgba(15, 14, 13, 0.18);
 }
@@ -121,7 +122,7 @@ html.lenis body {
   .praxis-card:hover,
   .warum-card:hover,
   .hebel-card:hover {
-    transform: none;
+    translate: none;
   }
 }
 
