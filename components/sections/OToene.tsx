@@ -167,14 +167,14 @@ export default function OToene() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".oton-head", start: "top 82%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".oton-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
       });
       gsap.from(".oton-panel", {
         y: 34,
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".oton-panel", start: "top 86%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".oton-panel", start: "top 86%" , toggleActions: "play reverse play reverse" },
       });
     },
     { scope: root },

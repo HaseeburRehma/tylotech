@@ -24,14 +24,14 @@ export default function Passt() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".passt-head", start: "top 82%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".passt-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
       });
       gsap.from(".passt-panel", {
         y: 34,
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".passt-panel", start: "top 86%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".passt-panel", start: "top 86%" , toggleActions: "play reverse play reverse" },
       });
       gsap.from(".passt-item", {
         y: 16,
@@ -39,7 +39,7 @@ export default function Passt() {
         duration: 0.5,
         ease: "power3.out",
         stagger: 0.09,
-        scrollTrigger: { trigger: ".passt-panel", start: "top 80%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".passt-panel", start: "top 80%" , toggleActions: "play reverse play reverse" },
       });
     },
     { scope: root },

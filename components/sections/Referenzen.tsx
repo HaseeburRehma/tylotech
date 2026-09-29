@@ -62,7 +62,7 @@ export default function Referenzen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".ref-head", start: "top 82%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".ref-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
       });
 
       const mm = gsap.matchMedia();
@@ -89,20 +89,18 @@ export default function Referenzen() {
             },
           );
 
-          // Exit: slowly shrink and fade as the next card scrolls in
-          if (i < cards.length - 1) {
-            gsap.to(card, {
-              scale: 0.88,
-              autoAlpha: 0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: stickies[i + 1],
-                start: "top 92%",
-                end: "top 32%",
-                scrub: true,
-              },
-            });
-          }
+          // Exit: slowly shrink and fade
+          gsap.to(card, {
+            scale: 0.88,
+            autoAlpha: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: i < cards.length - 1 ? stickies[i + 1] : "#referenzen",
+              start: i < cards.length - 1 ? "top 92%" : "bottom 90%",
+              end: i < cards.length - 1 ? "top 32%" : "bottom 40%",
+              scrub: true,
+            },
+          });
         });
       });
 
@@ -117,7 +115,7 @@ export default function Referenzen() {
               autoAlpha: 1,
               ease: "power3.out",
               duration: 0.8,
-              scrollTrigger: { trigger: card, start: "top 90%" , toggleActions: "restart none restart none" },
+              scrollTrigger: { trigger: card, start: "top 90%" , toggleActions: "play reverse play reverse" },
             },
           );
         });

@@ -24,7 +24,7 @@ export default function Leistungen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".leist-head", start: "top 82%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".leist-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
       });
       gsap.from(".leist-cell", {
         y: 30,
@@ -32,7 +32,7 @@ export default function Leistungen() {
         duration: 0.6,
         ease: "power3.out",
         stagger: 0.08,
-        scrollTrigger: { trigger: ".leist-grid", start: "top 82%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".leist-grid", start: "top 82%" , toggleActions: "play reverse play reverse" },
       });
 
       // Illustrations spring in, then settle into a slow idle float. The float
@@ -46,7 +46,7 @@ export default function Leistungen() {
         duration: 0.7,
         ease: "back.out(1.6)",
         stagger: 0.09,
-        scrollTrigger: { trigger: ".leist-grid", start: "top 80%" , toggleActions: "restart none restart none" },
+        scrollTrigger: { trigger: ".leist-grid", start: "top 80%" , toggleActions: "play reverse play reverse" },
       });
       illus.forEach((el, i) => {
         gsap.to(el, {
