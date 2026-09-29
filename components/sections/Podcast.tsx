@@ -135,7 +135,7 @@ export default function Podcast() {
             >
               <span
                 className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(https://i.ytimg.com/vi/${YT_ID}/maxresdefault.jpg)` }}
+                style={{ backgroundImage: `url(/podcast/studio.jpg)` }}
               />
               <span className="absolute inset-0 bg-[#001620]/20 transition-colors group-hover:bg-[#001620]/10" />
               <span className="pointer-events-none absolute inset-0 grid place-items-center">

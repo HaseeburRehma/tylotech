@@ -1,17 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { UserRound, Quote } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-const YT_ID = "vSIs3xcjzG4";
-
 export default function Gruender() {
   const root = useRef<HTMLDivElement>(null);
-  const [poster, setPoster] = useState(
-    `https://i.ytimg.com/vi/${YT_ID}/maxresdefault.jpg`,
-  );
 
   useGSAP(
     () => {
@@ -61,11 +56,8 @@ export default function Gruender() {
               <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] bg-ink shadow-[0_30px_60px_-26px_rgba(15,14,13,0.55)] ring-1 ring-[#d1aa71]/35">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={poster}
+                  src="/team/ilias-el-aradi.jpg"
                   alt="Ilias El Aradi, Gründer von TyloTech"
-                  onError={() =>
-                    setPoster(`https://i.ytimg.com/vi/${YT_ID}/hqdefault.jpg`)
-                  }
                   className="absolute inset-0 h-full w-full object-cover object-[center_20%]"
                 />
               </div>
