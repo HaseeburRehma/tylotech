@@ -59,7 +59,7 @@ export default function Ablauf() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".ablauf-head", start: "top 82%" },
+        scrollTrigger: { trigger: ".ablauf-head", start: "top 82%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".ablauf-step", {
         y: 30,
@@ -67,7 +67,7 @@ export default function Ablauf() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.12,
-        scrollTrigger: { trigger: ".ablauf-grid", start: "top 80%" },
+        scrollTrigger: { trigger: ".ablauf-grid", start: "top 80%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".ablauf-icon", {
         scale: 0.4,
@@ -75,15 +75,14 @@ export default function Ablauf() {
         duration: 0.55,
         ease: "back.out(1.9)",
         stagger: 0.12,
-        clearProps: "transform",
-        scrollTrigger: { trigger: ".ablauf-grid", start: "top 78%" },
+        scrollTrigger: { trigger: ".ablauf-grid", start: "top 78%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".ablauf-cta", {
         y: 18,
         opacity: 0,
         duration: 0.7,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".ablauf-cta", start: "top 92%" },
+        scrollTrigger: { trigger: ".ablauf-cta", start: "top 92%" , toggleActions: "restart none restart none" },
       });
     },
     { scope: root },

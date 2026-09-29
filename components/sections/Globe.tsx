@@ -278,7 +278,7 @@ export default function Globe() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.12,
-        scrollTrigger: { trigger: root.current, start: "top 70%" },
+        scrollTrigger: { trigger: root.current, start: "top 70%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".glb-label", {
         opacity: 0,
@@ -286,7 +286,7 @@ export default function Globe() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: root.current, start: "top 68%" },
+        scrollTrigger: { trigger: root.current, start: "top 68%" , toggleActions: "restart none restart none" },
       });
 
       // One-shot reveals for the base line + node outline; the gold line-draw
@@ -296,7 +296,7 @@ export default function Globe() {
         opacity: 0,
         duration: 0.6,
         stagger: 0.05,
-        scrollTrigger: { trigger: root.current, start: "top 88%" },
+        scrollTrigger: { trigger: root.current, start: "top 88%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".glb-node", {
         opacity: 0,
@@ -305,7 +305,7 @@ export default function Globe() {
         duration: 0.5,
         ease: "back.out(2)",
         stagger: 0.08,
-        scrollTrigger: { trigger: root.current, start: "top 78%" },
+        scrollTrigger: { trigger: root.current, start: "top 78%" , toggleActions: "restart none restart none" },
       });
     },
     { scope: root },

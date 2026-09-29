@@ -201,7 +201,7 @@ export default function Arbeitsweise() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".aw-head", start: "top 82%" },
+        scrollTrigger: { trigger: ".aw-head", start: "top 82%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".aw-card", {
         y: 34,
@@ -209,11 +209,11 @@ export default function Arbeitsweise() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.12,
-        scrollTrigger: { trigger: ".aw-grid", start: "top 82%" },
+        scrollTrigger: { trigger: ".aw-grid", start: "top 82%" , toggleActions: "restart none restart none" },
       });
-      const st = { trigger: ".aw-grid", start: "top 74%" };
-      gsap.from(".sys-pill", { x: -18, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.1, clearProps: "transform", scrollTrigger: st });
-      gsap.from(".sys-hub", { scale: 0.7, opacity: 0, duration: 0.6, ease: "back.out(1.7)", delay: 0.4, clearProps: "transform", scrollTrigger: st });
+      const st = { trigger: ".aw-grid", start: "top 74%", toggleActions: "restart none restart none" as const };
+      gsap.from(".sys-pill", { x: -18, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.1, scrollTrigger: st });
+      gsap.from(".sys-hub", { scale: 0.7, opacity: 0, duration: 0.6, ease: "back.out(1.7)", delay: 0.4, scrollTrigger: st });
       gsap.from(".flow-row", { y: 16, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.14, scrollTrigger: st });
       gsap.from(".appr-row", { x: 16, opacity: 0, duration: 0.5, ease: "power3.out", stagger: 0.1, scrollTrigger: st });
     },

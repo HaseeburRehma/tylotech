@@ -49,14 +49,14 @@ export default function Podcast() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".podcast-text", start: "top 82%" },
+        scrollTrigger: { trigger: ".podcast-text", start: "top 82%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".podcast-video", {
         y: 40,
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".podcast-video", start: "top 85%" },
+        scrollTrigger: { trigger: ".podcast-video", start: "top 85%" , toggleActions: "restart none restart none" },
       });
       // play button breathing ring
       gsap.fromTo(

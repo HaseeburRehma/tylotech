@@ -103,7 +103,7 @@ export default function Branchen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".br-head", start: "top 82%" },
+        scrollTrigger: { trigger: ".br-head", start: "top 82%" , toggleActions: "restart none restart none" },
       });
 
       const mm = gsap.matchMedia();

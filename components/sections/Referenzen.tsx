@@ -62,7 +62,7 @@ export default function Referenzen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".ref-head", start: "top 82%" },
+        scrollTrigger: { trigger: ".ref-head", start: "top 82%" , toggleActions: "restart none restart none" },
       });
 
       const mm = gsap.matchMedia();
@@ -117,8 +117,7 @@ export default function Referenzen() {
               autoAlpha: 1,
               ease: "power3.out",
               duration: 0.8,
-              scrollTrigger: { trigger: card, start: "top 90%" },
-              clearProps: "transform,opacity,visibility",
+              scrollTrigger: { trigger: card, start: "top 90%" , toggleActions: "restart none restart none" },
             },
           );
         });

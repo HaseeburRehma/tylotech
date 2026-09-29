@@ -496,7 +496,7 @@ function ReachCard() {
     gsap.fromTo(
       e.currentTarget,
       { scale: 0.84 },
-      { scale: 1, duration: 0.55, ease: "elastic.out(1, 0.5)", clearProps: "transform" },
+      { scale: 1, duration: 0.55, ease: "elastic.out(1, 0.5)" },
     );
   };
 
@@ -542,7 +542,7 @@ export default function Praxis() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".praxis-head", start: "top 80%" },
+        scrollTrigger: { trigger: ".praxis-head", start: "top 80%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".praxis-card", {
         y: 34,
@@ -550,12 +550,12 @@ export default function Praxis() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.08,
-        scrollTrigger: { trigger: ".praxis-grid", start: "top 78%" },
+        scrollTrigger: { trigger: ".praxis-grid", start: "top 78%" , toggleActions: "restart none restart none" },
       });
 
       // Fresh trigger config per tween — sharing one object across several
       // ScrollTriggers lets GSAP mutate it and cross-wire them.
-      const st = () => ({ trigger: ".praxis-grid", start: "top 70%" });
+      const st = () => ({ trigger: ".praxis-grid", start: "top 70%", toggleActions: "restart none restart none" as const });
 
       // stat bar chart grows up
       gsap.fromTo(
@@ -615,7 +615,6 @@ export default function Praxis() {
         duration: 0.5,
         ease: "power3.out",
         stagger: 0.12,
-        clearProps: "transform",
         scrollTrigger: st(),
       });
       const typeEl = root.current?.querySelector<HTMLElement>(".type-text");
@@ -648,7 +647,6 @@ export default function Praxis() {
         ease: "back.out(1.7)",
         stagger: { each: 0.028, from: "start", grid: "auto" },
         immediateRender: false,
-        clearProps: "transform",
         scrollTrigger: st(),
       });
 

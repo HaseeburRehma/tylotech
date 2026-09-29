@@ -34,7 +34,7 @@ export default function Wachstum() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".hebel-head", start: "top 80%" },
+        scrollTrigger: { trigger: ".hebel-head", start: "top 80%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".hebel-card", {
         y: 34,
@@ -42,8 +42,7 @@ export default function Wachstum() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.1,
-        clearProps: "transform,opacity",
-        scrollTrigger: { trigger: ".hebel-grid", start: "top 82%" },
+        scrollTrigger: { trigger: ".hebel-grid", start: "top 82%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".hebel-icon", {
         scale: 0.5,
@@ -51,8 +50,7 @@ export default function Wachstum() {
         duration: 0.55,
         ease: "back.out(1.7)",
         stagger: 0.1,
-        clearProps: "transform,opacity",
-        scrollTrigger: { trigger: ".hebel-grid", start: "top 78%" },
+        scrollTrigger: { trigger: ".hebel-grid", start: "top 78%" , toggleActions: "restart none restart none" },
       });
       gsap.fromTo(
         ".hebel-accent",
@@ -62,8 +60,7 @@ export default function Wachstum() {
           duration: 0.9,
           ease: "power3.out",
           stagger: 0.1,
-          clearProps: "transform",
-          scrollTrigger: { trigger: ".hebel-grid", start: "top 80%" },
+          scrollTrigger: { trigger: ".hebel-grid", start: "top 80%" , toggleActions: "restart none restart none" },
         },
       );
     },

@@ -15,7 +15,7 @@ export default function Gruender() {
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".gr-card", start: "top 85%" },
+        scrollTrigger: { trigger: ".gr-card", start: "top 85%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".gr-photo", {
         y: 30,
@@ -23,8 +23,7 @@ export default function Gruender() {
         scale: 0.96,
         duration: 0.9,
         ease: "power3.out",
-        clearProps: "transform",
-        scrollTrigger: { trigger: ".gr-card", start: "top 85%" },
+        scrollTrigger: { trigger: ".gr-card", start: "top 85%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".gr-body > *", {
         y: 20,
@@ -32,7 +31,7 @@ export default function Gruender() {
         duration: 0.6,
         ease: "power3.out",
         stagger: 0.08,
-        scrollTrigger: { trigger: ".gr-body", start: "top 88%" },
+        scrollTrigger: { trigger: ".gr-body", start: "top 88%" , toggleActions: "restart none restart none" },
       });
     },
     { scope: root },

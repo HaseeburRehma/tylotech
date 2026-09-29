@@ -41,7 +41,7 @@ export default function Zahlen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".zahlen-head", start: "top 82%" },
+        scrollTrigger: { trigger: ".zahlen-head", start: "top 82%" , toggleActions: "restart none restart none" },
       });
 
       const cards = gsap.utils.toArray<HTMLElement>(".zahlen-card");
@@ -51,8 +51,7 @@ export default function Zahlen() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.12,
-        clearProps: "transform",
-        scrollTrigger: { trigger: ".zahlen-grid", start: "top 82%" },
+        scrollTrigger: { trigger: ".zahlen-grid", start: "top 82%" , toggleActions: "restart none restart none" },
       });
 
       gsap.from(".zahlen-tag", {
@@ -61,8 +60,7 @@ export default function Zahlen() {
         duration: 0.5,
         ease: "back.out(1.6)",
         stagger: 0.1,
-        clearProps: "transform",
-        scrollTrigger: { trigger: ".zahlen-tags", start: "top 90%" },
+        scrollTrigger: { trigger: ".zahlen-tags", start: "top 90%" , toggleActions: "restart none restart none" },
       });
 
       // Count-up
@@ -75,7 +73,7 @@ export default function Zahlen() {
           n: value,
           duration: 1.6,
           ease: "power2.out",
-          scrollTrigger: { trigger: ".zahlen-grid", start: "top 78%" },
+          scrollTrigger: { trigger: ".zahlen-grid", start: "top 78%" , toggleActions: "restart none restart none" },
           onUpdate: () => {
             el.textContent = fmt(obj.n, decimals) + suffix;
           },

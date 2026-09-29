@@ -43,14 +43,14 @@ export default function TyloHQ() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".hq-head", start: "top 82%" },
+        scrollTrigger: { trigger: ".hq-head", start: "top 82%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".tylohq-card", {
         y: 44,
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".tylohq-card", start: "top 85%" },
+        scrollTrigger: { trigger: ".tylohq-card", start: "top 85%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".hq-feature", {
         y: 26,
@@ -58,7 +58,7 @@ export default function TyloHQ() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.12,
-        scrollTrigger: { trigger: ".hq-features", start: "top 85%" },
+        scrollTrigger: { trigger: ".hq-features", start: "top 85%" , toggleActions: "restart none restart none" },
       });
     },
     { scope: root },

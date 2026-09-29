@@ -129,14 +129,14 @@ export default function Diagnose() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".dg-head", start: "top 82%" },
+        scrollTrigger: { trigger: ".dg-head", start: "top 82%" , toggleActions: "restart none restart none" },
       });
       gsap.from(".dg-stage", {
         y: 34,
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".dg-stage", start: "top 84%" },
+        scrollTrigger: { trigger: ".dg-stage", start: "top 84%" , toggleActions: "restart none restart none" },
       });
     },
     { scope: root },
