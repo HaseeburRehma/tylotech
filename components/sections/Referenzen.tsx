@@ -72,7 +72,7 @@ export default function Referenzen() {
         const stickies = gsap.utils.toArray<HTMLElement>(".ref-sticky");
 
         cards.forEach((card, i) => {
-          // Entrance: card scales up and fades in over a long scroll range
+          // Entrance: fade in as the card's sticky wrapper scrolls into view
           gsap.fromTo(
             card,
             { scale: 0.92, autoAlpha: 0 },
@@ -82,22 +82,23 @@ export default function Referenzen() {
               ease: "none",
               scrollTrigger: {
                 trigger: stickies[i],
-                start: "top 98%",
-                end: "top 40%",
+                start: "top 95%",
+                end: "top 45%",
                 scrub: true,
               },
             },
           );
 
-          // Exit: slowly shrink and fade over a long scroll range
+          // Exit: previous card stays visible while next one enters,
+          // then starts fading only after the next card is well established
           gsap.to(card, {
             scale: 0.88,
             autoAlpha: 0,
             ease: "none",
             scrollTrigger: {
               trigger: i < cards.length - 1 ? stickies[i + 1] : "#referenzen",
-              start: i < cards.length - 1 ? "top 98%" : "bottom 95%",
-              end: i < cards.length - 1 ? "top 20%" : "bottom 30%",
+              start: i < cards.length - 1 ? "top 60%" : "bottom 80%",
+              end: i < cards.length - 1 ? "top 5%" : "bottom 25%",
               scrub: true,
             },
           });
