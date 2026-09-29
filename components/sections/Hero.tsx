@@ -82,7 +82,7 @@ export default function Hero() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
             <Link
               href="#kontakt"
-              className="hero-cta group inline-flex h-14 w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-transparent px-7 text-[16px] font-medium leading-none tracking-[-0.006em] text-[#0f0e0d] shadow-[0_4px_14px_rgba(168,127,69,0.2),0_10px_28px_rgba(168,127,69,0.32),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04] sm:w-[260px]"
+              className="hero-cta group inline-flex h-14 w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-transparent px-7 text-[16px] font-medium leading-none tracking-[-0.006em] text-[#0f0e0d] shadow-[0_4px_14px_rgba(168,127,69,0.2),0_10px_28px_rgba(168,127,69,0.32),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04] sm:w-[260px]"
               style={{
                 backgroundImage:
                   "linear-gradient(180deg,rgba(255,255,255,0.42) 0%,rgba(255,255,255,0.02) 55%,rgba(255,255,255,0) 100%),linear-gradient(90deg,#EFDCBC 0%,#D8B681 45%,#B4894D 100%)",
