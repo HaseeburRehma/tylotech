@@ -17,18 +17,18 @@ export default function Hero() {
       const tl = gsap.timeline({
         defaults: { ease: "power3.out", duration: 0.8 },
       });
-      tl.from(".hero-eyebrow", { y: 18, opacity: 0, duration: 0.6 })
+      tl.from(".hero-eyebrow", { y: 18, opacity: 0, duration: 0.6, clearProps: "transform,opacity" })
         .from(
           ".hero-line",
-          { yPercent: 118, opacity: 0, stagger: 0.09, duration: 0.9 },
+          { yPercent: 118, opacity: 0, stagger: 0.09, duration: 0.9, clearProps: "transform,opacity" },
           "-=0.3",
         )
-        .from(".hero-copy", { y: 18, opacity: 0 }, "-=0.55")
-        .from(".hero-cta", { y: 16, opacity: 0, stagger: 0.1 }, "-=0.5")
-        .from(".hero-proof", { y: 14, opacity: 0 }, "-=0.45")
+        .from(".hero-copy", { y: 18, opacity: 0, clearProps: "transform,opacity" }, "-=0.55")
+        .from(".hero-cta", { y: 16, opacity: 0, stagger: 0.1, clearProps: "transform,opacity" }, "-=0.5")
+        .from(".hero-proof", { y: 14, opacity: 0, clearProps: "transform,opacity" }, "-=0.45")
         .from(
           ".hero-media",
-          { y: 30, opacity: 0, scale: 0.96, duration: 1 },
+          { y: 30, opacity: 0, scale: 0.96, duration: 1, clearProps: "transform,opacity" },
           "-=0.95",
         );
     },
