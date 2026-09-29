@@ -1,13 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronDown, ArrowRight, Menu, X } from "lucide-react";
+import {
+  ChevronDown,
+  ArrowRight,
+  Menu,
+  X,
+  Hammer,
+  MapPin,
+  ShoppingCart,
+  Building2,
+  TrendingUp,
+} from "lucide-react";
 import Container from "./ui/Container";
 
+const INDUSTRIES = [
+  { label: "Handwerk", icon: Hammer },
+  { label: "Lokale Dienstleister", icon: MapPin },
+  { label: "E-Commerce", icon: ShoppingCart },
+  { label: "B2B-Dienstleistung", icon: Building2 },
+  { label: "Finanz & Investment", icon: TrendingUp },
+];
+
 const LINKS = [
-  { label: "Was wir machen", href: "#leistungen", caret: true },
-  { label: "Portfolio", href: "#portfolio" },
+  { label: "Was wir machen", href: "#branchen", dropdown: true },
+  { label: "Portfolio", href: "#referenzen" },
   { label: "TyloHQ", href: "#tylohq" },
   { label: "Über uns", href: "#team" },
   { label: "Kontakt", href: "#kontakt" },
@@ -16,6 +34,9 @@ const LINKS = [
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+  const dropdownTimeout = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -24,7 +45,6 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu once a link is tapped or the viewport grows.
   useEffect(() => {
     if (!open) return;
     const onResize = () => {
@@ -33,6 +53,14 @@ export default function Nav() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [open]);
+
+  const openDropdown = () => {
+    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+    setDropdownOpen(true);
+  };
+  const closeDropdown = () => {
+    dropdownTimeout.current = setTimeout(() => setDropdownOpen(false), 150);
+  };
 
   return (
     <header
@@ -55,16 +83,62 @@ export default function Nav() {
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
-          {LINKS.map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              className="flex h-10 items-center gap-1.5 rounded-[10px] px-3.5 text-[15px] font-medium tracking-[-0.1px] text-[#5c5954] transition-colors hover:bg-ink/[0.04] hover:text-ink"
-            >
-              {l.label}
-              {l.caret && <ChevronDown className="size-[15px] text-ink/45" />}
-            </Link>
-          ))}
+          {LINKS.map((l) =>
+            l.dropdown ? (
+              <div
+                key={l.label}
+                className="relative"
+                onMouseEnter={openDropdown}
+                onMouseLeave={closeDropdown}
+              >
+                <Link
+                  href={l.href}
+                  className="flex h-10 items-center gap-1.5 rounded-[10px] px-3.5 text-[15px] font-medium tracking-[-0.1px] text-[#5c5954] transition-colors hover:bg-ink/[0.04] hover:text-ink"
+                >
+                  {l.label}
+                  <ChevronDown
+                    className={`size-[15px] text-ink/45 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </Link>
+
+                <div
+                  className={`absolute left-1/2 top-full -translate-x-1/2 pt-2 transition-[opacity,transform] duration-200 ${
+                    dropdownOpen
+                      ? "pointer-events-auto translate-y-0 opacity-100"
+                      : "pointer-events-none -translate-y-1 opacity-0"
+                  }`}
+                >
+                  <div className="w-[240px] rounded-[16px] border border-line bg-white p-2 shadow-[0_12px_40px_-12px_rgba(15,14,13,0.2)]">
+                    <p className="px-3 pb-1.5 pt-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-ink/35">
+                      Online-Dienstleistung
+                    </p>
+                    {INDUSTRIES.map((ind) => {
+                      const Icon = ind.icon;
+                      return (
+                        <Link
+                          key={ind.label}
+                          href="#branchen"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[14px] font-medium text-[#5c5954] transition-colors hover:bg-ink/[0.04] hover:text-ink"
+                        >
+                          <Icon className="size-4 text-accent" strokeWidth={1.8} />
+                          {ind.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={l.label}
+                href={l.href}
+                className="flex h-10 items-center gap-1.5 rounded-[10px] px-3.5 text-[15px] font-medium tracking-[-0.1px] text-[#5c5954] transition-colors hover:bg-ink/[0.04] hover:text-ink"
+              >
+                {l.label}
+              </Link>
+            ),
+          )}
         </nav>
 
         <div className="flex items-center gap-2.5">
@@ -98,21 +172,57 @@ export default function Nav() {
       {/* Mobile menu panel */}
       <div
         className={`overflow-hidden border-t border-line bg-page transition-[max-height,opacity] duration-300 lg:hidden ${
-          open ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+          open ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <Container className="flex flex-col gap-1 py-4">
-          {LINKS.map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[16px] font-medium tracking-[-0.1px] text-[#43413d] transition-colors hover:bg-ink/[0.04] hover:text-ink"
-            >
-              {l.label}
-              {l.caret && <ChevronDown className="size-[16px] text-ink/40" />}
-            </Link>
-          ))}
+          {LINKS.map((l) =>
+            l.dropdown ? (
+              <div key={l.label}>
+                <button
+                  type="button"
+                  onClick={() => setMobileDropdownOpen((v) => !v)}
+                  className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-[16px] font-medium tracking-[-0.1px] text-[#43413d] transition-colors hover:bg-ink/[0.04] hover:text-ink"
+                >
+                  {l.label}
+                  <ChevronDown
+                    className={`size-[16px] text-ink/40 transition-transform duration-200 ${mobileDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+                <div
+                  className={`grid transition-[grid-template-rows] duration-200 ease-out ${
+                    mobileDropdownOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  }`}
+                >
+                  <div className="flex flex-col gap-0.5 overflow-hidden pb-2 pl-4">
+                    {INDUSTRIES.map((ind) => {
+                      const Icon = ind.icon;
+                      return (
+                        <Link
+                          key={ind.label}
+                          href="#branchen"
+                          onClick={() => { setOpen(false); setMobileDropdownOpen(false); }}
+                          className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-[15px] font-medium text-[#5c5954] transition-colors hover:bg-ink/[0.04]"
+                        >
+                          <Icon className="size-4 text-accent" strokeWidth={1.8} />
+                          {ind.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={l.label}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[16px] font-medium tracking-[-0.1px] text-[#43413d] transition-colors hover:bg-ink/[0.04] hover:text-ink"
+              >
+                {l.label}
+              </Link>
+            ),
+          )}
           <div className="mt-2 flex flex-col gap-2.5 border-t border-line pt-4">
             <Link
               href="#login"

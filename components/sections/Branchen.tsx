@@ -3,11 +3,10 @@
 import { useRef, useState } from "react";
 import {
   Hammer,
-  Sparkles,
-  Utensils,
-  GraduationCap,
-  Users,
-  House,
+  MapPin,
+  ShoppingCart,
+  Building2,
+  TrendingUp,
   Briefcase,
   type LucideIcon,
 } from "lucide-react";
@@ -26,58 +25,49 @@ type Industry = {
 
 const INDUSTRIES: Industry[] = [
   {
-    name: "Handwerk & Sanierung",
-    lead: "Handwerk sichtbar machen,",
-    accent: "Aufträge gewinnen.",
-    body: "Sanierung, Rohrreinigung, Elektro. Betriebe, die Aufträge brauchen, keine Klicks. Wir bauen Auftritt, Anfragestrecke und Kampagnen so, dass der Kalender voll wird und nicht nur das Postfach.",
+    name: "Handwerk",
+    lead: "Sichtbarkeit, die",
+    accent: "Aufträge bringt.",
+    body: "Sanierung, Elektro, Rohrreinigung — Betriebe, die nicht mehr Klicks brauchen, sondern volle Kalender. Wir bauen Auftritt, Anfragestrecke und Kampagnen, die funktionieren.",
     icon: Hammer,
-    img: "/branchen/01.jpg",
+    img: "/branchen/handwerk.jpg",
     tint: "from-[#e7d8c2] to-[#cba46f]",
   },
   {
-    name: "Gebäudeservice & Reinigung",
-    lead: "Planbare Anfragen,",
-    accent: "statt Zufall.",
-    body: "Von der Unterhaltsreinigung bis zur Glasreinigung. Wir sorgen für einen Auftritt und Abläufe, die konstant Anfragen bringen — auch dann, wenn du gerade selbst mit anpackst.",
-    icon: Sparkles,
-    img: "/branchen/02.jpg",
+    name: "Lokale Dienstleister",
+    lead: "Gefunden werden,",
+    accent: "wo es zählt.",
+    body: "Reinigung, Pflege, Gastronomie, Fahrschulen — lokale Betriebe, die bei jeder Suche im Umkreis ganz oben stehen sollen. Wir sorgen für Sichtbarkeit und planbare Anfragen.",
+    icon: MapPin,
+    img: "/branchen/lokale-dienstleister.jpg",
     tint: "from-[#d7e2e6] to-[#a9c2ca]",
   },
   {
-    name: "Gastronomie & Lieferdienste",
-    lead: "Den Laden füllen,",
-    accent: "auch unter der Woche.",
-    body: "Filialen, Bestellstrecken und Kampagnen, die Gäste bringen. Vom lokalen Marketing bis zur eigenen Bestell-Landingpage — messbar, nicht nach Bauchgefühl.",
-    icon: Utensils,
-    img: "/branchen/03.jpg",
+    name: "E-Commerce",
+    lead: "Mehr verkaufen,",
+    accent: "nicht nur mehr Traffic.",
+    body: "Onlineshops, Marktplätze, D2C-Brands — wir optimieren Conversion, Bestellstrecke und Kampagnen so, dass aus Besuchern Käufer werden. Messbar, nicht nach Bauchgefühl.",
+    icon: ShoppingCart,
+    img: "/branchen/ecommerce.jpg",
     tint: "from-[#ebd9c0] to-[#d9a86a]",
   },
   {
-    name: "Fahrschulen & Bildung",
-    lead: "Anmeldungen,",
-    accent: "die von allein kommen.",
-    body: "Anmeldungen, Theoriepläne und ein Auftritt, den Fahrschüler weiterempfehlen. Sichtbar bei jeder Suche im Umkreis, ohne dass du ständig posten musst.",
-    icon: GraduationCap,
-    img: "/branchen/04.jpg",
+    name: "B2B-Dienstleistung",
+    lead: "Leads generieren,",
+    accent: "die wirklich kaufen.",
+    body: "Agenturen, Beratungen, IT-Dienstleister — wir bauen Funnels und Systeme, die qualifizierte Anfragen liefern, statt nur Reichweite ohne Ergebnis.",
+    icon: Building2,
+    img: "/branchen/b2b.jpg",
     tint: "from-[#dbe0d9] to-[#b3c0ab]",
   },
   {
-    name: "Personal & Recruiting",
-    lead: "Stellen besetzen,",
-    accent: "ohne Dauerschleife.",
-    body: "Stellen, die tatsächlich besetzt werden — mit Anzeigen und Abläufen, die Bewerbungen bringen und die Richtigen davon auch halten.",
-    icon: Users,
-    img: "/branchen/05.jpg",
+    name: "Finanz & Investment",
+    lead: "Vertrauen aufbauen,",
+    accent: "digital skalieren.",
+    body: "Finanzberater, Vermögensverwaltung, Investment — wir schaffen den digitalen Auftritt, der Kompetenz zeigt und Vertrauen aufbaut, bevor das erste Gespräch stattfindet.",
+    icon: TrendingUp,
+    img: "/branchen/finanz.jpg",
     tint: "from-[#e6dcc9] to-[#c9b389]",
-  },
-  {
-    name: "Immobilien & Verwaltung",
-    lead: "Anfragen sortiert,",
-    accent: "statt verstreut.",
-    body: "Objekte, Anfragen und Interessenten sauber sortiert statt verstreut im Posteingang. Ein System, das Vermarktung und Verwaltung an einer Stelle bündelt.",
-    icon: House,
-    img: "/branchen/06.jpg",
-    tint: "from-[#dde1e4] to-[#b6c1c9]",
   },
 ];
 
@@ -142,7 +132,7 @@ export default function Branchen() {
   const it = INDUSTRIES[active];
 
   return (
-    <section id="branchen" ref={root} className="bg-[#f3f5f6] lg:h-[330vh]">
+    <section id="branchen" ref={root} className="bg-[#f3f5f6] lg:h-[280vh]">
       <div className="py-20 sm:py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0">
         <Container className="w-full">
           <div className="br-head max-w-[720px]">
