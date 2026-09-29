@@ -142,6 +142,7 @@ export default function Diagnose() {
     <section
       id="woran"
       ref={root}
+      data-nav-dark
       className="bg-[#001620] py-20 text-white sm:py-24"
     >
       <Container>

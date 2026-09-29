@@ -297,6 +297,7 @@ export default function Globe() {
     if (!el) return;
     const hi = [...el.querySelectorAll<SVGPathElement>(".glb-hi")];
     const nf = [...el.querySelectorAll<SVGElement>(".glb-node-fill")];
+    const labels = [...el.querySelectorAll<HTMLElement>(".glb-label")];
     const lens = hi.map((p) => {
       try {
         return p.getTotalLength();
@@ -306,6 +307,7 @@ export default function Globe() {
     });
     let p = 0;
     let raf = 0;
+    const ease = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
     const tick = () => {
       p += (progress.current - p) * 0.14;
       for (let i = 0; i < hi.length; i++) {
@@ -320,6 +322,23 @@ export default function Globe() {
         nf[i].style.opacity = String(lp);
         nf[i].style.transform = `scale(${0.3 + 0.7 * lp})`;
       }
+      // label fill: stagger from edges inward with ease-in-out
+      const count = labels.length;
+      for (let i = 0; i < count; i++) {
+        const mid = (count - 1) / 2;
+        const dist = Math.abs(i - mid) / mid;
+        const delay = (1 - dist) * 0.15;
+        const raw = Math.max(0, Math.min(1, (p - delay) / (1 - delay)));
+        const t = ease(raw);
+        labels[i].style.backgroundColor = `rgba(209,170,113,${0.18 * t})`;
+        labels[i].style.borderColor = `rgba(209,170,113,${0.15 + 0.35 * t})`;
+        labels[i].style.color = `rgba(${255 - 39 * t},${255 - 73 * t},${255 - 125 * t},0.85)`;
+        if (t > 0.01) {
+          labels[i].style.boxShadow = `0 0 24px -6px rgba(209,170,113,${0.25 * t})`;
+        } else {
+          labels[i].style.boxShadow = "none";
+        }
+      }
       raf = requestAnimationFrame(tick);
     };
     tick();
@@ -330,6 +349,7 @@ export default function Globe() {
     <section
       id="reichweite"
       ref={root}
+      data-nav-dark
       className="relative overflow-hidden bg-[#001620] py-24 text-white"
     >
       <Container className="relative">

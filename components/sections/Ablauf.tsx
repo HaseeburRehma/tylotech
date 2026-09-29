@@ -90,7 +90,7 @@ export default function Ablauf() {
   );
 
   return (
-    <section id="ablauf" ref={root} className="bg-[#001620] text-white py-24">
+    <section id="ablauf" ref={root} data-nav-dark className="bg-[#001620] text-white py-24">
       <Container>
         <div className="ablauf-head mx-auto max-w-[680px] text-center">
           <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
