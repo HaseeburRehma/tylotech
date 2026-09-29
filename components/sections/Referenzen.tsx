@@ -89,7 +89,7 @@ export default function Referenzen() {
             },
           );
 
-          // Exit: shrink and fade when the next card scrolls in
+          // Exit: slowly shrink and fade as the next card scrolls in
           if (i < cards.length - 1) {
             gsap.to(card, {
               scale: 0.88,
@@ -97,8 +97,8 @@ export default function Referenzen() {
               ease: "none",
               scrollTrigger: {
                 trigger: stickies[i + 1],
-                start: "top 88%",
-                end: "top 52%",
+                start: "top 92%",
+                end: "top 32%",
                 scrub: true,
               },
             });
