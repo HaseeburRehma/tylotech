@@ -42,6 +42,7 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
     let angle = 0;
     let raf = 0;
     let prog = 0; // eased scroll-fill progress (0 grey/empty → 1 gold/full)
+    let hoverStrength = 0; // smoothed hover intensity for glow ring
 
     const host = (canvas.parentElement ?? canvas) as HTMLElement;
 
@@ -119,11 +120,14 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
       const cx = w / 2;
       const cy = h / 2;
       const R = Math.min(w * 0.32, h * 0.5);
-      const RAD = R * 0.42;
+      const RAD = R * 0.75; // wider hover influence radius
 
       // scroll-fill driven by the shared ScrollTrigger progress (in sync with
       // the connector lines/nodes). Fills on scroll-down, empties on scroll-up.
-      prog += (progress.current - prog) * 0.14;
+      prog += (progress.current - prog) * 0.12;
+      // entrance scatter: dots start exploded outward then converge
+      const scatter = 1 - prog; // 1=fully scattered, 0=converged
+      const scatterScale = 1 + scatter * 0.55; // radius multiplier at start
 
       if (!dragging) {
         dragRotY += velX;
@@ -140,6 +144,7 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
       const cosT = Math.cos(tilt);
       const sinT = Math.sin(tilt);
       const repel = pointerInside && !dragging;
+      hoverStrength += ((repel ? 1 : 0) - hoverStrength) * 0.08;
 
       for (const p of pts) {
         const x1 = p.x * cosA - p.z * sinA;
@@ -148,11 +153,14 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
         const z2 = p.y * sinT + z1 * cosT;
 
         const d = Math.pow((z2 + 1) / 2, 1.3); // 0 back → 1 front
-        let sx = cx + x1 * R;
-        let sy = cy + y2 * R;
-        const size = (0.5 + d * 1.8) * dpr;
-        // brightness ramps with scroll-fill
-        let alpha = (0.06 + d * 0.9) * (0.22 + 0.78 * prog);
+        // scatter: dots start further out, per-dot noise via accent flag
+        const sOff = p.accent ? scatter * 0.3 : scatter * 0.15;
+        const effR = R * (scatterScale + sOff);
+        let sx = cx + x1 * effR;
+        let sy = cy + y2 * effR;
+        const size = (0.5 + d * 1.8) * dpr * (1 + scatter * 0.3);
+        // brightness ramps with scroll-fill — starts nearly invisible
+        let alpha = (0.06 + d * 0.9) * (0.05 + 0.95 * prog);
 
         // keep the centre clear so dots never sit behind the headline
         const ex = (sx - cx) / (R * 0.6);
@@ -160,18 +168,20 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
         const ed = Math.sqrt(ex * ex + ey * ey);
         alpha *= Math.min(1, Math.max(0, (ed - 0.7) / 0.45));
 
-        // cursor gently parts the dots — a soft fade + slight drift
+        // cursor dramatically parts the dots — strong push + bright rim glow
         if (repel) {
           const ddx = sx - pcx;
           const ddy = sy - pcy;
           const dist = Math.hypot(ddx, ddy);
           if (dist < RAD) {
             const f = 1 - dist / RAD;
-            const push = f * f * RAD * 0.14;
+            const push = f * f * RAD * 0.5;
             const inv = 1 / (dist || 1);
             sx += ddx * inv * push;
             sy += ddy * inv * push;
-            alpha *= 1 - f * 0.6;
+            // fade centre, but add bright glow ring at the edge of influence
+            const rimGlow = f > 0.15 && f < 0.55 ? Math.sin((f - 0.15) / 0.4 * Math.PI) * 0.6 : 0;
+            alpha *= (1 - f * 0.88) + rimGlow;
           }
         }
 
@@ -189,6 +199,17 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
         ctx.beginPath();
         ctx.arc(sx, sy, size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${rr},${gg},${bb},${alpha})`;
+        ctx.fill();
+      }
+
+      // subtle radial glow under cursor when hovering
+      if (hoverStrength > 0.01) {
+        const grad = ctx.createRadialGradient(pcx, pcy, 0, pcx, pcy, RAD * 0.6);
+        grad.addColorStop(0, `rgba(209,170,113,${0.08 * hoverStrength})`);
+        grad.addColorStop(1, "rgba(209,170,113,0)");
+        ctx.beginPath();
+        ctx.arc(pcx, pcy, RAD * 0.6, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
         ctx.fill();
       }
 
