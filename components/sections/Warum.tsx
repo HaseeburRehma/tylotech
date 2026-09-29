@@ -44,6 +44,7 @@ export default function Warum() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.1,
+        clearProps: "transform,opacity",
         scrollTrigger: { trigger: ".warum-grid", start: "top 82%" },
       });
       gsap.from(".warum-icon", {
@@ -52,7 +53,7 @@ export default function Warum() {
         duration: 0.55,
         ease: "back.out(1.7)",
         stagger: 0.1,
-        clearProps: "transform",
+        clearProps: "transform,opacity",
         scrollTrigger: { trigger: ".warum-grid", start: "top 78%" },
       });
       gsap.fromTo(
@@ -63,6 +64,7 @@ export default function Warum() {
           duration: 0.9,
           ease: "power3.out",
           stagger: 0.1,
+          clearProps: "transform",
           scrollTrigger: { trigger: ".warum-grid", start: "top 80%" },
         },
       );

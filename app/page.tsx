@@ -32,12 +32,12 @@ export default function Home() {
       <main>
         <Hero />
         <TrustStrip />
+        <Warum />
+        <Wachstum />
         <Praxis />
         <Diagnose />
         <Wechsel />
         <Zahlen />
-        <Warum />
-        <Wachstum />
         <Globe />
         <Ablauf />
         <Arbeitsweise />
