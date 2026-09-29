@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { CircleCheck, FolderOpen } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 type Bullet = { label: string; desc: string };
 
@@ -64,23 +64,64 @@ export default function Referenzen() {
         stagger: 0.1,
         scrollTrigger: { trigger: ".ref-head", start: "top 82%" },
       });
-      // Each card scales up as it rises into the stack.
-      gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card) => {
-        gsap.fromTo(
-          card,
-          { scale: 0.94, autoAlpha: 0.55 },
-          {
-            scale: 1,
-            autoAlpha: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 94%",
-              end: "top 62%",
-              scrub: true,
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 1024px)", () => {
+        const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
+        const stickies = gsap.utils.toArray<HTMLElement>(".ref-sticky");
+
+        cards.forEach((card, i) => {
+          // Entrance: card scales up and fades in
+          gsap.fromTo(
+            card,
+            { scale: 0.92, autoAlpha: 0 },
+            {
+              scale: 1,
+              autoAlpha: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: stickies[i],
+                start: "top 88%",
+                end: "top 52%",
+                scrub: true,
+              },
             },
-          },
-        );
+          );
+
+          // Exit: shrink and fade when the next card scrolls in
+          if (i < cards.length - 1) {
+            gsap.to(card, {
+              scale: 0.88,
+              autoAlpha: 0,
+              ease: "none",
+              scrollTrigger: {
+                trigger: stickies[i + 1],
+                start: "top 88%",
+                end: "top 52%",
+                scrub: true,
+              },
+            });
+          }
+        });
+      });
+
+      // Mobile: simple reveal, no stacking dismiss
+      mm.add("(max-width: 1023.98px)", () => {
+        gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card) => {
+          gsap.fromTo(
+            card,
+            { y: 30, autoAlpha: 0 },
+            {
+              y: 0,
+              autoAlpha: 1,
+              ease: "power3.out",
+              duration: 0.8,
+              scrollTrigger: { trigger: card, start: "top 90%" },
+              clearProps: "transform,opacity,visibility",
+            },
+          );
+        });
       });
     },
     { scope: root },
@@ -112,8 +153,12 @@ export default function Referenzen() {
           {PROJECTS.map((p, i) => (
             <div
               key={p.shot}
-              className="ref-sticky mb-6 lg:sticky lg:mb-10"
-              style={{ top: `${96 + i * 22}px` }}
+              className={`ref-sticky lg:sticky ${
+                i < PROJECTS.length - 1
+                  ? "mb-8 lg:mb-[38vh]"
+                  : "mb-0"
+              }`}
+              style={{ top: `${96 + i * 18}px` }}
             >
               <article className="ref-card grid h-auto overflow-hidden rounded-[24px] border border-line bg-white shadow-[0_36px_80px_-46px_rgba(15,14,13,0.35)] lg:h-[clamp(440px,70vh,600px)] lg:grid-cols-[1fr_1.05fr]">
                 {/* text */}
@@ -142,7 +187,7 @@ export default function Referenzen() {
                   </ul>
                 </div>
 
-                {/* image — fills the side edge-to-edge, no frame, no partition */}
+                {/* image */}
                 <div className="relative order-1 aspect-[3/2] overflow-hidden lg:order-2 lg:aspect-auto lg:h-full">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
