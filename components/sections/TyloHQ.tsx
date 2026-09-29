@@ -96,7 +96,7 @@ export default function TyloHQ() {
             <img
               src="/tylohq/dashboard.png"
               alt="TyloHQ Dashboard — Echtzeit-KPIs, Werbebudget und Leads auf einen Blick"
-              className="w-full"
+              className="block w-full"
             />
           </div>
         </div>

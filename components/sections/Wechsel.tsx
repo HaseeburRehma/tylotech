@@ -194,8 +194,8 @@ export default function Wechsel() {
 
             {/* image */}
             <div className="order-1 lg:order-2">
-              <div className="rounded-[24px] bg-white/60 p-4 shadow-[0_30px_70px_-40px_rgba(15,14,13,0.28)] ring-1 ring-line/70 sm:p-5">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[16px] bg-line">
+              <div className="overflow-hidden rounded-[24px] shadow-[0_30px_70px_-40px_rgba(15,14,13,0.28)] ring-1 ring-line/70">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-line">
                   {ITEMS.map((it, i) => (
                     <div
                       key={i}
