@@ -24,6 +24,7 @@ type Case = {
   to: { v: string; l: string };
   icon: LucideIcon;
   tint: string;
+  img: string;
 };
 
 const CASES: Case[] = [
@@ -38,6 +39,7 @@ const CASES: Case[] = [
     to: { v: "1 Ansprechpartner", l: "mit TyloTech" },
     icon: Users,
     tint: "from-[#123141] to-[#08202b]",
+    img: "/diagnose/01.jpg",
   },
   {
     idx: "02",
@@ -50,6 +52,7 @@ const CASES: Case[] = [
     to: { v: "Weniger Streuverlust", l: "mehr Anfragen" },
     icon: Megaphone,
     tint: "from-[#14313f] to-[#091f28]",
+    img: "/diagnose/02.jpg",
   },
   {
     idx: "03",
@@ -63,6 +66,7 @@ const CASES: Case[] = [
     to: { v: "Ein System", l: "das bleibt" },
     icon: Lock,
     tint: "from-[#122f3c] to-[#081d26]",
+    img: "/diagnose/03.jpg",
   },
 ];
 
@@ -192,11 +196,13 @@ export default function Diagnose() {
                   <div
                     className={`relative h-full w-[42%] shrink-0 overflow-hidden bg-gradient-to-br ${c.tint}`}
                   >
-                    <div className="absolute inset-0 bg-[radial-gradient(120%_85%_at_20%_10%,rgba(255,255,255,0.08),transparent_60%)]" />
-                    <Icon
-                      className="absolute -bottom-6 -right-4 size-56 text-white/[0.05]"
-                      strokeWidth={1}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={c.img}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#08222d]/60" />
                     <span className="absolute left-6 top-5 font-mono text-[12px] tracking-[0.2em] text-white/40">
                       {c.idx}
                     </span>
@@ -296,10 +302,11 @@ export default function Diagnose() {
                       <div
                         className={`relative mb-4 aspect-[16/9] overflow-hidden rounded-[14px] bg-gradient-to-br ${c.tint}`}
                       >
-                        <div className="absolute inset-0 bg-[radial-gradient(120%_85%_at_20%_10%,rgba(255,255,255,0.08),transparent_60%)]" />
-                        <Icon
-                          className="absolute -bottom-4 -right-2 size-40 text-white/[0.05]"
-                          strokeWidth={1}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={c.img}
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-cover"
                         />
                       </div>
                       <MetaLine c={c} />
