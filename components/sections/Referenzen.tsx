@@ -268,7 +268,7 @@ export default function Referenzen() {
                 <article
                   key={p.shot}
                   className="ref-card mx-auto w-full max-w-[1080px] rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mx-auto lg:p-10"
-                  style={{ zIndex: 30 - i * 10 }}
+                  style={{ zIndex: 10 + i * 10 }}
                 >
                   <div className="grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] lg:gap-10">
                     <div className="flex flex-col justify-center">
