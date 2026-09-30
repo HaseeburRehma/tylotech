@@ -64,30 +64,6 @@ const TILTS = [
   { rotate: 0, offsetX: -8 },
 ];
 
-function BrowserFrame({
-  shot,
-  alt,
-}: {
-  shot: string;
-  alt: string;
-  url: string;
-}) {
-  // The images from Figma already include the browser chrome (traffic
-  // lights, URL bar, tabs) and the -7° tilt with drop shadow baked in,
-  // so we render them directly with object-contain so nothing crops
-  // and the shadow reads correctly.
-  return (
-    <div className="relative flex h-full w-full items-center justify-center">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={shot}
-        alt={alt}
-        loading="lazy"
-        className="h-full w-full object-contain"
-      />
-    </div>
-  );
-}
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
@@ -273,10 +249,14 @@ export default function Referenzen() {
                       </ul>
                     </div>
 
-                    <div className="relative lg:-my-4 lg:-mr-16 xl:-mr-24">
-                      <div className="relative aspect-[16/10]">
-                        <BrowserFrame shot={p.shot} alt={p.alt} url={p.url} />
-                      </div>
+                    <div className="relative flex items-center justify-center lg:-my-6 lg:-mr-10 xl:-mr-16">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.shot}
+                        alt={p.alt}
+                        loading="lazy"
+                        className="h-auto w-full max-w-[720px] object-contain"
+                      />
                     </div>
                   </div>
                 </article>
