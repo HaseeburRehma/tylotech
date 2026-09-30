@@ -26,7 +26,7 @@ export default function Vergleich() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".verg-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".verg-head", start: "top 82%" , toggleActions: "play none none none" },
       });
       // Only the layout that's visible at this breakpoint is animated; trigger
       // off the section root since the hidden layout has no measurable box.
@@ -36,7 +36,7 @@ export default function Vergleich() {
           opacity: 0,
           duration: 0.8,
           ease: "power3.out",
-          scrollTrigger: { trigger: el, start: "top 88%" , toggleActions: "play reverse play reverse" },
+          scrollTrigger: { trigger: el, start: "top 88%" , toggleActions: "play none none none" },
         });
       });
     },

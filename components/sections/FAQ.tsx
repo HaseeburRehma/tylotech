@@ -41,7 +41,7 @@ export default function FAQ() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".faq-left", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".faq-left", start: "top 82%" , toggleActions: "play none none none" },
       });
       gsap.from(".faq-item", {
         y: 20,
@@ -49,7 +49,7 @@ export default function FAQ() {
         duration: 0.6,
         ease: "power3.out",
         stagger: 0.08,
-        scrollTrigger: { trigger: ".faq-list", start: "top 85%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".faq-list", start: "top 85%" , toggleActions: "play none none none" },
       });
     },
     { scope: root },

@@ -42,7 +42,7 @@ export default function Home() {
         <Ablauf />
         <Arbeitsweise />
         <TyloHQ />
-        <Team />
+        {/* <Team /> */}
         <Gruender />
         <Podcast />
         <Branchen />

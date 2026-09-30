@@ -66,7 +66,7 @@ export default function Wechsel() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".wx-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".wx-head", start: "top 82%" , toggleActions: "play none none none" },
       });
 
       // Scroll drives the active step. Desktop pins (tall section + sticky

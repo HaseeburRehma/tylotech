@@ -182,14 +182,14 @@ export default function Stimmen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".stimmen-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".stimmen-head", start: "top 82%" , toggleActions: "play none none none" },
       });
       gsap.from(".stimmen-track", {
         y: 30,
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".stimmen-track", start: "top 88%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".stimmen-track", start: "top 88%" , toggleActions: "play none none none" },
       });
     },
     { scope: root },

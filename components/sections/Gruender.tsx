@@ -15,7 +15,7 @@ export default function Gruender() {
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".gr-card", start: "top 85%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".gr-card", start: "top 85%" , toggleActions: "play none none none" },
       });
       gsap.from(".gr-photo", {
         y: 30,
@@ -23,7 +23,7 @@ export default function Gruender() {
         scale: 0.96,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".gr-card", start: "top 85%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".gr-card", start: "top 85%" , toggleActions: "play none none none" },
       });
       gsap.from(".gr-body > *", {
         y: 20,
@@ -31,7 +31,7 @@ export default function Gruender() {
         duration: 0.6,
         ease: "power3.out",
         stagger: 0.08,
-        scrollTrigger: { trigger: ".gr-body", start: "top 88%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".gr-body", start: "top 88%" , toggleActions: "play none none none" },
       });
     },
     { scope: root },
@@ -44,8 +44,13 @@ export default function Gruender() {
       className="border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
     >
       <Container>
-        <div className="gr-card relative mx-auto max-w-[1120px] rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-50px_rgba(15,14,13,0.3)] sm:p-10 lg:p-12">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:gap-14">
+        <div className="gr-card relative mx-auto max-w-[1120px] overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-50px_rgba(15,14,13,0.3)] sm:p-10 lg:p-14">
+          {/* soft accent wash in the background */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(209,170,113,0.14),transparent_65%)] blur-2xl"
+          />
+          <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:gap-16">
             {/* portrait — stacked-photo look */}
             <div className="gr-photo relative mx-auto w-full max-w-[320px] lg:mx-0 lg:max-w-[340px]">
               <span
@@ -78,12 +83,12 @@ export default function Gruender() {
               </h2>
 
               {/* quote */}
-              <div className="mt-6 flex items-start gap-4 rounded-[16px] border border-[rgba(209,170,113,0.3)] bg-[rgba(209,170,113,0.08)] px-5 py-5 sm:px-6">
+              <div className="relative mt-7 flex items-start gap-4 rounded-[18px] border border-[rgba(209,170,113,0.3)] bg-[rgba(209,170,113,0.08)] px-6 py-6 sm:px-7 sm:py-7">
                 <Quote
-                  className="mt-1 size-5 shrink-0 fill-[#c79a53] text-[#c79a53]"
+                  className="mt-1 size-6 shrink-0 fill-[#c79a53] text-[#c79a53]"
                   strokeWidth={0}
                 />
-                <p className="font-[family-name:var(--font-instrument)] text-[clamp(16px,1.6vw,19px)] italic leading-[1.5] text-ink/85">
+                <p className="font-[family-name:var(--font-instrument)] text-[clamp(16px,1.6vw,19px)] italic leading-[1.55] text-ink/85">
                   „Ich habe jeden dieser Prozesse selbst durchlaufen — Marketing,
                   Code, Vertrieb, Aufbau. Deshalb sehen wir, was andere
                   übersehen. Und deshalb bauen wir mit, statt nur zu beraten.“

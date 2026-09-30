@@ -103,7 +103,7 @@ export default function Branchen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".br-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".br-head", start: "top 82%" , toggleActions: "play none none none" },
       });
 
       const mm = gsap.matchMedia();
@@ -156,10 +156,10 @@ export default function Branchen() {
           </div>
 
           {/* card */}
-          <div className="mt-8 rounded-[28px] border border-line bg-white p-4 shadow-[0_40px_90px_-55px_rgba(15,14,13,0.3)] sm:mt-12 sm:p-6 lg:p-7">
-            <div className="grid items-stretch gap-5 lg:grid-cols-[210px_minmax(0,1fr)_minmax(300px,360px)] lg:gap-8">
+          <div className="mt-8 rounded-[28px] border border-line bg-white p-4 shadow-[0_40px_90px_-55px_rgba(15,14,13,0.3)] sm:mt-12 sm:p-6 lg:p-8">
+            <div className="grid items-stretch gap-5 lg:grid-cols-[220px_minmax(0,1fr)_minmax(300px,380px)] lg:gap-10">
               {/* list */}
-              <ul className="no-scrollbar order-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:order-1 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0 lg:pb-0">
+              <ul className="no-scrollbar order-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:order-1 lg:mx-0 lg:flex-col lg:gap-1.5 lg:overflow-visible lg:px-0 lg:pb-0">
                 {INDUSTRIES.map((ind, i) => {
                   const on = active === i;
                   return (
@@ -168,19 +168,21 @@ export default function Branchen() {
                         type="button"
                         aria-current={on}
                         onClick={() => pick(i)}
-                        className={`flex items-center gap-2 rounded-[12px] px-3.5 py-2.5 text-left transition-colors duration-200 lg:w-full lg:flex-col lg:items-start lg:gap-1 ${
-                          on ? "bg-[#0b2b39]" : "hover:bg-black/[0.04]"
+                        className={`flex items-center gap-2 rounded-[14px] px-4 py-3 text-left transition-colors duration-300 lg:w-full lg:flex-col lg:items-start lg:gap-1 ${
+                          on
+                            ? "bg-[#0b2b39] shadow-[0_10px_24px_-14px_rgba(11,43,57,0.55)]"
+                            : "hover:bg-black/[0.04]"
                         }`}
                       >
                         <span
-                          className={`font-mono text-[10px] tracking-[0.1em] ${
-                            on ? "text-white/55" : "text-ink/35"
+                          className={`font-mono text-[10px] tracking-[0.12em] transition-colors ${
+                            on ? "text-[#d1aa71]" : "text-ink/35"
                           }`}
                         >
                           {pad(i + 1)}
                         </span>
                         <span
-                          className={`whitespace-nowrap text-[13.5px] font-medium tracking-[-0.01em] lg:whitespace-normal ${
+                          className={`whitespace-nowrap text-[13.5px] font-medium tracking-[-0.01em] transition-colors lg:whitespace-normal ${
                             on ? "text-white" : "text-ink/65"
                           }`}
                         >
@@ -200,22 +202,22 @@ export default function Branchen() {
                     {it.accent}
                   </span>
                 </h3>
-                <p className="mt-3 max-w-[400px] text-[14px] leading-[1.65] text-[#5c5954]">
+                <p className="mt-4 max-w-[400px] text-[14.5px] leading-[1.65] text-[#5c5954]">
                   {it.body}
                 </p>
-                <p className="mt-5 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/40">
+                <p className="mt-6 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/40">
                   {pad(active + 1)} von {pad(STEPS)}
                 </p>
               </div>
 
               {/* image */}
-              <div className="relative order-1 aspect-[4/3] w-full overflow-hidden rounded-[18px] bg-line lg:order-3 lg:aspect-auto lg:h-full lg:min-h-[300px]">
+              <div className="relative order-1 aspect-[4/3] w-full overflow-hidden rounded-[20px] bg-line lg:order-3 lg:aspect-auto lg:h-full lg:min-h-[320px]">
                 {INDUSTRIES.map((ind, i) => {
                   const Icon = ind.icon;
                   return (
                     <div
                       key={ind.name}
-                      className="absolute inset-0 transition-opacity duration-500 ease-out"
+                      className="absolute inset-0 transition-opacity duration-700 ease-out"
                       style={{ opacity: active === i ? 1 : 0 }}
                       aria-hidden={active !== i}
                     >
@@ -232,6 +234,11 @@ export default function Branchen() {
                           e.currentTarget.style.display = "none";
                         }}
                         className="absolute inset-0 h-full w-full object-cover"
+                      />
+                      {/* subtle vignette overlay */}
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent"
                       />
                     </div>
                   );

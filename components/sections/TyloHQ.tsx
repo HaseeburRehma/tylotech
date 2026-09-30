@@ -43,14 +43,14 @@ export default function TyloHQ() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".hq-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".hq-head", start: "top 82%" , toggleActions: "play none none none" },
       });
       gsap.from(".tylohq-card", {
         y: 44,
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".tylohq-card", start: "top 85%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".tylohq-card", start: "top 85%" , toggleActions: "play none none none" },
       });
       gsap.from(".hq-feature", {
         y: 26,
@@ -58,7 +58,7 @@ export default function TyloHQ() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.12,
-        scrollTrigger: { trigger: ".hq-features", start: "top 85%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".hq-features", start: "top 85%" , toggleActions: "play none none none" },
       });
     },
     { scope: root },
@@ -90,8 +90,13 @@ export default function TyloHQ() {
           </p>
         </div>
 
-        <div className="mx-auto mt-14 max-w-[980px]">
-          <div className="tylohq-card overflow-hidden rounded-[20px] border border-line bg-white shadow-[0_40px_80px_-40px_rgba(15,14,13,0.25)]">
+        <div className="relative mx-auto mt-14 max-w-[1040px]">
+          {/* soft accent glow behind card */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -top-6 -z-0 mx-auto h-40 max-w-[900px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(209,170,113,0.18),transparent_70%)] blur-2xl"
+          />
+          <div className="tylohq-card relative overflow-hidden rounded-[24px] border border-line bg-white shadow-[0_50px_100px_-45px_rgba(15,14,13,0.32)] ring-1 ring-black/[0.02]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/tylohq/dashboard.png"
@@ -101,23 +106,23 @@ export default function TyloHQ() {
           </div>
         </div>
 
-        <div className="hq-features mx-auto mt-16 grid max-w-[980px] grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="hq-features mx-auto mt-16 grid max-w-[1040px] grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
           {FEATURES.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="hq-feature">
-              <span className="grid size-10 place-items-center rounded-xl border border-line bg-white text-[#94713f] shadow-[0_1px_3px_rgba(15,14,13,0.04)]">
+            <div key={title} className="hq-feature group">
+              <span className="grid size-11 place-items-center rounded-xl border border-line bg-white text-[#94713f] shadow-[0_1px_3px_rgba(15,14,13,0.04)] transition-colors group-hover:border-[#d1aa71]/40 group-hover:text-[#7a5a2a]">
                 <Icon className="size-5" strokeWidth={1.6} />
               </span>
-              <h3 className="mt-4 text-[17px] font-semibold tracking-[-0.01em] text-ink">
+              <h3 className="mt-5 text-[17px] font-semibold leading-snug tracking-[-0.01em] text-ink">
                 {title}
               </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-[#5c5954]">
+              <p className="mt-2.5 text-[15px] leading-relaxed text-[#5c5954]">
                 {body}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="hq-features mt-12 flex items-center justify-center gap-6">
+        <div className="hq-features mt-14 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
           <Button href="#kontakt" variant="dark" withArrow>
             TyloHQ ansehen
           </Button>

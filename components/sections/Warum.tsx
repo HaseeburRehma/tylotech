@@ -36,7 +36,7 @@ export default function Warum() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".warum-head", start: "top 80%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".warum-head", start: "top 80%" , toggleActions: "play none none none" },
       });
       gsap.from(".warum-card", {
         y: 34,
@@ -45,7 +45,7 @@ export default function Warum() {
         ease: "power3.out",
         stagger: 0.1,
         clearProps: "transform,opacity,translate,rotate,scale",
-        scrollTrigger: { trigger: ".warum-grid", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".warum-grid", start: "top 82%" , toggleActions: "play none none none" },
       });
       gsap.from(".warum-icon", {
         scale: 0.5,
@@ -53,7 +53,7 @@ export default function Warum() {
         duration: 0.55,
         ease: "back.out(1.7)",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".warum-grid", start: "top 78%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".warum-grid", start: "top 78%" , toggleActions: "play none none none" },
       });
       gsap.fromTo(
         ".warum-accent",
@@ -63,7 +63,7 @@ export default function Warum() {
           duration: 0.9,
           ease: "power3.out",
           stagger: 0.1,
-          scrollTrigger: { trigger: ".warum-grid", start: "top 80%" , toggleActions: "play reverse play reverse" },
+          scrollTrigger: { trigger: ".warum-grid", start: "top 80%" , toggleActions: "play none none none" },
         },
       );
       gsap.from(".warum-extra", {
@@ -72,7 +72,7 @@ export default function Warum() {
         duration: 0.5,
         ease: "back.out(1.6)",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".warum-extras", start: "top 90%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".warum-extras", start: "top 90%" , toggleActions: "play none none none" },
       });
     },
     { scope: root },

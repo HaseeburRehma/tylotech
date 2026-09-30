@@ -16,7 +16,7 @@ export default function FinalCTA() {
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".cta-panel", start: "top 88%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".cta-panel", start: "top 88%" , toggleActions: "play none none none" },
       });
       gsap.from(".cta-in > *", {
         y: 22,
@@ -24,7 +24,7 @@ export default function FinalCTA() {
         duration: 0.7,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".cta-in", start: "top 90%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".cta-in", start: "top 90%" , toggleActions: "play none none none" },
       });
       gsap.to(".cta-glow", {
         opacity: 0.5,

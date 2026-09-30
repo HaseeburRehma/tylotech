@@ -81,7 +81,7 @@ export default function Team() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".team-head", start: "top 82%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".team-head", start: "top 82%" , toggleActions: "play none none none" },
       });
 
       // Avatar selector rises in as a unit (its buttons carry an opacity class,
@@ -91,7 +91,7 @@ export default function Team() {
         opacity: 0,
         duration: 0.7,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".team-avatars", start: "top 92%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".team-avatars", start: "top 92%" , toggleActions: "play none none none" },
       });
 
       // The whole card strip rises into view (animating the scroller, not the
@@ -101,7 +101,7 @@ export default function Team() {
         opacity: 0,
         duration: 0.9,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".team-carousel", start: "top 88%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".team-carousel", start: "top 88%" , toggleActions: "play none none none" },
       });
     },
     { scope: root },

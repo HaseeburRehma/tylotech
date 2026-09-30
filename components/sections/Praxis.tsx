@@ -542,7 +542,7 @@ export default function Praxis() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".praxis-head", start: "top 80%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".praxis-head", start: "top 80%" , toggleActions: "play none none none" },
       });
       gsap.from(".praxis-card", {
         y: 34,
@@ -551,12 +551,12 @@ export default function Praxis() {
         ease: "power3.out",
         stagger: 0.08,
         clearProps: "transform,opacity,translate,rotate,scale",
-        scrollTrigger: { trigger: ".praxis-grid", start: "top 78%" , toggleActions: "play reverse play reverse" },
+        scrollTrigger: { trigger: ".praxis-grid", start: "top 78%" , toggleActions: "play none none none" },
       });
 
       // Fresh trigger config per tween — sharing one object across several
       // ScrollTriggers lets GSAP mutate it and cross-wire them.
-      const st = () => ({ trigger: ".praxis-grid", start: "top 70%", toggleActions: "play reverse play reverse" as const });
+      const st = () => ({ trigger: ".praxis-grid", start: "top 70%", toggleActions: "play none none none" as const });
 
       // stat bar chart grows up
       gsap.fromTo(
