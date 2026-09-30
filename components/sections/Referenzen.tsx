@@ -33,9 +33,9 @@ const PROJECTS: Project[] = [
       { label: "Kampagnen mit Standortbezug", desc: "Anzeigen, die den Laden auch unter der Woche füllen." },
       { label: "Wiederkehrbar offline", desc: "Speisekarte, Verpackung und Social aus einem Baukasten." },
     ],
-    shot: "/referenzen/crusty-pf.jpg",
-    alt: "Crusty Slices Website",
-    url: "crustyslices.de",
+    shot: "/referenzen/priya-pf.jpg",
+    alt: "Priya Dashboard",
+    url: "priya.de",
   },
   {
     lead: "Eine Fahrschule, die aussieht",
@@ -57,9 +57,9 @@ const PROJECTS: Project[] = [
       { label: "Ads auf Anfragen optimiert", desc: "nicht auf Klicks und nicht auf Reichweite." },
       { label: "5 bis 7 Leads am Tag", desc: "täglich planbar statt nur nach Wochenanfang." },
     ],
-    shot: "/referenzen/cleanpany-pf.jpg",
-    alt: "Cleanpany Gebäudeservice Website",
-    url: "cleanpany.de",
+    shot: "/referenzen/rohrcleaner-pf.jpg",
+    alt: "Rohrcleaner Website",
+    url: "rohrcleaner.de",
   },
 ];
 
