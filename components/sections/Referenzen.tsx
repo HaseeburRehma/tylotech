@@ -63,11 +63,11 @@ const PROJECTS: Project[] = [
   },
 ];
 
-// Small hand-tuned tilt per card so the deck feels tossed, not templated.
+// Resting tilt + subtle horizontal offset per card, so the deck reads as tossed.
 const TILTS = [
-  { rotate: "-1.4deg", offsetX: "0", z: 30 },
-  { rotate: "1.2deg", offsetX: "2%", z: 20 },
-  { rotate: "-0.9deg", offsetX: "-1%", z: 10 },
+  { rotate: -1.4, offsetX: 0 },
+  { rotate: 1.2, offsetX: 18 },
+  { rotate: -0.9, offsetX: -12 },
 ];
 
 function BrowserFrame({
@@ -81,7 +81,6 @@ function BrowserFrame({
 }) {
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-[16px] border border-black/[0.06] bg-white shadow-[0_30px_60px_-25px_rgba(15,14,13,0.4)]">
-      {/* chrome */}
       <div className="flex items-center gap-3 border-b border-black/[0.05] bg-[#f4f5f7] px-4 py-2.5">
         <div className="flex shrink-0 gap-1.5">
           <span className="size-[11px] rounded-full bg-[#ff5f57]" />
@@ -101,7 +100,6 @@ function BrowserFrame({
           <Plus className="size-3.5" strokeWidth={1.8} />
         </div>
       </div>
-      {/* screen */}
       <div className="relative flex-1 overflow-hidden bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -117,6 +115,7 @@ function BrowserFrame({
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -133,26 +132,78 @@ export default function Referenzen() {
         },
       });
 
-      gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card, i) => {
-        // Preserve the resting rotation set inline while animating in.
-        const restRotate = TILTS[i]?.rotate ?? "0deg";
-        gsap.fromTo(
-          card,
-          { y: 60, autoAlpha: 0, rotate: "0deg", scale: 0.97 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            rotate: restRotate,
-            scale: 1,
-            duration: 1,
+      const mm = gsap.matchMedia();
+
+      // Desktop: pinned deck — each card comes into focus in turn, keeping its tilt.
+      mm.add("(min-width: 1024px)", () => {
+        const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
+        if (!pinRef.current || cards.length === 0) return;
+
+        // Initial resting states: card 0 in focus, cards 1+ waiting behind (faded, smaller, offset down).
+        cards.forEach((card, i) => {
+          const tilt = TILTS[i] ?? TILTS[0];
+          gsap.set(card, {
+            rotate: tilt.rotate,
+            x: tilt.offsetX,
+            autoAlpha: i === 0 ? 1 : 0,
+            scale: i === 0 ? 1 : 0.92,
+            y: i === 0 ? 0 : 80,
+          });
+        });
+
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.inOut", duration: 1 },
+          scrollTrigger: {
+            trigger: pinRef.current,
+            start: "top top",
+            end: () => "+=" + window.innerHeight * (cards.length - 1),
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        for (let i = 1; i < cards.length; i++) {
+          // Previous card fades out & shrinks a touch, keeping its rotation.
+          tl.to(
+            cards[i - 1],
+            {
+              autoAlpha: 0,
+              scale: 0.88,
+              y: -40,
+            },
+            i - 1,
+          );
+          // Current card lifts into focus.
+          tl.to(
+            cards[i],
+            {
+              autoAlpha: 1,
+              scale: 1,
+              y: 0,
+            },
+            i - 1,
+          );
+        }
+      });
+
+      // Mobile: simple reveal, one card after another, no pin.
+      mm.add("(max-width: 1023.98px)", () => {
+        gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card, i) => {
+          const tilt = TILTS[i] ?? TILTS[0];
+          gsap.set(card, { rotate: tilt.rotate });
+          gsap.from(card, {
+            y: 40,
+            autoAlpha: 0,
+            duration: 0.8,
             ease: "power3.out",
             scrollTrigger: {
               trigger: card,
-              start: "top 85%",
+              start: "top 88%",
               toggleActions: "play none none none",
             },
-          },
-        );
+          });
+        });
       });
     },
     { scope: root },
@@ -162,10 +213,10 @@ export default function Referenzen() {
     <section
       id="referenzen"
       ref={root}
-      className="overflow-hidden bg-[#f3f5f6] py-20 sm:py-24 lg:py-28"
+      className="overflow-hidden bg-[#f3f5f6] py-20 sm:py-24 lg:py-0"
     >
       <Container>
-        <div className="ref-head max-w-[720px]">
+        <div className="ref-head max-w-[720px] lg:pt-24">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <FolderOpen className="size-3.5 text-accent" />
             Ausgewählte Projekte
@@ -182,59 +233,59 @@ export default function Referenzen() {
             Zweifel selbst anrufen kannst.
           </p>
         </div>
+      </Container>
 
-        {/* tilted / overlapping card stack */}
-        <div className="mt-14 flex flex-col gap-8 sm:mt-20 sm:gap-6 lg:mt-24 lg:gap-4">
-          {PROJECTS.map((p, i) => {
-            const tilt = TILTS[i] ?? TILTS[0];
-            return (
-              <article
-                key={p.shot}
-                className="ref-card relative mx-auto w-full max-w-[1080px] rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:p-10"
-                style={{
-                  transform: `translateX(${tilt.offsetX}) rotate(${tilt.rotate})`,
-                  zIndex: tilt.z,
-                }}
-              >
-                <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] lg:gap-10">
-                  {/* text side */}
-                  <div className="flex flex-col justify-center">
-                    <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
-                      {p.lead}{" "}
-                      <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-                        {p.accent}
-                      </span>
-                    </h3>
-                    <ul className="mt-6 space-y-4">
-                      {p.bullets.map((b) => (
-                        <li key={b.label} className="flex gap-3">
-                          <CircleCheck
-                            className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
-                            strokeWidth={2}
-                          />
-                          <p className="text-[14px] leading-[1.55] text-[#5c5954]">
-                            <span className="font-semibold text-ink">
-                              {b.label}:
-                            </span>{" "}
-                            {b.desc}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+      {/* Pinned deck — cards share the same stage on desktop, stack on mobile */}
+      <div ref={pinRef} className="mt-14 sm:mt-20 lg:mt-0">
+        <div className="lg:flex lg:h-screen lg:items-center lg:justify-center">
+          <Container className="w-full">
+            <div className="relative flex flex-col gap-8 sm:gap-6 lg:mx-auto lg:h-[min(560px,72vh)] lg:max-w-[1120px] lg:block">
+              {PROJECTS.map((p, i) => (
+                <article
+                  key={p.shot}
+                  className="ref-card mx-auto w-full max-w-[1080px] rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mx-auto lg:p-10"
+                  style={{ zIndex: 30 - i * 10 }}
+                >
+                  <div className="grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] lg:gap-10">
+                    {/* text side */}
+                    <div className="flex flex-col justify-center">
+                      <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
+                        {p.lead}{" "}
+                        <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                          {p.accent}
+                        </span>
+                      </h3>
+                      <ul className="mt-6 space-y-4">
+                        {p.bullets.map((b) => (
+                          <li key={b.label} className="flex gap-3">
+                            <CircleCheck
+                              className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
+                              strokeWidth={2}
+                            />
+                            <p className="text-[14px] leading-[1.55] text-[#5c5954]">
+                              <span className="font-semibold text-ink">
+                                {b.label}:
+                              </span>{" "}
+                              {b.desc}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
-                  {/* browser mockup — extends past the card's right edge on desktop */}
-                  <div className="relative lg:-my-6 lg:-mr-16 xl:-mr-24">
-                    <div className="relative aspect-[16/10]">
-                      <BrowserFrame shot={p.shot} alt={p.alt} url={p.url} />
+                    {/* browser mockup — extends past the card's right edge on desktop */}
+                    <div className="relative lg:-my-4 lg:-mr-16 xl:-mr-24">
+                      <div className="relative aspect-[16/10]">
+                        <BrowserFrame shot={p.shot} alt={p.alt} url={p.url} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </article>
-            );
-          })}
+                </article>
+              ))}
+            </div>
+          </Container>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }
