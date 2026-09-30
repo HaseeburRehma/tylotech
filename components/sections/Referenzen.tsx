@@ -139,58 +139,76 @@ export default function Referenzen() {
         const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
         if (!pinRef.current || cards.length === 0) return;
 
-        // Initial: card 0 fully visible in its resting tilt, others hidden underneath
+        // Initial: card 0 in its resting tilt at rest position, others hidden below
         cards.forEach((card, i) => {
           const tilt = TILTS[i] ?? TILTS[0];
           gsap.set(card, {
             rotate: tilt.rotate,
             x: tilt.offsetX,
             autoAlpha: i === 0 ? 1 : 0,
-            scale: i === 0 ? 1 : 0.9,
-            y: i === 0 ? 0 : 100,
+            scale: i === 0 ? 1 : 0.94,
+            y: i === 0 ? 0 : 140, // incoming cards start below the frame
           });
         });
 
-        // Timeline layout (time units):
-        //   0.0 - 1.0  card 0 alone (REST)
-        //   1.0 - 2.0  card 0 → card 1 transition
-        //   2.0 - 3.0  card 1 alone (REST)
-        //   3.0 - 4.0  card 1 → card 2 transition
-        //   4.0 - 5.0  card 2 alone (REST)
-        // Pin distance is (2*n-1) viewports so each rest/transition ≈ 1 viewport of scroll.
-        const totalUnits = cards.length * 2 - 1;
+        // Each stage: [ REST (0.4) | TRANS (1.0) ]
+        // For n cards: n rests + (n-1) transitions = n + (n-1) = 2n-1 stages
+        // Rest 0.4 + Transition 1.0 = 1.4 units per stage
+        // Total: n * REST + (n-1) * TRANS = 0.4n + (n-1)
+        const REST = 0.4;
+        const TRANS = 1.0;
+        const totalDuration = REST + (cards.length - 1) * (TRANS + REST);
+        // Pin distance: each card gets ~1.4 viewport heights of scroll
+        const pinViewports = (cards.length - 1) * 1.6 + 0.6;
 
         const tl = gsap.timeline({
-          defaults: { ease: "power2.inOut", duration: 1 },
+          defaults: { ease: "power2.inOut" },
           scrollTrigger: {
             trigger: pinRef.current,
             start: "top top",
-            end: () => "+=" + window.innerHeight * totalUnits,
+            end: () => "+=" + window.innerHeight * pinViewports,
             pin: true,
-            scrub: 0.6,
+            scrub: 1,
             invalidateOnRefresh: true,
           },
         });
 
         for (let i = 1; i < cards.length; i++) {
-          // Transition starts at time = (i - 1) * 2 + 1  →  1, 3, 5 …
-          const at = (i - 1) * 2 + 1;
-          // Previous card slides up + shrinks + fades out
+          // Transition begins after the previous card's REST phase.
+          const at = REST + (i - 1) * (REST + TRANS);
+
+          // Previous card stays in place — only scales down and fades out.
+          // No y motion, so it visually "sinks" behind the incoming card
+          // rather than lifting away.
           tl.to(
             cards[i - 1],
-            { autoAlpha: 0, scale: 0.88, y: -40 },
+            {
+              autoAlpha: 0,
+              scale: 0.86,
+              duration: TRANS,
+              ease: "power2.in",
+            },
             at,
           );
-          // Current card slides up into place + grows + fades in
+
+          // Current card slides up from below (y: 140 → 0) while growing
+          // and fading in. This lands it exactly on the previous card's
+          // resting position because they share the same absolute anchor.
           tl.to(
             cards[i],
-            { autoAlpha: 1, scale: 1, y: 0 },
+            {
+              autoAlpha: 1,
+              scale: 1,
+              y: 0,
+              duration: TRANS,
+              ease: "power3.out",
+            },
             at,
           );
         }
 
         // Guarantee the timeline extends through the final rest phase
-        tl.to({}, { duration: 1 }, totalUnits - 1);
+        tl.to({}, { duration: REST }, totalDuration - REST);
       });
 
       // Mobile: simple reveal, one card after another, no pin
