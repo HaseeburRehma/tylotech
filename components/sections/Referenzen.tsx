@@ -1,15 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CircleCheck,
-  FolderOpen,
-  Plus,
-  RefreshCw,
-  Search,
-} from "lucide-react";
+import { CircleCheck, FolderOpen } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 
@@ -75,54 +67,24 @@ const TILTS = [
 function BrowserFrame({
   shot,
   alt,
-  url,
 }: {
   shot: string;
   alt: string;
   url: string;
 }) {
-  // Figma spec on this element:
-  // - rotation: -7°
-  // - border-radius: 16px
-  // - drop shadows: (-8, 18, 46, 0, #08222C @ 18%) and (-2, 60, 90, 0, ...)
+  // The images from Figma already include the browser chrome (traffic
+  // lights, URL bar, tabs) and the -7° tilt with drop shadow baked in,
+  // so we render them directly with object-contain so nothing crops
+  // and the shadow reads correctly.
   return (
-    <div
-      className="relative flex h-full flex-col overflow-hidden border border-black/[0.06] bg-white"
-      style={{
-        borderRadius: 16,
-        transform: "rotate(-7deg)",
-        boxShadow:
-          "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
-      }}
-    >
-      <div className="flex items-center gap-3 border-b border-black/[0.05] bg-[#f4f5f7] px-4 py-2.5">
-        <div className="flex shrink-0 gap-1.5">
-          <span className="size-[11px] rounded-full bg-[#ff5f57]" />
-          <span className="size-[11px] rounded-full bg-[#febc2e]" />
-          <span className="size-[11px] rounded-full bg-[#28c840]" />
-        </div>
-        <div className="hidden shrink-0 items-center gap-1 text-black/35 sm:flex">
-          <ArrowLeft className="size-3.5" strokeWidth={1.8} />
-          <ArrowRight className="size-3.5" strokeWidth={1.8} />
-          <RefreshCw className="ml-1 size-3" strokeWidth={1.8} />
-        </div>
-        <div className="flex min-w-0 flex-1 items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-[11px] text-black/45 ring-1 ring-black/[0.05]">
-          <Search className="size-3 shrink-0" strokeWidth={2} />
-          <span className="truncate">{url}</span>
-        </div>
-        <div className="hidden shrink-0 text-black/25 sm:block">
-          <Plus className="size-3.5" strokeWidth={1.8} />
-        </div>
-      </div>
-      <div className="relative flex-1 overflow-hidden bg-white">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={shot}
-          alt={alt}
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
-      </div>
+    <div className="relative flex h-full w-full items-center justify-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={shot}
+        alt={alt}
+        loading="lazy"
+        className="h-full w-full object-contain"
+      />
     </div>
   );
 }
