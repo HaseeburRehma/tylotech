@@ -63,11 +63,13 @@ const PROJECTS: Project[] = [
   },
 ];
 
-// Resting tilt + subtle horizontal offset per card
+// Whole cards stay horizontal — only the browser mockup inside each card
+// is tilted at -7° per the Figma design. Small horizontal offsets keep
+// the stack readable as a tossed deck rather than a perfect column.
 const TILTS = [
-  { rotate: -1.4, offsetX: 0 },
-  { rotate: 1.2, offsetX: 18 },
-  { rotate: -0.9, offsetX: -12 },
+  { rotate: 0, offsetX: 0 },
+  { rotate: 0, offsetX: 12 },
+  { rotate: 0, offsetX: -8 },
 ];
 
 function BrowserFrame({
@@ -79,8 +81,20 @@ function BrowserFrame({
   alt: string;
   url: string;
 }) {
+  // Figma spec on this element:
+  // - rotation: -7°
+  // - border-radius: 16px
+  // - drop shadows: (-8, 18, 46, 0, #08222C @ 18%) and (-2, 60, 90, 0, ...)
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-[16px] border border-black/[0.06] bg-white shadow-[0_30px_60px_-25px_rgba(15,14,13,0.4)]">
+    <div
+      className="relative flex h-full flex-col overflow-hidden border border-black/[0.06] bg-white"
+      style={{
+        borderRadius: 16,
+        transform: "rotate(-7deg)",
+        boxShadow:
+          "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
+      }}
+    >
       <div className="flex items-center gap-3 border-b border-black/[0.05] bg-[#f4f5f7] px-4 py-2.5">
         <div className="flex shrink-0 gap-1.5">
           <span className="size-[11px] rounded-full bg-[#ff5f57]" />
