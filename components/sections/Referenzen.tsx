@@ -63,7 +63,7 @@ const PROJECTS: Project[] = [
   },
 ];
 
-// Resting tilt + subtle horizontal offset per card, so the deck reads as tossed.
+// Resting tilt + subtle horizontal offset per card
 const TILTS = [
   { rotate: -1.4, offsetX: 0 },
   { rotate: 1.2, offsetX: 18 },
@@ -134,60 +134,66 @@ export default function Referenzen() {
 
       const mm = gsap.matchMedia();
 
-      // Desktop: pinned deck — each card comes into focus in turn, keeping its tilt.
+      // Desktop: pinned deck with rest periods between transitions
       mm.add("(min-width: 1024px)", () => {
         const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
         if (!pinRef.current || cards.length === 0) return;
 
-        // Initial resting states: card 0 in focus, cards 1+ waiting behind (faded, smaller, offset down).
+        // Initial: card 0 fully visible in its resting tilt, others hidden underneath
         cards.forEach((card, i) => {
           const tilt = TILTS[i] ?? TILTS[0];
           gsap.set(card, {
             rotate: tilt.rotate,
             x: tilt.offsetX,
             autoAlpha: i === 0 ? 1 : 0,
-            scale: i === 0 ? 1 : 0.92,
-            y: i === 0 ? 0 : 80,
+            scale: i === 0 ? 1 : 0.9,
+            y: i === 0 ? 0 : 100,
           });
         });
+
+        // Timeline layout (time units):
+        //   0.0 - 1.0  card 0 alone (REST)
+        //   1.0 - 2.0  card 0 → card 1 transition
+        //   2.0 - 3.0  card 1 alone (REST)
+        //   3.0 - 4.0  card 1 → card 2 transition
+        //   4.0 - 5.0  card 2 alone (REST)
+        // Pin distance is (2*n-1) viewports so each rest/transition ≈ 1 viewport of scroll.
+        const totalUnits = cards.length * 2 - 1;
 
         const tl = gsap.timeline({
           defaults: { ease: "power2.inOut", duration: 1 },
           scrollTrigger: {
             trigger: pinRef.current,
             start: "top top",
-            end: () => "+=" + window.innerHeight * (cards.length - 1),
+            end: () => "+=" + window.innerHeight * totalUnits,
             pin: true,
-            scrub: 1,
+            scrub: 0.6,
             invalidateOnRefresh: true,
           },
         });
 
         for (let i = 1; i < cards.length; i++) {
-          // Previous card fades out & shrinks a touch, keeping its rotation.
+          // Transition starts at time = (i - 1) * 2 + 1  →  1, 3, 5 …
+          const at = (i - 1) * 2 + 1;
+          // Previous card slides up + shrinks + fades out
           tl.to(
             cards[i - 1],
-            {
-              autoAlpha: 0,
-              scale: 0.88,
-              y: -40,
-            },
-            i - 1,
+            { autoAlpha: 0, scale: 0.88, y: -40 },
+            at,
           );
-          // Current card lifts into focus.
+          // Current card slides up into place + grows + fades in
           tl.to(
             cards[i],
-            {
-              autoAlpha: 1,
-              scale: 1,
-              y: 0,
-            },
-            i - 1,
+            { autoAlpha: 1, scale: 1, y: 0 },
+            at,
           );
         }
+
+        // Guarantee the timeline extends through the final rest phase
+        tl.to({}, { duration: 1 }, totalUnits - 1);
       });
 
-      // Mobile: simple reveal, one card after another, no pin.
+      // Mobile: simple reveal, one card after another, no pin
       mm.add("(max-width: 1023.98px)", () => {
         gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card, i) => {
           const tilt = TILTS[i] ?? TILTS[0];
@@ -235,7 +241,7 @@ export default function Referenzen() {
         </div>
       </Container>
 
-      {/* Pinned deck — cards share the same stage on desktop, stack on mobile */}
+      {/* Pinned deck */}
       <div ref={pinRef} className="mt-14 sm:mt-20 lg:mt-0">
         <div className="lg:flex lg:h-screen lg:items-center lg:justify-center">
           <Container className="w-full">
@@ -247,7 +253,6 @@ export default function Referenzen() {
                   style={{ zIndex: 30 - i * 10 }}
                 >
                   <div className="grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] lg:gap-10">
-                    {/* text side */}
                     <div className="flex flex-col justify-center">
                       <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
                         {p.lead}{" "}
@@ -273,7 +278,6 @@ export default function Referenzen() {
                       </ul>
                     </div>
 
-                    {/* browser mockup — extends past the card's right edge on desktop */}
                     <div className="relative lg:-my-4 lg:-mr-16 xl:-mr-24">
                       <div className="relative aspect-[16/10]">
                         <BrowserFrame shot={p.shot} alt={p.alt} url={p.url} />
