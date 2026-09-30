@@ -65,33 +65,29 @@ const PROJECTS: Project[] = [
 
 function BrowserFrame({ shot, alt, url }: { shot: string; alt: string; url: string }) {
   return (
-    <div className="relative overflow-hidden rounded-[16px] border border-black/[0.06] bg-white shadow-[0_20px_50px_-25px_rgba(15,14,13,0.35)]">
+    <div className="relative w-full overflow-hidden rounded-[14px] border border-black/[0.06] bg-white shadow-[0_20px_50px_-25px_rgba(15,14,13,0.35)]">
       {/* chrome bar */}
       <div className="flex items-center gap-3 border-b border-black/[0.05] bg-[#f4f5f7] px-4 py-2.5">
-        {/* traffic lights */}
         <div className="flex shrink-0 gap-1.5">
           <span className="size-[11px] rounded-full bg-[#ff5f57]" />
           <span className="size-[11px] rounded-full bg-[#febc2e]" />
           <span className="size-[11px] rounded-full bg-[#28c840]" />
         </div>
-        {/* nav arrows */}
         <div className="hidden shrink-0 items-center gap-1 text-black/35 sm:flex">
           <ArrowLeft className="size-3.5" strokeWidth={1.8} />
           <ArrowRight className="size-3.5" strokeWidth={1.8} />
           <RefreshCw className="ml-1 size-3" strokeWidth={1.8} />
         </div>
-        {/* url pill */}
         <div className="flex min-w-0 flex-1 items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-[11px] text-black/45 ring-1 ring-black/[0.05]">
           <Search className="size-3 shrink-0" strokeWidth={2} />
           <span className="truncate">{url}</span>
         </div>
-        {/* right tab */}
         <div className="hidden shrink-0 text-black/25 sm:block">
           <Plus className="size-3.5" strokeWidth={1.8} />
         </div>
       </div>
       {/* website screenshot */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-white sm:aspect-[16/9]">
+      <div className="relative aspect-[16/10] overflow-hidden bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={shot}
@@ -106,6 +102,8 @@ function BrowserFrame({ shot, alt, url }: { shot: string; alt: string; url: stri
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -120,47 +118,54 @@ export default function Referenzen() {
 
       const mm = gsap.matchMedia();
 
+      // Desktop: pinned stack — each viewport of scroll swaps one card
       mm.add("(min-width: 1024px)", () => {
         const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
-        const stickies = gsap.utils.toArray<HTMLElement>(".ref-sticky");
+        if (!pinRef.current || cards.length === 0) return;
 
-        cards.forEach((card, i) => {
-          // Entrance: fade + scale in as the sticky wrapper approaches its rest position
-          gsap.fromTo(
-            card,
-            { scale: 0.94, autoAlpha: 0, y: 40 },
-            {
-              scale: 1,
-              autoAlpha: 1,
-              y: 0,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: stickies[i],
-                start: "top 95%",
-                end: "top 50%",
-                scrub: 1.2,
-              },
-            },
-          );
+        // Initial: only first card visible, others below and hidden
+        gsap.set(cards, { autoAlpha: 0, scale: 0.9, y: 80 });
+        gsap.set(cards[0], { autoAlpha: 1, scale: 1, y: 0 });
 
-          // Exit: previous card stays visible while the next one enters,
-          // then slowly scales down and fades away underneath
-          gsap.to(card, {
-            scale: 0.9,
-            autoAlpha: 0,
-            y: -30,
-            ease: "power2.inOut",
-            scrollTrigger: {
-              trigger: i < cards.length - 1 ? stickies[i + 1] : "#referenzen",
-              start: i < cards.length - 1 ? "top 55%" : "bottom 80%",
-              end: i < cards.length - 1 ? "top 0%" : "bottom 25%",
-              scrub: 1.2,
-            },
-          });
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.inOut" },
+          scrollTrigger: {
+            trigger: pinRef.current,
+            start: "top top",
+            end: () => "+=" + window.innerHeight * (cards.length - 1),
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
         });
+
+        for (let i = 1; i < cards.length; i++) {
+          // Previous card scales down + fades out + lifts slightly up
+          tl.to(
+            cards[i - 1],
+            {
+              autoAlpha: 0,
+              scale: 0.86,
+              y: -40,
+              duration: 1,
+            },
+            i - 1,
+          );
+          // Current card scales up + fades in from below
+          tl.to(
+            cards[i],
+            {
+              autoAlpha: 1,
+              scale: 1,
+              y: 0,
+              duration: 1,
+            },
+            i - 1,
+          );
+        }
       });
 
-      // Mobile: simple reveal, no stacking dismiss
+      // Mobile: simple stacked reveal
       mm.add("(max-width: 1023.98px)", () => {
         gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card) => {
           gsap.fromTo(
@@ -200,53 +205,58 @@ export default function Referenzen() {
             Zweifel selbst anrufen kannst.
           </p>
         </div>
-
-        {/* stacking cards */}
-        <div className="mt-12 sm:mt-16" style={{ perspective: "1600px" }}>
-          {PROJECTS.map((p, i) => (
-            <div
-              key={p.shot}
-              className={`ref-sticky lg:sticky ${
-                i < PROJECTS.length - 1 ? "mb-10 lg:mb-[60vh]" : "mb-0"
-              }`}
-              style={{ top: `${88 + i * 22}px` }}
-            >
-              <article className="ref-card grid h-auto grid-cols-1 gap-8 overflow-hidden rounded-[26px] border border-line bg-white p-6 shadow-[0_36px_80px_-46px_rgba(15,14,13,0.35)] sm:p-8 lg:h-[clamp(460px,72vh,620px)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-10 lg:p-10">
-                {/* text side */}
-                <div className="flex flex-col justify-center">
-                  <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
-                    {p.lead}{" "}
-                    <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-                      {p.accent}
-                    </span>
-                  </h3>
-                  <ul className="mt-6 space-y-4">
-                    {p.bullets.map((b) => (
-                      <li key={b.label} className="flex gap-3">
-                        <CircleCheck
-                          className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
-                          strokeWidth={2}
-                        />
-                        <p className="text-[14px] leading-[1.55] text-[#5c5954]">
-                          <span className="font-semibold text-ink">
-                            {b.label}:
-                          </span>{" "}
-                          {b.desc}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* browser mockup side */}
-                <div className="flex items-center">
-                  <BrowserFrame shot={p.shot} alt={p.alt} url={p.url} />
-                </div>
-              </article>
-            </div>
-          ))}
-        </div>
       </Container>
+
+      {/* Pinned card stack — desktop */}
+      <div ref={pinRef} className="mt-10 sm:mt-14">
+        <div className="lg:flex lg:h-screen lg:items-center lg:justify-center">
+          <Container className="w-full">
+            <div
+              ref={stageRef}
+              className="relative lg:mx-auto lg:h-[min(560px,72vh)] lg:max-w-[1180px]"
+            >
+              {PROJECTS.map((p, i) => (
+                <article
+                  key={p.shot}
+                  className="ref-card mb-8 grid grid-cols-1 gap-6 overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_36px_80px_-46px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mb-0 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-12 lg:p-10"
+                  style={{ zIndex: PROJECTS.length - i }}
+                >
+                  {/* text */}
+                  <div className="flex flex-col justify-center">
+                    <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
+                      {p.lead}{" "}
+                      <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                        {p.accent}
+                      </span>
+                    </h3>
+                    <ul className="mt-6 space-y-4">
+                      {p.bullets.map((b) => (
+                        <li key={b.label} className="flex gap-3">
+                          <CircleCheck
+                            className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
+                            strokeWidth={2}
+                          />
+                          <p className="text-[14px] leading-[1.55] text-[#5c5954]">
+                            <span className="font-semibold text-ink">
+                              {b.label}:
+                            </span>{" "}
+                            {b.desc}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* browser mockup */}
+                  <div className="flex items-center">
+                    <BrowserFrame shot={p.shot} alt={p.alt} url={p.url} />
+                  </div>
+                </article>
+              ))}
+            </div>
+          </Container>
+        </div>
+      </div>
     </section>
   );
 }
