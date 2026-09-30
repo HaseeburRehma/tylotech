@@ -41,7 +41,7 @@ export default function Home() {
         <Globe />
         <Ablauf />
         <Arbeitsweise />
-        <TyloHQ />
+        {/* <TyloHQ /> */}
         {/* <Team /> */}
         <Gruender />
         <Podcast />
