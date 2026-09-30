@@ -16,18 +16,26 @@ import { gsap, useGSAP } from "@/lib/gsap";
 type Bullet = { label: string; desc: string };
 
 type Project = {
+  index: string;
+  tag: string;
   lead: string;
   accent: string;
+  summary: string;
   bullets: Bullet[];
   shot: string;
   alt: string;
   url: string;
+  screenCount: string;
 };
 
 const PROJECTS: Project[] = [
   {
+    index: "01",
+    tag: "Gastronomie · Marke & Bestellstrecke",
     lead: "Von der ersten Filiale zur",
     accent: "Marke, die man kennt.",
+    summary:
+      "Auftritt, Bestellstrecke und lokale Kampagnen für Crusty Slices — von der ersten Filiale bis zur wachsenden Marke, die man im Ort kennt.",
     bullets: [
       { label: "Auftritt und Bestellstrecke", desc: "Eine Seite, die den Slice verkauft, statt ihn nur zu zeigen." },
       { label: "Kampagnen mit Standortbezug", desc: "Anzeigen, die den Laden auch unter der Woche füllen." },
@@ -36,10 +44,15 @@ const PROJECTS: Project[] = [
     shot: "/referenzen/crusty-pf.jpg",
     alt: "Crusty Slices Website",
     url: "crustyslices.de",
+    screenCount: "3 Bausteine",
   },
   {
+    index: "02",
+    tag: "Bildung · Marke & Anmeldung",
     lead: "Eine Fahrschule, die aussieht",
     accent: "wie eine Marke.",
+    summary:
+      "Neuer Auftritt für Fahrschule Abgefahrn — mit Theorieplan, Anmeldestrecke und einer Bildsprache, die auch offline zieht.",
     bullets: [
       { label: "Theorieplan, den Fahrschüler benutzen", desc: "monatlich aktuell, ohne Nachfragen im Büro." },
       { label: "Anmeldung ohne Umweg", desc: "vom Instagram-Profil bis zum Vertrag in einem Fluss." },
@@ -48,10 +61,15 @@ const PROJECTS: Project[] = [
     shot: "/referenzen/fahrschule-pf.jpg",
     alt: "Fahrschule Abgefahrn Website",
     url: "fahrschule-abgefahrn.de",
+    screenCount: "3 Bausteine",
   },
   {
+    index: "03",
+    tag: "Gebäudeservice · Leads & Local SEO",
     lead: "Aus unregelmäßigen Anrufen wurden",
     accent: "planbare Anfragen.",
+    summary:
+      "Local SEO und Performance-Marketing für Cleanpany — aus unregelmäßigen Anrufen wurden 5–7 planbare Anfragen am Tag.",
     bullets: [
       { label: "Local SEO für jeden Einsatzort", desc: "gefunden werden, wo der Auftrag tatsächlich entsteht." },
       { label: "Ads auf Anfragen optimiert", desc: "nicht auf Klicks und nicht auf Reichweite." },
@@ -60,40 +78,57 @@ const PROJECTS: Project[] = [
     shot: "/referenzen/cleanpany-pf.jpg",
     alt: "Cleanpany Gebäudeservice Website",
     url: "cleanpany.de",
+    screenCount: "3 Bausteine",
   },
 ];
 
-function BrowserFrame({ shot, alt, url }: { shot: string; alt: string; url: string }) {
+function BrowserFrame({
+  shot,
+  alt,
+  url,
+  variant,
+}: {
+  shot: string;
+  alt: string;
+  url: string;
+  variant: "hero" | "detail-a" | "detail-b";
+}) {
+  const focus =
+    variant === "hero"
+      ? "object-[center_top]"
+      : variant === "detail-a"
+        ? "object-[center_center]"
+        : "object-[center_bottom]";
   return (
-    <div className="relative w-full overflow-hidden rounded-[14px] border border-black/[0.06] bg-white shadow-[0_20px_50px_-25px_rgba(15,14,13,0.35)]">
-      {/* chrome bar */}
-      <div className="flex items-center gap-3 border-b border-black/[0.05] bg-[#f4f5f7] px-4 py-2.5">
-        <div className="flex shrink-0 gap-1.5">
-          <span className="size-[11px] rounded-full bg-[#ff5f57]" />
-          <span className="size-[11px] rounded-full bg-[#febc2e]" />
-          <span className="size-[11px] rounded-full bg-[#28c840]" />
+    <div className="relative flex h-full flex-col overflow-hidden rounded-[18px] border border-black/[0.06] bg-white shadow-[0_28px_60px_-30px_rgba(15,14,13,0.35)]">
+      {/* chrome */}
+      <div className="flex items-center gap-2 border-b border-black/[0.05] bg-[#f4f5f7] px-3 py-2">
+        <div className="flex shrink-0 gap-1">
+          <span className="size-[9px] rounded-full bg-[#ff5f57]" />
+          <span className="size-[9px] rounded-full bg-[#febc2e]" />
+          <span className="size-[9px] rounded-full bg-[#28c840]" />
         </div>
-        <div className="hidden shrink-0 items-center gap-1 text-black/35 sm:flex">
-          <ArrowLeft className="size-3.5" strokeWidth={1.8} />
-          <ArrowRight className="size-3.5" strokeWidth={1.8} />
-          <RefreshCw className="ml-1 size-3" strokeWidth={1.8} />
+        <div className="hidden shrink-0 items-center gap-1 text-black/30 sm:flex">
+          <ArrowLeft className="size-3" strokeWidth={1.8} />
+          <ArrowRight className="size-3" strokeWidth={1.8} />
+          <RefreshCw className="ml-0.5 size-[10px]" strokeWidth={1.8} />
         </div>
-        <div className="flex min-w-0 flex-1 items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-[11px] text-black/45 ring-1 ring-black/[0.05]">
-          <Search className="size-3 shrink-0" strokeWidth={2} />
+        <div className="flex min-w-0 flex-1 items-center gap-1 rounded-md bg-white px-2 py-0.5 text-[10px] text-black/45 ring-1 ring-black/[0.05]">
+          <Search className="size-[10px] shrink-0" strokeWidth={2} />
           <span className="truncate">{url}</span>
         </div>
         <div className="hidden shrink-0 text-black/25 sm:block">
-          <Plus className="size-3.5" strokeWidth={1.8} />
+          <Plus className="size-3" strokeWidth={1.8} />
         </div>
       </div>
-      {/* website screenshot */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-white">
+      {/* screen */}
+      <div className="relative flex-1 overflow-hidden bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={shot}
           alt={alt}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className={`absolute inset-0 h-full w-full object-cover ${focus}`}
         />
       </div>
     </div>
@@ -102,8 +137,6 @@ function BrowserFrame({ shot, alt, url }: { shot: string; alt: string; url: stri
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -113,72 +146,42 @@ export default function Referenzen() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: { trigger: ".ref-head", start: "top 82%", toggleActions: "play none none none" },
+        scrollTrigger: {
+          trigger: ".ref-head",
+          start: "top 82%",
+          toggleActions: "play none none none",
+        },
       });
 
-      const mm = gsap.matchMedia();
+      gsap.utils.toArray<HTMLElement>(".ref-project").forEach((el) => {
+        const heads = el.querySelectorAll(".ref-proj-head > *");
+        const frames = el.querySelectorAll(".ref-frame");
 
-      // Desktop: pinned stack — each viewport of scroll swaps one card
-      mm.add("(min-width: 1024px)", () => {
-        const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
-        if (!pinRef.current || cards.length === 0) return;
-
-        // Initial: only first card visible, others below and hidden
-        gsap.set(cards, { autoAlpha: 0, scale: 0.9, y: 80 });
-        gsap.set(cards[0], { autoAlpha: 1, scale: 1, y: 0 });
-
-        const tl = gsap.timeline({
-          defaults: { ease: "power2.inOut" },
+        gsap.from(heads, {
+          y: 24,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          stagger: 0.08,
           scrollTrigger: {
-            trigger: pinRef.current,
-            start: "top top",
-            end: () => "+=" + window.innerHeight * (cards.length - 1),
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
+            trigger: el,
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         });
 
-        for (let i = 1; i < cards.length; i++) {
-          // Previous card scales down + fades out + lifts slightly up
-          tl.to(
-            cards[i - 1],
-            {
-              autoAlpha: 0,
-              scale: 0.86,
-              y: -40,
-              duration: 1,
-            },
-            i - 1,
-          );
-          // Current card scales up + fades in from below
-          tl.to(
-            cards[i],
-            {
-              autoAlpha: 1,
-              scale: 1,
-              y: 0,
-              duration: 1,
-            },
-            i - 1,
-          );
-        }
-      });
-
-      // Mobile: simple stacked reveal
-      mm.add("(max-width: 1023.98px)", () => {
-        gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card) => {
-          gsap.fromTo(
-            card,
-            { y: 30, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              ease: "power3.out",
-              duration: 0.8,
-              scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none none" },
-            },
-          );
+        gsap.from(frames, {
+          y: 40,
+          opacity: 0,
+          scale: 0.96,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 70%",
+            toggleActions: "play none none none",
+          },
         });
       });
     },
@@ -186,7 +189,11 @@ export default function Referenzen() {
   );
 
   return (
-    <section id="referenzen" ref={root} className="bg-[#f3f5f6] py-20 sm:py-24">
+    <section
+      id="referenzen"
+      ref={root}
+      className="bg-[#f3f5f6] py-20 sm:py-24 lg:py-28"
+    >
       <Container>
         <div className="ref-head max-w-[720px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
@@ -205,58 +212,81 @@ export default function Referenzen() {
             Zweifel selbst anrufen kannst.
           </p>
         </div>
-      </Container>
 
-      {/* Pinned card stack — desktop */}
-      <div ref={pinRef} className="mt-10 sm:mt-14">
-        <div className="lg:flex lg:h-screen lg:items-center lg:justify-center">
-          <Container className="w-full">
-            <div
-              ref={stageRef}
-              className="relative lg:mx-auto lg:h-[min(560px,72vh)] lg:max-w-[1180px]"
-            >
-              {PROJECTS.map((p, i) => (
-                <article
-                  key={p.shot}
-                  className="ref-card mb-8 grid grid-cols-1 gap-6 overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_36px_80px_-46px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mb-0 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center lg:gap-12 lg:p-10"
-                  style={{ zIndex: PROJECTS.length - i }}
-                >
-                  {/* text */}
-                  <div className="flex flex-col justify-center">
-                    <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
-                      {p.lead}{" "}
-                      <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-                        {p.accent}
-                      </span>
-                    </h3>
-                    <ul className="mt-6 space-y-4">
-                      {p.bullets.map((b) => (
-                        <li key={b.label} className="flex gap-3">
-                          <CircleCheck
-                            className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
-                            strokeWidth={2}
-                          />
-                          <p className="text-[14px] leading-[1.55] text-[#5c5954]">
-                            <span className="font-semibold text-ink">
-                              {b.label}:
-                            </span>{" "}
-                            {b.desc}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+        {/* Projects — each is a portfolio "chapter" */}
+        <div className="mt-16 space-y-24 sm:mt-20 sm:space-y-28 lg:mt-24 lg:space-y-36">
+          {PROJECTS.map((p) => (
+            <article key={p.shot} className="ref-project">
+              {/* header row: index + title left, description right */}
+              <div className="ref-proj-head grid gap-6 border-b border-line pb-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-end lg:gap-14 lg:pb-10">
+                <div>
+                  <p className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/40">
+                    {p.tag}
+                  </p>
+                  <h3 className="mt-3 font-display text-[clamp(1.7rem,2.8vw,2.4rem)] font-bold leading-[1.12] tracking-[-0.02em] text-ink">
+                    {p.lead}{" "}
+                    <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                      {p.accent}
+                    </span>
+                  </h3>
+                  <p className="mt-3 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink/40">
+                    {p.index} · {p.screenCount}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[clamp(15px,1.4vw,17px)] leading-[1.6] text-[#5c5954]">
+                    {p.summary}
+                  </p>
+                  <ul className="mt-6 space-y-3">
+                    {p.bullets.map((b) => (
+                      <li key={b.label} className="flex gap-3">
+                        <CircleCheck
+                          className="mt-0.5 size-[18px] shrink-0 text-[#c79a53]"
+                          strokeWidth={2}
+                        />
+                        <p className="text-[14px] leading-[1.55] text-[#5c5954]">
+                          <span className="font-semibold text-ink">
+                            {b.label}:
+                          </span>{" "}
+                          {b.desc}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
 
-                  {/* browser mockup */}
-                  <div className="flex items-center">
-                    <BrowserFrame shot={p.shot} alt={p.alt} url={p.url} />
+              {/* frame row — tall portrait cards */}
+              <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:mt-14 lg:grid-cols-3">
+                {(["hero", "detail-a", "detail-b"] as const).map((variant, fi) => (
+                  <div
+                    key={variant}
+                    className={`ref-frame group relative ${
+                      fi === 0 ? "sm:col-span-2 lg:col-span-1" : ""
+                    }`}
+                  >
+                    <div className="aspect-[3/4.2] w-full">
+                      <BrowserFrame
+                        shot={p.shot}
+                        alt={p.alt}
+                        url={p.url}
+                        variant={variant}
+                      />
+                    </div>
+                    <p className="mt-4 font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-ink/45">
+                      {fi === 0
+                        ? `${p.index}.01  ·  Startseite`
+                        : fi === 1
+                          ? `${p.index}.02  ·  Angebot`
+                          : `${p.index}.03  ·  Kontakt`}
+                    </p>
                   </div>
-                </article>
-              ))}
-            </div>
-          </Container>
+                ))}
+              </div>
+            </article>
+          ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
