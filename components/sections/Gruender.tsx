@@ -60,9 +60,9 @@ export default function Gruender() {
               <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] bg-ink shadow-[0_30px_60px_-26px_rgba(15,14,13,0.55)] ring-1 ring-[#d1aa71]/35">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/team/ilias-el-aradi.jpg"
+                  src="/team/ilias-el-aradi-podcast.jpg"
                   alt="Ilias El Aradi, Gründer von TyloTech"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_20%]"
+                  className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
                 />
               </div>
             </div>
