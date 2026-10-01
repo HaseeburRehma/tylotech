@@ -33,10 +33,10 @@ export default function Home() {
       <main>
         <Hero />
         <TrustStrip />
-        <TyloHQ />
+        {/* <TyloHQ /> */}
         <Warum />
         <Wachstum />
-        <Praxis />
+        {/* <Praxis /> */}
         <Diagnose />
         <Wechsel />
         <Zahlen />
