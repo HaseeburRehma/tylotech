@@ -249,7 +249,7 @@ export default function Referenzen() {
                       </ul>
                     </div>
 
-                    <div className="relative flex items-center justify-center lg:-my-12 lg:-mr-20 xl:-mr-32">
+                    <div className="relative flex items-center justify-center overflow-visible lg:-my-10 lg:-mr-24 xl:-mr-36">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={p.shot}
@@ -257,7 +257,7 @@ export default function Referenzen() {
                         loading="lazy"
                         className="block h-auto w-full"
                         style={{
-                          transform: "rotate(-7deg) scale(1.2)",
+                          transform: "rotate(-7deg) scale(1.15)",
                           transformOrigin: "center center",
                           boxShadow:
                             "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
