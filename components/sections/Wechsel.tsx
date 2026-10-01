@@ -5,7 +5,7 @@ import { Monitor } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
-type Item = { t: string; b: string; img: string; tint: string };
+type Item = { t: string; b: string; img: string; tint: string; alt?: string; pos?: string };
 
 const ITEMS: Item[] = [
   {
@@ -29,7 +29,9 @@ const ITEMS: Item[] = [
   {
     t: "Ein Partner, der das Ergebnis trägt",
     b: "Keine Agentur, die abrechnet und weiterleitet. Sondern ein Team, das sich am Ergebnis messen lässt — und bei echtem Potenzial sogar mit einsteigt.",
-    img: "/wechsel/04.jpg",
+    img: "/wechsel/04-ilias.jpg",
+    alt: "Ilias El Aradi, Gründer von TyloTech, vor dem Google-Campus in Mountain View",
+    pos: "50% 30%",
     tint: "from-[#dfe1dc] to-[#c6cabf]",
   },
 ];
@@ -214,11 +216,12 @@ export default function Wechsel() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={it.img}
-                        alt=""
+                        alt={it.alt ?? ""}
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                         }}
                         className="absolute inset-0 h-full w-full object-cover"
+                        style={it.pos ? { objectPosition: it.pos } : undefined}
                       />
                     </div>
                   ))}
