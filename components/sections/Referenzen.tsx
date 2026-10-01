@@ -223,17 +223,19 @@ export default function Referenzen() {
                   className="ref-card mx-auto w-full max-w-[1080px] overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mx-auto lg:p-10"
                   style={{ zIndex: 10 + i * 10 }}
                 >
-                  {/* Desktop mockup band: an absolute column on the right ~55% of
-                      the card. The image is height-driven, tilted -7°, and
-                      over-sized so even its rotated corners cover the band — no
-                      white wedge. The band's own overflow-hidden + the card's
-                      rounded clip trim every bleeding edge. */}
-                  <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[55%] overflow-hidden rounded-r-[28px] lg:block">
+                  {/* Desktop mockup band: an absolute column on the right ~56% of
+                      the card. Matches the Figma frame: the browser mockup's
+                      top-left corner (traffic lights + URL bar) sits just inside
+                      the band, it tilts 7° clockwise (Figma's -7° is CCW-positive,
+                      so CSS needs +7deg), and it bleeds off the right and bottom
+                      where the band/card clip it. Height-driven and pivoted at the
+                      top-left so the chrome stays in frame. */}
+                  <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[56%] overflow-hidden rounded-r-[28px] lg:block">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={p.shot}
                       alt={p.alt}
-                      className="absolute left-[-22%] top-1/2 h-[140%] w-auto max-w-none -translate-y-1/2 rotate-[-7deg] rounded-[14px]"
+                      className="absolute left-[1%] top-[5%] h-[104%] w-auto max-w-none origin-top-left rotate-[7deg] rounded-[14px]"
                       style={{
                         boxShadow:
                           "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
@@ -274,7 +276,7 @@ export default function Referenzen() {
                       <img
                         src={p.shot}
                         alt={p.alt}
-                        className="block h-auto w-full rotate-[-7deg] rounded-[14px]"
+                        className="block h-auto w-full rotate-[7deg] rounded-[14px]"
                         style={{
                           boxShadow:
                             "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
