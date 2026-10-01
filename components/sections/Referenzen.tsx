@@ -91,70 +91,84 @@ export default function Referenzen() {
         const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
         if (!pinRef.current || cards.length === 0) return;
 
-        // Initial: card 0 in its resting tilt at rest position, others hidden well below
+        // Stacked-deck behaviour:
+        // - Card 0 starts in place. Later cards are hidden.
+        // - On each transition the incoming card enters fully opaque from the
+        //   bottom of the viewport and slides up to rest on top (higher z).
+        // - Every card already on the deck recedes one "depth" step at the same
+        //   time: smaller, lifted, dimmer. Depth 1 stays faintly visible as a
+        //   peeking edge above the new card; depth 2+ fades out completely.
+        const DEPTH_SCALE = 0.08; // scale lost per depth step
+        const DEPTH_LIFT = 48; // px lifted per depth step (peeks above the next card)
+        const depthAlpha = (d: number) => (d === 0 ? 1 : d === 1 ? 0.45 : 0);
+
         cards.forEach((card, i) => {
           const tilt = TILTS[i] ?? TILTS[0];
           gsap.set(card, {
             rotate: tilt.rotate,
             x: tilt.offsetX,
+            scale: 1,
+            y: 0,
             autoAlpha: i === 0 ? 1 : 0,
-            scale: i === 0 ? 1 : 0.9,
-            y: i === 0 ? 0 : 320, // incoming cards start well below the frame for a clear slide-up
           });
         });
 
         // Timeline layout (time units):
         //   0.0 - 0.6  card 0 alone (REST)
-        //   0.6 - 2.0  card 0 → card 1 transition (TRANS)
-        //   2.0 - 2.6  card 1 alone (REST)
-        //   2.6 - 4.0  card 1 → card 2 transition (TRANS)
-        //   4.0 - 4.6  card 2 alone (REST)
+        //   0.6 - 2.0  card 1 rises from the bottom, card 0 recedes (TRANS)
+        //   2.0 - 2.6  card 1 on top, card 0 peeking (REST)
+        //   2.6 - 4.0  card 2 rises, card 1 recedes, card 0 fades out (TRANS)
+        //   4.0 - 4.6  card 2 on top, card 1 peeking (REST)
         const REST = 0.6;
         const TRANS = 1.4;
         const totalDuration = REST + (cards.length - 1) * (TRANS + REST);
-        // Pin distance: each stage gets roughly 1 viewport of scroll runway
         const pinViewports = totalDuration;
 
         const tl = gsap.timeline({
-          defaults: { ease: "power2.inOut" },
           scrollTrigger: {
             trigger: pinRef.current,
             start: "top top",
             end: () => "+=" + window.innerHeight * pinViewports,
             pin: true,
-            scrub: 1.2,
+            scrub: 1,
             invalidateOnRefresh: true,
           },
         });
 
         for (let i = 1; i < cards.length; i++) {
-          // Transition begins after the previous card's REST phase.
           const at = REST + (i - 1) * (REST + TRANS);
 
-          // Previous card stays in place — scales down and fades out.
-          // No y motion, so it "sinks" beneath the incoming card.
-          tl.to(
-            cards[i - 1],
-            {
-              autoAlpha: 0,
-              scale: 0.84,
-              duration: TRANS,
-              ease: "power2.inOut",
-            },
-            at,
-          );
+          // Every card already on the deck steps one level further back.
+          for (let j = 0; j < i; j++) {
+            const depth = i - j;
+            tl.to(
+              cards[j],
+              {
+                scale: 1 - DEPTH_SCALE * depth,
+                y: -DEPTH_LIFT * depth,
+                autoAlpha: depthAlpha(depth),
+                duration: TRANS,
+                // Front-loaded so the recede is clearly visible while the
+                // incoming card is still low in the viewport.
+                ease: "power2.out",
+              },
+              at,
+            );
+          }
 
-          // Current card slides up from y:320 to y:0 (dramatic slide-up),
-          // grows from scale 0.9 to 1, and fades from 0 to 1.
-          // The higher z-index puts it visibly on top of the fading card.
-          tl.to(
+          // Incoming card: becomes visible at the start of its transition,
+          // fully opaque ("clear"), and travels up from the bottom of the
+          // viewport — not from just under the current card.
+          tl.set(cards[i], { autoAlpha: 1 }, at);
+          tl.fromTo(
             cards[i],
+            { y: () => window.innerHeight },
             {
-              autoAlpha: 1,
-              scale: 1,
               y: 0,
               duration: TRANS,
-              ease: "power3.out",
+              // Eases in from the bottom, glides, and settles softly on top.
+              ease: "power3.inOut",
+              immediateRender: false,
             },
             at,
           );
