@@ -82,7 +82,7 @@ function ChannelsCard() {
     <Card title="Alle Kanäle, eine Auswertung" subtitle="statt sechs Dashboards">
       <div className="flex flex-col gap-3">
         <IconMarquee slugs={ROW_TOP} dir="ltr" />
-        <IconMarquee slugs={ROW_BOTTOM} dir="rtl" />
+        <IconMarquee slugs={ROW_BOTTOM} dir="ltr" />
       </div>
     </Card>
   );

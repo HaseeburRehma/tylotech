@@ -276,12 +276,12 @@ export default function TyloHQ() {
         once: true,
         onToggle: (self) => self.isActive && setRowsShown(true),
       });
-      gsap.from(".hq-channel", {
-        scale: 0.8,
+      gsap.from(".hq-marquee", {
+        x: -40,
         opacity: 0,
-        duration: 0.5,
-        ease: "back.out(1.6)",
-        stagger: 0.05,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.12,
         clearProps: "transform,opacity",
         scrollTrigger: { trigger: ".hq-row2", start: "top 78%", toggleActions: "play none none none" },
       });
@@ -369,31 +369,51 @@ export default function TyloHQ() {
 
             {/* 04 · channels */}
             <Tile title="Marketing aus einer Hand" desc="Ads, SEO, Content, Funnels" className="hq-row2">
-              <div className="px-6 pb-2" onMouseLeave={() => setHoverCh(null)}>
-                <div className="grid w-full max-w-[332px] grid-cols-4 gap-3">
-                  {CHANNELS.map((c, i) => {
-                    const on = activeCh === i;
+              <div className="pb-2" onMouseLeave={() => setHoverCh(null)}>
+                {/* two rows of logos running continuously left → right */}
+                <div className="flex flex-col gap-3">
+                  {[CHANNELS.slice(0, 4), CHANNELS.slice(4)].map((row, r) => {
+                    // one copy (row ×2) is wider than the tile; the track holds two copies
+                    // and slides by 50 %, so the loop is seamless
+                    const track = [...row, ...row, ...row, ...row];
                     return (
-                      <button
-                        type="button"
-                        key={c.name}
-                        aria-label={c.name}
-                        onMouseEnter={() => setHoverCh(i)}
-                        onFocus={() => setHoverCh(i)}
-                        className={cn(
-                          "hq-channel grid aspect-square w-full place-items-center rounded-[14px] border transition-[background-color,border-color,box-shadow,scale] duration-300",
-                          on
-                            ? "scale-[1.04] border-[1.5px] border-[#d1aa71] bg-[#fbf6ee] shadow-[0_10px_24px_-14px_rgba(148,113,63,0.6)]"
-                            : "border-[#eeedea] bg-[#f6f5f3]",
-                        )}
+                      <div
+                        key={r}
+                        className="hq-marquee group/mq relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]"
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={c.src} alt="" className="size-[40%] max-h-[30px] max-w-[30px] object-contain" draggable={false} />
-                      </button>
+                        <div
+                          className="flex w-max gap-3 py-1.5 animate-[marqueeRight_26s_linear_infinite] group-hover/mq:[animation-play-state:paused] motion-reduce:animate-none"
+                          style={{ animationDelay: r ? "-9s" : "0s" }}
+                        >
+                          {track.map((c, i) => {
+                            const idx = CHANNELS.indexOf(c);
+                            const on = activeCh === idx;
+                            return (
+                              <button
+                                type="button"
+                                key={i}
+                                aria-label={c.name}
+                                tabIndex={i < row.length ? 0 : -1}
+                                onMouseEnter={() => setHoverCh(idx)}
+                                onFocus={() => setHoverCh(idx)}
+                                className={cn(
+                                  "grid size-[74px] shrink-0 place-items-center rounded-[14px] border transition-[background-color,border-color,box-shadow,translate] duration-300 hover:-translate-y-1",
+                                  on
+                                    ? "border-[1.5px] border-[#d1aa71] bg-[#fbf6ee] shadow-[0_10px_24px_-14px_rgba(148,113,63,0.6)]"
+                                    : "border-[#eeedea] bg-[#f6f5f3]",
+                                )}
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={c.src} alt="" className="size-[30px] object-contain" draggable={false} />
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
-                <p className="mt-5 flex h-5 items-center gap-2 text-[13px] text-[#5c5954]">
+                <p className="mt-4 flex h-5 items-center gap-2 px-6 text-[13px] text-[#5c5954]">
                   <span className="size-1.5 rounded-full bg-[#d1aa71]" />
                   <span key={activeCh} className="animate-[hqfade_.35s_ease]">
                     <span className="font-medium text-[#1a1917]">{CHANNELS[activeCh].name}</span>
