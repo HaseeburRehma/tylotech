@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 
-export default function HeroVideoCard({
-  videoId,
-  label = "Imagefilm",
-}: {
-  videoId: string;
-  label?: string;
-}) {
+export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const [posterVisible, setPosterVisible] = useState(true);
   const [poster, setPoster] = useState(
     `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
@@ -51,10 +45,6 @@ export default function HeroVideoCard({
           <span className="absolute inset-0 bg-gradient-to-t from-ink/45 via-transparent to-transparent" />
         </div>
 
-        {/* label pill */}
-        <span className="absolute bottom-4 left-4 z-10 rounded-md bg-black/35 px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/90 backdrop-blur sm:bottom-5 sm:left-5">
-          {label}
-        </span>
       </div>
     </div>
   );

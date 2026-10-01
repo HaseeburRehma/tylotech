@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
+  Activity,
   ArrowUpRight,
   CalendarCheck2,
   ChartNoAxesColumnIncreasing,
@@ -14,7 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { gsap } from "@/lib/gsap";
-import { FEED_URL, SAMPLE_EVENTS, agoLabel, type LiveEvent, type LiveKind } from "@/lib/liveFeed";
+import { agoLabel, type LiveEvent, type LiveFeedResponse, type LiveKind } from "@/lib/liveFeed";
 
 const AVATARS = [
   { src: "/avatars/tt.png", alt: "Team TT" },
@@ -38,62 +39,101 @@ const RING_C = 2 * Math.PI * RING_R;
 const STEP_MS = 4200;
 
 /* ---- TyloHQ live ticker ------------------------------------------------- */
-function LiveTicker() {
-  const [events, setEvents] = useState<LiveEvent[]>(SAMPLE_EVENTS);
-  const [i, setI] = useState(0);
-  const [prev, setPrev] = useState<number | null>(null);
-  const [paused, setPaused] = useState(false);
-  const [visitors, setVisitors] = useState(20);
+const POLL_MS = 30_000;
+const SEEN_KEY = "tylohq-live-seen";
 
-  // optional real feed from TyloHQ
+function loadSeen(): Set<string> {
+  try {
+    const raw = window.localStorage.getItem(SEEN_KEY);
+    return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+function saveSeen(seen: Set<string>) {
+  try {
+    // keep the most recent 300 ids
+    window.localStorage.setItem(SEEN_KEY, JSON.stringify([...seen].slice(-300)));
+  } catch {}
+}
+
+/**
+ * Shows real TyloHQ events only, each exactly once (also across reloads).
+ * When no unseen event is waiting, a neutral waiting state is shown instead.
+ */
+function LiveTicker() {
+  const [queue, setQueue] = useState<LiveEvent[]>([]);
+  const [current, setCurrent] = useState<LiveEvent | null>(null);
+  const [outgoing, setOutgoing] = useState<LiveEvent | null>(null);
+  const [paused, setPaused] = useState(false);
+  const [, setTick] = useState(0);
+  const seen = useRef<Set<string>>(new Set());
+
+  // poll the authenticated server route; queue only events never shown before
   useEffect(() => {
-    const url = FEED_URL;
-    if (!url) return;
+    seen.current = loadSeen();
     let alive = true;
-    const load = () =>
-      fetch(url)
-        .then((r) => (r.ok ? r.json() : null))
-        .then((d: LiveEvent[] | null) => {
-          if (alive && Array.isArray(d) && d.length) setEvents(d);
-        })
-        .catch(() => {});
+    const load = async () => {
+      try {
+        const r = await fetch("/api/live-feed", { cache: "no-store" });
+        if (!r.ok) return;
+        const data = (await r.json()) as LiveFeedResponse;
+        if (!alive || !Array.isArray(data.events)) return;
+        setQueue((q) => {
+          const queued = new Set(q.map((e) => e.id));
+          // oldest first, so the newest event ends up last on screen
+          const fresh = [...data.events]
+            .reverse()
+            .filter((e) => !seen.current.has(e.id) && !queued.has(e.id));
+          return fresh.length ? [...q, ...fresh] : q;
+        });
+      } catch {}
+    };
     load();
-    const id = setInterval(load, 60_000);
+    const id = setInterval(load, POLL_MS);
     return () => {
       alive = false;
       clearInterval(id);
     };
   }, []);
 
-  // rotate messages
+  // advance: show the next unseen event, mark it as seen, never come back to it
   useEffect(() => {
     if (paused) return;
-    const id = setTimeout(() => {
-      setPrev(i);
-      setI((n) => (n + 1) % events.length);
-    }, STEP_MS);
+    const showNext = () => {
+      if (!queue.length) {
+        // nothing new: the last event fades out into the waiting state
+        if (current) {
+          setOutgoing(current);
+          setCurrent(null);
+        }
+        return;
+      }
+      const [next, ...rest] = queue;
+      seen.current.add(next.id);
+      saveSeen(seen.current);
+      setQueue(rest);
+      setOutgoing(current);
+      setCurrent(next);
+    };
+    // first event appears right away, later ones after the step time
+    const id = setTimeout(showNext, current ? STEP_MS : queue.length ? 400 : POLL_MS);
     return () => clearTimeout(id);
-  }, [i, paused, events.length]);
+  }, [current, paused, queue]);
 
-  // the live visitor count drifts a little so it feels live
+  // keep "vor X Min." honest while an event stays on screen
   useEffect(() => {
-    const base = events.find((e) => e.kind === "visitors")?.count ?? 20;
-    const id = setInterval(() => {
-      setVisitors((v) => Math.max(base - 6, Math.min(base + 6, v + Math.round((Math.random() - 0.45) * 3))));
-    }, 2600);
+    const id = setInterval(() => setTick((t) => t + 1), 30_000);
     return () => clearInterval(id);
-  }, [events]);
+  }, []);
 
-  const current = events[i % events.length];
-  const Icon = ICONS[current.kind];
+  const Icon = current ? ICONS[current.kind] : Activity;
 
-  const render = (e: LiveEvent) => {
-    const title = e.kind === "visitors" ? `${visitors} ${e.title}` : e.title;
-    const when = e.kind === "visitors" ? "jetzt" : agoLabel(e.minutesAgo);
-    return (
+  const render = (e: LiveEvent | null) =>
+    e ? (
       <span className="block min-w-0">
         <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">
-          {title}
+          {e.title}
         </span>
         <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11.5px] leading-4 text-[#8cc0d1]">
           <span className="shrink-0 font-medium text-[#d8b682]">TyloHQ</span>
@@ -104,11 +144,21 @@ function LiveTicker() {
               <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
             </>
           )}
-          <span className="shrink-0 tabular-nums">{when}</span>
+          <span className="shrink-0 tabular-nums">{agoLabel(e.occurredAt)}</span>
+        </span>
+      </span>
+    ) : (
+      <span className="block min-w-0">
+        <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">
+          Live aus TyloHQ
+        </span>
+        <span className="mt-0.5 block truncate text-[11.5px] leading-4 text-[#8cc0d1]">
+          Neue Aktivitäten erscheinen hier in Echtzeit
         </span>
       </span>
     );
-  };
+
+  const key = current?.id ?? "idle";
 
   return (
     <div
@@ -121,26 +171,28 @@ function LiveTicker() {
       <span className="relative grid size-[44px] shrink-0 place-items-center">
         <svg viewBox="0 0 44 44" className="absolute inset-0 -rotate-90" aria-hidden>
           <circle cx="22" cy="22" r={RING_R} fill="none" stroke="rgba(127,186,205,0.18)" strokeWidth="1.5" />
-          <circle
-            key={`ring-${i}-${paused}`}
-            cx="22"
-            cy="22"
-            r={RING_R}
-            fill="none"
-            stroke="#d8b682"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeDasharray={RING_C}
-            style={{
-              strokeDashoffset: paused ? RING_C * 0.35 : undefined,
-              animation: paused ? "none" : `liveRing ${STEP_MS}ms linear both`,
-            }}
-          />
+          {current && (
+            <circle
+              key={`ring-${key}-${paused}`}
+              cx="22"
+              cy="22"
+              r={RING_R}
+              fill="none"
+              stroke="#d8b682"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeDasharray={RING_C}
+              style={{
+                strokeDashoffset: paused ? RING_C * 0.35 : undefined,
+                animation: paused ? "none" : `liveRing ${STEP_MS}ms linear both`,
+              }}
+            />
+          )}
         </svg>
         <span className="grid size-[34px] place-items-center rounded-full bg-gradient-to-b from-[#0e5a70] to-[#023646] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
           <Icon
-            key={`ic-${i}`}
-            className={`size-[16px] animate-[hqfade_.45s_ease_both] text-[#e3c79e] ${current.kind === "review" ? "fill-[#e3c79e]" : ""}`}
+            key={`ic-${key}`}
+            className={`size-[16px] animate-[hqfade_.45s_ease_both] text-[#e3c79e] ${current?.kind === "review" ? "fill-[#e3c79e]" : ""}`}
             strokeWidth={1.75}
           />
         </span>
@@ -153,12 +205,15 @@ function LiveTicker() {
 
       {/* message window */}
       <div className="relative h-[38px] min-w-0 flex-1 overflow-hidden">
-        {prev !== null && events[prev] && (
-          <div key={`out-${prev}-${i}`} className="absolute inset-0 flex items-center animate-[liveOut_.6s_cubic-bezier(.65,0,.35,1)_both]">
-            {render(events[prev])}
+        {outgoing !== undefined && (outgoing || current) && (
+          <div
+            key={`out-${outgoing?.id ?? "idle"}-${key}`}
+            className="absolute inset-0 flex items-center animate-[liveOut_.6s_cubic-bezier(.65,0,.35,1)_both]"
+          >
+            {render(outgoing)}
           </div>
         )}
-        <div key={`in-${i}`} className="absolute inset-0 flex items-center animate-[liveIn_.6s_cubic-bezier(.65,0,.35,1)_both]">
+        <div key={`in-${key}`} className="absolute inset-0 flex items-center animate-[liveIn_.6s_cubic-bezier(.65,0,.35,1)_both]">
           {render(current)}
         </div>
       </div>

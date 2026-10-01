@@ -126,7 +126,7 @@ export default function Hero() {
 
         {/* Right — video */}
         <div className="w-full max-w-[560px] min-[1180px]:max-w-none">
-          <HeroVideoCard videoId={YT_ID} label="Imagefilm" />
+          <HeroVideoCard videoId={YT_ID} />
         </div>
       </Container>
     </section>
