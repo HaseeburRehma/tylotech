@@ -208,3 +208,59 @@ html.lenis body {
     animation: none;
   }
 }
+
+/* TyloHQ — small crossfade for swapped labels / views */
+@keyframes hqfade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes hqview {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hq-draw {
+  animation: hqdraw 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes hqdraw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+/* charts wait until the app mock has scrolled into view */
+.hq-app:not(.hq-live) .hq-draw,
+.hq-app:not(.hq-live) .hq-area {
+  animation-play-state: paused;
+}
+.hq-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #e2e0dc transparent;
+}
+.hq-noscrollbar {
+  scrollbar-width: none;
+}
+.hq-noscrollbar::-webkit-scrollbar {
+  display: none;
+}
+@keyframes hqbar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

@@ -1,103 +1,247 @@
 "use client";
 
-import { useRef } from "react";
-import { ArrowUpRight, Eye, KeyRound, TrendingUp } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, LayoutDashboard, TrendingDown, TrendingUp } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { cn } from "@/lib/cn";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
-/* ---- Bar chart -------------------------------------------------- */
-function BarChart({
-  data,
-  accentFrom,
-  cap,
-  className = "",
-}: {
-  data: number[];
-  accentFrom?: number;
-  cap: number;
-  className?: string;
-}) {
-  return (
-    <div className={`flex h-14 items-end gap-[3px] ${className}`}>
-      {data.map((v, i) => {
-        const isAccent = accentFrom !== undefined && i >= accentFrom;
-        return (
-          <div
-            key={i}
-            className={`flex-1 rounded-t-[2px] ${
-              isAccent ? "bg-[#d1aa71]" : "bg-[#e4e2dd]"
-            }`}
-            style={{ height: `${(v / cap) * 100}%` }}
-          />
-        );
-      })}
-    </div>
-  );
+/* ------------------------------------------------------------------ */
+/* data                                                                */
+/* ------------------------------------------------------------------ */
+
+type Range = 7 | 30 | 90;
+const RANGES: Range[] = [7, 30, 90];
+
+type Series = { value: number; prefix?: string; suffix?: string; bars: number[]; labels: string[] };
+
+const LABELS: Record<Range, string[]> = {
+  7: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So", "Mo", "Di", "Mi"],
+  30: ["KW 1", "KW 1", "KW 2", "KW 2", "KW 2", "KW 3", "KW 3", "KW 4", "KW 4", "KW 4"],
+  90: ["Jul", "Jul", "Jul", "Aug", "Aug", "Aug", "Sep", "Sep", "Sep", "Sep"],
+};
+
+/* Bar heights are the Figma pixel values (panel visual = 92 px tall at max). */
+const TRAFFIC: Record<Range, Series> = {
+  7: { value: 12, prefix: "+", suffix: " %", bars: [40, 46, 38, 52, 49, 58, 54, 62, 70, 76], labels: LABELS[7] },
+  30: { value: 42, prefix: "+", suffix: " %", bars: [25, 33, 29, 44, 50, 60, 56, 71, 79, 92], labels: LABELS[30] },
+  90: { value: 118, prefix: "+", suffix: " %", bars: [14, 20, 26, 31, 40, 47, 58, 66, 80, 92], labels: LABELS[90] },
+};
+const ANFRAGEN: Record<Range, Series> = {
+  7: { value: 31, bars: [30, 42, 36, 48, 40, 55, 50, 58, 64, 70], labels: LABELS[7] },
+  30: { value: 128, bars: [22, 30, 26, 38, 34, 48, 52, 60, 74, 88], labels: LABELS[30] },
+  90: { value: 342, bars: [16, 22, 30, 34, 42, 50, 58, 64, 76, 90], labels: LABELS[90] },
+};
+const CPL: Record<Range, Series> = {
+  7: { value: 16, suffix: " €", bars: [62, 58, 60, 54, 52, 48, 46, 44, 38, 34], labels: LABELS[7] },
+  30: { value: 18, suffix: " €", bars: [92, 84, 79, 70, 66, 55, 49, 42, 36, 30], labels: LABELS[30] },
+  90: { value: 23, suffix: " €", bars: [92, 88, 80, 74, 66, 60, 52, 46, 40, 34], labels: LABELS[90] },
+};
+
+const CHANNELS = [
+  { name: "Google Ads", src: "/icons/brands/google-ads.svg", note: "Suche & Performance Max" },
+  { name: "Meta", src: "/icons/brands/meta.svg", note: "Facebook & Instagram Ads" },
+  { name: "TikTok", src: "/icons/brands/tiktok.svg", note: "Reichweite & Recruiting" },
+  { name: "YouTube", src: "/icons/brands/youtube.svg", note: "Video-Kampagnen" },
+  { name: "LinkedIn", src: "/icons/brands/linkedin.svg", note: "B2B-Leads" },
+  { name: "Instagram", src: "/icons/brands/instagram.svg", note: "Content & Reels" },
+  { name: "Google Analytics", src: "/icons/brands/google-analytics.svg", note: "Tracking & Attribution" },
+  { name: "Google", src: "/icons/brands/google.svg", note: "SEO & Unternehmensprofil" },
+];
+
+const RANKINGS = [
+  { term: "gebäudereinigung düsseldorf", pos: 1, from: 6, trend: 0.95 },
+  { term: "fahrschule düsseldorf", pos: 3, from: 11, trend: 0.62 },
+  { term: "Wärmepumpen Spezialist", pos: 2, from: 9, trend: 0.78 },
+  { term: "Badsanierung Berlin", pos: 1, from: 7, trend: 0.88 },
+];
+
+/* Figma "Skin in the Game" pairs: Du / Wir heights in px */
+const SKIN = [
+  [38, 16],
+  [52, 22],
+  [64, 27],
+  [82, 35],
+  [104, 44],
+  [128, 54],
+  [150, 64],
+];
+
+/* ------------------------------------------------------------------ */
+/* helpers                                                             */
+/* ------------------------------------------------------------------ */
+
+/** Counts from the previous value to `target` whenever target changes (and only once `active`). */
+function useCountUp(target: number, active: boolean, duration = 900) {
+  const [val, setVal] = useState(0);
+  const from = useRef(0);
+  useEffect(() => {
+    if (!active) return;
+    const start = performance.now();
+    const a = from.current;
+    let raf = 0;
+    const tick = (t: number) => {
+      const p = Math.min(1, Math.max(0, (t - start) / duration));
+      const e = 1 - Math.pow(1 - p, 3);
+      const v = a + (target - a) * e;
+      setVal(v);
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else from.current = target;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      from.current = target;
+    };
+  }, [target, active, duration]);
+  return Math.round(val);
 }
 
-/* ---- Colored brand mark used inside the platforms tile ---------- */
-function BrandMark({
-  label,
-  bg,
-  fg,
-  children,
-}: {
-  label: string;
-  bg: string;
-  fg: string;
-  children?: React.ReactNode;
-}) {
+function OpenButton() {
   return (
-    <div
-      title={label}
-      className="grid aspect-square place-items-center rounded-xl border border-black/5 text-[13px] font-bold"
-      style={{ background: bg, color: fg }}
+    <span
+      aria-hidden
+      className="grid size-8 shrink-0 place-items-center rounded-full bg-[#f6f5f3] text-ink/70 transition-all duration-300 group-hover:rotate-45 group-hover:bg-ink group-hover:text-white"
     >
-      {children ?? label.charAt(0)}
-    </div>
-  );
-}
-
-/* ---- Simple 30-Tage pill --------------------------------------- */
-function TrendPill({ label = "30 Tage" }: { label?: string }) {
-  return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(40,180,120,0.14)] px-2 py-[3px] text-[10.5px] font-semibold text-[#1a8a5a]">
-      <TrendingUp className="size-[11px]" strokeWidth={2.5} />
-      {label}
+      <ArrowUpRight className="size-[15px]" strokeWidth={1.8} />
     </span>
   );
 }
 
-/* ---- Tile skeleton --------------------------------------------- */
-function TileHeader({
+function Tile({
   title,
   desc,
+  children,
+  className,
 }: {
   title: string;
   desc: string;
+  children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="flex items-start justify-between gap-3">
-      <div className="min-w-0">
-        <h3 className="truncate text-[14.5px] font-semibold tracking-[-0.005em] text-ink">
-          {title}
-        </h3>
-        <p className="mt-0.5 text-[12.5px] leading-snug text-ink/50">{desc}</p>
-      </div>
-      <button
-        type="button"
-        aria-label="Öffnen"
-        className="grid size-7 shrink-0 place-items-center rounded-full border border-line text-ink/40 transition-colors hover:border-ink/25 hover:text-ink"
-      >
-        <ArrowUpRight className="size-3.5" strokeWidth={2} />
-      </button>
-    </div>
+    <article
+      className={cn(
+        "hq-tile group relative flex flex-col overflow-hidden rounded-[20px] border border-[#e2e0dc] bg-white transition-[translate,box-shadow,border-color] duration-300 ease-out hover:-translate-y-1 hover:border-[#d6d2cb] hover:shadow-[0_22px_44px_-24px_rgba(8,34,44,0.28)]",
+        className,
+      )}
+    >
+      <header className="flex items-start gap-4 pb-2 pl-6 pr-5 pt-6 sm:pl-7 sm:pt-[26px]">
+        <div className="min-w-0 flex-1">
+          <h3 className="font-display text-[19px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917] sm:text-[20px]">
+            {title}
+          </h3>
+          <p className="mt-[3px] text-[14px] leading-[22px] tracking-[-0.1px] text-[#7d7973]">{desc}</p>
+        </div>
+        <OpenButton />
+      </header>
+      <div className="flex h-[300px] flex-col justify-center">{children}</div>
+    </article>
   );
 }
 
-/* ---- Section ---------------------------------------------------- */
+/* ---- KPI tile with growing bars -------------------------------------------- */
+
+function BarsTile({
+  title,
+  desc,
+  label,
+  series,
+  shown,
+  falling = false,
+}: {
+  title: string;
+  desc: string;
+  label: string;
+  series: Series;
+  shown: boolean;
+  falling?: boolean;
+}) {
+  const [hover, setHover] = useState<number | null>(null);
+  const num = useCountUp(series.value, shown);
+  const max = 92;
+  const Icon = falling ? TrendingDown : TrendingUp;
+
+  return (
+    <Tile title={title} desc={desc}>
+      <div className="flex h-full flex-col gap-4 rounded-[14px] border border-[#eeedea] bg-white px-[22px] py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-mono text-[9.5px] font-medium uppercase leading-[13px] tracking-[0.8px] text-[#7d7973]">
+              {label}
+            </p>
+            <p className="mt-0.5 font-display text-[30px] font-semibold leading-[34px] tracking-[-0.8px] text-[#1a1917] tabular-nums">
+              {series.prefix}
+              {num}
+              {series.suffix}
+            </p>
+          </div>
+          <span className="inline-flex h-[22px] items-center gap-[5px] rounded-full bg-[#e7f4ed] px-2 text-[11px] font-medium text-[#0e5836]">
+            <Icon className="size-3" strokeWidth={2.2} />
+            {series.labels === LABELS[7] ? "7 Tage" : series.labels === LABELS[90] ? "90 Tage" : "30 Tage"}
+          </span>
+        </div>
+
+        <div className="relative flex min-h-0 flex-1 items-end gap-2" onMouseLeave={() => setHover(null)}>
+          {series.bars.map((h, i) => {
+            const accent = i >= series.bars.length - 2;
+            const active = hover === i;
+            return (
+              <button
+                type="button"
+                key={i}
+                aria-label={`${series.labels[i]}: ${h}`}
+                onMouseEnter={() => setHover(i)}
+                onFocus={() => setHover(i)}
+                className="relative flex h-full min-w-0 flex-1 cursor-pointer items-end outline-none"
+              >
+                <span
+                  className={cn(
+                    "block w-full rounded-[4px] transition-[height,background-color] ease-[cubic-bezier(.22,1,.36,1)]",
+                    accent
+                      ? active
+                        ? "bg-[#b98c4f]"
+                        : "bg-[#d1aa71]"
+                      : active
+                        ? "bg-[#d9d6d0]"
+                        : "bg-[#eeedea]",
+                  )}
+                  style={{
+                    height: shown ? h : 0,
+                    transitionDuration: "700ms, 200ms",
+                    transitionDelay: shown ? `${i * 55}ms, 0ms` : "0ms",
+                  }}
+                />
+                {active && (
+                  <span
+                    className="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1917] px-2 py-1 font-mono text-[10px] text-white shadow-lg"
+                    style={{ bottom: h + 8 }}
+                  >
+                    {series.labels[i]} · {Math.round((h / max) * (falling ? 30 : 100))}
+                    {falling ? " €" : ""}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </Tile>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* section                                                             */
+/* ------------------------------------------------------------------ */
+
 export default function TyloHQ() {
   const root = useRef<HTMLDivElement>(null);
+  const [range, setRange] = useState<Range>(30);
+  const [shown, setShown] = useState(false);
+  const [rowsShown, setRowsShown] = useState(false);
+  const [hl, setHl] = useState(1); // Meta is highlighted in Figma
+  const [hoverCh, setHoverCh] = useState<number | null>(null);
+  const [skinHover, setSkinHover] = useState<number | null>(null);
 
   useGSAP(
     () => {
@@ -107,235 +251,313 @@ export default function TyloHQ() {
         duration: 0.8,
         ease: "power3.out",
         stagger: 0.1,
-        scrollTrigger: {
-          trigger: ".hq-head",
-          start: "top 82%",
-          toggleActions: "play none none none",
-        },
+        scrollTrigger: { trigger: ".hq-head", start: "top 82%", toggleActions: "play none none none" },
       });
       gsap.from(".hq-tile", {
-        y: 30,
+        y: 36,
         opacity: 0,
-        scale: 0.97,
-        duration: 0.65,
+        duration: 0.8,
         ease: "power3.out",
         stagger: 0.08,
-        scrollTrigger: {
-          trigger: ".hq-grid",
-          start: "top 82%",
-          toggleActions: "play none none none",
-        },
+        clearProps: "transform,opacity",
+        scrollTrigger: { trigger: ".hq-grid", start: "top 80%", toggleActions: "play none none none" },
+      });
+      ScrollTrigger.create({
+        trigger: ".hq-grid",
+        start: "top 75%",
+        end: "max",
+        once: true,
+        onToggle: (self) => self.isActive && setShown(true),
+      });
+      ScrollTrigger.create({
+        trigger: ".hq-row2",
+        start: "top 78%",
+        end: "max",
+        once: true,
+        onToggle: (self) => self.isActive && setRowsShown(true),
+      });
+      gsap.from(".hq-channel", {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.5,
+        ease: "back.out(1.6)",
+        stagger: 0.05,
+        clearProps: "transform,opacity",
+        scrollTrigger: { trigger: ".hq-row2", start: "top 78%", toggleActions: "play none none none" },
       });
     },
     { scope: root },
   );
 
-  const traffic = [10, 14, 12, 18, 15, 20, 22, 26, 30, 34, 38, 46];
-  const anfragen = [6, 10, 14, 12, 18, 22, 26, 24, 30, 34, 40, 46];
-  const cpl = [24, 26, 23, 25, 22, 20, 21, 19, 17, 16, 15, 14];
-  const skinYou = [18, 24, 28, 32, 26, 34, 40, 44, 50, 46, 56, 62];
-  const skinUs = [8, 10, 12, 14, 12, 15, 18, 20, 22, 20, 24, 26];
+  // the highlight wanders from channel to channel while nobody hovers
+  useEffect(() => {
+    if (hoverCh !== null || !rowsShown) return;
+    const id = setInterval(() => setHl((h) => (h + 1) % CHANNELS.length), 1600);
+    return () => clearInterval(id);
+  }, [hoverCh, rowsShown]);
+
+  const activeCh = hoverCh ?? hl;
 
   return (
-    <section
-      id="tylohq"
-      ref={root}
-      className="border-t border-line bg-[#f7f7f5] py-20 text-ink sm:py-24"
-    >
+    <section id="tylohq" ref={root} className="border-t border-line bg-[#f6f5f3] py-20 text-ink sm:py-24 lg:py-28">
       <Container>
-        {/* header */}
-        <div className="hq-head max-w-[720px]">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-              <Eye className="size-3.5 text-accent" />
-              Alles sichtbar
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink/60 shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-              <KeyRound className="size-3.5" />
-              TyloHQ HQ
-            </span>
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="hq-head max-w-[780px]">
+            <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md sm:text-[12px]">
+              <LayoutDashboard className="size-3.5 text-[#c79a53]" strokeWidth={1.8} />
+              Alles sichtbar · TyloTech HQ
+            </p>
+            <h2 className="font-display text-[clamp(2rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-1.3px] text-[#1a1917]">
+              Bei uns läufst du{" "}
+              <span className="font-[family-name:var(--font-instrument)] text-[1.05em] font-normal italic tracking-[-0.5px] text-[#94713f]">
+                nicht im Blindflug.
+              </span>
+            </h2>
+            <p className="mt-[18px] max-w-[640px] text-[clamp(16px,1.4vw,18px)] leading-[28px] tracking-[-0.18px] text-[#5c5954]">
+              Dein eigenes Portal zeigt dir jederzeit, was läuft — Zahlen, Fortschritt, nächste Schritte. Keine
+              Reportings per Mail, keine Blackbox.
+            </p>
           </div>
-          <h2 className="mt-6 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.08] tracking-[-0.03em] text-ink">
-            Bei uns läufst du{" "}
-            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              nicht im Blindflug
-            </span>
-            .
-          </h2>
-          <p className="mt-5 max-w-[620px] text-[clamp(15px,1.5vw,17px)] leading-[1.6] text-[#5c5954]">
-            Dein eigenes Portal zeigt dir jederzeit, was läuft — Zahlen,
-            Fortschritt, nächste Schritte. Keine Reportings per Mail, keine
-            Blackbox.
-          </p>
+
+          {/* range switch drives the three KPI tiles */}
+          <div
+            role="tablist"
+            aria-label="Zeitraum"
+            className="hq-head inline-flex w-fit items-center gap-1 rounded-full border border-[#e2e0dc] bg-white p-1 shadow-[0_1px_2px_rgba(8,34,44,0.04)]"
+          >
+            {RANGES.map((r) => (
+              <button
+                key={r}
+                role="tab"
+                aria-selected={range === r}
+                onClick={() => setRange(r)}
+                className={cn(
+                  "whitespace-nowrap rounded-full px-3.5 py-1.5 font-mono text-[11.5px] font-medium tracking-[0.3px] transition-colors duration-200",
+                  range === r ? "bg-[#1a1917] text-white" : "text-[#5c5954] hover:bg-[#f6f5f3] hover:text-ink",
+                )}
+              >
+                {r} Tage
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* dashboard grid */}
-        <div className="hq-grid mt-12 grid grid-cols-1 gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3">
-          {/* 1 · Website-Traffic */}
-          <div className="hq-tile rounded-2xl border border-line bg-white p-5 shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-            <TileHeader
-              title="Website-Traffic · 30 Tage"
+        <div className="hq-grid mt-10 grid grid-cols-1 gap-5 sm:mt-14 md:grid-cols-2 xl:grid-cols-3">
+          {/* row 1 — KPIs */}
+            <BarsTile
+              title={`Website-Traffic · ${range} Tage`}
               desc="Echtzeit, jederzeit einsehbar"
+              label="Website-Traffic"
+              series={TRAFFIC[range]}
+              shown={shown}
             />
-            <div className="mt-5 flex items-center justify-between">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-ink/40">
-                Website-Traffic
-              </p>
-              <TrendPill />
-            </div>
-            <p className="mt-1 font-display text-[30px] font-bold leading-none tracking-[-0.02em]">
-              +42 %
-            </p>
-            <BarChart data={traffic} accentFrom={traffic.length - 2} cap={50} className="mt-4" />
-          </div>
-
-          {/* 2 · Neue Anfragen */}
-          <div className="hq-tile rounded-2xl border border-line bg-white p-5 shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-            <TileHeader
+            <BarsTile
               title="Neue Anfragen"
-              desc="Automatisiert erfasst und zugeordnet"
+              desc="Automatisch erfasst und zugeordnet"
+              label="Neue Anfragen"
+              series={ANFRAGEN[range]}
+              shown={shown}
             />
-            <div className="mt-5 flex items-center justify-between">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-ink/40">
-                Neue Anfragen
-              </p>
-              <TrendPill />
-            </div>
-            <p className="mt-1 font-display text-[30px] font-bold leading-none tracking-[-0.02em]">
-              128
-            </p>
-            <BarChart data={anfragen} accentFrom={anfragen.length - 2} cap={50} className="mt-4" />
-          </div>
-
-          {/* 3 · Cost per Lead */}
-          <div className="hq-tile rounded-2xl border border-line bg-white p-5 shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-            <TileHeader
+            <BarsTile
               title="Cost per Lead"
               desc="Transparent, kein geschöntes Reporting"
+              label="Cost per Lead"
+              series={CPL[range]}
+              shown={shown}
+              falling
             />
-            <div className="mt-5 flex items-center justify-between">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-ink/40">
-                Cost per Lead
-              </p>
-              <TrendPill />
-            </div>
-            <p className="mt-1 font-display text-[30px] font-bold leading-none tracking-[-0.02em]">
-              18 €
-            </p>
-            <BarChart data={cpl} accentFrom={cpl.length - 2} cap={30} className="mt-4" />
-          </div>
 
-          {/* 4 · Marketing aus einer Hand */}
-          <div className="hq-tile rounded-2xl border border-line bg-white p-5 shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-            <TileHeader
-              title="Marketing aus einer Hand"
-              desc="Ads, SEO, Content, Funnels"
-            />
-            <div className="mt-6 grid grid-cols-4 gap-2.5">
-              <BrandMark label="Google Ads" bg="#fff" fg="#4285f4">
-                <span className="text-[15px] font-bold" style={{ color: "#4285f4" }}>
-                  G
-                </span>
-              </BrandMark>
-              <BrandMark label="Meta" bg="#0866ff" fg="#fff">
-                <span className="text-[15px] font-black">M</span>
-              </BrandMark>
-              <BrandMark label="TikTok" bg="#0f0f10" fg="#fff">
-                <span className="text-[13px] font-black">TT</span>
-              </BrandMark>
-              <BrandMark label="YouTube" bg="#ff0033" fg="#fff">
-                <svg viewBox="0 0 24 24" className="size-4" fill="currentColor">
-                  <path d="M8 5.5v13l11-6.5z" />
-                </svg>
-              </BrandMark>
-              <BrandMark label="LinkedIn" bg="#0a66c2" fg="#fff">
-                <span className="text-[12px] font-black">in</span>
-              </BrandMark>
-              <BrandMark label="Instagram" bg="linear-gradient(135deg,#feda75,#fa7e1e 40%,#d62976 70%,#4f5bd5)" fg="#fff">
-                <span className="text-[13px] font-black">IG</span>
-              </BrandMark>
-              <BrandMark label="Analytics" bg="#fef3c7" fg="#c07a00">
-                <TrendingUp className="size-4" strokeWidth={2.5} />
-              </BrandMark>
-              <BrandMark label="Google" bg="#fff" fg="#4285f4">
-                <span className="text-[15px] font-bold" style={{ color: "#4285f4" }}>
-                  G
-                </span>
-              </BrandMark>
-            </div>
-          </div>
-
-          {/* 5 · Anfragen auf Autopilot */}
-          <div className="hq-tile rounded-2xl border border-line bg-white p-5 shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-            <TileHeader
-              title="Anfragen auf Autopilot"
-              desc="über Google, Social und KI-Suche"
-            />
-            <div className="mt-5">
-              <div className="flex items-center justify-between border-b border-line pb-2 font-mono text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/35">
-                <span>Suchbegriff</span>
-                <span className="flex items-center gap-4">
-                  <span>Pos.</span>
-                  <span>Trend</span>
-                </span>
+            {/* 04 · channels */}
+            <Tile title="Marketing aus einer Hand" desc="Ads, SEO, Content, Funnels" className="hq-row2">
+              <div className="px-6 pb-2" onMouseLeave={() => setHoverCh(null)}>
+                <div className="grid w-full max-w-[332px] grid-cols-4 gap-3">
+                  {CHANNELS.map((c, i) => {
+                    const on = activeCh === i;
+                    return (
+                      <button
+                        type="button"
+                        key={c.name}
+                        aria-label={c.name}
+                        onMouseEnter={() => setHoverCh(i)}
+                        onFocus={() => setHoverCh(i)}
+                        className={cn(
+                          "hq-channel grid aspect-square w-full place-items-center rounded-[14px] border transition-[background-color,border-color,box-shadow,scale] duration-300",
+                          on
+                            ? "scale-[1.04] border-[1.5px] border-[#d1aa71] bg-[#fbf6ee] shadow-[0_10px_24px_-14px_rgba(148,113,63,0.6)]"
+                            : "border-[#eeedea] bg-[#f6f5f3]",
+                        )}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={c.src} alt="" className="size-[40%] max-h-[30px] max-w-[30px] object-contain" draggable={false} />
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="mt-5 flex h-5 items-center gap-2 text-[13px] text-[#5c5954]">
+                  <span className="size-1.5 rounded-full bg-[#d1aa71]" />
+                  <span key={activeCh} className="animate-[hqfade_.35s_ease]">
+                    <span className="font-medium text-[#1a1917]">{CHANNELS[activeCh].name}</span>
+                    {" · "}
+                    {CHANNELS[activeCh].note}
+                  </span>
+                </p>
               </div>
-              {[
-                { term: "gebäudereinigung düsseldorf", pos: 1, up: true },
-                { term: "fahrschule krefeld", pos: 3, up: true },
-                { term: "pizza in bochum", pos: 1, up: true },
-              ].map((row) => (
-                <div
-                  key={row.term}
-                  className="flex items-center justify-between border-b border-line/70 py-2.5 text-[12.5px] text-ink/75 last:border-0"
-                >
-                  <span className="truncate pr-2">{row.term}</span>
-                  <span className="flex items-center gap-5 font-semibold text-ink">
-                    <span>{row.pos}</span>
-                    <span className="inline-flex size-4 items-center justify-center rounded-full bg-[rgba(40,180,120,0.14)] text-[#1a8a5a]">
-                      <TrendingUp className="size-[10px]" strokeWidth={3} />
-                    </span>
+            </Tile>
+
+            {/* 05 · rankings */}
+            <Tile title="Anfragen auf Autopilot" desc="über Google, Social und KI-Suche">
+              <div className="mx-0 rounded-[14px] border border-[#eeedea] bg-white px-5 py-[18px]">
+                <div className="flex items-center gap-2.5 pb-2.5 font-mono text-[9.5px] font-medium uppercase leading-[13px] tracking-[0.7px] text-[#7d7973]">
+                  <span className="flex-1">Suchbegriff</span>
+                  <span className="w-[34px]">Pos.</span>
+                  <span className="w-[52px]">Trend</span>
+                </div>
+                {RANKINGS.map((r, i) => (
+                  <RankRow key={r.term} row={r} index={i} shown={rowsShown} />
+                ))}
+              </div>
+            </Tile>
+
+            {/* 06 · skin in the game */}
+            <article className="hq-tile group relative flex flex-col overflow-hidden rounded-[20px] border-[1.5px] border-[rgba(209,170,113,0.55)] bg-[#fbf6ee] shadow-[0_14px_34px_rgba(8,34,44,0.08),0_0_44px_rgba(209,170,113,0.22)] transition-[translate,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_22px_44px_-18px_rgba(8,34,44,0.22),0_0_60px_rgba(209,170,113,0.35)] ">
+              <header className="flex items-start gap-4 pb-2 pl-6 pr-5 pt-6 sm:pl-7 sm:pt-[26px]">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-display text-[19px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917] sm:text-[20px]">
+                    Skin in the Game
+                  </h3>
+                  <p className="mt-[3px] text-[14px] leading-[22px] tracking-[-0.1px] text-[#7d7973]">
+                    wir steigen mit ein
+                  </p>
+                </div>
+                <OpenButton />
+              </header>
+              <div className="flex h-[300px] flex-col gap-[18px] p-[22px]">
+                <div className="flex items-center gap-5 font-mono text-[10px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#7d7973]">
+                  <span className="inline-flex items-center gap-[7px]">
+                    <span className="size-2 rounded-full bg-[#12313d]" />
+                    Dein Wachstum
+                  </span>
+                  <span className="inline-flex items-center gap-[7px]">
+                    <span className="size-2 rounded-full bg-[#d1aa71]" />
+                    Unser Anteil
                   </span>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 6 · Skin in the Game */}
-          <div className="hq-tile rounded-2xl border border-[#e8dcc4] bg-[#f8f0e0] p-5 shadow-[0_1px_0_rgba(15,14,13,0.02)]">
-            <TileHeader
-              title="Skin in the Game"
-              desc="wir steigen mit ein"
-            />
-            <div className="mt-5 flex items-center gap-4 font-mono text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/55">
-              <span className="inline-flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-ink" />
-                Dein Wachstum
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-[#d1aa71]" />
-                Unser Anteil
-              </span>
-            </div>
-            <div className="mt-4 flex h-14 items-end gap-[3px]">
-              {skinYou.map((v, i) => (
-                <div key={i} className="flex flex-1 flex-col items-stretch justify-end gap-[2px]">
-                  <div
-                    className="rounded-t-[2px] bg-ink"
-                    style={{ height: `${(v / 70) * 100}%` }}
-                  />
-                  <div
-                    className="rounded-t-[2px] bg-[#d1aa71]"
-                    style={{ height: `${(skinUs[i] / 70) * 100}%` }}
-                  />
+                <div
+                  className="relative flex min-h-0 flex-1 items-end justify-center gap-[14px]"
+                  onMouseLeave={() => setSkinHover(null)}
+                >
+                  {SKIN.map(([du, wir], i) => {
+                    const on = skinHover === i;
+                    const dim = skinHover !== null && !on;
+                    return (
+                      <button
+                        type="button"
+                        key={i}
+                        aria-label={`Monat ${i + 1}`}
+                        onMouseEnter={() => setSkinHover(i)}
+                        onFocus={() => setSkinHover(i)}
+                        className={cn(
+                          "relative flex h-full items-end gap-1 outline-none transition-opacity duration-200",
+                          dim && "opacity-45",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "block w-[15px] rounded-[4px] transition-[height,background-color] ease-[cubic-bezier(.22,1,.36,1)]",
+                            on ? "bg-[rgba(18,49,61,0.32)]" : "bg-[rgba(18,49,61,0.14)]",
+                          )}
+                          style={{
+                            height: rowsShown ? du : 0,
+                            transitionDuration: "800ms, 200ms",
+                            transitionDelay: rowsShown ? `${i * 80}ms, 0ms` : "0ms",
+                          }}
+                        />
+                        <span
+                          className="block w-[15px] rounded-[4px] bg-gradient-to-b from-[#efdcbc] to-[#b4894d] transition-[height] ease-[cubic-bezier(.22,1,.36,1)]"
+                          style={{
+                            height: rowsShown ? wir : 0,
+                            transitionDuration: "800ms",
+                            transitionDelay: rowsShown ? `${i * 80 + 120}ms` : "0ms",
+                          }}
+                        />
+                        {on && (
+                          <span
+                            className="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1917] px-2 py-1 text-left font-mono text-[10px] leading-[14px] text-white shadow-lg"
+                            style={{ bottom: du + 8 }}
+                          >
+                            Monat {i + 1}
+                            <br />
+                            <span className="text-white/60">Umsatz</span> +{Math.round((du / 38) * 100 - 100)} %
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
-            <p className="mt-3 text-center text-[12px] italic text-ink/55">
-              Wir verdienen, wenn du wächst.
-            </p>
-          </div>
+                <p className="text-center text-[14px] leading-[22px] tracking-[-0.1px] text-[#5c5954]">
+                  Wir verdienen, wenn du wächst.
+                </p>
+              </div>
+            </article>
         </div>
       </Container>
     </section>
+  );
+}
+
+function RankRow({
+  row,
+  index,
+  shown,
+}: {
+  row: (typeof RANKINGS)[number];
+  index: number;
+  shown: boolean;
+}) {
+  // position counts down from where we started to where we are now
+  const [pos, setPos] = useState(row.from);
+  useEffect(() => {
+    if (!shown) return;
+    let p = row.from;
+    let id: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => {
+      id = setInterval(() => {
+        p -= 1;
+        setPos(p);
+        if (p <= row.pos) clearInterval(id);
+      }, 90);
+    }, 250 + index * 140);
+    return () => {
+      clearTimeout(start);
+      clearInterval(id);
+    };
+  }, [shown, row.from, row.pos, index]);
+
+  const top = pos === 1;
+  return (
+    <div
+      className="group/row -mx-2 flex items-center gap-2.5 rounded-lg border-t border-[#eeedea] px-2 py-[9px] transition-[background-color,translate,opacity] duration-500 ease-out hover:bg-[#fbf6ee]"
+      style={{
+        opacity: shown ? 1 : 0,
+        translate: shown ? "0 0" : "0 14px",
+        transitionDelay: shown ? `${index * 120}ms` : "0ms",
+      }}
+    >
+      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917]">{row.term}</p>
+      <span
+        className={cn(
+          "grid h-6 w-[26px] place-items-center rounded-[7px] font-mono text-[12px] font-medium leading-4 tabular-nums transition-colors",
+          top ? "bg-[#fbf6ee] text-[#94713f] group-hover/row:bg-[#f3e6cf]" : "bg-[#f6f5f3] text-[#5c5954]",
+        )}
+      >
+        {pos}
+      </span>
+      <span className="relative h-1.5 w-[52px] overflow-hidden rounded-[3px] bg-[#eeedea]">
+        <span
+          className="absolute inset-y-0 left-0 rounded-[3px] bg-[#d1aa71] transition-[width] duration-1000 ease-[cubic-bezier(.22,1,.36,1)]"
+          style={{ width: shown ? `${row.trend * 100}%` : "0%", transitionDelay: shown ? `${300 + index * 140}ms` : "0ms" }}
+        />
+      </span>
+    </div>
   );
 }

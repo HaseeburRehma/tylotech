@@ -11,6 +11,7 @@ import Globe from "@/components/sections/Globe";
 import Ablauf from "@/components/sections/Ablauf";
 import Arbeitsweise from "@/components/sections/Arbeitsweise";
 import TyloHQ from "@/components/sections/TyloHQ";
+import TyloHQDashboard from "@/components/sections/TyloHQDashboard";
 import Team from "@/components/sections/Team";
 import Gruender from "@/components/sections/Gruender";
 import Podcast from "@/components/sections/Podcast";
@@ -32,6 +33,7 @@ export default function Home() {
       <main>
         <Hero />
         <TrustStrip />
+        <TyloHQ />
         <Warum />
         <Wachstum />
         <Praxis />
@@ -41,7 +43,7 @@ export default function Home() {
         <Globe />
         <Ablauf />
         <Arbeitsweise />
-        {/* <TyloHQ /> */}
+        <TyloHQDashboard />
         {/* <Team /> */}
         <Gruender />
         <Podcast />
