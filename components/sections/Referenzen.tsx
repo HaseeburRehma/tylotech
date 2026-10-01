@@ -86,8 +86,11 @@ export default function Referenzen() {
 
       const mm = gsap.matchMedia();
 
-      // Desktop: pinned deck with rest periods between transitions
-      mm.add("(min-width: 1024px)", () => {
+      // Pinned stacked deck — same choreography on desktop and mobile.
+      mm.add(
+        { isDesktop: "(min-width: 1024px)", isMobile: "(max-width: 1023.98px)" },
+        (ctx) => {
+        const { isDesktop } = ctx.conditions as { isDesktop: boolean };
         const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
         if (!pinRef.current || cards.length === 0) return;
 
@@ -106,31 +109,35 @@ export default function Referenzen() {
           const tilt = TILTS[i] ?? TILTS[0];
           gsap.set(card, {
             rotate: tilt.rotate,
-            x: tilt.offsetX,
+            x: isDesktop ? tilt.offsetX : 0,
             scale: 1,
             y: 0,
             autoAlpha: i === 0 ? 1 : 0,
           });
         });
 
-        // Timeline layout (time units; 1 unit ≈ 1 viewport of scroll):
+        // Timeline layout (time units):
         //   0.0 - 0.9  card 0 alone (REST)
         //   0.9 - 2.9  card 1 rises from the bottom, card 0 recedes (TRANS)
         //   2.9 - 3.8  card 1 on top, card 0 peeking (REST)
         //   3.8 - 5.8  card 2 rises, card 1 recedes, card 0 fades out (TRANS)
         //   5.8 - 6.7  card 2 on top, card 1 peeking (REST)
+        // Each unit maps to half a viewport of scroll, so the whole deck is
+        // ~3.35 screens: a card change takes ~1 screen, each rest ~0.45.
         const REST = 0.9;
         const TRANS = 2.0;
+        const SCROLL_PER_UNIT = 0.5;
         const totalDuration = REST + (cards.length - 1) * (TRANS + REST);
-        const pinViewports = totalDuration;
 
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: pinRef.current,
             start: "top top",
-            end: () => "+=" + window.innerHeight * pinViewports,
+            end: () =>
+              "+=" + window.innerHeight * totalDuration * SCROLL_PER_UNIT,
             pin: true,
-            scrub: 1.5,
+            anticipatePin: 1,
+            scrub: 1.2,
             invalidateOnRefresh: true,
           },
         });
@@ -176,26 +183,8 @@ export default function Referenzen() {
 
         // Guarantee the timeline extends through the final rest phase
         tl.to({}, { duration: REST }, totalDuration - REST);
-      });
-
-      // Mobile: simple reveal, one card after another, no pin
-      mm.add("(max-width: 1023.98px)", () => {
-        gsap.utils.toArray<HTMLElement>(".ref-card").forEach((card, i) => {
-          const tilt = TILTS[i] ?? TILTS[0];
-          gsap.set(card, { rotate: tilt.rotate });
-          gsap.from(card, {
-            y: 40,
-            autoAlpha: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 88%",
-              toggleActions: "play none none none",
-            },
-          });
-        });
-      });
+        },
+      );
     },
     { scope: root },
   );
@@ -226,30 +215,31 @@ export default function Referenzen() {
         </div>
       </Container>
 
-      {/* Pinned deck */}
-      <div ref={pinRef} className="mt-14 sm:mt-20 lg:mt-0">
-        <div className="lg:flex lg:h-screen lg:items-center lg:justify-center">
+      {/* Pinned deck — pinned on every screen size. The stage is a fixed-height
+          box centred in the viewport; all cards are absolutely stacked in it. */}
+      <div ref={pinRef} className="mt-6 sm:mt-10 lg:mt-0">
+        <div className="flex h-[100svh] items-center justify-center">
           <Container className="w-full">
-            <div className="relative flex flex-col gap-8 sm:gap-6 lg:mx-auto lg:h-[min(560px,72vh)] lg:max-w-[1120px] lg:block">
+            <div className="relative mx-auto h-[min(620px,80svh)] max-w-[1120px] lg:h-[min(560px,72vh)]">
               {PROJECTS.map((p, i) => (
                 <article
                   key={p.shot}
-                  className="ref-card mx-auto w-full max-w-[1080px] overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mx-auto lg:p-10"
+                  className="ref-card absolute inset-0 mx-auto w-full max-w-[1080px] overflow-hidden rounded-[24px] border border-line bg-white p-5 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:rounded-[28px] lg:p-10"
                   style={{ zIndex: 10 + i * 10 }}
                 >
-                  {/* Desktop mockup band: an absolute column on the right ~56% of
-                      the card. Matches the Figma frame: the browser mockup's
-                      top-left corner (traffic lights + URL bar) sits just inside
-                      the band, it tilts 7° clockwise (Figma's -7° is CCW-positive,
-                      so CSS needs +7deg), and it bleeds off the right and bottom
-                      where the band/card clip it. Height-driven and pivoted at the
-                      top-left so the chrome stays in frame. */}
-                  <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[56%] overflow-hidden rounded-r-[28px] lg:block">
+                  {/* Desktop mockup: the Figma 730×870 browser frame (aspect
+                      0.84), placed 46% across the card, ~63% of the card wide,
+                      6% from the top, pivoted at its top-left so the chrome stays
+                      in view. It tilts 7° clockwise (Figma's -7° is CCW-positive,
+                      so CSS needs +7deg). Only the card clips it — right and
+                      bottom bleed off, while the slanted left edge stays fully
+                      visible against the white card. */}
+                  <div className="pointer-events-none absolute inset-0 hidden overflow-hidden rounded-[28px] lg:block">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={p.shot}
                       alt={p.alt}
-                      className="absolute left-[1%] top-[5%] h-[104%] w-auto max-w-none origin-top-left rotate-[7deg] rounded-[14px]"
+                      className="absolute left-[46%] top-[6%] h-auto w-[63%] max-w-none origin-top-left rotate-[7deg] rounded-[14px]"
                       style={{
                         boxShadow:
                           "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
@@ -257,24 +247,40 @@ export default function Referenzen() {
                     />
                   </div>
 
-                  {/* Text column — constrained to the left so it never collides
-                      with the mockup band. Mobile stacks text over an in-flow
-                      mockup below. */}
-                  <div className="relative z-10 flex h-full flex-col justify-center lg:max-w-[45%]">
-                    <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
+                  {/* Mobile mockup band (Figma mobile frame): the bottom ~46% of
+                      the card. Same tilted mockup, width-driven here because the
+                      band is wide and short; chrome top-left stays in view and
+                      the rest bleeds off the right/bottom edges. */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] overflow-hidden rounded-b-[24px] lg:hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.shot}
+                      alt={p.alt}
+                      className="absolute left-[5%] top-[10%] h-auto w-[92%] max-w-none origin-top-left rotate-[7deg] rounded-[12px]"
+                      style={{
+                        boxShadow:
+                          "-6px 14px 34px 0 rgba(8, 34, 44, 0.18), -2px 40px 60px 0 rgba(8, 34, 44, 0.10)",
+                      }}
+                    />
+                  </div>
+
+                  {/* Text column — top of the card on mobile, left 45% on desktop
+                      so it never collides with either mockup band. */}
+                  <div className="relative z-10 flex flex-col lg:h-full lg:max-w-[35%] lg:justify-center xl:max-w-[38%]">
+                    <h3 className="font-display text-[clamp(1.3rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
                       {p.lead}{" "}
                       <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
                         {p.accent}
                       </span>
                     </h3>
-                    <ul className="mt-6 space-y-4">
+                    <ul className="mt-4 space-y-2.5 lg:mt-6 lg:space-y-4">
                       {p.bullets.map((b) => (
-                        <li key={b.label} className="flex gap-3">
+                        <li key={b.label} className="flex gap-2.5 lg:gap-3">
                           <CircleCheck
-                            className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
+                            className="mt-0.5 size-[17px] shrink-0 text-[#c79a53] lg:size-[19px]"
                             strokeWidth={2}
                           />
-                          <p className="text-[14px] leading-[1.55] text-[#5c5954]">
+                          <p className="text-[13px] leading-[1.5] text-[#5c5954] lg:text-[14px] lg:leading-[1.55]">
                             <span className="font-semibold text-ink">
                               {b.label}:
                             </span>{" "}
@@ -283,20 +289,6 @@ export default function Referenzen() {
                         </li>
                       ))}
                     </ul>
-
-                    {/* Mobile-only in-flow mockup */}
-                    <div className="mt-8 lg:hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={p.shot}
-                        alt={p.alt}
-                        className="block h-auto w-full rotate-[7deg] rounded-[14px]"
-                        style={{
-                          boxShadow:
-                            "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
-                        }}
-                      />
-                    </div>
                   </div>
                 </article>
               ))}
