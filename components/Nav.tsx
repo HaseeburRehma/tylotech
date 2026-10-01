@@ -12,10 +12,12 @@ import {
   ShoppingCart,
   Building2,
   TrendingUp,
+  Globe,
 } from "lucide-react";
 import Container from "./ui/Container";
 
 const INDUSTRIES = [
+  { label: "Online-Dienstleistungen", icon: Globe },
   { label: "Handwerk", icon: Hammer },
   { label: "Lokale Dienstleister", icon: MapPin },
   { label: "E-Commerce", icon: ShoppingCart },
@@ -24,7 +26,7 @@ const INDUSTRIES = [
 ];
 
 const LINKS = [
-  { label: "Was wir machen", href: "#branchen", dropdown: true },
+  { label: "Branchen", href: "#branchen", dropdown: true },
   { label: "Portfolio", href: "#referenzen" },
   { label: "TyloHQ", href: "#tylohq" },
   { label: "Über uns", href: "#team" },
@@ -138,9 +140,6 @@ export default function Nav() {
                   }`}
                 >
                   <div className="w-[240px] rounded-[16px] border border-line bg-white p-2 shadow-[0_12px_40px_-12px_rgba(15,14,13,0.2)]">
-                    <p className="px-3 pb-1.5 pt-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-ink/35">
-                      Online-Dienstleistung
-                    </p>
                     {INDUSTRIES.map((ind) => {
                       const Icon = ind.icon;
                       return (
