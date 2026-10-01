@@ -249,15 +249,15 @@ export default function Referenzen() {
                       </ul>
                     </div>
 
-                    <div className="relative flex items-center justify-center overflow-visible lg:-my-10 lg:-mr-24 xl:-mr-36">
+                    <div className="relative flex items-center justify-center">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={p.shot}
                         alt={p.alt}
                         loading="lazy"
-                        className="block h-auto w-full"
+                        className="block h-auto w-full max-w-full"
                         style={{
-                          transform: "rotate(-7deg) scale(1.15)",
+                          transform: "rotate(-7deg)",
                           transformOrigin: "center center",
                           boxShadow:
                             "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
