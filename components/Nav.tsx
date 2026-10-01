@@ -28,7 +28,7 @@ const INDUSTRIES = [
 const LINKS = [
   { label: "Branchen", href: "#branchen", dropdown: true },
   { label: "Portfolio", href: "#referenzen" },
-  { label: "TyloHQ", href: "#tylohq" },
+  { label: "TyloHQ", href: "#tylohq-app" },
   { label: "Über uns", href: "#team" },
   { label: "Kontakt", href: "#kontakt" },
 ];
