@@ -98,9 +98,9 @@ export default function Referenzen() {
         // - Every card already on the deck recedes one "depth" step at the same
         //   time: smaller, lifted, dimmer. Depth 1 stays faintly visible as a
         //   peeking edge above the new card; depth 2+ fades out completely.
-        const DEPTH_SCALE = 0.08; // scale lost per depth step
-        const DEPTH_LIFT = 48; // px lifted per depth step (peeks above the next card)
-        const depthAlpha = (d: number) => (d === 0 ? 1 : d === 1 ? 0.45 : 0);
+        const DEPTH_SCALE = 0.14; // scale lost per depth step
+        const DEPTH_LIFT = 70; // px lifted per depth step (peeks above the next card)
+        const depthAlpha = (d: number) => (d === 0 ? 1 : d === 1 ? 0.3 : 0);
 
         cards.forEach((card, i) => {
           const tilt = TILTS[i] ?? TILTS[0];
@@ -113,14 +113,14 @@ export default function Referenzen() {
           });
         });
 
-        // Timeline layout (time units):
-        //   0.0 - 0.6  card 0 alone (REST)
-        //   0.6 - 2.0  card 1 rises from the bottom, card 0 recedes (TRANS)
-        //   2.0 - 2.6  card 1 on top, card 0 peeking (REST)
-        //   2.6 - 4.0  card 2 rises, card 1 recedes, card 0 fades out (TRANS)
-        //   4.0 - 4.6  card 2 on top, card 1 peeking (REST)
-        const REST = 0.6;
-        const TRANS = 1.4;
+        // Timeline layout (time units; 1 unit ≈ 1 viewport of scroll):
+        //   0.0 - 0.9  card 0 alone (REST)
+        //   0.9 - 2.9  card 1 rises from the bottom, card 0 recedes (TRANS)
+        //   2.9 - 3.8  card 1 on top, card 0 peeking (REST)
+        //   3.8 - 5.8  card 2 rises, card 1 recedes, card 0 fades out (TRANS)
+        //   5.8 - 6.7  card 2 on top, card 1 peeking (REST)
+        const REST = 0.9;
+        const TRANS = 2.0;
         const totalDuration = REST + (cards.length - 1) * (TRANS + REST);
         const pinViewports = totalDuration;
 
@@ -130,7 +130,7 @@ export default function Referenzen() {
             start: "top top",
             end: () => "+=" + window.innerHeight * pinViewports,
             pin: true,
-            scrub: 1,
+            scrub: 1.5,
             invalidateOnRefresh: true,
           },
         });
