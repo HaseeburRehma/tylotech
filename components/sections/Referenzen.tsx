@@ -220,10 +220,10 @@ export default function Referenzen() {
               {PROJECTS.map((p, i) => (
                 <article
                   key={p.shot}
-                  className="ref-card mx-auto w-full max-w-[1080px] rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mx-auto lg:p-10"
+                  className="ref-card mx-auto w-full max-w-[1080px] overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mx-auto lg:p-10"
                   style={{ zIndex: 10 + i * 10 }}
                 >
-                  <div className="grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.2fr)] lg:gap-10">
+                  <div className="grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-10">
                     <div className="flex flex-col justify-center">
                       <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
                         {p.lead}{" "}
@@ -249,19 +249,20 @@ export default function Referenzen() {
                       </ul>
                     </div>
 
-                    <div className="relative flex items-center justify-center">
+                    {/* Mockup fills the right column top-to-bottom and bleeds off
+                        the card's right edge, where the card's overflow-hidden
+                        clips it — matching the Figma layout. Height-driven so a
+                        wide landscape image never leaves top/bottom gaps. */}
+                    <div className="relative h-full min-h-[300px]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={p.shot}
                         alt={p.alt}
                         loading="lazy"
-                        className="block h-auto w-full max-w-full"
+                        className="block h-auto w-full rotate-[-7deg] rounded-[14px] lg:absolute lg:left-[-6%] lg:top-1/2 lg:h-[124%] lg:w-auto lg:max-w-none lg:-translate-y-1/2"
                         style={{
-                          transform: "rotate(-7deg)",
-                          transformOrigin: "center center",
                           boxShadow:
                             "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
-                          borderRadius: 16,
                         }}
                       />
                     </div>
