@@ -258,7 +258,6 @@ export default function Referenzen() {
                       <img
                         src={p.shot}
                         alt={p.alt}
-                        loading="lazy"
                         className="block h-auto w-full rotate-[-7deg] rounded-[14px] lg:absolute lg:left-[-6%] lg:top-1/2 lg:h-[124%] lg:w-auto lg:max-w-none lg:-translate-y-1/2"
                         style={{
                           boxShadow:
