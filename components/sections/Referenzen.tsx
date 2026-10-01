@@ -256,6 +256,12 @@ export default function Referenzen() {
                         alt={p.alt}
                         loading="lazy"
                         className="h-auto w-full max-w-[720px] object-contain"
+                        style={{
+                          transform: "rotate(-7deg)",
+                          boxShadow:
+                            "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
+                          borderRadius: 16,
+                        }}
                       />
                     </div>
                   </div>
