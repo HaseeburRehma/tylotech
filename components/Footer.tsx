@@ -28,9 +28,9 @@ const MEHR = [
 ];
 
 const PARTNERS = [
-  "/partners/cleanpany.png",
+  "/partners/priyas.png",
+  "/partners/lokshift.png",
   "/partners/crusty-slices.png",
-  "/partners/sanierungslotse.png",
   "/partners/rohrcleaner.png",
 ];
 
