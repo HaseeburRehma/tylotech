@@ -223,42 +223,58 @@ export default function Referenzen() {
                   className="ref-card mx-auto w-full max-w-[1080px] overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-45px_rgba(15,14,13,0.35)] sm:p-8 lg:absolute lg:inset-0 lg:mx-auto lg:p-10"
                   style={{ zIndex: 10 + i * 10 }}
                 >
-                  <div className="grid h-full grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-10">
-                    <div className="flex flex-col justify-center">
-                      <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
-                        {p.lead}{" "}
-                        <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-                          {p.accent}
-                        </span>
-                      </h3>
-                      <ul className="mt-6 space-y-4">
-                        {p.bullets.map((b) => (
-                          <li key={b.label} className="flex gap-3">
-                            <CircleCheck
-                              className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
-                              strokeWidth={2}
-                            />
-                            <p className="text-[14px] leading-[1.55] text-[#5c5954]">
-                              <span className="font-semibold text-ink">
-                                {b.label}:
-                              </span>{" "}
-                              {b.desc}
-                            </p>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  {/* Desktop mockup band: an absolute column on the right ~55% of
+                      the card. The image is height-driven, tilted -7°, and
+                      over-sized so even its rotated corners cover the band — no
+                      white wedge. The band's own overflow-hidden + the card's
+                      rounded clip trim every bleeding edge. */}
+                  <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[55%] overflow-hidden rounded-r-[28px] lg:block">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.shot}
+                      alt={p.alt}
+                      className="absolute left-[-22%] top-1/2 h-[140%] w-auto max-w-none -translate-y-1/2 rotate-[-7deg] rounded-[14px]"
+                      style={{
+                        boxShadow:
+                          "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
+                      }}
+                    />
+                  </div>
 
-                    {/* Mockup fills the right column top-to-bottom and bleeds off
-                        the card's right edge, where the card's overflow-hidden
-                        clips it — matching the Figma layout. Height-driven so a
-                        wide landscape image never leaves top/bottom gaps. */}
-                    <div className="relative h-full min-h-[300px]">
+                  {/* Text column — constrained to the left so it never collides
+                      with the mockup band. Mobile stacks text over an in-flow
+                      mockup below. */}
+                  <div className="relative z-10 flex h-full flex-col justify-center lg:max-w-[45%]">
+                    <h3 className="font-display text-[clamp(1.4rem,2.2vw,2rem)] font-bold leading-[1.16] tracking-[-0.02em] text-ink">
+                      {p.lead}{" "}
+                      <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                        {p.accent}
+                      </span>
+                    </h3>
+                    <ul className="mt-6 space-y-4">
+                      {p.bullets.map((b) => (
+                        <li key={b.label} className="flex gap-3">
+                          <CircleCheck
+                            className="mt-0.5 size-[19px] shrink-0 text-[#c79a53]"
+                            strokeWidth={2}
+                          />
+                          <p className="text-[14px] leading-[1.55] text-[#5c5954]">
+                            <span className="font-semibold text-ink">
+                              {b.label}:
+                            </span>{" "}
+                            {b.desc}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Mobile-only in-flow mockup */}
+                    <div className="mt-8 lg:hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={p.shot}
                         alt={p.alt}
-                        className="block h-auto w-full rotate-[-7deg] rounded-[14px] lg:absolute lg:left-[-6%] lg:top-1/2 lg:h-[124%] lg:w-auto lg:max-w-none lg:-translate-y-1/2"
+                        className="block h-auto w-full rotate-[-7deg] rounded-[14px]"
                         style={{
                           boxShadow:
                             "-8px 18px 46px 0 rgba(8, 34, 44, 0.18), -2px 60px 90px 0 rgba(8, 34, 44, 0.10)",
