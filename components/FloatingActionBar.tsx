@@ -5,12 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowUpRight,
-  CalendarCheck,
-  Inbox,
-  Search,
+  CalendarCheck2,
+  ChartNoAxesColumnIncreasing,
+  MessageSquareText,
   Star,
-  TrendingUp,
-  Users,
+  UserRoundPlus,
+  UsersRound,
   type LucideIcon,
 } from "lucide-react";
 import { gsap } from "@/lib/gsap";
@@ -23,13 +23,17 @@ const AVATARS = [
 ];
 
 const ICONS: Record<LiveKind, LucideIcon> = {
-  query: Search,
-  visitors: Users,
-  leads: Inbox,
-  ranking: TrendingUp,
-  booking: CalendarCheck,
+  query: MessageSquareText,
+  visitors: UsersRound,
+  leads: UserRoundPlus,
+  ranking: ChartNoAxesColumnIncreasing,
+  booking: CalendarCheck2,
   review: Star,
 };
+
+// progress ring around the icon (r = 19 → circumference ≈ 119.4)
+const RING_R = 19;
+const RING_C = 2 * Math.PI * RING_R;
 
 const STEP_MS = 4200;
 
@@ -80,21 +84,27 @@ function LiveTicker() {
     return () => clearInterval(id);
   }, [events]);
 
+  const current = events[i % events.length];
+  const Icon = ICONS[current.kind];
+
   const render = (e: LiveEvent) => {
-    const Icon = ICONS[e.kind];
     const title = e.kind === "visitors" ? `${visitors} ${e.title}` : e.title;
+    const when = e.kind === "visitors" ? "jetzt" : agoLabel(e.minutesAgo);
     return (
-      <span className="flex min-w-0 items-center gap-2.5">
-        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[#01475c]/70 text-[#d8b682]">
-          <Icon className="size-[15px]" strokeWidth={1.9} />
+      <span className="block min-w-0">
+        <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">
+          {title}
         </span>
-        <span className="min-w-0 leading-tight">
-          <span className="block truncate text-[12.5px] font-medium text-white sm:text-[13.5px]">{title}</span>
-          <span className="block truncate text-[11px] text-[#7fbacd] sm:text-[11.5px]">
-            {e.detail}
-            {e.detail && " · "}
-            {e.kind === "visitors" ? "jetzt" : agoLabel(e.minutesAgo)}
-          </span>
+        <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11.5px] leading-4 text-[#8cc0d1]">
+          <span className="shrink-0 font-medium text-[#d8b682]">TyloHQ</span>
+          <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
+          {e.detail && (
+            <>
+              <span className="truncate">{e.detail}</span>
+              <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
+            </>
+          )}
+          <span className="shrink-0 tabular-nums">{when}</span>
         </span>
       </span>
     );
@@ -102,50 +112,56 @@ function LiveTicker() {
 
   return (
     <div
-      className="flex min-w-0 flex-1 items-center gap-3 sm:w-[360px] sm:flex-none lg:w-[410px]"
+      className="flex min-w-0 flex-1 items-center gap-3 sm:w-[350px] sm:flex-none lg:w-[390px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-live="polite"
     >
-      {/* live badge */}
-      <span className="hidden shrink-0 flex-col items-center gap-1 sm:flex">
-        <span className="relative flex size-2.5">
-          <span className="absolute inset-0 animate-ping rounded-full bg-[#3ccf8e] opacity-70" />
-          <span className="relative size-2.5 rounded-full bg-[#3ccf8e]" />
+      {/* icon with progress ring + live dot */}
+      <span className="relative grid size-[44px] shrink-0 place-items-center">
+        <svg viewBox="0 0 44 44" className="absolute inset-0 -rotate-90" aria-hidden>
+          <circle cx="22" cy="22" r={RING_R} fill="none" stroke="rgba(127,186,205,0.18)" strokeWidth="1.5" />
+          <circle
+            key={`ring-${i}-${paused}`}
+            cx="22"
+            cy="22"
+            r={RING_R}
+            fill="none"
+            stroke="#d8b682"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeDasharray={RING_C}
+            style={{
+              strokeDashoffset: paused ? RING_C * 0.35 : undefined,
+              animation: paused ? "none" : `liveRing ${STEP_MS}ms linear both`,
+            }}
+          />
+        </svg>
+        <span className="grid size-[34px] place-items-center rounded-full bg-gradient-to-b from-[#0e5a70] to-[#023646] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+          <Icon
+            key={`ic-${i}`}
+            className={`size-[16px] animate-[hqfade_.45s_ease_both] text-[#e3c79e] ${current.kind === "review" ? "fill-[#e3c79e]" : ""}`}
+            strokeWidth={1.75}
+          />
         </span>
-        <span className="font-mono text-[8.5px] font-medium uppercase tracking-[0.14em] text-[#7fbacd]">Live</span>
-      </span>
-      <span className="relative flex size-2 shrink-0 sm:hidden">
-        <span className="absolute inset-0 animate-ping rounded-full bg-[#3ccf8e] opacity-70" />
-        <span className="relative size-2 rounded-full bg-[#3ccf8e]" />
+        {/* live dot */}
+        <span className="absolute right-[1px] top-[1px] flex size-[11px] items-center justify-center rounded-full bg-[#002e3d]">
+          <span className="absolute size-[7px] animate-ping rounded-full bg-[#3ccf8e] opacity-60" />
+          <span className="relative size-[7px] rounded-full bg-[#3ccf8e]" />
+        </span>
       </span>
 
       {/* message window */}
-      <div className="relative h-[40px] min-w-0 flex-1 overflow-hidden">
+      <div className="relative h-[38px] min-w-0 flex-1 overflow-hidden">
         {prev !== null && events[prev] && (
-          <div key={`out-${prev}-${i}`} className="absolute inset-0 flex items-center animate-[liveOut_.55s_cubic-bezier(.4,0,.2,1)_both]">
+          <div key={`out-${prev}-${i}`} className="absolute inset-0 flex items-center animate-[liveOut_.6s_cubic-bezier(.65,0,.35,1)_both]">
             {render(events[prev])}
           </div>
         )}
-        <div key={`in-${i}`} className="absolute inset-0 flex items-center animate-[liveIn_.55s_cubic-bezier(.22,1,.36,1)_both]">
-          {render(events[i % events.length])}
+        <div key={`in-${i}`} className="absolute inset-0 flex items-center animate-[liveIn_.6s_cubic-bezier(.65,0,.35,1)_both]">
+          {render(current)}
         </div>
       </div>
-
-      {/* label + progress to next message */}
-      <span className="hidden h-full shrink-0 flex-col justify-center gap-1.5 lg:flex">
-        <span className="font-mono text-[9px] font-medium uppercase tracking-[0.14em] text-[#d8b682]">TyloHQ</span>
-        <span className="h-[2px] w-12 overflow-hidden rounded-full bg-[#01475c]">
-          <span
-            key={`p-${i}-${paused}`}
-            className="block h-full origin-left rounded-full bg-[#d8b682]"
-            style={{
-              animation: paused ? "none" : `liveProgress ${STEP_MS}ms linear both`,
-              transform: paused ? "scaleX(0.5)" : undefined,
-            }}
-          />
-        </span>
-      </span>
     </div>
   );
 }
@@ -180,7 +196,7 @@ export default function FloatingActionBar() {
     <div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center px-4">
       <div
         ref={bar}
-        className="pointer-events-auto flex w-full max-w-[560px] items-center gap-3 rounded-full sm:w-auto sm:max-w-none sm:gap-3.5 border border-[#01475c] bg-[#002e3d] py-2 pl-4 pr-2 shadow-[0px_8px_16px_-4px_rgba(15,14,13,0.05),0px_32px_64px_-16px_rgba(15,14,13,0.10)]"
+        className="pointer-events-auto flex w-full max-w-[560px] items-center gap-3 rounded-full sm:w-auto sm:max-w-none sm:gap-3.5 border border-[#01475c] bg-[#002e3d] py-1.5 pl-2 pr-1.5 shadow-[0px_8px_16px_-4px_rgba(15,14,13,0.05),0px_32px_64px_-16px_rgba(15,14,13,0.10)]"
       >
         <LiveTicker />
 

@@ -294,3 +294,11 @@ html.lenis body {
     transform: scaleX(1);
   }
 }
+@keyframes liveRing {
+  from {
+    stroke-dashoffset: 119.38;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
