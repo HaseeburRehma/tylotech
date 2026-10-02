@@ -153,7 +153,8 @@ function LiveTicker() {
           Live aus TyloHQ
         </span>
         <span className="mt-0.5 block truncate text-[11.5px] leading-4 text-[#8cc0d1]">
-          Neue Aktivitäten erscheinen hier in Echtzeit
+          <span className="sm:hidden">Neue Aktivitäten in Echtzeit</span>
+          <span className="hidden sm:inline">Neue Aktivitäten erscheinen hier in Echtzeit</span>
         </span>
       </span>
     );
@@ -231,7 +232,10 @@ export default function FloatingActionBar() {
     gsap.set(bar.current, { yPercent: 160, opacity: 0 });
     let shown = false;
     const onScroll = () => {
-      const show = window.scrollY > window.innerHeight * 0.75;
+      // visible after the hero, but step aside once the footer is on screen so
+      // it never covers contact details, legal links or the copyright line
+      const footerTop = document.querySelector("footer")?.getBoundingClientRect().top ?? Infinity;
+      const show = window.scrollY > window.innerHeight * 0.75 && footerTop > window.innerHeight - 40;
       if (show === shown) return;
       shown = show;
       gsap.to(bar.current, {

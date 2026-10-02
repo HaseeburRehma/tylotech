@@ -434,7 +434,12 @@ export default function Globe() {
 
             {/* center copy */}
             <div className="glb-copy pointer-events-none absolute inset-0 z-10 grid place-items-center px-6 text-center">
-              <div>
+              <div className="relative">
+                {/* soft backdrop so the copy reads cleanly over the dot sphere */}
+                <span
+                  aria-hidden
+                  className="absolute -inset-x-12 -inset-y-12 -z-10 bg-[radial-gradient(closest-side,rgba(0,22,32,0.92),rgba(0,22,32,0.8)_55%,transparent)]"
+                />
                 <p className="eyebrow mb-3 flex items-center justify-center gap-2.5 text-[#d8b682]">
                   <span className="size-[7px] rounded-[2px] bg-accent" />
                   Reichweite

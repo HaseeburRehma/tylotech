@@ -111,9 +111,9 @@ export default function Nav() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-0.5 lg:flex xl:gap-1">
           {LINKS.map((l) => {
-            const linkCls = `flex h-10 items-center gap-1.5 rounded-[10px] px-3.5 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 ${
+            const linkCls = `flex h-10 items-center gap-1.5 whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-medium tracking-[-0.1px] xl:px-3.5 xl:text-[15px] transition-colors duration-500 ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#5c5954] hover:bg-ink/[0.04] hover:text-ink"
@@ -168,7 +168,7 @@ export default function Nav() {
         <div className="flex items-center gap-2.5">
           <Link
             href="#login"
-            className={`hidden h-12 items-center rounded-xl px-[18px] text-[16px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex ${
+            className={`hidden h-12 items-center whitespace-nowrap rounded-xl px-3 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex xl:px-[18px] xl:text-[16px] ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#43413d] hover:bg-ink/[0.04]"
@@ -178,7 +178,7 @@ export default function Nav() {
           </Link>
           <Link
             href="#kontakt"
-            className={`group hidden h-12 items-center gap-2 rounded-xl px-[22px] text-[16px] font-medium tracking-[-0.1px] transition-colors duration-500 sm:inline-flex ${
+            className={`group hidden h-12 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 sm:inline-flex xl:px-[22px] xl:text-[16px] ${
               dark
                 ? "bg-accent text-[#001620] hover:bg-[#ddb97e]"
                 : "bg-[#002e3d] text-inverse hover:bg-[#013a4d]"

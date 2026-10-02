@@ -100,7 +100,7 @@ export default function Warum() {
           </p>
         </div>
 
-        <div className="warum-grid mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="warum-grid mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
           {SERVICES.map(({ icon: Icon, title, body }) => (
             <article
               key={title}

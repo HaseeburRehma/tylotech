@@ -157,7 +157,7 @@ export default function Branchen() {
 
           {/* card */}
           <div className="mt-8 rounded-[28px] border border-line bg-white p-4 shadow-[0_40px_90px_-55px_rgba(15,14,13,0.3)] sm:mt-12 sm:p-6 lg:p-8">
-            <div className="grid items-stretch gap-5 lg:grid-cols-[220px_minmax(0,1fr)_minmax(300px,380px)] lg:gap-10">
+            <div className="grid items-stretch gap-5 lg:grid-cols-[170px_minmax(0,1fr)_minmax(240px,300px)] lg:gap-7 xl:grid-cols-[220px_minmax(0,1fr)_minmax(300px,380px)] xl:gap-10">
               {/* list */}
               <ul className="no-scrollbar order-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:order-1 lg:mx-0 lg:flex-col lg:gap-1.5 lg:overflow-visible lg:px-0 lg:pb-0">
                 {INDUSTRIES.map((ind, i) => {

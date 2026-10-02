@@ -82,7 +82,7 @@ export default function CookieBanner() {
     <div
       role="dialog"
       aria-label="Cookie-Einstellungen"
-      className="fixed inset-x-4 bottom-24 z-[70] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[400px]"
+      className="fixed inset-x-4 bottom-24 z-[70] sm:inset-x-auto sm:bottom-[96px] sm:right-6 sm:w-[400px]"
     >
       <div className="rounded-[18px] border border-line bg-white p-6 shadow-[0_24px_60px_-20px_rgba(15,14,13,0.28)]">
         <p className="text-[17px] font-semibold tracking-[-0.01em] text-ink">

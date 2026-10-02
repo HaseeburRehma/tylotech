@@ -80,7 +80,7 @@ export default function Podcast() {
       ref={root}
       className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-20 text-ink sm:py-24"
     >
-      <Container className="relative grid grid-cols-1 items-center gap-12 lg:grid-cols-[520px_1fr] lg:gap-16">
+      <Container className="relative grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 xl:grid-cols-[520px_1fr] xl:gap-16">
         <div className="podcast-text">
           <p className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <Headphones className="size-3.5 text-accent" />

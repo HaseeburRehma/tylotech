@@ -251,7 +251,7 @@ export default function Referenzen() {
                       the card. Same tilted mockup, width-driven here because the
                       band is wide and short; chrome top-left stays in view and
                       the rest bleeds off the right/bottom edges. */}
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] overflow-hidden rounded-b-[24px] lg:hidden">
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] overflow-hidden md:h-[63%] rounded-b-[24px] lg:hidden">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={p.shot}

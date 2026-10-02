@@ -89,7 +89,7 @@ export default function Wachstum() {
           </p>
         </div>
 
-        <div className="hebel-grid mt-12 grid grid-cols-1 gap-5 sm:mt-14 md:grid-cols-2 lg:grid-cols-3">
+        <div className="hebel-grid mt-12 grid grid-cols-1 gap-5 sm:mt-14 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
           {LEVERS.map(({ icon: Icon, title, body }) => (
             <article
               key={title}

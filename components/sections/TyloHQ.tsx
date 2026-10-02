@@ -332,7 +332,7 @@ export default function TyloHQ() {
                 aria-selected={range === r}
                 onClick={() => setRange(r)}
                 className={cn(
-                  "whitespace-nowrap rounded-full px-3.5 py-1.5 font-mono text-[11.5px] font-medium tracking-[0.3px] transition-colors duration-200",
+                  "whitespace-nowrap rounded-full px-3.5 py-2.5 font-mono text-[11.5px] sm:py-1.5 font-medium tracking-[0.3px] transition-colors duration-200",
                   range === r ? "bg-[#1a1917] text-white" : "text-[#5c5954] hover:bg-[#f6f5f3] hover:text-ink",
                 )}
               >
