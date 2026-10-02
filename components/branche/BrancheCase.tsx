@@ -13,6 +13,11 @@ import { Accent, Eyebrow } from "./ui";
  * false to hide the in-card notes once real figures are in. */
 const SHOW_PLACEHOLDERS = true;
 
+/* Figma-style dashed outline (6/5 dashes, 1.5px) — a CSS dashed border is too faint and fine */
+const dashed = (color: string, r: number) => ({
+  backgroundImage: `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='${r}' ry='${r}' stroke='%23${color}' stroke-width='3' stroke-dasharray='6%2c 5' stroke-linecap='round'/%3e%3c/svg%3e")`,
+});
+
 export default function BrancheCase({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
   const c = b.case;
@@ -78,7 +83,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
               </div>
             )}
             {SHOW_PLACEHOLDERS && (
-              <div className="flex w-full flex-col gap-1.5 rounded-[18px] border border-dashed border-[#d1aa71] bg-[#fbf6ee] px-[22px] py-[18px]">
+              <div className="flex w-full flex-col gap-1.5 rounded-[18px] bg-[#fbf6ee] px-[22px] py-[18px]" style={dashed("D1AA71", 18)}>
                 <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#94713f]">Platzhalter</p>
                 <p className="text-[16px] leading-[26px] text-[#5c5954]">{c.placeholder}</p>
               </div>
@@ -124,7 +129,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
         </div>
 
         {c.extraPlaceholder && (
-          <div className="bhc-extra flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-[20px] border border-dashed border-[#cbc8c2] px-5 py-4 sm:px-7 sm:py-5">
+          <div className="bhc-extra flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-[20px] px-5 py-4 sm:px-7 sm:py-5" style={dashed("CBC8C2", 20)}>
             <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">Platzhalter</p>
             <p className="text-[16px] text-[#5c5954]">{c.extraPlaceholder}</p>
           </div>
