@@ -1,15 +1,15 @@
 import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, validate, type ContactPayload } from "@/lib/contact";
+import { MailError, sendMail, sender, transport } from "@/lib/mail/send";
+import { customerConfirmation, teamNotification } from "@/lib/mail/templates";
 
-/* Contact form → e-mail to info@tylotech.de, sent through Resend's HTTP API.
+/* Contact form → branded e-mail to info@tylotech.de (+ confirmation to the sender).
+ * Transport and credentials: see lib/mail/send.ts. Extra switches:
  *
- *   RESEND_API_KEY  API key from resend.com (server-side only)
- *   CONTACT_FROM    sender, e.g. "TyloTech Website <website@tylotech.de>" — the domain
- *                   must be verified in Resend. Defaults to Resend's test sender, which
- *                   only delivers to the Resend account's own address.
- *   CONTACT_TO      recipient, defaults to info@tylotech.de
+ *   CONTACT_AUTOREPLY  "false" turns off the confirmation e-mail to the sender
+ *   SITE_URL           public origin for logo/links in e-mails (defaults to the request origin)
  *
- * Without RESEND_API_KEY the route answers 503 { reason: "not-configured" } and the
- * form offers a pre-filled mailto link instead, so no enquiry is lost. */
+ * Without a transport the route answers 503 { reason: "not-configured" } and the form
+ * offers a pre-filled mailto link instead, so no enquiry is lost. */
 
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
@@ -24,13 +24,18 @@ function rateLimited(ip: string) {
   return list.length > MAX_PER_WINDOW;
 }
 
-const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 const clip = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 
-/** Status check without sending anything: is delivery configured, and with which sender? */
+/** Status check without sending anything: which transport, which kind of sender? */
 export async function GET() {
+  const via = transport();
   return Response.json(
-    { configured: Boolean(process.env.RESEND_API_KEY), sender: process.env.CONTACT_FROM ? "custom" : "resend-test" },
+    {
+      configured: via !== null,
+      transport: via,
+      sender: process.env.CONTACT_FROM ? "custom" : via === "smtp" ? "smtp-user" : "resend-test",
+      autoreply: process.env.CONTACT_AUTOREPLY !== "false",
+    },
     { headers: { "Cache-Control": "no-store" } },
   );
 }
@@ -64,55 +69,29 @@ export async function POST(request: Request) {
   const errors = validate(p);
   if (Object.keys(errors).length) return Response.json({ ok: false, reason: "invalid", errors }, { status: 422 });
 
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
+  if (!transport()) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
 
-  const rows: [string, string][] = [
-    ["Name", p.name],
-    ["Unternehmen", p.company || "—"],
-    ["E-Mail", p.email],
-    ["Telefon", p.phone || "—"],
-    ["Branche", p.branche || "—"],
-    ["Anliegen", p.topics.join(", ") || "—"],
-  ];
-  const text = `${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\nNachricht:\n${p.message}\n\n— gesendet über tylotech.de/kontakt`;
-  const html = `<div style="font-family:Inter,Arial,sans-serif;color:#1a1917;max-width:560px">
-<h2 style="font-size:20px;margin:0 0 16px">Neue Anfrage über tylotech.de</h2>
-<table cellpadding="6" style="border-collapse:collapse;font-size:14px">${rows
-    .map(([k, v]) => `<tr><td style="color:#7d7973;padding-right:16px">${k}</td><td>${esc(v)}</td></tr>`)
-    .join("")}</table>
-<p style="font-size:14px;color:#7d7973;margin:20px 0 6px">Nachricht</p>
-<p style="font-size:15px;line-height:1.6;white-space:pre-wrap;margin:0">${esc(p.message)}</p>
-<p style="font-size:12px;color:#a8a49d;margin-top:28px">Antworten geht direkt an ${esc(p.email)}.</p></div>`;
+  const origin = (process.env.SITE_URL || new URL(request.url).origin).replace(/\/$/, "");
+  const source = `${new URL(origin).host}/kontakt${p.branche ? ` (Branche: ${p.branche})` : ""}`;
 
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        // tolerate a value pasted with surrounding quotes in the Vercel UI
-        from: process.env.CONTACT_FROM?.trim().replace(/^["']|["']$/g, "") || "TyloTech Website <onboarding@resend.dev>",
-        to: [process.env.CONTACT_TO || CONTACT.email],
-        reply_to: p.email,
-        subject: `Neue Anfrage: ${p.name}${p.company ? ` (${p.company})` : ""}${p.topics[0] ? ` – ${p.topics[0]}` : ""}`,
-        text,
-        html,
-      }),
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!res.ok) {
-      const detail = await res.text().catch(() => "");
-      console.error("kontakt: resend", res.status, detail);
-      // only Resend's short error code (e.g. "validation_error") — no message text, nothing secret
-      let code: string | undefined;
-      try {
-        code = (JSON.parse(detail) as { name?: string }).name;
-      } catch {}
-      return Response.json({ ok: false, reason: "send-failed", status: res.status, code }, { status: 502 });
-    }
+    const team = teamNotification(p, origin, source);
+    await sendMail({ to: process.env.CONTACT_TO || CONTACT.email, replyTo: p.email, ...team });
   } catch (err) {
-    console.error("kontakt: send", err);
-    return Response.json({ ok: false, reason: "send-failed" }, { status: 502 });
+    const code = err instanceof MailError ? err.code : "unknown";
+    console.error("kontakt: send failed", code, err instanceof Error ? err.message : err, "from:", sender());
+    // only a short code (e.g. "EAUTH 535") — no message text, nothing secret
+    return Response.json({ ok: false, reason: "send-failed", code }, { status: 502 });
+  }
+
+  // confirmation to the sender — best effort, never fails the request
+  if (process.env.CONTACT_AUTOREPLY !== "false") {
+    try {
+      const mail = customerConfirmation(p, origin);
+      await sendMail({ to: p.email, replyTo: process.env.CONTACT_TO || CONTACT.email, ...mail });
+    } catch (err) {
+      console.error("kontakt: confirmation failed", err instanceof MailError ? err.code : err);
+    }
   }
 
   return Response.json({ ok: true });
