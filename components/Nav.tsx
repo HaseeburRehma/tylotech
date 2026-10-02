@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   ChevronDown,
   ArrowRight,
@@ -17,23 +18,27 @@ import {
 import Container from "./ui/Container";
 
 const INDUSTRIES = [
-  { label: "Online-Dienstleistungen", icon: Globe },
-  { label: "Handwerk", icon: Hammer },
-  { label: "Lokale Dienstleister", icon: MapPin },
-  { label: "E-Commerce", icon: ShoppingCart },
-  { label: "B2B-Dienstleistung", icon: Building2 },
-  { label: "Finanz & Investment", icon: TrendingUp },
+  { label: "Online-Dienstleistungen", icon: Globe, href: "/branchen/online-dienstleistungen" },
+  { label: "Handwerk", icon: Hammer, href: "/branchen/handwerk" },
+  { label: "Lokale Dienstleister", icon: MapPin, href: "/branchen/lokale-dienstleister" },
+  { label: "E-Commerce", icon: ShoppingCart, href: "/branchen/e-commerce" },
+  { label: "B2B-Dienstleistung", icon: Building2, href: "/branchen/b2b-dienstleistung" },
+  { label: "Finanz & Investment", icon: TrendingUp, href: "/branchen/finanz-investment" },
 ];
 
 const LINKS = [
   { label: "Branchen", href: "#branchen", dropdown: true },
   { label: "Portfolio", href: "#referenzen" },
   { label: "TyloHQ", href: "#tylohq-app" },
-  { label: "Über uns", href: "#team" },
-  { label: "Kontakt", href: "#kontakt" },
+  { label: "Über uns", href: "#gruender", everywhere: true },
+  { label: "Kontakt", href: "#kontakt", everywhere: true },
 ];
 
 export default function Nav() {
+  const pathname = usePathname();
+  const home = pathname === "/";
+  // anchors that only exist on the home page need the "/" prefix elsewhere
+  const to = (l: { href: string; everywhere?: boolean }) => (home || l.everywhere ? l.href : `/${l.href}`);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);
@@ -96,7 +101,7 @@ export default function Nav() {
       }`}
     >
       <Container className="flex h-20 items-center justify-between">
-        <Link href="#top" className="flex items-center" onClick={() => setOpen(false)}>
+        <Link href={home ? "#top" : "/"} className="flex items-center" onClick={() => setOpen(false)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/brand/tylotech-logo.svg"
@@ -125,7 +130,7 @@ export default function Nav() {
                 onMouseEnter={openDropdown}
                 onMouseLeave={closeDropdown}
               >
-                <Link href={l.href} className={linkCls}>
+                <Link href={to(l)} className={linkCls}>
                   {l.label}
                   <ChevronDown
                     className={`size-[15px] transition-transform duration-200 ${dark ? "text-white/40" : "text-ink/45"} ${dropdownOpen ? "rotate-180" : ""}`}
@@ -145,7 +150,7 @@ export default function Nav() {
                       return (
                         <Link
                           key={ind.label}
-                          href="#branchen"
+                          href={ind.href}
                           onClick={() => setDropdownOpen(false)}
                           className="flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[14px] font-medium text-[#5c5954] transition-colors hover:bg-ink/[0.04] hover:text-ink"
                         >
@@ -158,7 +163,7 @@ export default function Nav() {
                 </div>
               </div>
             ) : (
-              <Link key={l.label} href={l.href} className={linkCls}>
+              <Link key={l.label} href={to(l)} className={linkCls}>
                 {l.label}
               </Link>
             );
@@ -236,7 +241,7 @@ export default function Nav() {
                       return (
                         <Link
                           key={ind.label}
-                          href="#branchen"
+                          href={ind.href}
                           onClick={() => { setOpen(false); setMobileDropdownOpen(false); }}
                           className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-[15px] font-medium text-[#5c5954] transition-colors hover:bg-ink/[0.04]"
                         >
@@ -251,7 +256,7 @@ export default function Nav() {
             ) : (
               <Link
                 key={l.label}
-                href={l.href}
+                href={to(l)}
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[16px] font-medium tracking-[-0.1px] text-[#43413d] transition-colors hover:bg-ink/[0.04] hover:text-ink"
               >

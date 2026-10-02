@@ -302,3 +302,26 @@ html.lenis body {
     stroke-dashoffset: 0;
   }
 }
+
+/* Branchen pages · Lösung hub pulse and KI typing dots */
+@keyframes bhlPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+@keyframes bhgDot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}

@@ -10,6 +10,8 @@ import {
   Briefcase,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
@@ -21,6 +23,14 @@ type Industry = {
   icon: LucideIcon;
   img: string;
   tint: string;
+};
+
+const SLUGS: Record<string, string> = {
+  Handwerk: "handwerk",
+  "Lokale Dienstleister": "lokale-dienstleister",
+  "E-Commerce": "e-commerce",
+  "B2B-Dienstleistung": "b2b-dienstleistung",
+  "Finanz & Investment": "finanz-investment",
 };
 
 const INDUSTRIES: Industry[] = [
@@ -205,6 +215,13 @@ export default function Branchen() {
                 <p className="mt-4 max-w-[400px] text-[14.5px] leading-[1.65] text-[#5c5954]">
                   {it.body}
                 </p>
+                <Link
+                  href={`/branchen/${SLUGS[it.name]}`}
+                  className="group mt-5 inline-flex w-fit items-center gap-1.5 text-[14px] font-medium text-ink underline decoration-[#d1aa71] decoration-2 underline-offset-[5px] transition-colors hover:text-[#94713f]"
+                >
+                  Zur Branchenseite
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
                 <p className="mt-6 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/40">
                   {pad(active + 1)} von {pad(STEPS)}
                 </p>

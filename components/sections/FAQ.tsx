@@ -29,7 +29,7 @@ const ITEMS = [
   },
 ];
 
-export default function FAQ() {
+export default function FAQ({ items = ITEMS }: { items?: { q: string; a: string }[] }) {
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(0);
 
@@ -93,7 +93,7 @@ export default function FAQ() {
         </div>
 
         <div className="faq-list flex flex-col gap-3">
-          {ITEMS.map((item, i) => {
+          {items.map((item, i) => {
             const on = open === i;
             return (
               <div
