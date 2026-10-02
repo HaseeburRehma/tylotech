@@ -27,6 +27,14 @@ function rateLimited(ip: string) {
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 const clip = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 
+/** Status check without sending anything: is delivery configured, and with which sender? */
+export async function GET() {
+  return Response.json(
+    { configured: Boolean(process.env.RESEND_API_KEY), sender: process.env.CONTACT_FROM ? "custom" : "resend-test" },
+    { headers: { "Cache-Control": "no-store" } },
+  );
+}
+
 export async function POST(request: Request) {
   let body: Partial<ContactPayload>;
   try {

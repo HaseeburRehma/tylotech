@@ -18,7 +18,7 @@ export const IMPRESSUM: LegalDoc = {
   eyebrow: "Rechtliches",
   title: "Impressum",
   accent: "",
-  intro: "Angaben gemäß § 5 TMG",
+  intro: "Angaben gemäß § 5 DDG",
   stand: "",
   sections: [
     {
@@ -41,21 +41,9 @@ export const IMPRESSUM: LegalDoc = {
       ],
     },
     {
-      id: "eu-streitschlichtung",
-      title: "EU-Streitschlichtung",
-      blocks: [
-        {
-          p: "Die Europäische Kommission stellt eine Plattform für die außergerichtliche Online-Streitschlichtung (OS-Plattform) bereit, die unter [www.ec.europa.eu/consumers/odr](https://ec.europa.eu/consumers/odr) aufrufbar ist. Unsere E-Mail-Adresse finden Sie oben. Wir nehmen am Streitschlichtungsverfahren teil. Eine Liste mit den Kontaktdaten der anerkannten Streitschlichtungsstellen finden Sie unter [https://ec.europa.eu/consumers/odr/main/index.cfm?event=main.adr.show](https://ec.europa.eu/consumers/odr/main/index.cfm?event=main.adr.show).",
-        },
-      ],
-    },
-    {
       id: "streitbeilegung",
-      title: "Außergerichtliche Streitschlichtungsverfahren",
+      title: "Verbraucherstreitbeilegung",
       blocks: [
-        {
-          p: "Die Europäische Kommission hat eine Internetplattform zur außergerichtlichen Online-Streitbeilegung von Verbraucherstreitigkeiten über vertragliche Verpflichtungen aus Kauf- und Dienstleistungsverträgen, die online geschlossen wurden, eingerichtet. Sie können die Plattform unter dem folgenden Link erreichen: [http://ec.europa.eu/consumers/odr/](https://ec.europa.eu/consumers/odr/)",
-        },
         { h: "Hinweis gemäß § 36 Verbraucherstreitbeilegungsgesetz (VSBG)" },
         { p: "Wir sind zur Teilnahme an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle weder bereit noch verpflichtet." },
       ],
@@ -76,14 +64,6 @@ export const IMPRESSUM: LegalDoc = {
         {
           p: "Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein beim Autor der Seiten. Eine Vervielfältigung oder Verwendung solcher Grafiken, Tondokumente, Videosequenzen und Texte in anderen elektronischen oder gedruckten Publikationen ist ohne ausdrückliche Zustimmung der Verantwortlichen nicht gestattet.",
         },
-      ],
-    },
-    {
-      id: "dl-infov",
-      title: "Pflichtangaben gem. §§ 1 bis 3 DL-InfoV",
-      blocks: [
-        { h: "Verbraucherstreitbeilegung/Universalschlichtungsstelle" },
-        { p: "Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen." },
       ],
     },
     {
