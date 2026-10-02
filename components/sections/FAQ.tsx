@@ -81,7 +81,11 @@ export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: str
               Deine Frage steht nicht dabei?
             </p>
             <p className="mt-2 text-[14px] leading-[1.6] text-[#5c5954]">
-              Ruf einfach an: 0211 15847097. Du sprichst direkt mit jemandem, der
+              Ruf einfach an:{" "}
+              <a href="tel:+4921115847097" className="whitespace-nowrap font-medium text-ink underline-offset-2 hover:underline">
+                0211 15847097
+              </a>
+              . Du sprichst direkt mit jemandem, der
               antworten kann.
             </p>
             <Link

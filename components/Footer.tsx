@@ -9,7 +9,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 const CONTACT = [
   { icon: MapPin, text: "Behrenstraße 4, 40233 Düsseldorf" },
   { icon: Mail, text: "info@tylotech.de", href: "mailto:info@tylotech.de" },
-  { icon: Phone, text: "0211 15847097", href: "tel:+4921115847697" },
+  { icon: Phone, text: "0211 15847097", href: "tel:+4921115847097" },
 ];
 
 const TRUST = [
