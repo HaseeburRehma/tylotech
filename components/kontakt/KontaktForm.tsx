@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Check, ChevronDown, CircleAlert, LoaderCircle, Lock, Mail, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, validate, type FieldErrors } from "@/lib/contact";
@@ -313,7 +314,11 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           </span>
           <span className="text-[13.5px] leading-[21px] text-[#5c5954]">
             Ich bin einverstanden, dass TyloTech meine Angaben zur Bearbeitung meiner Anfrage verarbeitet. Die Einwilligung kann ich jederzeit per
-            E-Mail an {CONTACT.email} widerrufen.<span className="text-[#b4894d]"> *</span>
+            E-Mail an {CONTACT.email} widerrufen. Mehr in der{" "}
+            <Link href="/datenschutz" target="_blank" className="font-medium text-[#94713f] underline decoration-[#d1aa71]/50 underline-offset-2 hover:text-[#6d5330]">
+              Datenschutzerklärung
+            </Link>
+            .<span className="text-[#b4894d]"> *</span>
           </span>
         </label>
         <Err id="kf-consent-err" msg={show("consent")} />

@@ -56,10 +56,8 @@ function ReviewCard({ r }: { r: Review }) {
       </div>
       <p className="line-clamp-7 flex-1 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954]">{r.text}</p>
       <div className="flex items-center gap-3">
-        {r.photo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={r.photo} alt="" referrerPolicy="no-referrer" loading="lazy" className="size-[38px] shrink-0 rounded-full border border-[#eeedea] object-cover" />
-        ) : r.author ? (
+        {/* initials instead of Google profile photos: no request to Google from the visitor's browser */}
+        {r.author ? (
           <span className="grid size-[38px] shrink-0 place-items-center rounded-full border border-[#eeedea] bg-[#fbf6ee] text-[13px] font-semibold text-[#94713f]">
             {initials(r.author)}
           </span>

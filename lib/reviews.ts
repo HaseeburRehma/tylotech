@@ -9,7 +9,7 @@ import { mapsSearchUrl } from "./contact";
  * (refreshed every 6 h). Without them the page shows the Google reviews already
  * published on the homepage, and no names or dates are made up. */
 
-export type Review = { author: string | null; photo: string | null; rating: number; text: string; when: string | null };
+export type Review = { author: string | null; rating: number; text: string; when: string | null };
 export type ReviewData = { rating: number; count: number; url: string; reviews: Review[]; live: boolean };
 
 const FALLBACK: ReviewData = {
@@ -20,21 +20,18 @@ const FALLBACK: ReviewData = {
   reviews: [
     {
       author: null,
-      photo: null,
       rating: 5,
       when: null,
       text: "Ich bin persönlich immer sehr skeptisch, aber hier wurde ich positiv überrascht. Er reagiert auf Nachrichten und Anliegen zeitnah.",
     },
     {
       author: null,
-      photo: null,
       rating: 5,
       when: null,
       text: "Endlich eine Agentur, die Ergebnisse liefert statt Ausreden. Klare Kommunikation, schnelle Umsetzung, alles nachvollziehbar.",
     },
     {
       author: null,
-      photo: null,
       rating: 5,
       when: null,
       text: "Top Betreuung von Anfang an. Man merkt, dass hier mitgedacht wird und nicht nur abgerechnet.",
@@ -47,7 +44,7 @@ type PlacesReview = {
   text?: { text?: string };
   originalText?: { text?: string };
   relativePublishTimeDescription?: string;
-  authorAttribution?: { displayName?: string; photoUri?: string };
+  authorAttribution?: { displayName?: string };
 };
 
 export async function getGoogleReviews(): Promise<ReviewData> {
@@ -66,7 +63,6 @@ export async function getGoogleReviews(): Promise<ReviewData> {
     const reviews = (d.reviews ?? [])
       .map((r) => ({
         author: r.authorAttribution?.displayName ?? null,
-        photo: r.authorAttribution?.photoUri ?? null,
         rating: Math.round(r.rating ?? 0),
         text: (r.originalText?.text || r.text?.text || "").trim(),
         when: r.relativePublishTimeDescription ?? null,

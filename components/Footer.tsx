@@ -27,6 +27,8 @@ const MEHR = [
   "Karriere",
 ];
 
+const LEGAL: Record<string, string> = { Impressum: "/impressum", Datenschutz: "/datenschutz" };
+
 const PARTNERS = [
   "/partners/priyas.png",
   "/partners/lokshift.png",
@@ -186,7 +188,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5">
               {MEHR.map((l) => (
                 <li key={l}>
-                  <Link href="#" className="text-[14px] text-white/65 transition-colors hover:text-white">
+                  <Link href={LEGAL[l] ?? "#"} className="text-[14px] text-white/65 transition-colors hover:text-white">
                     {l}
                   </Link>
                 </li>

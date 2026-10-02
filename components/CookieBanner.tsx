@@ -92,7 +92,7 @@ export default function CookieBanner() {
           Wir verwenden Cookies, um die Seite zu betreiben, zu verstehen, wie sie
           genutzt wird, und sie zu verbessern. Sie entscheiden, was an ist. Mehr
           in unserer{" "}
-          <Link href="#datenschutz" className="text-ink underline underline-offset-2 hover:text-accent">
+          <Link href="/datenschutz" className="text-ink underline underline-offset-2 hover:text-accent">
             Datenschutzerklärung
           </Link>
           .
