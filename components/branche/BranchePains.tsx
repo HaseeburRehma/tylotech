@@ -40,7 +40,7 @@ function RankRow({ r, i, on }: { r: (typeof RANKS)[number]; i: number; on: boole
       className="group/row -mx-2 flex items-center gap-2.5 rounded-lg border-t border-[#eeedea] px-2 py-[9px] transition-[background-color,translate,opacity] duration-500 hover:bg-[#fbf6ee]"
       style={{ opacity: on ? 1 : 0, translate: on ? "0 0" : "0 14px", transitionDelay: on ? `${i * 120}ms` : "0ms" }}
     >
-      <p className="min-w-0 flex-1 truncate text-[13px] leading-[17px] text-[#1a1917]">{r.term}</p>
+      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917] sm:text-[13px]">{r.term}</p>
       <span className={cn("grid h-6 w-[26px] place-items-center rounded-[7px] font-mono text-[12px] font-medium tabular-nums", pos === 1 ? "bg-[#fbf6ee] text-[#94713f]" : "bg-[#f6f5f3] text-[#5c5954]")}>
         {pos}
       </span>
@@ -57,8 +57,8 @@ function RankRow({ r, i, on }: { r: (typeof RANKS)[number]; i: number; on: boole
 function Rankings() {
   const [ref, on] = useInView<HTMLDivElement>(0.35);
   return (
-    <div ref={ref} className="flex h-full items-center bg-[#f6f5f3] px-5 sm:px-10">
-      <div className="w-full rounded-[14px] border border-[#eeedea] bg-white px-5 py-[18px] shadow-[0_10px_30px_-20px_rgba(8,34,44,0.25)]">
+    <div ref={ref} className="flex h-full items-center justify-center bg-[#fbf6ee] px-5 sm:px-10">
+      <div className="w-full max-w-[413px] rounded-[14px] border border-[#eeedea] bg-white px-5 py-[18px] shadow-[0_10px_30px_-20px_rgba(8,34,44,0.25)]">
         <div className="flex items-center gap-2.5 pb-2.5 font-mono text-[9.5px] font-medium uppercase leading-[13px] tracking-[0.7px] text-[#7d7973]">
           <span className="flex-1">Suchbegriff</span>
           <span className="w-[34px]">Pos.</span>
@@ -81,8 +81,8 @@ function Kpi({ label, value, falling }: { label: string; value: string; falling?
   const [hover, setHover] = useState<number | null>(null);
   const T = falling ? TrendingDown : TrendingUp;
   return (
-    <div ref={ref} className="flex h-full items-stretch bg-[#f6f5f3] px-5 py-6 sm:px-10">
-      <div className="flex w-full flex-col gap-4 rounded-[14px] border border-[#eeedea] bg-white px-[22px] py-5 shadow-[0_10px_30px_-20px_rgba(8,34,44,0.25)]">
+    <div ref={ref} className="flex h-full items-stretch justify-center bg-[#fbf6ee] px-5 py-6 sm:px-10">
+      <div className="flex w-full max-w-[413px] flex-col gap-4 rounded-[14px] border border-[#eeedea] bg-white px-[22px] py-5 shadow-[0_10px_30px_-20px_rgba(8,34,44,0.25)]">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-mono text-[9.5px] font-medium uppercase leading-[13px] tracking-[0.8px] text-[#7d7973]">{label}</p>
@@ -136,7 +136,7 @@ function Channels() {
   }, [on, hover]);
   const active = hover ?? hl;
   return (
-    <div ref={ref} className="flex h-full items-center justify-center bg-[#f6f5f3] px-5">
+    <div ref={ref} className="flex h-full items-center justify-center bg-[#fbf6ee] px-5">
       <div className="grid w-full max-w-[340px] grid-cols-4 gap-3" onMouseLeave={() => setHover(null)}>
         {CHANNELS.map((c, i) => (
           <span
@@ -185,7 +185,7 @@ export default function BranchePains({ b }: { b: Branche }) {
   );
 
   return (
-    <section ref={root} className="bg-page py-20 sm:py-24 lg:py-28">
+    <section ref={root} className="bg-[#f6f5f3] py-20 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
         <SectionHead icon="target" eyebrow="Schmerz und Lösung" title="So _lösen_ wir es." />
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">

@@ -27,6 +27,8 @@ export type Branche = {
   name: string;
   metaTitle: string;
   metaDescription: string;
+  /** eyebrow of the closing CTA (Figma "10 · CTA") */
+  ctaEyebrow: string;
   hero: {
     icon: IconName;
     eyebrow: string;
@@ -82,6 +84,7 @@ export const BRANCHEN: Branche[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "handwerk",
+    ctaEyebrow: "Kostenlose Potenzialanalyse",
     name: "Handwerk",
     metaTitle: "Marketing, Leadgenerierung & Recruiting für Handwerksbetriebe | TyloTech",
     metaDescription:
@@ -201,6 +204,7 @@ export const BRANCHEN: Branche[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "lokale-dienstleister",
+    ctaEyebrow: "Kostenlose Sichtbarkeits-Analyse für deine Region",
     name: "Lokale Dienstleister",
     metaTitle: "Marketing & lokale Sichtbarkeit für Dienstleister | TyloTech",
     metaDescription:
@@ -312,6 +316,7 @@ export const BRANCHEN: Branche[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "online-dienstleistungen",
+    ctaEyebrow: "Kostenloses Erstgespräch",
     name: "Online-Dienstleistungen",
     metaTitle: "Marketing für Online-Dienstleister, Coaches & digitale Anbieter | TyloTech",
     metaDescription:
@@ -421,6 +426,7 @@ export const BRANCHEN: Branche[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "e-commerce",
+    ctaEyebrow: "Kostenlose Shop-Analyse",
     name: "E-Commerce",
     metaTitle: "Performance-Marketing & SEO für Online-Shops | TyloTech",
     metaDescription:
@@ -531,6 +537,7 @@ export const BRANCHEN: Branche[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "b2b-dienstleistung",
+    ctaEyebrow: "Kostenloses Erstgespräch",
     name: "B2B-Dienstleistung",
     metaTitle: "Leadgenerierung für B2B-Dienstleister | TyloTech",
     metaDescription:
@@ -640,6 +647,7 @@ export const BRANCHEN: Branche[] = [
   /* ------------------------------------------------------------------ */
   {
     slug: "finanz-investment",
+    ctaEyebrow: "Vertrauliche Analyse",
     name: "Finanz & Investment",
     metaTitle: "Marketing & Leadgenerierung für Finanz- & Investment-Anbieter | TyloTech",
     metaDescription:

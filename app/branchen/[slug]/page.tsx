@@ -4,9 +4,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import FloatingActionBar from "@/components/FloatingActionBar";
 import TrustStrip from "@/components/sections/TrustStrip";
-import Gruender from "@/components/sections/Gruender";
 import FAQ from "@/components/sections/FAQ";
-import FinalCTA from "@/components/sections/FinalCTA";
 import BrancheHero from "@/components/branche/BrancheHero";
 import BrancheKennst from "@/components/branche/BrancheKennst";
 import BrancheLoesung from "@/components/branche/BrancheLoesung";
@@ -15,6 +13,8 @@ import BrancheSystem from "@/components/branche/BrancheSystem";
 import BrancheGeo from "@/components/branche/BrancheGeo";
 import BrancheFuerWen from "@/components/branche/BrancheFuerWen";
 import BrancheCase from "@/components/branche/BrancheCase";
+import BrancheUeberUns from "@/components/branche/BrancheUeberUns";
+import BrancheCTA from "@/components/branche/BrancheCTA";
 import { BRANCHEN, getBranche } from "@/lib/branchen";
 
 export const dynamicParams = false;
@@ -53,9 +53,9 @@ export default async function BranchePage(props: PageProps<"/branchen/[slug]">) 
         <BrancheGeo />
         <BrancheFuerWen b={b} />
         <BrancheCase b={b} />
-        <Gruender />
-        <FAQ items={b.faq} />
-        <FinalCTA />
+        <BrancheUeberUns />
+        <FAQ items={b.faq} tone="branche" />
+        <BrancheCTA b={b} />
       </main>
       <Footer />
       <FloatingActionBar />
