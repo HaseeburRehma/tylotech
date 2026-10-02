@@ -264,7 +264,7 @@ export default function FloatingActionBar() {
 
         {/* Termin pill */}
         <Link
-          href="#termin"
+          href="/kontakt"
           aria-label="Erstgespräch buchen"
           className="group flex h-11 shrink-0 items-center gap-3 rounded-full bg-white pl-1.5 pr-1.5 sm:pl-2"
         >

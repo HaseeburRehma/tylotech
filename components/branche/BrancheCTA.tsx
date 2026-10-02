@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
@@ -19,8 +20,6 @@ export default function BrancheCTA({ b }: { b: Branche }) {
     },
     { scope: root },
   );
-
-  const mail = `mailto:info@tylotech.de?subject=${encodeURIComponent(`Erstgespräch – ${b.name}`)}`;
 
   return (
     <section id="kontakt" ref={root} className="scroll-mt-20 bg-white py-16 sm:py-20 lg:py-[100px]">
@@ -52,8 +51,8 @@ export default function BrancheCTA({ b }: { b: Branche }) {
             <p className="max-w-[720px] text-[clamp(16px,1.5vw,18px)] leading-[1.56] tracking-[-0.01em] text-white/[0.94]">
               Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt — und ob wir zueinander passen.
             </p>
-            <a
-              href={mail}
+            <Link
+              href={`/kontakt?branche=${b.slug}`}
               className="group relative inline-flex items-center gap-3.5 rounded-full py-2 pl-2 pr-[30px] shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 hover:-translate-y-0.5 hover:brightness-105"
               style={{ backgroundImage: "linear-gradient(90deg, #efdcbc 0%, #d8b681 45%, #b4894d 100%)" }}
             >
@@ -63,7 +62,7 @@ export default function BrancheCTA({ b }: { b: Branche }) {
               <span className="whitespace-nowrap text-[18px] font-medium leading-6 tracking-[-0.3px] text-[#04161d]">
                 <span className="font-[family-name:var(--font-instrument)] text-[19px] font-normal italic">Erstgespräch</span> sichern
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </Container>

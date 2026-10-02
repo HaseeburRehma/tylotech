@@ -31,7 +31,7 @@ const LINKS = [
   { label: "Portfolio", href: "#referenzen" },
   { label: "TyloHQ", href: "#tylohq-app" },
   { label: "Über uns", href: "#gruender", everywhere: true },
-  { label: "Kontakt", href: "#kontakt", everywhere: true },
+  { label: "Kontakt", href: "/kontakt", everywhere: true },
 ];
 
 export default function Nav() {
@@ -182,7 +182,7 @@ export default function Nav() {
             Kunden-Login
           </Link>
           <Link
-            href="#kontakt"
+            href="/kontakt"
             className={`group hidden h-12 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 sm:inline-flex xl:px-[22px] xl:text-[16px] ${
               dark
                 ? "bg-accent text-[#001620] hover:bg-[#ddb97e]"
@@ -273,7 +273,7 @@ export default function Nav() {
               Kunden-Login
             </Link>
             <Link
-              href="#kontakt"
+              href="/kontakt"
               onClick={() => setOpen(false)}
               className="flex h-12 items-center justify-center gap-2 rounded-xl bg-[#002e3d] text-[16px] font-medium text-inverse transition-colors hover:bg-[#013a4d]"
             >

@@ -132,7 +132,7 @@ export default function Ablauf() {
 
         <div className="ablauf-cta mt-14 flex justify-center">
           <Link
-            href="#termin"
+            href="/kontakt"
             className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[16px] font-medium text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
           >
             Erstgespräch sichern

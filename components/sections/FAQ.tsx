@@ -89,7 +89,7 @@ export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: str
               antworten kann.
             </p>
             <Link
-              href="#kontakt"
+              href="/kontakt"
               className="group mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-5 text-[14px] font-medium text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
             >
               Erstgespräch sichern

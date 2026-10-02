@@ -325,3 +325,17 @@ html.lenis body {
     transform: translateY(-3px);
   }
 }
+
+/* Kontakt · success check draw, map pin pulse, review progress */
+@keyframes ktDraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes ktPin {
+  0% { transform: scale(0.6); opacity: 0.7; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+@keyframes ktProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

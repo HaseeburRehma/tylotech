@@ -170,7 +170,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5">
               {NAV.map((l) => (
                 <li key={l}>
-                  <Link href="#" className="text-[14px] text-white/65 transition-colors hover:text-white">
+                  <Link href={l === "Kontakt" ? "/kontakt" : "#"} className="text-[14px] text-white/65 transition-colors hover:text-white">
                     {l}
                   </Link>
                 </li>

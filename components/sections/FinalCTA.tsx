@@ -76,7 +76,7 @@ export default function FinalCTA() {
 
             <div className="mt-9 flex justify-center">
               <Link
-                href="#termin"
+                href="/kontakt"
                 className="group inline-flex items-center gap-3.5 rounded-full bg-gradient-to-b from-[#e7c179] to-[#c99f5c] py-2 pl-2 pr-7 shadow-[0_0_44px_-6px_rgba(209,170,113,0.7)] transition-[transform,filter] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
               >
                 <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#03202c] text-white">
