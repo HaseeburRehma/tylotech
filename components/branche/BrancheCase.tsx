@@ -9,9 +9,9 @@ import type { Branche } from "@/lib/branchen";
 import { Accent, Eyebrow } from "./ui";
 
 /* Figma shows dashed "PLATZHALTER" notes where numbers will go once a case is
- * live. They are internal to-dos, so they stay hidden on the live site; flip
- * this to true to show them (e.g. for a review build). */
-const SHOW_PLACEHOLDERS = false;
+ * live (in-card note + "next case" teaser below). Shown as designed; set to
+ * false to hide the in-card notes once real figures are in. */
+const SHOW_PLACEHOLDERS = true;
 
 export default function BrancheCase({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
@@ -22,6 +22,8 @@ export default function BrancheCase({ b }: { b: Branche }) {
       const st = { trigger: ".bhc-card", start: "top 80%", toggleActions: "play none none none" };
       gsap.from(".bhc-card", { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: st });
       gsap.from(".bhc-content > *", { y: 20, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.08, delay: 0.15, scrollTrigger: st });
+      if (root.current?.querySelector(".bhc-extra"))
+        gsap.from(".bhc-extra", { y: 20, opacity: 0, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: ".bhc-extra", start: "top 92%", toggleActions: "play none none none" } });
       gsap.from(".bhc-visual", { y: 30, opacity: 0, scale: 0.96, duration: 1, ease: "power3.out", delay: 0.2, scrollTrigger: st });
     },
     { scope: root },
@@ -85,24 +87,44 @@ export default function BrancheCase({ b }: { b: Branche }) {
 
           <div
             className={cn(
-              "bhc-visual relative aspect-square w-full max-w-[520px] shrink-0 overflow-hidden rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)] lg:w-[min(520px,42%)]",
-              c.tyloLogo ? "bg-[#fbf6ee]" : "bg-[#eeedea]",
+              "bhc-visual group relative aspect-square w-full max-w-[520px] shrink-0 overflow-hidden rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)] lg:w-[min(520px,42%)]",
+              c.image ? "bg-[#eeedea]" : "bg-[#fbf6ee]",
             )}
           >
-            {c.tyloLogo ? (
+            {c.image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src="/brand/tylotech-logo.svg" alt="TyloTech" className="absolute left-1/2 top-1/2 w-[35%] -translate-x-1/2 -translate-y-1/2" />
+              <img
+                src={c.image}
+                alt=""
+                loading="lazy"
+                className={cn("absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]", c.imageFit === "top" && "object-top")}
+              />
             ) : (
-              c.image && (
+              c.tyloLogo && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={c.image} alt="" loading="lazy" className={cn("absolute inset-0 h-full w-full object-cover", c.imageFit === "top" && "object-top")} />
+                <img src="/brand/tylotech-logo.svg" alt="TyloTech" className="absolute left-1/2 top-1/2 w-[35%] -translate-x-1/2 -translate-y-1/2" />
               )
+            )}
+            {c.image && c.tyloLogo && (
+              <>
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,rgba(3,21,28,0)_0%,rgba(3,21,28,0.55)_100%)]" />
+                <div className="absolute bottom-4 left-4 flex items-center gap-3 rounded-[16px] border border-white/60 bg-white/90 py-3 pl-3.5 pr-4 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.45)] backdrop-blur-md sm:bottom-6 sm:left-6">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brand/tylotech-logo.svg" alt="TyloTech" className="h-6 w-auto sm:h-7" />
+                  <span className="h-6 w-px bg-[#e2e0dc]" />
+                  <span className="font-mono text-[10.5px] font-medium uppercase leading-[13px] tracking-[0.4px] text-[#94713f] sm:text-[11px]">
+                    Eigene
+                    <br />
+                    Marke
+                  </span>
+                </div>
+              </>
             )}
           </div>
         </div>
 
-        {SHOW_PLACEHOLDERS && c.extraPlaceholder && (
-          <div className="flex flex-wrap items-center gap-4 rounded-[20px] border border-dashed border-[#cbc8c2] px-7 py-5">
+        {c.extraPlaceholder && (
+          <div className="bhc-extra flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-[20px] border border-dashed border-[#cbc8c2] px-5 py-4 sm:px-7 sm:py-5">
             <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">Platzhalter</p>
             <p className="text-[16px] text-[#5c5954]">{c.extraPlaceholder}</p>
           </div>

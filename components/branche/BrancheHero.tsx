@@ -19,8 +19,6 @@ export default function BrancheHero({ b }: { b: Branche }) {
         .from(".bhh-photo", { y: 40, opacity: 0, scale: 0.96, duration: 1 }, 0.2)
         .from(".bhh-card", { y: 18, opacity: 0, scale: 0.94, duration: 0.6, stagger: 0.15 }, 0.65)
         .from(".bhh-chip", { y: 14, opacity: 0, duration: 0.6 }, 0.95);
-      // gentle float on the lead cards
-      gsap.to(".bhh-card", { y: "-=6", duration: 2.6, ease: "sine.inOut", yoyo: true, repeat: -1, stagger: 0.8, delay: 1.6 });
     },
     { scope: root },
   );
@@ -61,16 +59,17 @@ export default function BrancheHero({ b }: { b: Branche }) {
           </div>
         </div>
 
-        {/* visual — positions are Figma's 500×560 frame, in % so it scales */}
+        {/* visual — positions are Figma's 500×560 frame, in % so it scales.
+          The float runs on CSS `translate`, so it never fights GSAP's transform. */}
         <div className="relative mx-auto aspect-[500/560] w-full max-w-[500px]">
           <div className="bhh-offset absolute left-[17.6%] top-[7.1%] h-[91.1%] w-[80%] rounded-[28px] bg-[#fbf6ee]" />
           <div className="bhh-photo absolute left-[12%] top-[2.1%] h-[91.1%] w-[80%] overflow-hidden rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={h.image} alt="" className="absolute inset-0 h-full w-full object-cover" fetchPriority="high" />
           </div>
-          <LeadCard className="left-0 top-[15%]" {...h.cards[0]} />
-          <LeadCard className="right-0 top-[70.7%]" {...h.cards[1]} />
-          <div className="bhh-chip absolute left-[7.2%] top-[87.9%] flex items-center gap-2.5 rounded-full bg-[#0f0e0d] py-2 pl-2 pr-[18px] shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05)]">
+          <LeadCard className="left-0 top-[15%] motion-safe:animate-[bhFloat_4.2s_ease-in-out_1.3s_infinite]" {...h.cards[0]} />
+          <LeadCard className="right-0 top-[70.7%] motion-safe:animate-[bhFloat_4.8s_ease-in-out_2.4s_infinite]" {...h.cards[1]} />
+          <div className="bhh-chip absolute left-[7.2%] top-[87.9%] motion-safe:animate-[bhFloatSm_5.4s_ease-in-out_1.9s_infinite] flex items-center gap-2.5 rounded-full bg-[#0f0e0d] py-2 pl-2 pr-[18px] shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05)]">
             <span className="grid size-7 place-items-center rounded-full bg-[#d1aa71] font-display text-[14px] font-medium text-[#0f0e0d]">1</span>
             <span className="whitespace-nowrap font-display text-[13px] font-medium tracking-[-0.02em] text-white sm:text-[14px]">{h.chip}</span>
           </div>

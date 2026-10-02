@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import { TYLOHQ_URL } from "@/lib/site";
 import { MapPin, Mail, Phone, ShieldCheck, Server, Quote } from "lucide-react";
 import Container from "./ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
@@ -27,7 +28,7 @@ const MEHR = [
   "Karriere",
 ];
 
-const LEGAL: Record<string, string> = { Impressum: "/impressum", Datenschutz: "/datenschutz" };
+const LEGAL: Record<string, string> = { "TyloTech HQ Login": TYLOHQ_URL, Impressum: "/impressum", Datenschutz: "/datenschutz" };
 
 const PARTNERS = [
   "/partners/priyas.png",
@@ -188,7 +189,10 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5">
               {MEHR.map((l) => (
                 <li key={l}>
-                  <Link href={LEGAL[l] ?? "#"} className="text-[14px] text-white/65 transition-colors hover:text-white">
+                  <Link
+                    href={LEGAL[l] ?? "#"}
+                    {...(LEGAL[l]?.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
+                    className="text-[14px] text-white/65 transition-colors hover:text-white">
                     {l}
                   </Link>
                 </li>

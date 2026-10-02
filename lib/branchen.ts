@@ -73,6 +73,7 @@ export type Branche = {
     extraPlaceholder?: string;
     image?: string;
     imageFit?: "top";
+    /** TyloTech logo badge over the case image (our own brand as the case) */
     tyloLogo?: boolean;
   };
   faq: { q: string; a: string }[];
@@ -414,6 +415,7 @@ export const BRANCHEN: Branche[] = [
       title: "Unsere eigenen Marken _als Beweis_",
       text: "Wir bauen unsere eigenen Marken (TyloTech, Marokko Investment) mit genau diesen Methoden auf: digitale Sichtbarkeit, Autorität und Leadgenerierung.",
       placeholder: "Sobald ein externer Online-Dienstleister-Case mit Zahlen vorliegt, wird er hier ergänzt.",
+      image: img("online-dienstleistungen", "case"),
       tyloLogo: true,
     },
     faq: [

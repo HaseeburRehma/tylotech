@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
-import { Gauge, LayoutDashboard, MousePointerClick, Sparkles, Users } from "lucide-react";
+import { ArrowUpRight, Gauge, LayoutDashboard, MousePointerClick, Sparkles, Users } from "lucide-react";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
 import HQApp from "../tylohq/HQApp";
+import { TYLOHQ_URL } from "@/lib/site";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 const FEATURES = [
@@ -115,15 +115,18 @@ export default function TyloHQDashboard() {
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-3">
-          <Button href="#kontakt" variant="dark" withArrow>
-            TyloHQ ansehen
+          <Button href="/kontakt" variant="dark" withArrow>
+            TyloHQ-Zugang anfragen
           </Button>
-          <Link
-            href="#login"
-            className="rounded-[10px] px-7 py-4 text-[16px] font-medium leading-5 tracking-[-0.01em] text-[#1a1917] transition-colors hover:bg-white"
+          <a
+            href={TYLOHQ_URL}
+            target="_blank"
+            rel="noopener"
+            className="group inline-flex items-center gap-2 rounded-[10px] border border-[#e2e0dc] bg-white/60 px-7 py-4 text-[16px] font-medium leading-5 tracking-[-0.01em] text-[#1a1917] transition-colors hover:bg-white"
           >
             Kunden-Login
-          </Link>
+            <ArrowUpRight className="size-[18px] text-[#7d7973] transition-[color,translate] duration-200 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-[#94713f]" strokeWidth={1.9} />
+          </a>
         </div>
       </Container>
     </section>

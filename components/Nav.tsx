@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   ChevronDown,
   ArrowRight,
+  ArrowUpRight,
   Menu,
   X,
   Hammer,
@@ -16,6 +17,7 @@ import {
   Globe,
 } from "lucide-react";
 import Container from "./ui/Container";
+import { TYLOHQ_URL } from "@/lib/site";
 
 const INDUSTRIES = [
   { label: "Online-Dienstleistungen", icon: Globe, href: "/branchen/online-dienstleistungen" },
@@ -171,16 +173,20 @@ export default function Nav() {
         </nav>
 
         <div className="flex items-center gap-2.5">
-          <Link
-            href="#login"
-            className={`hidden h-12 items-center whitespace-nowrap rounded-xl px-3 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex xl:px-[18px] xl:text-[16px] ${
+          <a
+            href={TYLOHQ_URL}
+            target="_blank"
+            rel="noopener"
+            title="Zum Kundenportal TyloHQ"
+            className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex xl:px-[18px] xl:text-[16px] ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#43413d] hover:bg-ink/[0.04]"
             }`}
           >
             Kunden-Login
-          </Link>
+            <ArrowUpRight className="size-4 opacity-50 transition-[opacity,translate] duration-200 group-hover:-translate-y-px group-hover:translate-x-px group-hover:opacity-100" strokeWidth={1.9} />
+          </a>
           <Link
             href="/kontakt"
             className={`group hidden h-12 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 sm:inline-flex xl:px-[22px] xl:text-[16px] ${
@@ -265,13 +271,16 @@ export default function Nav() {
             ),
           )}
           <div className="mt-2 flex flex-col gap-2.5 border-t border-line pt-4">
-            <Link
-              href="#login"
+            <a
+              href={TYLOHQ_URL}
+              target="_blank"
+              rel="noopener"
               onClick={() => setOpen(false)}
-              className="flex h-12 items-center justify-center rounded-xl border border-line text-[16px] font-medium text-[#43413d] transition-colors hover:bg-ink/[0.04]"
+              className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-line text-[16px] font-medium text-[#43413d] transition-colors hover:bg-ink/[0.04]"
             >
               Kunden-Login
-            </Link>
+              <ArrowUpRight className="size-4 opacity-60" strokeWidth={1.9} />
+            </a>
             <Link
               href="/kontakt"
               onClick={() => setOpen(false)}
