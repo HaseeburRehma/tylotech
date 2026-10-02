@@ -90,7 +90,8 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: process.env.CONTACT_FROM || "TyloTech Website <onboarding@resend.dev>",
+        // tolerate a value pasted with surrounding quotes in the Vercel UI
+        from: process.env.CONTACT_FROM?.trim().replace(/^["']|["']$/g, "") || "TyloTech Website <onboarding@resend.dev>",
         to: [process.env.CONTACT_TO || CONTACT.email],
         reply_to: p.email,
         subject: `Neue Anfrage: ${p.name}${p.company ? ` (${p.company})` : ""}${p.topics[0] ? ` – ${p.topics[0]}` : ""}`,
@@ -100,8 +101,14 @@ export async function POST(request: Request) {
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) {
-      console.error("kontakt: resend", res.status, await res.text().catch(() => ""));
-      return Response.json({ ok: false, reason: "send-failed" }, { status: 502 });
+      const detail = await res.text().catch(() => "");
+      console.error("kontakt: resend", res.status, detail);
+      // only Resend's short error code (e.g. "validation_error") — no message text, nothing secret
+      let code: string | undefined;
+      try {
+        code = (JSON.parse(detail) as { name?: string }).name;
+      } catch {}
+      return Response.json({ ok: false, reason: "send-failed", status: res.status, code }, { status: 502 });
     }
   } catch (err) {
     console.error("kontakt: send", err);
