@@ -94,9 +94,15 @@ export default function Footer() {
   return (
     <footer
       ref={root}
-      className="border-t border-white/10 bg-[#04161d] pb-8 pt-16 text-white sm:pt-20"
+      className="relative overflow-hidden border-t border-white/10 bg-[#001620] pb-8 pt-16 text-white sm:pt-20"
     >
-      <Container>
+      {/* Figma "Warmes Licht": 900×520 gold radial glow behind the logo */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-[140px] -top-[200px] h-[520px] w-[900px] max-w-[160vw] motion-safe:animate-[footGlow_9s_ease-in-out_infinite]"
+        style={{ background: "radial-gradient(ellipse closest-side, rgba(209,170,113,0.2), rgba(209,170,113,0.06) 55%, rgba(209,170,113,0))" }}
+      />
+      <Container className="relative">
         <div className="grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-[1.5fr_1.4fr_1fr_1fr]">
           {/* Brand */}
           <div className="footer-reveal">
@@ -201,7 +207,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col-reverse items-center justify-between gap-5 border-t border-white/10 pt-6 sm:flex-row">
+        {/* Figma "Trennlinie": gold fading into white */}
+        <div aria-hidden className="mt-14 h-px w-full bg-[linear-gradient(90deg,rgba(209,170,113,0.35)_0%,rgba(255,255,255,0.12)_50%,rgba(255,255,255,0.04)_100%)]" />
+        <div className="flex flex-col-reverse items-center justify-between gap-5 pt-6 sm:flex-row">
           <div className="flex gap-2.5">
             {SOCIALS.map((s) => (
               <Social key={s.label} label={s.label} path={s.path} />
