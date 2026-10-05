@@ -177,7 +177,7 @@ function LiveTicker() {
           <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11.5px] leading-4 text-[#8cc0d1]">
             <span className="shrink-0 font-medium text-[#d8b682]">TyloTech</span>
             <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
-            <span className="truncate">Ergebnis aus Partnerprojekten</span>
+            <span className="truncate">{TICKER_MESSAGES[sl.i].time ?? "Ergebnis aus Partnerprojekten"}</span>
           </span>
         </span>
       );
