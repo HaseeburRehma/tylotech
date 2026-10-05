@@ -1,17 +1,48 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import { ArrowRight, Check, ChevronDown, CircleAlert, Clock, Globe, LoaderCircle, Lock, Mail, MessageCircle, ScanSearch, Target, UserRound, Video, X } from "lucide-react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BadgeEuro,
+  Building2,
+  Check,
+  ChevronDown,
+  CircleAlert,
+  Clock,
+  Ellipsis,
+  Globe,
+  Hammer,
+  House,
+  LoaderCircle,
+  Lock,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Search,
+  ScanSearch,
+  ShoppingCart,
+  Sparkles,
+  Stethoscope,
+  Target,
+  TrendingUp,
+  UserPlus,
+  UserRound,
+  Video,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/cn";
 import { CONTACT } from "@/lib/contact";
 import { TL_BRANCHEN, TL_BUDGETS, TL_ZIELE, normalizeWebsite, trackLens, validateLens, type TlErrors } from "@/lib/tylolens";
 
-/* TyloLens (dev brief + TyloLens_Tool.html): scroll-triggered lead modal.
+/* TyloLens (dev brief + TyloLens_Tool.html): scroll-triggered lead modal, two steps.
    - opens automatically at ~55 % scroll depth, once per session, never after a manual close
    - also opens from the gold "TyloLens" menu item (event "tylolens:open") and the floating button
-   - six fields, budget is the lead qualifier; success state without redirect */
+   - step 1: website, Branche, Ziel, Budget · step 2: Name, E-Mail — the same six fields as the brief */
 
 const SS_AUTO = "tylolens-auto-shown";
 const SS_DISMISSED = "tylolens-dismissed";
@@ -49,10 +80,31 @@ const HEAD_BG =
   "radial-gradient(70% 90% at 100% 0%, rgba(209,170,113,0.30), rgba(209,170,113,0.06) 55%, transparent 75%), radial-gradient(60% 70% at 0% 100%, rgba(29,115,145,0.30), transparent 70%), linear-gradient(155deg, #0a4157 0%, #002e3d 48%, #001b26 100%)";
 
 const EMPTY = { website: "", branche: "", ziel: "", budget: "", name: "", email: "", company: "" };
+const STEP1 = ["website", "branche", "ziel", "budget"] as const;
+const STEP2 = ["name", "email"] as const;
+
+const BRANCHE_ICON: Record<string, LucideIcon> = {
+  Handwerk: Hammer,
+  "Lokaler Dienstleister": MapPin,
+  "E-Commerce": ShoppingCart,
+  "B2B-Dienstleistung": Building2,
+  "Finanz & Investment": TrendingUp,
+  "Gesundheit / Praxis": Stethoscope,
+  Immobilien: House,
+  Sonstiges: Ellipsis,
+};
+const ZIEL_ICON: Record<string, LucideIcon> = {
+  "Mehr Anfragen / Leads": MessageCircle,
+  "Bessere Google-Rankings": Search,
+  "Mehr Umsatz": BadgeEuro,
+  "Personal finden": UserPlus,
+  "Marke aufbauen": Sparkles,
+};
 
 export default function TyloLens() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [step, setStep] = useState<1 | 2>(1);
   const [v, setV] = useState(EMPTY);
   const [errors, setErrors] = useState<TlErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -62,6 +114,7 @@ export default function TyloLens() {
   const lastFocus = useRef<HTMLElement | null>(null);
   const dialog = useRef<HTMLDivElement>(null);
   const firstField = useRef<HTMLInputElement>(null);
+  const nameField = useRef<HTMLInputElement>(null);
   const openRef = useRef(false);
   const statusRef = useRef(status);
   useEffect(() => {
@@ -112,12 +165,13 @@ export default function TyloLens() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [pathname, show]);
 
-  /* floating button: visible once the hero is passed, hidden over the footer */
+  /* floating button: visible once the hero is passed, hidden over the footer and while the cookie notice is up */
   useEffect(() => {
     const onScroll = () => {
       const footer = document.querySelector("footer");
       const overFooter = footer ? footer.getBoundingClientRect().top < window.innerHeight - 40 : false;
-      setFab(window.scrollY > window.innerHeight * 0.6 && !overFooter);
+      const cookieDecided = !!store.get(ls(), "tt-cookie-consent");
+      setFab(window.scrollY > window.innerHeight * 0.6 && !overFooter && cookieDecided);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -134,15 +188,19 @@ export default function TyloLens() {
     lenis()?.stop();
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
-    const t = window.setTimeout(() => (statusRef.current === "sent" ? dialog.current?.querySelector<HTMLElement>("button") : firstField.current)?.focus(), 60);
+    const t = window.setTimeout(() => {
+      if (statusRef.current === "sent") dialog.current?.querySelector<HTMLElement>("button")?.focus();
+      else firstField.current?.focus({ preventScroll: true });
+    }, 60);
     const onKey = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return; // e.g. an open dropdown consumed Escape
       if (e.key === "Escape") {
         e.preventDefault();
         close();
         return;
       }
       if (e.key !== "Tab" || !dialog.current) return;
-      const f = [...dialog.current.querySelectorAll<HTMLElement>("button, input, select, a[href]")].filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
+      const f = [...dialog.current.querySelectorAll<HTMLElement>("button, input, a[href]")].filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null && el.tabIndex !== -1);
       if (!f.length) return;
       const first = f[0];
       const last = f[f.length - 1];
@@ -163,13 +221,16 @@ export default function TyloLens() {
     };
   }, [open, close]);
 
-  const set = (k: keyof typeof EMPTY) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const next = { ...v, [k]: e.target.value };
+  const setValue = (k: keyof typeof EMPTY, value: string) => {
+    const next = { ...v, [k]: value };
     setV(next);
-    if (touched[k]) setErrors(validateLens(next));
+    const picked = k === "branche" || k === "ziel" || k === "budget";
+    if (picked) setTouched((t) => ({ ...t, [k]: true }));
+    if (touched[k] || picked) setErrors(validateLens(next));
   };
-  // Only check a field on blur once something was typed — an error appearing for an empty
-  // field would shift the layout under the pointer and swallow the click that caused the blur.
+  const set = (k: keyof typeof EMPTY) => (e: React.ChangeEvent<HTMLInputElement>) => setValue(k, e.target.value);
+  // Only check a typed field on blur once something was entered — an error appearing for an
+  // empty field would shift the layout under the pointer and swallow the click that caused the blur.
   const blur = (k: keyof typeof EMPTY) => () => {
     if (!v[k].trim()) return;
     setTouched((t) => ({ ...t, [k]: true }));
@@ -177,14 +238,32 @@ export default function TyloLens() {
   };
   const err = (k: keyof TlErrors) => (touched[k] ? errors[k] : undefined);
 
+  function next(e?: React.FormEvent) {
+    e?.preventDefault();
+    const errs = validateLens(v);
+    setErrors(errs);
+    setTouched((t) => ({ ...t, website: true, branche: true, ziel: true, budget: true }));
+    const bad = STEP1.find((k) => errs[k]);
+    if (bad) {
+      document.getElementById(`tl-${bad}`)?.focus();
+      return;
+    }
+    setStep(2);
+    window.setTimeout(() => nameField.current?.focus({ preventScroll: true }), 80);
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const errs = validateLens(v);
     setErrors(errs);
     setTouched({ website: true, branche: true, ziel: true, budget: true, name: true, email: true });
-    const firstBad = Object.keys(errs)[0];
-    if (firstBad) {
-      document.getElementById(`tl-${firstBad}`)?.focus();
+    if (STEP1.some((k) => errs[k])) {
+      setStep(1);
+      return;
+    }
+    const bad = STEP2.find((k) => errs[k]);
+    if (bad) {
+      document.getElementById(`tl-${bad}`)?.focus();
       return;
     }
     setStatus("sending");
@@ -204,6 +283,7 @@ export default function TyloLens() {
       }
       if (data.reason === "invalid" && data.errors) {
         setErrors(data.errors);
+        if (STEP1.some((k) => data.errors?.[k])) setStep(1);
         return setStatus("idle");
       }
       setStatus(data.reason === "rate-limited" ? "limited" : "error");
@@ -219,21 +299,27 @@ export default function TyloLens() {
 
   const first = v.name.trim().split(/\s+/)[0];
   const site = (normalizeWebsite(v.website) ?? v.website).replace(/^https?:\/\//, "");
+  const budgetLabel = TL_BUDGETS.find((b) => b.value === v.budget)?.label ?? "";
 
   const never = () => {
     store.set(ls(), LS_NEVER, "1");
     close();
   };
 
+  const headTitle = "mt-4 font-display text-[clamp(1.45rem,4.6vw,1.9rem)] font-semibold leading-[1.13] tracking-[-0.03em] text-white";
+  const accent = "font-[family-name:var(--font-instrument)] text-[1.08em] font-normal italic tracking-[-0.01em] text-[#D4A863]";
+  const stepIn = "animate-[tlStepIn_.35s_cubic-bezier(.2,.8,.2,1)_both]";
+
   return (
     <>
-      {/* floating trigger (manual open) — xl+, where it can't collide with the live bar */}
+      {/* floating trigger — pill on xl+, compact lens button above the live bar on smaller screens */}
       <button
         type="button"
         onClick={() => show("fab")}
         aria-label="TyloLens: Was würden wir anders machen?"
         className={cn(
-          "group fixed bottom-[22px] right-[22px] z-[60] hidden items-center gap-3 rounded-full border border-[#D4A863]/45 bg-[#002E3D] py-2 pl-2 pr-5 text-left shadow-[0_24px_60px_-20px_rgba(0,20,28,0.55)] transition-[opacity,translate,border-color] duration-300 hover:-translate-y-0.5 hover:border-[#D4A863] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A863] xl:flex",
+          "group fixed z-[60] flex items-center rounded-full border border-[#D4A863]/45 bg-[#002E3D] text-left shadow-[0_24px_60px_-20px_rgba(0,20,28,0.55)] transition-[opacity,translate,border-color] duration-300 hover:-translate-y-0.5 hover:border-[#D4A863] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A863]",
+          "bottom-[92px] right-4 p-1.5 xl:bottom-[22px] xl:right-[22px] xl:gap-3 xl:py-2 xl:pl-2 xl:pr-5",
           fab && !open ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
         )}
       >
@@ -241,7 +327,7 @@ export default function TyloLens() {
           <span className="absolute inset-0 rounded-full bg-[#D4A863]/50 motion-safe:animate-[bhlPulse_2.6s_ease-out_infinite]" />
           <ScanSearch className="relative size-[19px]" strokeWidth={2} />
         </span>
-        <span className="flex flex-col">
+        <span className="hidden flex-col xl:flex">
           <span className="font-mono text-[10px] font-medium uppercase tracking-[0.6px] text-[#D4A863]">TyloLens · gratis</span>
           <span className="font-display text-[14.5px] font-semibold leading-5 tracking-[-0.01em] text-white">Was würden wir anders machen?</span>
         </span>
@@ -264,17 +350,17 @@ export default function TyloLens() {
           aria-labelledby="tl-title"
           data-lenis-prevent
           className={cn(
-            "max-h-[94vh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white shadow-[0_12px_32px_rgba(8,34,44,0.1),0_40px_60px_rgba(8,34,44,0.06),0_80px_90px_rgba(8,34,44,0.04)] transition-[transform,opacity] duration-[420ms] ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none sm:max-w-[560px] sm:rounded-[24px]",
+            "max-h-[96dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white shadow-[0_12px_32px_rgba(8,34,44,0.1),0_40px_60px_rgba(8,34,44,0.06),0_80px_90px_rgba(8,34,44,0.04)] transition-[transform,opacity] duration-[420ms] ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none sm:max-w-[560px] sm:rounded-[24px]",
             open ? "translate-y-0 scale-100 opacity-100" : "translate-y-full opacity-100 sm:translate-y-3 sm:scale-[0.96] sm:opacity-0",
           )}
         >
           {status !== "sent" ? (
             <>
               {/* header */}
-              <div className="relative overflow-hidden px-6 pb-5 pt-4 sm:px-8 sm:pb-6 sm:pt-6" style={{ backgroundImage: HEAD_BG }}>
-                <span aria-hidden className="mx-auto mb-4 block h-1 w-10 rounded-full bg-white/25 sm:hidden" />
+              <div className="relative overflow-hidden px-5 pb-5 pt-3 sm:px-8 sm:pb-6 sm:pt-6" style={{ backgroundImage: HEAD_BG }}>
+                <span aria-hidden className="mx-auto mb-3 block h-1 w-10 rounded-full bg-white/25 sm:hidden" />
                 <div className="flex items-start justify-between gap-4">
-                  <span className="inline-flex items-center gap-[7px] rounded-full border border-white/[0.18] bg-white/10 py-[7px] pl-2.5 pr-3.5 font-mono text-[11.5px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#cbc8c2] backdrop-blur-md">
+                  <span className="inline-flex items-center gap-[7px] rounded-full border border-white/[0.18] bg-white/10 py-[6px] pl-2.5 pr-3 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#cbc8c2] backdrop-blur-md sm:text-[11.5px]">
                     <ScanSearch className="size-3.5 text-[#D4A863]" strokeWidth={2} />
                     TyloLens
                     <span className="ml-1 rounded-full bg-[#D4A863] px-1.5 py-px text-[9.5px] font-semibold tracking-[0.3px] text-[#002E3D]">Gratis</span>
@@ -283,211 +369,267 @@ export default function TyloLens() {
                     type="button"
                     onClick={close}
                     aria-label="Schließen"
-                    className="-mr-1 -mt-1 grid size-10 shrink-0 place-items-center rounded-full border border-white/[0.22] bg-[rgba(0,22,32,0.62)] text-white/80 transition-colors hover:bg-[rgba(0,22,32,0.85)] hover:text-white focus-visible:outline-2 focus-visible:outline-[#D4A863]"
+                    className="-mr-1 -mt-0.5 grid size-9 shrink-0 place-items-center rounded-full border border-white/[0.22] bg-[rgba(0,22,32,0.62)] text-white/80 transition-colors hover:bg-[rgba(0,22,32,0.85)] hover:text-white focus-visible:outline-2 focus-visible:outline-[#D4A863] sm:size-10"
                   >
                     <X className="size-[18px]" strokeWidth={2} />
                   </button>
                 </div>
-                <h3 id="tl-title" className="mt-4 font-display text-[clamp(1.55rem,4.6vw,1.9rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-white">
-                  Was würden wir bei dir{" "}
-                  <span className="font-[family-name:var(--font-instrument)] text-[1.08em] font-normal italic tracking-[-0.01em] text-[#D4A863]">anders machen?</span>
-                </h3>
-                <p className="mt-2.5 text-[14.5px] leading-[23px] tracking-[-0.1px] text-[#cbc8c2]">
-                  Unser Team schaut sich dein Marketing persönlich an und zeigt dir 3 konkrete Hebel — als kurzes Video, kostenlos, in 48 Stunden.
-                </p>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {[
-                    { I: Target, t: "3 konkrete Hebel" },
-                    { I: Video, t: "Persönliches Video" },
-                    { I: Clock, t: "In 48 Stunden" },
-                  ].map(({ I, t }) => (
-                    <li key={t} className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[12.5px] font-medium text-white/90">
-                      <I className="size-3.5 text-[#D4A863]" strokeWidth={2} />
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-3.5 flex items-center gap-3 border-t border-white/10 pt-3 [@media(min-width:640px)_and_(max-height:900px)]:hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/team/ilias-el-aradi.jpg" alt="" className="size-9 shrink-0 rounded-full object-cover object-top ring-2 ring-[#D4A863]/60" />
-                  <p className="text-[13px] leading-[18px] text-white/80">
-                    Persönlich von <span className="font-semibold text-white">Ilias El Aradi</span> & Team —<br className="hidden sm:inline" /> kein Bot, keine Automatik.
-                  </p>
-                </div>
-              </div>
 
-              {/* form */}
-              <form onSubmit={submit} noValidate className="px-6 pb-5 pt-5 sm:px-8">
-                {/* honeypot */}
-                <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-                  <label htmlFor="tl-company">Firma</label>
-                  <input id="tl-company" tabIndex={-1} autoComplete="off" value={v.company} onChange={set("company")} />
-                </div>
-
-                <Field id="website" label="Deine Website" error={err("website")}>
-                  <Iconed icon={Globe}>
-                    <input
-                      ref={firstField}
-                      id="tl-website"
-                      type="url"
-                      inputMode="url"
-                      autoComplete="url"
-                      placeholder="deine-firma.de"
-                      value={v.website}
-                      onChange={set("website")}
-                      onBlur={blur("website")}
-                      aria-invalid={!!err("website")}
-                      aria-describedby={err("website") ? "tl-website-err" : undefined}
-                      className={cn(field, "pl-10", err("website") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
-                    />
-                  </Iconed>
-                </Field>
-
-                <div className="grid grid-cols-1 gap-x-3 min-[521px]:grid-cols-2">
-                  <Field id="branche" label="Branche" error={err("branche")}>
-                    <Select id="branche" value={v.branche} onChange={set("branche")} onBlur={blur("branche")} invalid={!!err("branche")} options={TL_BRANCHEN.map((b) => ({ value: b, label: b }))} />
-                  </Field>
-                  <Field id="ziel" label="Dein größtes Ziel" error={err("ziel")}>
-                    <Select id="ziel" value={v.ziel} onChange={set("ziel")} onBlur={blur("ziel")} invalid={!!err("ziel")} options={TL_ZIELE.map((z) => ({ value: z, label: z }))} />
-                  </Field>
-                </div>
-
-                {/* budget — the lead qualifier, as selectable cards (radio group) */}
-                <fieldset className="mb-3.5">
-                  <legend className="mb-1.5 flex w-full items-baseline justify-between gap-3 text-[13px] font-semibold text-[#17252B]">
-                    Marketing-Budget / Monat
-                    <span className="hidden text-[11.5px] font-normal text-[#6C7A7E] sm:inline">zeigt uns deinen größten Hebel</span>
-                  </legend>
-                  <div id="tl-budget" tabIndex={-1} role="radiogroup" aria-invalid={!!err("budget")} aria-describedby={err("budget") ? "tl-budget-err" : undefined} className="grid grid-cols-2 gap-2 outline-none">
-                    {TL_BUDGETS.map((b) => {
-                      const on = v.budget === b.value;
-                      return (
-                        <label
-                          key={b.value}
-                          className={cn(
-                            "relative flex h-11 cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-[12px] border-[1.5px] px-3 text-[13px] font-semibold tracking-[-0.1px] sm:px-3.5 sm:text-[14px] transition-[border-color,background-color,color,box-shadow] duration-150 has-[:focus-visible]:shadow-[0_0_0_4px_rgba(212,168,99,0.25)]",
-                            on
-                              ? "border-[#D4A863] bg-[#fbf6ee] text-[#7a5b30] shadow-[0_6px_16px_-10px_rgba(168,127,69,0.6)]"
-                              : err("budget")
-                                ? "border-[#e5a29b] bg-white text-[#17252B]"
-                                : "border-[#DDE4E5] bg-white text-[#17252B] hover:border-[#c9d3d5]",
-                          )}
-                        >
-                          <input
-                            type="radio"
-                            name="tl-budget"
-                            value={b.value}
-                            checked={on}
-                            onChange={() => {
-                              const next = { ...v, budget: b.value };
-                              setV(next);
-                              setTouched((t) => ({ ...t, budget: true }));
-                              setErrors(validateLens(next));
-                            }}
-                            className="sr-only"
-                          />
-                          {b.label}
-                          <span className={cn("grid size-[18px] shrink-0 place-items-center rounded-full border-[1.5px] transition-colors", on ? "border-[#D4A863] bg-[#D4A863] text-white" : "border-[#cfd8da]")}>
-                            {on && <Check className="size-3" strokeWidth={3} />}
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                  {err("budget") && (
-                    <p id="tl-budget-err" className="mt-1.5 flex items-center gap-1.5 text-[12px] leading-4 text-[#b42318]">
-                      <CircleAlert className="size-3.5 shrink-0" strokeWidth={2} />
-                      {err("budget")}
+                {step === 1 ? (
+                  <div key="h1" className={stepIn}>
+                    <h3 id="tl-title" className={headTitle}>
+                      Was würden wir bei dir <span className={accent}>anders machen?</span>
+                    </h3>
+                    <p className="mt-2 hidden text-[14.5px] leading-[22px] tracking-[-0.1px] text-[#cbc8c2] sm:block">
+                      Unser Team schaut sich dein Marketing persönlich an und zeigt dir 3 konkrete Hebel.
                     </p>
-                  )}
-                </fieldset>
-
-                <div className="grid grid-cols-1 gap-x-3 min-[521px]:grid-cols-2">
-                  <Field id="name" label="Name" error={err("name")}>
-                    <Iconed icon={UserRound}>
-                      <input
-                        id="tl-name"
-                        type="text"
-                        autoComplete="name"
-                        maxLength={100}
-                        placeholder="Vor- und Nachname"
-                        value={v.name}
-                        onChange={set("name")}
-                        onBlur={blur("name")}
-                        aria-invalid={!!err("name")}
-                        aria-describedby={err("name") ? "tl-name-err" : undefined}
-                        className={cn(field, "pl-10", err("name") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
-                      />
-                    </Iconed>
-                  </Field>
-                  <Field id="email" label="E-Mail" error={err("email")}>
-                    <Iconed icon={Mail}>
-                      <input
-                        id="tl-email"
-                        type="email"
-                        inputMode="email"
-                        autoComplete="email"
-                        maxLength={160}
-                        placeholder="name@firma.de"
-                        value={v.email}
-                        onChange={set("email")}
-                        onBlur={blur("email")}
-                        aria-invalid={!!err("email")}
-                        aria-describedby={err("email") ? "tl-email-err" : undefined}
-                        className={cn(field, "pl-10", err("email") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
-                      />
-                    </Iconed>
-                  </Field>
-                </div>
-
-                {(status === "error" || status === "limited") && (
-                  <div role="alert" className="mb-3 rounded-[12px] border border-[#ecd8b6] bg-[#fbf6ee] p-3 text-[13.5px] leading-[20px] text-[#5c4524]">
-                    {status === "limited" ? (
-                      <>Gerade kamen viele Anfragen von deinem Anschluss. Bitte versuch es in ein paar Minuten erneut.</>
-                    ) : (
-                      <>
-                        Das Senden hat gerade nicht geklappt.{" "}
-                        <a href={mailto()} className="inline-flex items-center gap-1 font-semibold text-[#002E3D] underline underline-offset-2">
-                          <Mail className="size-3.5" /> Per E-Mail senden
-                        </a>
-                      </>
-                    )}
+                    <p className="mt-2 flex items-center gap-1.5 text-[12.5px] font-medium text-white/85 sm:hidden">
+                      <Video className="size-3.5 text-[#D4A863]" strokeWidth={2} />
+                      3 Hebel als persönliches Video · in 48 h
+                    </p>
+                    <ul className="mt-4 hidden flex-wrap gap-2 sm:flex">
+                      {[
+                        { I: Target, t: "3 konkrete Hebel" },
+                        { I: Video, t: "Persönliches Video" },
+                        { I: Clock, t: "In 48 Stunden" },
+                      ].map(({ I, t }) => (
+                        <li key={t} className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[12.5px] font-medium text-white/90">
+                          <I className="size-3.5 text-[#D4A863]" strokeWidth={2} />
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div key="h2" className={stepIn}>
+                    <h3 id="tl-title" className={headTitle}>
+                      Wohin dürfen wir dein <span className={accent}>Video</span> schicken?
+                    </h3>
+                    <div className="mt-3 flex items-center gap-3">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/team/ilias-el-aradi.jpg" alt="" className="size-9 shrink-0 rounded-full object-cover object-top ring-2 ring-[#D4A863]/60" />
+                      <p className="text-[13px] leading-[18px] text-white/80">
+                        <span className="font-semibold text-white">Ilias El Aradi</span> & Team schauen persönlich drauf — kein Bot, keine Automatik.
+                      </p>
+                    </div>
                   </div>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className={cn(
-                    "group mt-2 flex h-[54px] w-full items-center justify-center gap-2.5 rounded-full text-[16px] font-semibold tracking-[-0.1px] text-[#002E3D] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px disabled:cursor-wait disabled:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#002E3D]",
-                    GOLD_BTN,
-                  )}
-                >
-                  {status === "sending" ? (
-                    <>
-                      <LoaderCircle className="size-[18px] animate-spin" strokeWidth={2.2} /> Wird gesendet …
-                    </>
-                  ) : (
-                    <>
-                      Meine Analyse anfordern
-                      <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
-                    </>
-                  )}
-                </button>
-                <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[12px] leading-[18px] text-[#6C7A7E]">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Lock className="size-3 shrink-0" strokeWidth={2} />
-                    Kein Newsletter, kein Spam.
-                  </span>
-                  <Link href="/datenschutz" target="_blank" className="underline underline-offset-2 hover:text-[#17252B]">
-                    Datenschutz
-                  </Link>
-                  <span aria-hidden className="text-[#cfd8da]">·</span>
-                  <button type="button" onClick={never} className="text-[#9aa7ab] underline-offset-2 hover:text-[#6C7A7E] hover:underline">
-                    Nicht mehr anzeigen
-                  </button>
+                {/* progress */}
+                <div className="mt-4 flex items-center gap-3 sm:mt-5" aria-label={`Schritt ${step} von 2`}>
+                  <div className="grid flex-1 grid-cols-2 gap-1.5">
+                    {[1, 2].map((n) => (
+                      <span key={n} className="h-1 overflow-hidden rounded-full bg-white/15">
+                        <span className={cn("block h-full rounded-full bg-[#D4A863] transition-transform duration-500 ease-[cubic-bezier(.2,.8,.2,1)]", step >= n ? "translate-x-0" : "-translate-x-full")} />
+                      </span>
+                    ))}
+                  </div>
+                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.4px] text-white/60">Schritt {step} / 2</span>
                 </div>
-              </form>
+              </div>
+
+              {/* honeypot */}
+              <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                <label htmlFor="tl-company">Firma</label>
+                <input id="tl-company" tabIndex={-1} autoComplete="off" value={v.company} onChange={set("company")} />
+              </div>
+
+              {step === 1 ? (
+                <form key="s1" onSubmit={next} noValidate className={cn(stepIn, "px-5 pb-4 pt-4 sm:px-8 sm:pb-6 sm:pt-5")}>
+                  <Field id="website" label="Deine Website" error={err("website")}>
+                    <Iconed icon={Globe}>
+                      <input
+                        ref={firstField}
+                        id="tl-website"
+                        type="url"
+                        inputMode="url"
+                        autoComplete="url"
+                        placeholder="deine-firma.de"
+                        value={v.website}
+                        onChange={set("website")}
+                        onBlur={blur("website")}
+                        aria-invalid={!!err("website")}
+                        aria-describedby={err("website") ? "tl-website-err" : undefined}
+                        className={cn(field, "pl-10", err("website") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
+                      />
+                    </Iconed>
+                  </Field>
+
+                  <div className="grid grid-cols-2 gap-x-2.5 sm:gap-x-3">
+                    <Field id="branche" label="Branche" error={err("branche")}>
+                      <LensSelect id="branche" value={v.branche} onChange={(x) => setValue("branche", x)} invalid={!!err("branche")} icon={Building2} options={TL_BRANCHEN.map((b) => ({ value: b, label: b, icon: BRANCHE_ICON[b] }))} />
+                    </Field>
+                    <Field id="ziel" label="Größtes Ziel" error={err("ziel")}>
+                      <LensSelect id="ziel" value={v.ziel} onChange={(x) => setValue("ziel", x)} invalid={!!err("ziel")} icon={Target} options={TL_ZIELE.map((z) => ({ value: z, label: z, icon: ZIEL_ICON[z] }))} />
+                    </Field>
+                  </div>
+
+                  {/* budget — the lead qualifier, as selectable cards (radio group) */}
+                  <fieldset className="mb-3.5 sm:mb-4">
+                    <legend className="mb-1.5 flex w-full items-baseline justify-between gap-3 text-[13px] font-semibold text-[#17252B]">
+                      Marketing-Budget / Monat
+                      <span className="hidden text-[11.5px] font-normal text-[#6C7A7E] sm:inline">zeigt uns deinen größten Hebel</span>
+                    </legend>
+                    <div id="tl-budget" tabIndex={-1} role="radiogroup" aria-invalid={!!err("budget")} aria-describedby={err("budget") ? "tl-budget-err" : undefined} className="grid grid-cols-2 gap-2 outline-none">
+                      {TL_BUDGETS.map((b) => {
+                        const on = v.budget === b.value;
+                        return (
+                          <label
+                            key={b.value}
+                            className={cn(
+                              "relative flex h-11 cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-[12px] border-[1.5px] px-3 text-[13px] font-semibold tracking-[-0.1px] transition-[border-color,background-color,color,box-shadow] duration-150 has-[:focus-visible]:shadow-[0_0_0_4px_rgba(212,168,99,0.25)] sm:px-3.5 sm:text-[14px]",
+                              on
+                                ? "border-[#D4A863] bg-[#fbf6ee] text-[#7a5b30] shadow-[0_6px_16px_-10px_rgba(168,127,69,0.6)]"
+                                : err("budget")
+                                  ? "border-[#e5a29b] bg-white text-[#17252B]"
+                                  : "border-[#DDE4E5] bg-white text-[#17252B] hover:border-[#c9d3d5]",
+                            )}
+                          >
+                            <input type="radio" name="tl-budget" value={b.value} checked={on} onChange={() => setValue("budget", b.value)} className="sr-only" />
+                            {b.label}
+                            <span className={cn("grid size-[18px] shrink-0 place-items-center rounded-full border-[1.5px] transition-colors", on ? "border-[#D4A863] bg-[#D4A863] text-white" : "border-[#cfd8da]")}>
+                              {on && <Check className="size-3" strokeWidth={3} />}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    {err("budget") && <ErrLine id="tl-budget-err" msg={err("budget")!} />}
+                  </fieldset>
+
+                  <button
+                    type="submit"
+                    className={cn(
+                      "group flex h-[52px] w-full items-center justify-center gap-2.5 rounded-full text-[16px] font-semibold tracking-[-0.1px] text-[#002E3D] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#002E3D]",
+                      GOLD_BTN,
+                    )}
+                  >
+                    Weiter
+                    <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
+                  </button>
+                  <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[12px] leading-[18px] text-[#6C7A7E]">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Clock className="size-3 shrink-0" strokeWidth={2} />
+                      Dauert 30 Sekunden
+                    </span>
+                    <span aria-hidden className="text-[#cfd8da]">·</span>
+                    <button type="button" onClick={never} className="text-[#9aa7ab] underline-offset-2 hover:text-[#6C7A7E] hover:underline">
+                      Nicht mehr anzeigen
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <form key="s2" onSubmit={submit} noValidate className={cn(stepIn, "px-5 pb-5 pt-5 sm:px-8 sm:pb-6")}>
+                  {/* what we'll analyse */}
+                  <div className="mb-4 flex items-center gap-3 rounded-[14px] border border-[#DDE4E5] bg-[#EEF3F4]/70 p-3.5">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white text-[#A8863A] shadow-[0_1px_2px_rgba(8,34,44,0.06)]">
+                      <ScanSearch className="size-[18px]" strokeWidth={2} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[14.5px] font-semibold text-[#17252B]">{site}</p>
+                      <p className="mt-0.5 truncate text-[12.5px] text-[#6C7A7E]">
+                        {v.branche} · {v.ziel} · {budgetLabel}
+                      </p>
+                    </div>
+                    <button type="button" onClick={() => setStep(1)} className="shrink-0 text-[12.5px] font-semibold text-[#A8863A] underline-offset-2 hover:underline">
+                      Ändern
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-x-3 min-[521px]:grid-cols-2">
+                    <Field id="name" label="Name" error={err("name")}>
+                      <Iconed icon={UserRound}>
+                        <input
+                          ref={nameField}
+                          id="tl-name"
+                          type="text"
+                          autoComplete="name"
+                          maxLength={100}
+                          placeholder="Vor- und Nachname"
+                          value={v.name}
+                          onChange={set("name")}
+                          onBlur={blur("name")}
+                          aria-invalid={!!err("name")}
+                          aria-describedby={err("name") ? "tl-name-err" : undefined}
+                          className={cn(field, "pl-10", err("name") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
+                        />
+                      </Iconed>
+                    </Field>
+                    <Field id="email" label="E-Mail" error={err("email")}>
+                      <Iconed icon={Mail}>
+                        <input
+                          id="tl-email"
+                          type="email"
+                          inputMode="email"
+                          autoComplete="email"
+                          maxLength={160}
+                          placeholder="name@firma.de"
+                          value={v.email}
+                          onChange={set("email")}
+                          onBlur={blur("email")}
+                          aria-invalid={!!err("email")}
+                          aria-describedby={err("email") ? "tl-email-err" : undefined}
+                          className={cn(field, "pl-10", err("email") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
+                        />
+                      </Iconed>
+                    </Field>
+                  </div>
+
+                  {(status === "error" || status === "limited") && (
+                    <div role="alert" className="mb-3 rounded-[12px] border border-[#ecd8b6] bg-[#fbf6ee] p-3 text-[13.5px] leading-[20px] text-[#5c4524]">
+                      {status === "limited" ? (
+                        <>Gerade kamen viele Anfragen von deinem Anschluss. Bitte versuch es in ein paar Minuten erneut.</>
+                      ) : (
+                        <>
+                          Das Senden hat gerade nicht geklappt.{" "}
+                          <a href={mailto()} className="inline-flex items-center gap-1 font-semibold text-[#002E3D] underline underline-offset-2">
+                            <Mail className="size-3.5" /> Per E-Mail senden
+                          </a>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="mt-1 flex gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      aria-label="Zurück zu Schritt 1"
+                      className="grid size-[52px] shrink-0 place-items-center rounded-full border-[1.5px] border-[#DDE4E5] bg-white text-[#17252B] transition-colors hover:border-[#c9d3d5] hover:bg-[#f6f8f8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A863]"
+                    >
+                      <ArrowLeft className="size-[18px]" strokeWidth={2} />
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={status === "sending"}
+                      className={cn(
+                        "group flex h-[52px] flex-1 items-center justify-center gap-2.5 rounded-full text-[15.5px] font-semibold tracking-[-0.1px] text-[#002E3D] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px disabled:cursor-wait disabled:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#002E3D] sm:text-[16px]",
+                        GOLD_BTN,
+                      )}
+                    >
+                      {status === "sending" ? (
+                        <>
+                          <LoaderCircle className="size-[18px] animate-spin" strokeWidth={2.2} /> Wird gesendet …
+                        </>
+                      ) : (
+                        <>
+                          Meine Analyse anfordern
+                          <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[12px] leading-[18px] text-[#6C7A7E]">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Lock className="size-3 shrink-0" strokeWidth={2} />
+                      Kein Newsletter, kein Spam.
+                    </span>
+                    <Link href="/datenschutz" target="_blank" className="underline underline-offset-2 hover:text-[#17252B]">
+                      Datenschutz
+                    </Link>
+                  </div>
+                </form>
+              )}
             </>
           ) : (
             <div role="status" aria-live="polite">
@@ -509,7 +651,7 @@ export default function TyloLens() {
                   Danke
                   {first ? (
                     <>
-                      , <span className="font-[family-name:var(--font-instrument)] text-[1.08em] font-normal italic text-[#D4A863]">{first}</span>
+                      , <span className={accent}>{first}</span>
                     </>
                   ) : null}
                   !
@@ -555,7 +697,9 @@ export default function TyloLens() {
   );
 }
 
-function Iconed({ icon: I, children }: { icon: typeof Globe; children: React.ReactNode }) {
+/* ---- pieces ---------------------------------------------------------------- */
+
+function Iconed({ icon: I, children }: { icon: LucideIcon; children: React.ReactNode }) {
   return (
     <div className="relative">
       <I className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#9aa7ab]" strokeWidth={1.9} />
@@ -564,61 +708,228 @@ function Iconed({ icon: I, children }: { icon: typeof Globe; children: React.Rea
   );
 }
 
-function Field({ id, label, error, hint, children }: { id: string; label: string; error?: string; hint?: string; children: React.ReactNode }) {
+function ErrLine({ id, msg }: { id: string; msg: string }) {
   return (
-    <div className="mb-3.5">
+    <p id={id} className="mt-1.5 flex items-start gap-1.5 text-[12px] leading-4 text-[#b42318]">
+      <CircleAlert className="mt-px size-3.5 shrink-0" strokeWidth={2} />
+      {msg}
+    </p>
+  );
+}
+
+function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-3 sm:mb-3.5">
       <label htmlFor={`tl-${id}`} className="mb-1.5 block text-[13px] font-semibold text-[#17252B]">
         {label}
       </label>
       {children}
-      {error ? (
-        <p id={`tl-${id}-err`} className="mt-1.5 flex items-center gap-1.5 text-[12px] leading-4 text-[#b42318]">
-          <CircleAlert className="size-3.5 shrink-0" strokeWidth={2} />
-          {error}
-        </p>
-      ) : (
-        hint && <p className="mt-1.5 text-[12px] text-[#6C7A7E]">{hint}</p>
-      )}
+      {error && <ErrLine id={`tl-${id}-err`} msg={error} />}
     </div>
   );
 }
 
-function Select({
+/**
+ * Select-only combobox (WAI-ARIA pattern): focus stays on the trigger, the listbox is
+ * rendered in a portal so the dialog never clips it, options are announced via
+ * aria-activedescendant. Keys: ↑ ↓ Home End Enter Space Esc Tab, type-ahead by first letter.
+ */
+function LensSelect({
   id,
   value,
   onChange,
-  onBlur,
   invalid,
+  icon: TriggerIcon,
   options,
 }: {
   id: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  onBlur: () => void;
+  onChange: (v: string) => void;
   invalid: boolean;
-  options: { value: string; label: string }[];
+  icon: LucideIcon;
+  options: { value: string; label: string; icon: LucideIcon }[];
 }) {
+  const uid = useId().replace(/:/g, "");
+  const listId = `tl-${id}-list-${uid}`;
+  const optId = (i: number) => `tl-${id}-opt-${uid}-${i}`;
+  const trigger = useRef<HTMLButtonElement>(null);
+  const list = useRef<HTMLUListElement>(null);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(0);
+  const [pos, setPos] = useState<{ left: number; top: number; width: number; up: boolean; maxH: number } | null>(null);
+  const selected = options.findIndex((o) => o.value === value);
+  const current = selected >= 0 ? options[selected] : null;
+  const CurIcon = current?.icon ?? TriggerIcon;
+
+  const place = useCallback(() => {
+    const r = trigger.current?.getBoundingClientRect();
+    if (!r) return;
+    const width = Math.max(r.width, 248);
+    const left = Math.min(Math.max(8, r.left), window.innerWidth - width - 8);
+    const full = Math.min(options.length * 42 + 12, 340);
+    const below = window.innerHeight - r.bottom - 14;
+    const above = r.top - 14;
+    // open downwards whenever a comfortable list fits there; flip up only if below is tight
+    const up = below < Math.min(full, 220) && above > below;
+    const maxH = Math.max(140, Math.min(full, up ? above : below));
+    setPos({ left, top: up ? r.top - maxH - 6 : r.bottom + 6, width, up, maxH });
+  }, [options.length]);
+
+  const openList = (at = selected >= 0 ? selected : 0) => {
+    place();
+    setActive(at);
+    setOpen(true);
+  };
+  const choose = (i: number) => {
+    onChange(options[i].value);
+    setOpen(false);
+    trigger.current?.focus({ preventScroll: true });
+  };
+
+  useLayoutEffect(() => {
+    if (!open || !list.current) return;
+    list.current.children[active]?.scrollIntoView({ block: "nearest" });
+  }, [open, active]);
+
+  useEffect(() => {
+    if (!open) return;
+    const away = (e: MouseEvent) => {
+      if (!trigger.current?.contains(e.target as Node) && !list.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const reflow = () => place();
+    document.addEventListener("mousedown", away);
+    window.addEventListener("resize", reflow);
+    const scroller = trigger.current?.closest("[role=dialog]");
+    scroller?.addEventListener("scroll", reflow, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", away);
+      window.removeEventListener("resize", reflow);
+      scroller?.removeEventListener("scroll", reflow);
+    };
+  }, [open, place]);
+
+  const onKey = (e: React.KeyboardEvent) => {
+    const last = options.length - 1;
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        if (!open) openList();
+        else setActive((a) => Math.min(last, a + 1));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (!open) openList();
+        else setActive((a) => Math.max(0, a - 1));
+        break;
+      case "Home":
+        if (open) {
+          e.preventDefault();
+          setActive(0);
+        }
+        break;
+      case "End":
+        if (open) {
+          e.preventDefault();
+          setActive(last);
+        }
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (open) choose(active);
+        else openList();
+        break;
+      case "Escape":
+        if (open) {
+          e.preventDefault(); // keeps the modal open
+          setOpen(false);
+        }
+        break;
+      case "Tab":
+        if (open) setOpen(false);
+        break;
+      default:
+        if (e.key.length === 1 && /\S/.test(e.key)) {
+          const i = options.findIndex((o) => o.label.toLowerCase().startsWith(e.key.toLowerCase()));
+          if (i >= 0) {
+            if (!open) openList(i);
+            else setActive(i);
+          }
+        }
+    }
+  };
+
   return (
-    <div className="relative">
-      <select
+    <>
+      <button
+        ref={trigger}
         id={`tl-${id}`}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
+        type="button"
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-activedescendant={open ? optId(active) : undefined}
         aria-invalid={invalid}
         aria-describedby={invalid ? `tl-${id}-err` : undefined}
-        className={cn(field, "cursor-pointer appearance-none pr-10", invalid ? "border-[#e5a29b]" : "border-[#DDE4E5]", !value && "text-[#9aa7ab]")}
+        onClick={() => (open ? setOpen(false) : openList())}
+        onKeyDown={onKey}
+        className={cn(
+          field,
+          "relative flex items-center gap-2.5 pl-3 pr-9 text-left",
+          open && "border-[#D4A863] shadow-[0_0_0_4px_rgba(212,168,99,0.18)]",
+          invalid ? "border-[#e5a29b]" : !open && "border-[#DDE4E5]",
+        )}
       >
-        <option value="" disabled>
-          Auswählen…
-        </option>
-        {options.map((o) => (
-          <option key={o.value} value={o.value} className="text-[#17252B]">
-            {o.label}
-          </option>
-        ))}
-      </select>
-      <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-[#6C7A7E]" strokeWidth={1.8} />
-    </div>
+        <CurIcon className={cn("size-4 shrink-0", current ? "text-[#A8863A]" : "text-[#9aa7ab]")} strokeWidth={1.9} />
+        <span className={cn("min-w-0 flex-1 truncate text-[14px] sm:text-[15px]", !current && "text-[#9aa7ab]")}>{current?.label ?? "Auswählen…"}</span>
+        <ChevronDown className={cn("pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#6C7A7E] transition-transform duration-200", open && "rotate-180")} strokeWidth={1.8} />
+      </button>
+
+      {open &&
+        pos &&
+        createPortal(
+          <ul
+            ref={list}
+            id={listId}
+            role="listbox"
+            aria-labelledby={`tl-${id}`}
+            data-lenis-prevent
+            style={{ left: pos.left, top: pos.top, width: pos.width, maxHeight: pos.maxH }}
+            className={cn(
+              "fixed z-[120] overflow-y-auto overscroll-contain rounded-[14px] border border-[#DDE4E5] bg-white p-1.5 shadow-[0_18px_40px_-12px_rgba(0,20,28,0.35),0_4px_12px_rgba(0,20,28,0.08)] animate-[tlDrop_.16s_cubic-bezier(.2,.8,.2,1)_both]",
+              pos.up ? "origin-bottom" : "origin-top",
+            )}
+          >
+            {options.map((o, i) => {
+              const Ico = o.icon;
+              const isSel = i === selected;
+              return (
+                <li
+                  key={o.value}
+                  id={optId(i)}
+                  role="option"
+                  aria-selected={isSel}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => choose(i)}
+                  className={cn(
+                    "flex h-10 cursor-pointer items-center gap-2.5 rounded-[10px] px-2.5 text-[14px] transition-colors",
+                    i === active && "bg-[#f4f1ea]",
+                    isSel ? "font-semibold text-[#7a5b30]" : "text-[#17252B]",
+                  )}
+                >
+                  <span className={cn("grid size-7 shrink-0 place-items-center rounded-[8px]", isSel ? "bg-[#D4A863] text-white" : "bg-[#EEF3F4] text-[#5b6b70]")}>
+                    <Ico className="size-[15px]" strokeWidth={2} />
+                  </span>
+                  <span className="min-w-0 flex-1 truncate">{o.label}</span>
+                  {isSel && <Check className="size-4 shrink-0 text-[#A8863A]" strokeWidth={2.4} />}
+                </li>
+              );
+            })}
+          </ul>,
+          document.body,
+        )}
+    </>
   );
 }

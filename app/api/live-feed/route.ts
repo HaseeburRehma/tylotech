@@ -19,12 +19,14 @@ export async function GET() {
     return Response.json({ configured: false, events: [] } satisfies LiveFeedResponse, { headers });
   }
 
+  let upstream: number | undefined;
   try {
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
       cache: "no-store",
       signal: AbortSignal.timeout(5000),
     });
+    upstream = res.status;
     if (!res.ok) throw new Error(`feed ${res.status}`);
     const body: unknown = await res.json();
     const list = Array.isArray(body) ? body : (body as { events?: unknown })?.events;
@@ -39,8 +41,9 @@ export async function GET() {
       }
     }
     events.sort((a, b) => Date.parse(b.occurredAt) - Date.parse(a.occurredAt));
-    return Response.json({ configured: true, events: events.slice(0, 20) } satisfies LiveFeedResponse, { headers });
-  } catch {
-    return Response.json({ configured: true, events: [] } satisfies LiveFeedResponse, { headers });
+    return Response.json({ configured: true, ok: true, upstream, events: events.slice(0, 20) } satisfies LiveFeedResponse, { headers });
+  } catch (err) {
+    console.error("live-feed:", upstream ?? "", err instanceof Error ? err.message : err);
+    return Response.json({ configured: true, ok: false, upstream, events: [] } satisfies LiveFeedResponse, { headers });
   }
 }

@@ -20,7 +20,8 @@ export type LiveEvent = {
   occurredAt: string;
 };
 
-export type LiveFeedResponse = { configured: boolean; events: LiveEvent[] };
+/** `ok` / `upstream` are non-secret diagnostics: did TyloHQ answer, and with which HTTP status. */
+export type LiveFeedResponse = { configured: boolean; events: LiveEvent[]; ok?: boolean; upstream?: number };
 
 /** Max age of an event that may still be shown. */
 export const MAX_AGE_MS = 24 * 60 * 60 * 1000;

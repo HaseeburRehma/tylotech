@@ -10,12 +10,16 @@ import {
   ChartNoAxesColumnIncreasing,
   MessageSquareText,
   Star,
+  ShoppingBag,
+  TrendingUp,
   UserRoundPlus,
   UsersRound,
+  Code2,
   type LucideIcon,
 } from "lucide-react";
 import { gsap } from "@/lib/gsap";
 import { agoLabel, type LiveEvent, type LiveFeedResponse, type LiveKind } from "@/lib/liveFeed";
+import { TICKER_MESSAGES, shuffledOrder, type TickerIcon } from "@/lib/tickerMessages";
 
 const AVATARS = [
   { src: "/avatars/tt.png", alt: "Team TT" },
@@ -36,11 +40,14 @@ const ICONS: Record<LiveKind, LucideIcon> = {
 const RING_R = 19;
 const RING_C = 2 * Math.PI * RING_R;
 
-const STEP_MS = 4200;
 
-/* ---- TyloHQ live ticker ------------------------------------------------- */
+/* ---- live ticker -----------------------------------------------------------
+ * Real TyloHQ events (authenticated feed) always win: each is shown exactly once,
+ * with its true time. In between, the curated partner results from the Live Ticker
+ * brief rotate — labelled as results, never with an invented "vor X Minuten". */
 const POLL_MS = 30_000;
 const SEEN_KEY = "tylohq-live-seen";
+const RESULT_MS = 5000; // brief: next message every ~5 s
 
 function loadSeen(): Set<string> {
   try {
@@ -57,23 +64,44 @@ function saveSeen(seen: Set<string>) {
   } catch {}
 }
 
-/**
- * Shows real TyloHQ events only, each exactly once (also across reloads).
- * When no unseen event is waiting, a neutral waiting state is shown instead.
- */
+const RESULT_ICONS: Record<TickerIcon, LucideIcon> = {
+  leads: UserRoundPlus,
+  query: MessageSquareText,
+  growth: TrendingUp,
+  ranking: ChartNoAxesColumnIncreasing,
+  people: UsersRound,
+  software: Code2,
+  sale: ShoppingBag,
+};
+
+type Slide = { key: string; type: "event"; e: LiveEvent } | { key: string; type: "result"; i: number };
+
 function LiveTicker() {
   const [queue, setQueue] = useState<LiveEvent[]>([]);
-  const [current, setCurrent] = useState<LiveEvent | null>(null);
-  const [outgoing, setOutgoing] = useState<LiveEvent | null>(null);
-  const [paused, setPaused] = useState(false);
+  const [slide, setSlide] = useState<Slide | null>(null);
+  const [outgoing, setOutgoing] = useState<Slide | null>(null);
+  const [hover, setHover] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [, setTick] = useState(0);
   const seen = useRef<Set<string>>(new Set());
+  const order = useRef<number[]>([]);
+  const lastResult = useRef(-1);
+  const paused = hover || hidden;
+
+  // pause the rotation while the tab is in the background (brief: save cycles)
+  useEffect(() => {
+    const onVis = () => setHidden(document.visibilityState === "hidden");
+    onVis();
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
 
   // poll the authenticated server route; queue only events never shown before
   useEffect(() => {
     seen.current = loadSeen();
     let alive = true;
     const load = async () => {
+      if (document.visibilityState === "hidden") return;
       try {
         const r = await fetch("/api/live-feed", { cache: "no-store" });
         if (!r.ok) return;
@@ -81,10 +109,7 @@ function LiveTicker() {
         if (!alive || !Array.isArray(data.events)) return;
         setQueue((q) => {
           const queued = new Set(q.map((e) => e.id));
-          // oldest first, so the newest event ends up last on screen
-          const fresh = [...data.events]
-            .reverse()
-            .filter((e) => !seen.current.has(e.id) && !queued.has(e.id));
+          const fresh = [...data.events].reverse().filter((e) => !seen.current.has(e.id) && !queued.has(e.id));
           return fresh.length ? [...q, ...fresh] : q;
         });
       } catch {}
@@ -97,46 +122,71 @@ function LiveTicker() {
     };
   }, []);
 
-  // advance: show the next unseen event, mark it as seen, never come back to it
+  const nextResult = () => {
+    if (!order.current.length) order.current = shuffledOrder(TICKER_MESSAGES.length, lastResult.current);
+    const i = order.current.shift()!;
+    lastResult.current = i;
+    return i;
+  };
+
+  // advance every ~5 s: a waiting real event first, otherwise the next partner result
   useEffect(() => {
     if (paused) return;
-    const showNext = () => {
-      if (!queue.length) {
-        // nothing new: the last event fades out into the waiting state
-        if (current) {
-          setOutgoing(current);
-          setCurrent(null);
-        }
-        return;
+    const advance = () => {
+      let next: Slide;
+      if (queue.length) {
+        const [e, ...rest] = queue;
+        seen.current.add(e.id);
+        saveSeen(seen.current);
+        setQueue(rest);
+        next = { key: `e-${e.id}`, type: "event", e };
+      } else {
+        const i = nextResult();
+        next = { key: `r-${i}-${Date.now()}`, type: "result", i };
       }
-      const [next, ...rest] = queue;
-      seen.current.add(next.id);
-      saveSeen(seen.current);
-      setQueue(rest);
-      setOutgoing(current);
-      setCurrent(next);
+      setOutgoing(slide);
+      setSlide(next);
     };
-    // first event appears right away, later ones after the step time
-    const id = setTimeout(showNext, current ? STEP_MS : queue.length ? 400 : POLL_MS);
+    const id = setTimeout(advance, slide ? RESULT_MS : 600);
     return () => clearTimeout(id);
-  }, [current, paused, queue]);
+  }, [slide, paused, queue]);
 
-  // keep "vor X Min." honest while an event stays on screen
+  // keep "vor X Min." of a real event honest while it stays on screen
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 30_000);
     return () => clearInterval(id);
   }, []);
 
-  const Icon = current ? ICONS[current.kind] : Activity;
+  const isEvent = slide?.type === "event";
+  const Icon = !slide ? Activity : slide.type === "event" ? ICONS[slide.e.kind] : RESULT_ICONS[TICKER_MESSAGES[slide.i].icon];
 
-  const render = (e: LiveEvent | null) =>
-    e ? (
-      <span className="block min-w-0">
-        <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">
-          {e.title}
+  const render = (sl: Slide | null) => {
+    if (!sl)
+      return (
+        <span className="block min-w-0">
+          <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">TyloTech</span>
+          <span className="mt-0.5 block truncate text-[11.5px] leading-4 text-[#8cc0d1]">Ergebnisse unserer Partner</span>
         </span>
+      );
+    if (sl.type === "result")
+      return (
+        <span className="block min-w-0">
+          <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">
+            {TICKER_MESSAGES[sl.i].text}
+          </span>
+          <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11.5px] leading-4 text-[#8cc0d1]">
+            <span className="shrink-0 font-medium text-[#d8b682]">TyloTech</span>
+            <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
+            <span className="truncate">Ergebnis aus Partnerprojekten</span>
+          </span>
+        </span>
+      );
+    const e = sl.e;
+    return (
+      <span className="block min-w-0">
+        <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">{e.title}</span>
         <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11.5px] leading-4 text-[#8cc0d1]">
-          <span className="shrink-0 font-medium text-[#d8b682]">TyloHQ</span>
+          <span className="shrink-0 font-medium text-[#d8b682]">Live · TyloHQ</span>
           <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
           {e.detail && (
             <>
@@ -147,32 +197,23 @@ function LiveTicker() {
           <span className="shrink-0 tabular-nums">{agoLabel(e.occurredAt)}</span>
         </span>
       </span>
-    ) : (
-      <span className="block min-w-0">
-        <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">
-          Live aus TyloHQ
-        </span>
-        <span className="mt-0.5 block truncate text-[11.5px] leading-4 text-[#8cc0d1]">
-          <span className="sm:hidden">Neue Aktivitäten in Echtzeit</span>
-          <span className="hidden sm:inline">Neue Aktivitäten erscheinen hier in Echtzeit</span>
-        </span>
-      </span>
     );
+  };
 
-  const key = current?.id ?? "idle";
+  const key = slide?.key ?? "idle";
 
   return (
     <div
       className="flex min-w-0 flex-1 items-center gap-3 sm:w-[350px] sm:flex-none lg:w-[390px]"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       aria-live="polite"
     >
-      {/* icon with progress ring + live dot */}
+      {/* icon with progress ring + status dot (green pulse only for real live events) */}
       <span className="relative grid size-[44px] shrink-0 place-items-center">
         <svg viewBox="0 0 44 44" className="absolute inset-0 -rotate-90" aria-hidden>
           <circle cx="22" cy="22" r={RING_R} fill="none" stroke="rgba(127,186,205,0.18)" strokeWidth="1.5" />
-          {current && (
+          {slide && (
             <circle
               key={`ring-${key}-${paused}`}
               cx="22"
@@ -185,37 +226,35 @@ function LiveTicker() {
               strokeDasharray={RING_C}
               style={{
                 strokeDashoffset: paused ? RING_C * 0.35 : undefined,
-                animation: paused ? "none" : `liveRing ${STEP_MS}ms linear both`,
+                animation: paused ? "none" : `liveRing ${RESULT_MS}ms linear both`,
               }}
             />
           )}
         </svg>
         <span className="grid size-[34px] place-items-center rounded-full bg-gradient-to-b from-[#0e5a70] to-[#023646] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-          <Icon
-            key={`ic-${key}`}
-            className={`size-[16px] animate-[hqfade_.45s_ease_both] text-[#e3c79e] ${current?.kind === "review" ? "fill-[#e3c79e]" : ""}`}
-            strokeWidth={1.75}
-          />
+          <Icon key={`ic-${key}`} className={`size-[16px] animate-[hqfade_.45s_ease_both] text-[#e3c79e] ${isEvent && slide.e.kind === "review" ? "fill-[#e3c79e]" : ""}`} strokeWidth={1.75} />
         </span>
-        {/* live dot */}
         <span className="absolute right-[1px] top-[1px] flex size-[11px] items-center justify-center rounded-full bg-[#002e3d]">
-          <span className="absolute size-[7px] animate-ping rounded-full bg-[#3ccf8e] opacity-60" />
-          <span className="relative size-[7px] rounded-full bg-[#3ccf8e]" />
+          {isEvent ? (
+            <>
+              <span className="absolute size-[7px] animate-ping rounded-full bg-[#3ccf8e] opacity-60" />
+              <span className="relative size-[7px] rounded-full bg-[#3ccf8e]" />
+            </>
+          ) : (
+            <span className="relative size-[7px] rounded-full bg-[#d8b682]" />
+          )}
         </span>
       </span>
 
-      {/* message window */}
+      {/* message window — fade-out / fade-in, single line with ellipsis */}
       <div className="relative h-[38px] min-w-0 flex-1 overflow-hidden">
-        {outgoing !== undefined && (outgoing || current) && (
-          <div
-            key={`out-${outgoing?.id ?? "idle"}-${key}`}
-            className="absolute inset-0 flex items-center animate-[liveOut_.6s_cubic-bezier(.65,0,.35,1)_both]"
-          >
+        {outgoing && (
+          <div key={`out-${outgoing.key}-${key}`} className="absolute inset-0 flex items-center animate-[liveOut_.6s_cubic-bezier(.65,0,.35,1)_both]">
             {render(outgoing)}
           </div>
         )}
         <div key={`in-${key}`} className="absolute inset-0 flex items-center animate-[liveIn_.6s_cubic-bezier(.65,0,.35,1)_both]">
-          {render(current)}
+          {render(slide)}
         </div>
       </div>
     </div>
