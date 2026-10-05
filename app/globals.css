@@ -355,3 +355,17 @@ html.lenis body {
   0%, 100% { opacity: 1; transform: translate(0, 0) scale(1); }
   50% { opacity: 0.8; transform: translate(24px, 10px) scale(1.05); }
 }
+
+/* Branchen · Lösung flow: hub logo turns continuously, tabs give a soft shake on hover.
+   Uses the individual `rotate`/`translate` properties so it never fights GSAP's transform. */
+@keyframes bhSpin {
+  to { rotate: 360deg; }
+}
+@keyframes bhShake {
+  0%   { rotate: 0deg;    translate: 0 0; }
+  18%  { rotate: -2.2deg; translate: -2px -1px; }
+  36%  { rotate: 1.8deg;  translate: 2px -2px; }
+  54%  { rotate: -1.2deg; translate: -1px -2px; }
+  72%  { rotate: 0.6deg;  translate: 1px -1px; }
+  100% { rotate: 0deg;    translate: 0 -1px; }
+}

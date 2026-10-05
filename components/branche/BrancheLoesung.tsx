@@ -69,13 +69,13 @@ function Flow({ b }: { b: Branche }) {
         >
           <span className="absolute inset-0 animate-[bhlPulse_2.8s_ease-out_infinite] rounded-full border border-[#d1aa71]/60" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[46px] w-[37px]" />
+          <img src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[46px] w-[37px] motion-safe:animate-[bhSpin_10s_linear_infinite]" />
         </div>
 
         {b.loesung.kanaele.map((k, i) => (
           <div
             key={k.label}
-            className="bhl-kanal absolute flex h-[46px] w-[178px] items-center gap-2.5 rounded-[14px] border border-[#43413d] bg-[#002230] px-3.5 transition-colors duration-300 hover:border-[#d1aa71]"
+            className="bhl-kanal absolute flex h-[46px] w-[178px] cursor-default items-center gap-2.5 rounded-[14px] border border-[#43413d] bg-[#002230] px-3.5 transition-[border-color,box-shadow] duration-300 hover:border-[#d1aa71] motion-safe:hover:animate-[bhShake_0.7s_cubic-bezier(.36,.07,.19,.97)_both] hover:shadow-[0_10px_26px_-12px_rgba(209,170,113,0.55)]"
             style={{ left: 0, top: KANAL_Y[i] }}
           >
             <KanalIcon k={k} />
@@ -86,7 +86,7 @@ function Flow({ b }: { b: Branche }) {
         {b.loesung.ergebnisse.map((e, i) => (
           <div
             key={i}
-            className="bhl-ergebnis absolute flex w-[196px] flex-col gap-[5px] rounded-[14px] border border-[#43413d] bg-[#002e3d] px-4 py-[13px] shadow-[0_16px_44px_rgba(0,0,0,0.35)] transition-colors duration-300 hover:border-[#d1aa71]"
+            className="bhl-ergebnis absolute flex w-[196px] cursor-default flex-col gap-[5px] rounded-[14px] border border-[#43413d] bg-[#002e3d] px-4 py-[13px] shadow-[0_16px_44px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] duration-300 hover:border-[#d1aa71] motion-safe:hover:animate-[bhShake_0.7s_cubic-bezier(.36,.07,.19,.97)_both]"
             style={{ left: 404, top: ERGEBNIS_Y[i] }}
           >
             <span className="whitespace-nowrap font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#d8b682]">{e.label}</span>
@@ -104,7 +104,7 @@ function FlowStacked({ b }: { b: Branche }) {
     <div className="flex w-full flex-col items-center gap-4">
       <div className="grid w-full grid-cols-2 gap-2.5">
         {b.loesung.kanaele.map((k) => (
-          <div key={k.label} className="bhl-kanal flex min-h-[46px] items-center gap-2 rounded-[14px] border border-[#43413d] bg-[#002230] px-3 py-2">
+          <div key={k.label} className="bhl-kanal flex min-h-[46px] items-center gap-2 rounded-[14px] border border-[#43413d] bg-[#002230] px-3 py-2 transition-[border-color] duration-300 hover:border-[#d1aa71] motion-safe:hover:animate-[bhShake_0.7s_cubic-bezier(.36,.07,.19,.97)_both]">
             <KanalIcon k={k} size={20} />
             <span className="font-display text-[12.5px] font-medium leading-[15px] tracking-[-0.02em] text-white">{k.label}</span>
           </div>
@@ -114,12 +114,12 @@ function FlowStacked({ b }: { b: Branche }) {
       <div className="bhl-hub relative grid size-[84px] place-items-center rounded-full border border-[#d1aa71] bg-[#002e3d] shadow-[0_6px_24px_rgba(209,170,113,0.4)]">
         <span className="absolute inset-0 animate-[bhlPulse_2.8s_ease-out_infinite] rounded-full border border-[#d1aa71]/60" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[37px] w-[30px]" />
+        <img src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[37px] w-[30px] motion-safe:animate-[bhSpin_10s_linear_infinite]" />
       </div>
       <ArrowDown className="size-4 text-[#d1aa71]" />
       <div className="flex w-full flex-col gap-2.5">
         {b.loesung.ergebnisse.map((e, i) => (
-          <div key={i} className="bhl-ergebnis flex flex-col gap-[5px] rounded-[14px] border border-[#43413d] bg-[#002e3d] px-4 py-3 shadow-[0_16px_44px_rgba(0,0,0,0.35)]">
+          <div key={i} className="bhl-ergebnis flex flex-col gap-[5px] rounded-[14px] border border-[#43413d] bg-[#002e3d] px-4 py-3 shadow-[0_16px_44px_rgba(0,0,0,0.35)] transition-[border-color] duration-300 hover:border-[#d1aa71] motion-safe:hover:animate-[bhShake_0.7s_cubic-bezier(.36,.07,.19,.97)_both]">
             <span className="font-mono text-[11px] font-medium uppercase tracking-[0.4px] text-[#d8b682]">{e.label}</span>
             <span className="font-display text-[14px] font-medium tracking-[-0.02em] text-white">{e.value}</span>
           </div>
