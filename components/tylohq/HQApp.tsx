@@ -501,8 +501,8 @@ function DashboardView({
   const cpl = d.budget.map((b, i) => b / Math.max(0.6, d.leads[i]));
 
   const chart: ChartSeries[] = useMemo(() => {
-    const budget: ChartSeries = { key: "budget", label: "Werbebudget", color: GOLD, values: d.budget, max: 312, format: (v) => `${de(v)} €` };
-    const leads: ChartSeries = { key: "leads", label: "Leads", color: TEAL, values: d.leads, max: 8, format: (v) => de(v, 1) };
+    const budget: ChartSeries = { key: "budget", label: "Werbebudget", color: GOLD, values: d.budget, max: 1600, format: (v) => `${de(v)} €` };
+    const leads: ChartSeries = { key: "leads", label: "Leads", color: TEAL, values: d.leads, max: 70, format: (v) => de(v) };
     if (kpi === "budget") return [{ ...budget, area: true }, leads];
     if (kpi === "leads") return [{ ...leads, area: true }, budget];
     if (kpi === "cpl")
@@ -749,7 +749,8 @@ function LeistungView({ client, setClient }: { client: ClientId; setClient: (c: 
   const n = labels.length;
   const bucket = range === "90 T" ? 2 : range === "Jahr" ? 30 : 1;
   const days = range === "7 T" ? 7 : range === "30 T" ? 30 : range === "90 T" ? 90 : 365;
-  const clientBoost = 0.6 + (CLIENTS.findIndex((x) => x.id === client) % 4) * 0.25;
+  // narrow spread so every client lands at roughly 500–600 leads a month
+  const clientBoost = 0.92 + (CLIENTS.findIndex((x) => x.id === client) % 4) * 0.05;
 
   const data = useMemo(
     () =>

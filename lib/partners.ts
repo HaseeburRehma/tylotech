@@ -16,6 +16,7 @@ export const PARTNERS: Partner[] = [
   { name: "Rohrcleaner", src: "/partners/rohrcleaner-wide.png", w: 199, h: 40 },
   { name: "Startup Stage", src: "/partners/startup-stage.png", w: 81, h: 34 },
   { name: "SAHIH", src: "/partners/sahih.png", w: 106, h: 26 },
+  { name: "Wohlfühlfahrten", src: "/partners/wohlfuehlfahrten.png", w: 185, h: 38 },
   { name: "Nouh-Wehres", src: "/partners/nouh-wehres.png", w: 185, h: 38 },
   { name: "Experts & Partner", src: "/partners/experts-partner.png", w: 170, h: 26 },
   { name: "FairPflegeBox", src: "/partners/fairpflegebox.png", w: 193, h: 40 },

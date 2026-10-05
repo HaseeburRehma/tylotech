@@ -28,9 +28,9 @@ const TRAFFIC: Record<Range, Series> = {
   90: { value: 118, prefix: "+", suffix: " %", bars: [14, 20, 26, 31, 40, 47, 58, 66, 80, 92], labels: LABELS[90] },
 };
 const ANFRAGEN: Record<Range, Series> = {
-  7: { value: 31, bars: [30, 42, 36, 48, 40, 55, 50, 58, 64, 70], labels: LABELS[7] },
-  30: { value: 128, bars: [22, 30, 26, 38, 34, 48, 52, 60, 74, 88], labels: LABELS[30] },
-  90: { value: 342, bars: [16, 22, 30, 34, 42, 50, 58, 64, 76, 90], labels: LABELS[90] },
+  7: { value: 132, bars: [58, 66, 61, 70, 64, 74, 69, 77, 82, 88], labels: LABELS[7] },
+  30: { value: 568, bars: [62, 68, 64, 71, 69, 75, 78, 81, 85, 90], labels: LABELS[30] },
+  90: { value: 1664, bars: [60, 63, 66, 68, 71, 74, 77, 80, 85, 90], labels: LABELS[90] },
 };
 const CPL: Record<Range, Series> = {
   7: { value: 16, suffix: " €", bars: [62, 58, 60, 54, 52, 48, 46, 44, 38, 34], labels: LABELS[7] },
@@ -172,7 +172,7 @@ function BarsTile({
             </p>
             <p className="mt-0.5 font-display text-[30px] font-semibold leading-[34px] tracking-[-0.8px] text-[#1a1917] tabular-nums">
               {series.prefix}
-              {num}
+              {num.toLocaleString("de-DE")}
               {series.suffix}
             </p>
           </div>

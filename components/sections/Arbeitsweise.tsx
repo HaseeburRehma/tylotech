@@ -12,7 +12,6 @@ function SystemMock() {
     { t: "Website", gold: true },
     { t: "Werbekonten", gold: false },
     { t: "CRM", gold: false },
-    { t: "Buchhaltung", gold: false },
   ];
   return (
     <div className="relative flex h-[210px] w-full max-w-[360px] items-center">
@@ -28,7 +27,7 @@ function SystemMock() {
             <stop offset="100%" stopColor="#d1aa71" />
           </linearGradient>
         </defs>
-        {[36, 78, 120, 162].map((py) => (
+        {[63, 105, 147].map((py) => (
           <path
             key={py}
             d={`M150 ${py} C 205 ${py}, 210 105, 262 105`}
@@ -39,7 +38,7 @@ function SystemMock() {
           />
         ))}
         {/* gold pulses continuously flowing into the hub */}
-        {[36, 78, 120, 162].map((py, i) => (
+        {[63, 105, 147].map((py, i) => (
           <path
             key={`p${py}`}
             className="aw-flow"
@@ -61,7 +60,7 @@ function SystemMock() {
           <span
             key={p.t}
             className="sys-pill flex items-center gap-2 rounded-[10px] border border-line bg-white px-3 py-1.5 shadow-[0_1px_3px_rgba(15,14,13,0.04)]"
-            style={{ transform: `rotate(${(3 - i) * 1.1}deg)` }}
+            style={{ transform: `rotate(${(2 - i) * 1.1}deg)` }}
           >
             <span
               className="size-[6px] rounded-[3px]"
@@ -175,7 +174,7 @@ const CARDS = [
   {
     Mock: SystemMock,
     title: "Ein System statt Insellösungen",
-    body: "Website, Werbekonten, CRM und Buchhaltung hängen zusammen. Eine Anfrage landet nicht in vier Postfächern, sondern an einer Stelle.",
+    body: "Website, Werbekonten und CRM hängen zusammen. Eine Anfrage landet nicht in drei Postfächern, sondern an einer Stelle.",
 
   },
   {

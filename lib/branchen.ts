@@ -268,7 +268,7 @@ export const BRANCHEN: Branche[] = [
         text: "Bewertungen sind der stärkste lokale Ranking-Faktor, und das Erste, worauf Kunden schauen. Wir bauen dir einen einfachen Prozess, mit dem zufriedene Kunden nach jedem Auftrag ganz leicht eine Bewertung hinterlassen. So kommen konstant neue dazu, dein Profil wächst und du steigst in den Rankings.",
       },
       {
-        visual: { kind: "kpi", label: "Neue Anfragen", value: "128" },
+        visual: { kind: "kpi", label: "Neue Anfragen", value: "548" },
         title: "Unsere Anfragen sind reine Glückssache.",
         text: "Statt auf Empfehlungen zu hoffen, bauen wir ein System aus lokaler Sichtbarkeit und gezielten Umkreis-Ads, das dir konstant und planbar Anfragen bringt, unabhängig von Saison und Zufall.",
       },
@@ -381,7 +381,7 @@ export const BRANCHEN: Branche[] = [
         text: "Vertrauen ist im Digitalen die größte Hürde. Wir bauen es systematisch auf: über echten Mehrwert-Content, sichtbare Ergebnisse, Bewertungen und eine überzeugende Story, damit Interessenten dir glauben, noch bevor ihr das erste Mal sprecht.",
       },
       {
-        visual: { kind: "kpi", label: "Neue Anfragen", value: "128" },
+        visual: { kind: "kpi", label: "Neue Anfragen", value: "572" },
         title: "Traffic wird nicht zu Kunden.",
         text: "Besucher allein zahlen keine Rechnungen. Wir bauen den Weg vom Besucher zum Kunden: Landingpages, die konvertieren, klare Angebote und automatisiertes Follow-up, das Interessenten zum Abschluss führt.",
       },
@@ -593,7 +593,7 @@ export const BRANCHEN: Branche[] = [
     },
     pains: [
       {
-        visual: { kind: "kpi", label: "Neue Anfragen", value: "128" },
+        visual: { kind: "kpi", label: "Neue Anfragen", value: "536" },
         title: "Unsere Pipeline ist unberechenbar.",
         text: "Empfehlungen sind schön, aber nicht steuerbar. Wir bauen ein planbares Leadgen-System über LinkedIn und Google, das konstant qualifizierte Anfragen liefert, damit du deine Pipeline aktiv füllst, statt auf den nächsten Zufall zu warten.",
       },

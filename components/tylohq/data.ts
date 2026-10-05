@@ -41,36 +41,36 @@ export const DASH: Record<
 > = {
   "September 2026": {
     labels: ["26.8", "29.8", "1.9", "4.9", "6.9", "9.9", "12.9", "15.9", "18.9", "20.9", "22.9", "24.9"],
-    budget: [90, 115, 103, 139, 157, 142, 184, 205, 190, 235, 256, 293],
-    leads: [4.4, 4.6, 4.2, 3.9, 4.1, 3.5, 3.7, 3.2, 3.4, 2.9, 2.6, 2.4],
+    budget: [442, 564, 505, 682, 770, 697, 903, 1006, 932, 1153, 1256, 1436],
+    leads: [42, 44, 45, 47, 46, 48, 49, 50, 48, 51, 53, 55],
     kpi: {
-      budget: { value: "2.109 €", delta: "+101,8 %" },
-      leads: { value: "39", delta: "+100 %" },
-      cpl: { value: "54,08 €", delta: "−24,6 %", down: true },
+      budget: { value: "10.346 €", delta: "+2,8 %" },
+      leads: { value: "578", delta: "+6,8 %" },
+      cpl: { value: "17,90 €", delta: "−3,8 %", down: true },
       kunden: { value: "10", delta: "+1" },
     },
     kunden: [9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10],
   },
   "August 2026": {
     labels: ["27.7", "30.7", "2.8", "5.8", "8.8", "11.8", "14.8", "17.8", "20.8", "23.8", "26.8", "29.8"],
-    budget: [70, 78, 85, 80, 92, 88, 95, 90, 96, 92, 88, 91],
-    leads: [1.4, 1.8, 1.5, 1.9, 1.6, 1.4, 1.7, 1.5, 1.8, 1.6, 1.4, 1.4],
+    budget: [674, 751, 819, 770, 886, 847, 915, 867, 924, 886, 847, 877],
+    leads: [42, 44, 43, 45, 44, 46, 45, 46, 45, 47, 46, 48],
     kpi: {
-      budget: { value: "1.045 €", delta: "+12,4 %" },
-      leads: { value: "19", delta: "+5,6 %" },
-      cpl: { value: "55,00 €", delta: "+6,4 %" },
+      budget: { value: "10.063 €", delta: "+1,3 %" },
+      leads: { value: "541", delta: "+5,7 %" },
+      cpl: { value: "18,60 €", delta: "−4,1 %", down: true },
       kunden: { value: "9", delta: "+2" },
     },
     kunden: [7, 7, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9],
   },
   "Juli 2026": {
     labels: ["27.6", "30.6", "3.7", "6.7", "9.7", "12.7", "15.7", "18.7", "21.7", "24.7", "27.7", "30.7"],
-    budget: [72, 75, 70, 78, 80, 76, 82, 79, 74, 81, 80, 83],
-    leads: [1.2, 1.6, 1.4, 1.5, 1.8, 1.3, 1.6, 1.5, 1.4, 1.6, 1.7, 1.4],
+    budget: [769, 801, 748, 833, 854, 812, 876, 844, 790, 865, 854, 887],
+    leads: [40, 42, 41, 43, 42, 43, 42, 44, 43, 44, 43, 45],
     kpi: {
-      budget: { value: "930 €", delta: "+8,1 %" },
-      leads: { value: "18", delta: "+12,5 %" },
-      cpl: { value: "51,67 €", delta: "−3,9 %", down: true },
+      budget: { value: "9.933 €", delta: "+3,0 %" },
+      leads: { value: "512", delta: "+4,1 %" },
+      cpl: { value: "19,40 €", delta: "−2,5 %", down: true },
       kunden: { value: "7", delta: "+1" },
     },
     kunden: [6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7],
@@ -112,14 +112,14 @@ export const SOURCES: { id: Source; label: string }[] = [
 type MetricDef = { key: string; label: string; base: number; unit?: "€" | "%"; chart?: boolean; avg?: boolean };
 export const METRICS: Record<Source, MetricDef[]> = {
   all: [
-    { key: "leads", label: "Leads", base: 3.2, chart: true },
+    { key: "leads", label: "Leads", base: 15.5, chart: true },
     { key: "klicks", label: "Klicks", base: 260, chart: true },
     { key: "impr", label: "Impressionen", base: 11800, chart: true },
   ],
   meta: [
     { key: "reach", label: "Reichweite", base: 4200, chart: true },
     { key: "klicks", label: "Klicks", base: 96, chart: true },
-    { key: "leads", label: "Leads", base: 1.9, chart: true },
+    { key: "leads", label: "Leads", base: 9.2, chart: true },
   ],
   gads: [
     { key: "klicks", label: "Klicks", base: 64, chart: true },
