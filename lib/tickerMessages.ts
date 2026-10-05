@@ -9,7 +9,7 @@
 export type TickerIcon = "leads" | "query" | "growth" | "ranking" | "people" | "software" | "sale";
 
 export const TICKER_MESSAGES: { text: string; icon: TickerIcon }[] = [
-  { text: "Letzte 30 Tage: 432 Leads für unsere Partner", icon: "leads" },
+  { text: "Letzte 30 Tage: 550 Leads für unsere Partner", icon: "leads" },
   { text: "Anfrage für einen Dachdecker", icon: "query" },
   { text: "Marge eines Partners um 14 % gesteigert", icon: "growth" },
   { text: "ROAS eines Shops von 1,8 auf 3,5 verbessert", icon: "growth" },
