@@ -39,14 +39,14 @@ function PlatformButton({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="group flex items-center gap-3.5 rounded-[14px] border border-line bg-white py-3 pl-4 pr-[16px] shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-[0_12px_26px_-16px_rgba(15,14,13,0.4)]"
+      className="group flex min-w-0 items-center gap-2.5 rounded-[14px] border border-line bg-white px-3 py-3 sm:gap-3.5 sm:pl-4 sm:pr-[16px] shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-ink/20 hover:shadow-[0_12px_26px_-16px_rgba(15,14,13,0.4)]"
     >
       {badge}
       <span className="flex flex-col">
-        <span className="text-[9.5px] font-medium uppercase tracking-[0.9px] text-ink/45">{over}</span>
+        <span className="whitespace-nowrap text-[9.5px] font-medium uppercase tracking-[0.9px] text-ink/45">{over}</span>
         <span className="text-[15px] font-medium text-ink">{name}</span>
       </span>
-      <ArrowUpRight className="size-4 text-ink/40 transition-transform duration-300 group-hover:rotate-45" />
+      <ArrowUpRight className="ml-auto size-4 shrink-0 text-ink/40 max-[399px]:hidden transition-transform duration-300 group-hover:rotate-45" />
     </a>
   );
 }
@@ -150,7 +150,7 @@ export default function Podcast() {
               bauen eine Lösung, die sich um <span className="font-semibold text-ink">dein</span> Unternehmen biegt, nicht
               andersrum. Maßgeschneidert auf deine Prozesse, deine Branche, deine Regeln. So wie zuletzt für Priya.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3.5">
+            <div className="mt-8 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3.5">
               <PlatformButton
                 href={`https://www.youtube.com/watch?v=${YT_ID}`}
                 over="Ansehen auf"

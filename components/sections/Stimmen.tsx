@@ -77,14 +77,6 @@ const CARDS: Card[] = [
     meta: "verifiziert, 5 von 5",
   },
   {
-    kind: "client",
-    quote:
-      "Unser gesamtes Unternehmen haben wir mit TyloTech aufgebaut — täglich 5 bis 7 günstige lokale Anfragen.",
-    name: "Cleanpany Gebäudeservice",
-    firma: "Gebäudereinigung, NRW",
-    initials: "CG",
-  },
-  {
     kind: "google",
     text: "Top Betreuung von Anfang an. Man merkt, dass hier mitgedacht wird und nicht nur abgerechnet.",
     meta: "verifiziert, 5 von 5",
