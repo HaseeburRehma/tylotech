@@ -8,6 +8,7 @@ import {
   Building2,
   TrendingUp,
   Briefcase,
+  Globe,
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -26,6 +27,7 @@ type Industry = {
 };
 
 const SLUGS: Record<string, string> = {
+  "Online-Dienstleistungen": "online-dienstleistungen",
   Handwerk: "handwerk",
   "Lokale Dienstleister": "lokale-dienstleister",
   "E-Commerce": "e-commerce",
@@ -34,6 +36,15 @@ const SLUGS: Record<string, string> = {
 };
 
 const INDUSTRIES: Industry[] = [
+  {
+    name: "Online-Dienstleistungen",
+    lead: "Expertise sichtbar machen,",
+    accent: "Kunden gewinnen.",
+    body: "Coaches, Berater, Software- und Online-Anbieter — wir schärfen deine Positionierung, bauen Autorität auf und verwandeln Besucher in zahlende Kunden. Mit einem System, das nicht nur an dir hängt.",
+    icon: Globe,
+    img: "/branchen/online.jpg",
+    tint: "from-[#e9dccb] to-[#c9a774]",
+  },
   {
     name: "Handwerk",
     lead: "Sichtbarkeit, die",
@@ -142,7 +153,7 @@ export default function Branchen() {
   const it = INDUSTRIES[active];
 
   return (
-    <section id="branchen" ref={root} className="bg-[#f3f5f6] lg:h-[280vh]">
+    <section id="branchen" ref={root} className="bg-[#f3f5f6] lg:h-[336vh]">
       <div className="py-20 sm:py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0">
         <Container className="w-full">
           <div className="br-head max-w-[720px]">
