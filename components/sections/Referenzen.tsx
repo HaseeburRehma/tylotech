@@ -59,7 +59,7 @@ const PROJECTS: Project[] = [
       { icon: Send, label: "Anmeldung ohne Umweg", desc: "vom Instagram-Profil bis zum Vertrag in einem Fluss." },
       { icon: Heart, label: "Ein Auftritt, den man weiterempfiehlt", desc: "Farbe, Ton und Bildsprache konsequent durchgezogen." },
     ],
-    tiles: ["/referenzen/fahrschule-1.webp", "/referenzen/fahrschule-2.webp", null, "/referenzen/fahrschule-4.webp"],
+    tiles: ["/referenzen/fahrschule-1.webp", "/referenzen/fahrschule-2.webp", "/referenzen/fahrschule-3.webp", "/referenzen/fahrschule-4.webp"],
   },
   {
     client: "Cleanpany Gebäudeservice",
