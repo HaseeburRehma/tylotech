@@ -53,7 +53,10 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
     setV(next);
     if (touched[k]) setErrors(validate({ ...next, topics, consent }));
   };
-  const blur = (k: string) => () => {
+  // Only check a field on blur once something was typed — an error appearing for an empty
+  // field would shift the layout under the pointer and swallow the click that caused the blur.
+  const blur = (k: keyof typeof v) => () => {
+    if (!v[k].trim()) return;
     setTouched((t) => ({ ...t, [k]: true }));
     setErrors(validate(fields()));
   };
