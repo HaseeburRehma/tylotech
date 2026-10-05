@@ -5,6 +5,8 @@ import Link from "next/link";
 import { TYLOHQ_URL } from "@/lib/site";
 import { MapPin, Mail, Phone, ShieldCheck, Server, Quote } from "lucide-react";
 import Container from "./ui/Container";
+import PartnerLogo from "./PartnerLogo";
+import { PARTNERS } from "@/lib/partners";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const CONTACT = [
@@ -30,12 +32,11 @@ const MEHR = [
 
 const LEGAL: Record<string, string> = { "TyloTech HQ Login": TYLOHQ_URL, Impressum: "/impressum", Datenschutz: "/datenschutz" };
 
-const PARTNERS = [
-  "/partners/priyas.png",
-  "/partners/lokshift.png",
-  "/partners/crusty-slices.png",
-  "/partners/rohrcleaner.png",
-];
+// footer row: the four partners chosen for the footer, rendered like the logo strip (alpha masks)
+const FOOTER_PARTNERS = ["Priya's Reinigungsservice", "LokShift", "Crusty Slices", "Rohrcleaner"]
+  .map((n) => PARTNERS.find((p) => p.name === n))
+  .filter((p): p is (typeof PARTNERS)[number] => !!p)
+  .map((p) => (p.name === "Rohrcleaner" ? { ...p, src: "/partners/rohrcleaner.png", w: 48, h: 40 } : p));
 
 const SOCIALS: { label: string; path: string }[] = [
   {
@@ -65,12 +66,22 @@ function Social({ label, path }: { label: string; path: string }) {
     <Link
       href="#"
       aria-label={label}
-      className="grid size-9 place-items-center rounded-lg border border-white/15 text-white/70 transition-colors hover:border-white/40 hover:text-white"
+      className="grid size-8 place-items-center rounded-full border border-white/[0.14] bg-white/[0.09] text-white/[0.92] transition-colors hover:border-white/30 hover:bg-white/[0.16]"
     >
-      <svg viewBox="0 0 24 24" className="size-[15px]" fill="currentColor" aria-hidden>
+      <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden>
         <path d={path} />
       </svg>
     </Link>
+  );
+}
+
+/* Figma "Partner-Feld": 63×36 tile, logo as alpha mask tinted text/tertiary at 80 % */
+function PartnerTile({ p }: { p: (typeof PARTNERS)[number] }) {
+  const scale = Math.min(50 / p.w, 22 / p.h);
+  return (
+    <span className="grid h-9 w-[63px] place-items-center rounded-lg border border-white/[0.13] bg-white/[0.07]">
+      <PartnerLogo partner={p} tint="#a6a29b" scale={scale} className="opacity-80" />
+    </span>
   );
 }
 
@@ -92,38 +103,26 @@ export default function Footer() {
   );
 
   return (
-    <footer
-      ref={root}
-      className="relative overflow-hidden border-t border-white/10 bg-[#001620] pb-8 pt-16 text-white sm:pt-20"
-    >
+    <footer ref={root} className="relative overflow-hidden border-t border-white/10 bg-[#001620] pb-10 pt-16 text-white lg:pt-[88px]">
       {/* Figma "Warmes Licht": 900×520 gold radial glow behind the logo */}
       <div
         aria-hidden
         className="pointer-events-none absolute -left-[140px] -top-[200px] h-[520px] w-[900px] max-w-[160vw] motion-safe:animate-[footGlow_9s_ease-in-out_infinite]"
         style={{ background: "radial-gradient(ellipse closest-side, rgba(209,170,113,0.2), rgba(209,170,113,0.06) 55%, rgba(209,170,113,0))" }}
       />
-      <Container className="relative">
-        <div className="grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-[1.5fr_1.4fr_1fr_1fr]">
-          {/* Brand */}
-          <div className="footer-reveal">
-            <Link href="#top" className="inline-flex">
+      <Container className="relative flex flex-col gap-12 lg:gap-14">
+        {/* Figma "Footer Oben": Marke 360 · Haltung 290 · Spalten */}
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:flex lg:gap-16">
+          <div className="footer-reveal flex flex-col items-start gap-[26px] lg:w-[360px] lg:shrink-0">
+            <Link href="/" className="inline-flex" aria-label="TyloTech Startseite">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/brand/tylotech-logo-dark.svg"
-                alt="TyloTech"
-                width={150}
-                height={38}
-                className="h-[36px] w-auto"
-              />
+              <img src="/brand/tylotech-logo-dark.svg" alt="TyloTech" width={264} height={67} className="h-12 w-auto sm:h-[56px] lg:h-[66.7px]" />
             </Link>
-            <p className="mt-5 font-display text-[18px] font-semibold tracking-[-0.01em] text-white">
-              Wir bauen. Du wächst.
-            </p>
-
-            <ul className="mt-6 space-y-2.5">
+            <p className="font-display text-[20px] font-medium leading-7 tracking-[-0.4px] text-white/[0.92]">Wir bauen. Du wächst.</p>
+            <ul className="flex flex-col gap-[9px]">
               {CONTACT.map((c) => (
-                <li key={c.text} className="flex items-center gap-2.5 text-[14px] text-white/70">
-                  <c.icon className="size-4 shrink-0 text-[#7fbacd]" strokeWidth={1.7} />
+                <li key={c.text} className="flex items-center gap-2.5 text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.62]">
+                  <c.icon className="size-[15px] shrink-0 text-[#d8b682]" strokeWidth={1.7} />
                   {c.href ? (
                     <a href={c.href} className="transition-colors hover:text-white">
                       {c.text}
@@ -134,90 +133,62 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-[12.5px] text-white/50">
+            <div className="flex flex-wrap gap-x-4 gap-y-2.5">
               {TRUST.map((t) => (
-                <span key={t.text} className="flex items-center gap-1.5">
-                  <t.icon className="size-3.5 text-accent" strokeWidth={1.8} />
+                <span key={t.text} className="flex items-center gap-[7px] whitespace-nowrap text-[13px] leading-5 tracking-[-0.05px] text-white/50">
+                  <t.icon className="size-3.5 text-[#d8b682]" strokeWidth={1.8} />
                   {t.text}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Quote + partners */}
-          <div className="footer-reveal">
-            <Quote className="size-7 fill-[#d8b682] text-[#d8b682]" strokeWidth={0} />
-            <p className="mt-4 max-w-[340px] font-[family-name:var(--font-instrument)] text-[20px] italic leading-[1.4] text-white/90">
-              „Building unique brands with unique people.“
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2.5">
-              {PARTNERS.map((src) => (
-                <span
-                  key={src}
-                  className="grid h-11 w-[92px] place-items-center rounded-lg border border-white/10 bg-white/[0.04] px-2.5"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={src}
-                    alt=""
-                    className="max-h-6 w-auto max-w-full object-contain opacity-80"
-                  />
-                </span>
-              ))}
+          <div className="footer-reveal flex flex-col items-start gap-7 lg:w-[290px] lg:shrink-0">
+            <Quote className="size-[26px] fill-[#d8b682] text-[#d8b682]" strokeWidth={0} />
+            <p className="font-[family-name:var(--font-instrument)] text-[23px] italic leading-8 tracking-[-0.3px] text-white/90">„Building unique brands with unique people.“</p>
+            <div className="flex flex-col gap-3.5">
+              <div className="flex gap-2">
+                {FOOTER_PARTNERS.map((p) => (
+                  <PartnerTile key={p.name} p={p} />
+                ))}
+              </div>
+              <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.62]">Über 100 Projekte umgesetzt</p>
             </div>
-            <p className="mt-4 text-[13px] text-white/45">
-              Über 100 Projekte umgesetzt
-            </p>
           </div>
 
-          {/* Navigation */}
-          <div className="footer-reveal">
-            <p className="font-[family-name:var(--font-instrument)] text-[18px] italic text-[#d8b682]">
-              Navigation
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {NAV.map((l) => (
-                <li key={l}>
-                  <Link href={l === "Kontakt" ? "/kontakt" : "#"} className="text-[14px] text-white/65 transition-colors hover:text-white">
-                    {l}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Mehr */}
-          <div className="footer-reveal">
-            <p className="font-[family-name:var(--font-instrument)] text-[18px] italic text-[#d8b682]">
-              Mehr
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {MEHR.map((l) => (
-                <li key={l}>
+          <div className="footer-reveal grid grid-cols-2 gap-12 md:col-span-2 lg:flex-1">
+            {[
+              { title: "Navigation", items: NAV.map((l) => ({ l, href: l === "Kontakt" ? "/kontakt" : "#" })) },
+              { title: "Mehr", items: MEHR.map((l) => ({ l, href: LEGAL[l] ?? "#" })) },
+            ].map((col) => (
+              <div key={col.title} className="flex flex-col gap-3.5">
+                <p className="font-[family-name:var(--font-instrument)] text-[19px] italic leading-6 text-[#d8b681]">{col.title}</p>
+                {col.items.map(({ l, href }) => (
                   <Link
-                    href={LEGAL[l] ?? "#"}
-                    {...(LEGAL[l]?.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
-                    className="text-[14px] text-white/65 transition-colors hover:text-white">
+                    key={l}
+                    href={href}
+                    {...(href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
+                    className="w-fit text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.66] transition-colors hover:text-white"
+                  >
                     {l}
                   </Link>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Figma "Trennlinie": gold fading into white */}
-        <div aria-hidden className="mt-14 h-px w-full bg-[linear-gradient(90deg,rgba(209,170,113,0.35)_0%,rgba(255,255,255,0.12)_50%,rgba(255,255,255,0.04)_100%)]" />
-        <div className="flex flex-col-reverse items-center justify-between gap-5 pt-6 sm:flex-row">
+        <div aria-hidden className="h-px w-full bg-[linear-gradient(90deg,rgba(209,170,113,0.35)_0%,rgba(255,255,255,0.12)_50%,rgba(255,255,255,0.04)_100%)]" />
+
+        {/* Figma "Footer Unten": socials + copyright, left-aligned */}
+        <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-[26px]">
           <div className="flex gap-2.5">
             {SOCIALS.map((s) => (
               <Social key={s.label} label={s.label} path={s.path} />
             ))}
           </div>
-          <p className="text-center text-[13px] text-white/45 sm:text-right">
-            © 2026 TyloTech. Building unique brands with unique people.
-          </p>
+          <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.56]">© 2026 TyloTech. Building unique brands with unique people.</p>
         </div>
       </Container>
     </footer>

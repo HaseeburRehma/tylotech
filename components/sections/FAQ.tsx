@@ -150,7 +150,7 @@ export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: str
                     <p
                       className={
                         br
-                          ? "pb-6 pl-6 pr-6 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954] sm:pb-[26px] sm:pl-8 sm:pr-[92px]"
+                          ? "-mt-2.5 pb-6 pl-6 pr-6 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954] sm:pb-[26px] sm:pl-8 sm:pr-[92px]"
                           : "pb-6 pl-7 pr-[68px] text-[15px] leading-[1.65] text-[#5c5954]"
                       }
                     >

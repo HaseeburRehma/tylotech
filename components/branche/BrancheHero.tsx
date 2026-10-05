@@ -24,7 +24,7 @@ export default function BrancheHero({ b }: { b: Branche }) {
   );
 
   return (
-    <section id="top" ref={root} className="relative overflow-hidden bg-page">
+    <section id="top" ref={root} className="relative overflow-hidden bg-white">
       {/* warm light */}
       <div
         aria-hidden

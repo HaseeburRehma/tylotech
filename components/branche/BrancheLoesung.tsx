@@ -146,7 +146,7 @@ export default function BrancheLoesung({ b }: { b: Branche }) {
   );
 
   return (
-    <section ref={root} className="bg-page py-20 sm:py-24 lg:py-28">
+    <section ref={root} className="bg-white py-20 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-5">
         <div
           className="bhl-panel relative flex flex-col items-center gap-12 overflow-hidden rounded-[28px] border border-[rgba(209,170,113,0.28)] px-6 py-10 sm:rounded-[36px] sm:px-10 sm:py-14 lg:flex-row lg:gap-14 lg:py-16 lg:pl-16 lg:pr-14"

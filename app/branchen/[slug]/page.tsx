@@ -45,7 +45,7 @@ export default async function BranchePage(props: PageProps<"/branchen/[slug]">) 
       <Nav />
       <main>
         <BrancheHero b={b} />
-        <TrustStrip />
+        <TrustStrip tone="branche" />
         <BrancheKennst b={b} />
         <BrancheLoesung b={b} />
         <BranchePains b={b} />

@@ -14,7 +14,7 @@
   --color-ink-40: #8a857f; /* faint labels     */
 
   /* Fonts */
-  --font-display: var(--font-bricolage);
+  --font-display: var(--font-instrument-sans);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 

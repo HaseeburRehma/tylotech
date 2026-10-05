@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import {
-  Bricolage_Grotesque,
+  Instrument_Sans,
   Inter,
   Geist_Mono,
   Instrument_Serif,
@@ -10,11 +10,12 @@ import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
 import CookieBanner from "@/components/CookieBanner";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+// Figma type system: Instrument Sans for headings and labels
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument-sans",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const inter = Inter({
@@ -47,7 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="de"
-      className={`${bricolage.variable} ${inter.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
+      className={`${instrumentSans.variable} ${inter.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
     >
       <body>
         <ScrollProgress />
