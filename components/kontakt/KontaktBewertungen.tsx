@@ -150,7 +150,7 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
   const rating = data.rating.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
   return (
-    <section id="bewertungen" ref={root} className="scroll-mt-20 overflow-hidden bg-page py-20 sm:py-24 lg:py-28">
+    <section id="bewertungen" ref={root} className="scroll-mt-20 overflow-hidden bg-page py-14 sm:py-24 lg:py-28">
       <Container className="kb-grid grid grid-cols-1 gap-10 lg:grid-cols-[360px_minmax(0,1fr)] lg:gap-14 xl:gap-16">
         <div className="kb-summary flex flex-col items-start gap-6">
           <Eyebrow icon="star">Google-Bewertungen</Eyebrow>

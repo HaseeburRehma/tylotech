@@ -51,7 +51,7 @@ const CHANNELS = [
 
 const RANKINGS = [
   { term: "gebäudereinigung düsseldorf", pos: 1, from: 6, trend: 0.95 },
-  { term: "fahrschule düsseldorf", pos: 3, from: 11, trend: 0.62 },
+  { term: "fahrschule düsseldorf", pos: 1, from: 11, trend: 0.92 },
   { term: "Wärmepumpen Spezialist", pos: 2, from: 9, trend: 0.78 },
   { term: "Badsanierung Berlin", pos: 1, from: 7, trend: 0.88 },
 ];
@@ -299,7 +299,7 @@ export default function TyloHQ() {
   const activeCh = hoverCh ?? hl;
 
   return (
-    <section id="tylohq" ref={root} className="border-t border-line bg-[#f6f5f3] py-20 text-ink sm:py-24 lg:py-28">
+    <section id="tylohq" ref={root} className="border-t border-line bg-[#f6f5f3] py-14 text-ink sm:py-24 lg:py-28">
       <Container>
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="hq-head max-w-[780px]">

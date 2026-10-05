@@ -223,7 +223,7 @@ export default function Arbeitsweise() {
     <section
       id="arbeitsweise"
       ref={root}
-      className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
+      className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-14 sm:py-24"
     >
       <Container className="relative">
         <div className="aw-head max-w-[680px]">

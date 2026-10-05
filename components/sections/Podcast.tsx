@@ -111,7 +111,7 @@ export default function Podcast() {
   );
 
   return (
-    <section id="podcast" ref={root} className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-20 text-ink sm:py-24">
+    <section id="podcast" ref={root} className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-14 text-ink sm:py-24">
       <Container className="relative grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14 xl:gap-16">
         <div>
           <p className="podcast-eyebrow mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">

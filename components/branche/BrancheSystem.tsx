@@ -20,7 +20,7 @@ export default function BrancheSystem({ b }: { b: Branche }) {
   );
 
   return (
-    <section ref={root} className="bg-white py-20 sm:py-24 lg:py-28">
+    <section ref={root} className="bg-white py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
         <SectionHead icon="workflow" eyebrow="Unser System" title="Sechs Bausteine, die _ineinandergreifen_." />
         <div className="bhs-grid grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">

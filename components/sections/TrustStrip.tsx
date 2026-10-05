@@ -36,7 +36,7 @@ export default function TrustStrip({ tone = "home" }: { tone?: "home" | "branche
   return (
     <section
       id="partner"
-      className={br ? "border-b border-line bg-white pb-[72px] pt-14" : "border-b border-line bg-page py-14"}
+      className={br ? "border-b border-line bg-white pb-12 pt-10 sm:pb-[72px] sm:pt-14" : "border-b border-line bg-page py-10 sm:py-14"}
     >
       <Container>
         <p className={`${br ? "mb-8" : "mb-10"} text-center text-[15px] tracking-[-0.01em] text-ink/55`}>

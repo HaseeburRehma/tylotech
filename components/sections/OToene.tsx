@@ -213,7 +213,7 @@ export default function OToene() {
   }, [playing]);
 
   return (
-    <section id="otoene" ref={root} className="bg-[#001620] py-20 text-white sm:py-24">
+    <section id="otoene" ref={root} className="bg-[#001620] py-14 text-white sm:py-24">
       <Container>
         <div className="oton-head max-w-[720px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">

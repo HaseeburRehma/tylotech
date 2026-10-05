@@ -127,7 +127,7 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
         aria-hidden
         className="pointer-events-none absolute -top-40 left-[30%] h-[640px] w-[1100px] rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.18),rgba(209,170,113,0.04)_60%,transparent)]"
       />
-      <Container className="relative pb-20 pt-10 sm:pt-14 lg:pb-28 lg:pt-16 xl:pt-[88px]">
+      <Container className="relative pb-14 pt-8 sm:pb-20 sm:pt-14 lg:pb-28 lg:pt-16 xl:pt-[88px]">
         <header className="lg-head flex max-w-[760px] flex-col items-start gap-5 sm:gap-6">
           <Eyebrow icon={icon}>{doc.eyebrow}</Eyebrow>
           <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">

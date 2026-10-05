@@ -87,7 +87,7 @@ export default function Zahlen() {
     <section
       id="zahlen"
       ref={root}
-      className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
+      className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-14 sm:py-24"
     >
       {/* faint warm glow, top-right */}
       <div

@@ -42,7 +42,7 @@ export default function KontaktHero({ initialBranche }: { initialBranche?: strin
         className="pointer-events-none absolute -top-40 left-[38%] h-[760px] w-[1180px] rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.2),rgba(209,170,113,0.05)_60%,transparent)]"
       />
       {/* phones: headline → form → channels; desktop: copy + channels left, form right */}
-      <Container className="relative grid grid-cols-1 items-start gap-10 pb-20 pt-10 sm:pt-14 lg:pb-28 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,600px)] xl:grid-rows-[auto_1fr] xl:gap-x-16 xl:gap-y-10 xl:pt-[88px] 2xl:gap-x-20">
+      <Container className="relative grid grid-cols-1 items-start gap-10 pb-14 pt-8 sm:pb-20 sm:pt-14 lg:pb-28 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,600px)] xl:grid-rows-[auto_1fr] xl:gap-x-16 xl:gap-y-10 xl:pt-[88px] 2xl:gap-x-20">
         <div className="kh-copy flex min-w-0 flex-col items-start gap-6 sm:gap-7">
           <Eyebrow icon="message-circle">Kontakt</Eyebrow>
           <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">

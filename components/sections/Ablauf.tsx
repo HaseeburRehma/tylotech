@@ -89,7 +89,7 @@ export default function Ablauf() {
   );
 
   return (
-    <section id="ablauf" ref={root} data-nav-dark className="bg-[#001620] text-white py-24">
+    <section id="ablauf" ref={root} data-nav-dark className="bg-[#001620] py-14 text-white sm:py-24">
       <Container>
         <div className="ablauf-head mx-auto max-w-[680px] text-center">
           <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
@@ -108,12 +108,12 @@ export default function Ablauf() {
           </p>
         </div>
 
-        <div className="ablauf-grid mx-auto mt-14 grid max-w-[1040px] grid-cols-1 md:grid-cols-2">
+        <div className="ablauf-grid mx-auto mt-6 grid sm:mt-14 max-w-[1040px] grid-cols-1 md:grid-cols-2">
           {STEPS.map(({ icon: Icon, step, title, body }, i) => (
             <div
               key={title}
               className={cn(
-                "ablauf-step py-9",
+                "ablauf-step py-7 sm:py-9",
                 i % 2 === 0 ? "md:pr-12" : "md:pl-12",
                 CELL_BORDERS[i],
               )}
@@ -130,7 +130,7 @@ export default function Ablauf() {
           ))}
         </div>
 
-        <div className="ablauf-cta mt-14 flex justify-center">
+        <div className="ablauf-cta mt-8 flex sm:mt-14 justify-center">
           <Link
             href="/kontakt"
             className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[16px] font-medium text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"

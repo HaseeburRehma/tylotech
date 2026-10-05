@@ -22,7 +22,7 @@ export default function BrancheCTA({ b }: { b: Branche }) {
   );
 
   return (
-    <section id="kontakt" ref={root} className="scroll-mt-20 bg-white py-16 sm:py-20 lg:py-[100px]">
+    <section id="kontakt" ref={root} className="scroll-mt-20 bg-white py-12 sm:py-20 lg:py-[100px]">
       <Container>
         <div
           className="bhc-panel relative overflow-hidden rounded-[28px] border border-[rgba(209,170,113,0.28)] px-6 py-14 shadow-[0_28px_70px_rgba(4,22,29,0.3)] sm:rounded-[36px] sm:px-12 sm:py-[76px] lg:px-20"

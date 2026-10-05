@@ -109,7 +109,7 @@ export default function KontaktStandort() {
   );
 
   return (
-    <section id="standort" ref={root} className="scroll-mt-20 bg-[#f6f5f3] py-20 sm:py-24 lg:py-28">
+    <section id="standort" ref={root} className="scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
         <SectionHead icon="map-pin" eyebrow="Standort" title="Mitten in _Düsseldorf._" sub="Unser Büro in der Behrenstraße. Ruf an, schreib uns oder plan direkt deine Route." />
         <div className="ks-grid grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_400px]">

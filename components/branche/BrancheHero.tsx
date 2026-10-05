@@ -30,7 +30,7 @@ export default function BrancheHero({ b }: { b: Branche }) {
         aria-hidden
         className="pointer-events-none absolute -top-36 left-[32%] h-[760px] w-[1180px] rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.22),rgba(209,170,113,0.06)_60%,transparent)]"
       />
-      <Container className="relative grid grid-cols-1 items-center gap-12 pb-20 pt-10 sm:pt-14 lg:pb-24 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,500px)] xl:gap-16 xl:pt-[88px]">
+      <Container className="relative grid grid-cols-1 items-center gap-10 pb-14 pt-8 sm:gap-12 sm:pb-20 sm:pt-14 lg:pb-24 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,500px)] xl:gap-16 xl:pt-[88px]">
         <div className="bhh-copy flex min-w-0 flex-col items-start gap-6 sm:gap-7">
           <Eyebrow icon={h.icon}>{h.eyebrow}</Eyebrow>
           <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">

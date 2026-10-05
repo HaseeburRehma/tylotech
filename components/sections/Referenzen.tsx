@@ -1,22 +1,24 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import {
-  Calendar,
+  Eye,
   FileText,
   FolderOpen,
-  Heart,
   HeartPulse,
+  Inbox,
   LayoutDashboard,
   MapPin,
   Megaphone,
-  MessageCircle,
   Monitor,
+  PiggyBank,
   Send,
   ShieldCheck,
   Target,
   TrendingUp,
+  Trophy,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 import Container from "../ui/Container";
@@ -32,6 +34,8 @@ type Project = {
   client: string;
   lead: string;
   accent: string;
+  /** "Das Ergebnis" line under the title */
+  result?: string;
   bullets: Bullet[];
   /** Bild 1–4 in Figma order: row 1 = wide, narrow · row 2 = narrow, wide */
   tiles: [Tile, Tile, Tile, Tile];
@@ -52,45 +56,49 @@ const PROJECTS: Project[] = [
   },
   {
     client: "Fahrschule Abgefahrn",
-    lead: "Eine Fahrschule, die aussieht",
-    accent: "wie eine Marke.",
+    lead: "Die Fahrschule, die ganz Düsseldorf",
+    accent: "zuerst sieht.",
+    result: "#1 bei Google — SEO & KI-Suche. Plus eine Social-Media-Präsenz, die die ganze Stadt erreicht.",
     bullets: [
-      { icon: Calendar, label: "Theorieplan, den Fahrschüler benutzen", desc: "monatlich aktuell, ohne Nachfragen im Büro." },
-      { icon: Send, label: "Anmeldung ohne Umweg", desc: "vom Instagram-Profil bis zum Vertrag in einem Fluss." },
-      { icon: Heart, label: "Ein Auftritt, den man weiterempfiehlt", desc: "Farbe, Ton und Bildsprache konsequent durchgezogen." },
+      { icon: Trophy, label: "Platz 1, wo es zählt", desc: "Bei „Fahrschule Düsseldorf“ ganz oben — in der Google- und in der KI-Suche. Wer sucht, findet zuerst sie." },
+      { icon: Megaphone, label: "Social-Media-Macht", desc: "Ein Auftritt, der nicht nach Fahrschule aussieht, sondern nach Marke — mit Reichweite, die kein Wettbewerber hat." },
+      { icon: Send, label: "Vom Profil zum Vertrag in einem Fluss", desc: "Anmeldung ohne Umweg, vom ersten Klick bis zur Unterschrift." },
     ],
     tiles: ["/referenzen/fahrschule-1.webp", "/referenzen/fahrschule-2.webp", "/referenzen/fahrschule-3.webp", "/referenzen/fahrschule-4.webp"],
   },
   {
     client: "Rohr Cleaner",
-    lead: "Aus unregelmäßigen Anrufen wurden",
-    accent: "planbare Anfragen.",
+    lead: "5 Anfragen am Tag.",
+    accent: "Null Euro Werbung.",
+    result: "#1 bei Google & in der KI-Suche — täglich ~5 Anfragen, komplett ohne Werbebudget.",
     bullets: [
-      { icon: MapPin, label: "Local SEO für jeden Einsatzort", desc: "gefunden werden, wo der Auftrag tatsächlich entsteht." },
-      { icon: Target, label: "Ads auf Anfragen optimiert", desc: "nicht auf Klicks und nicht auf Reichweite." },
-      { icon: TrendingUp, label: "5 bis 7 Leads pro Tag", desc: "täglich planbar statt nur zum Monatsanfang." },
+      { icon: MapPin, label: "Gefunden, wo der Auftrag entsteht", desc: "Platz 1 bei Google und in der KI-Suche — ganz oben, ohne für jeden Klick zu zahlen." },
+      { icon: Eye, label: "94.034 Impressionen in 90 Tagen", desc: "Sichtbarkeit, die rund um die Uhr Kunden bringt." },
+      { icon: PiggyBank, label: "5 Anfragen pro Tag, 0 € Werbebudget", desc: "Planbare Aufträge aus reiner Sichtbarkeit — der Unterschied zwischen hoffen und wissen." },
     ],
     tiles: ["/referenzen/rohr-1.webp", "/referenzen/rohr-2.webp", "/referenzen/rohr-3.webp", "/referenzen/rohr-4.webp"],
   },
   {
     client: "Light of Hope",
-    lead: "Ein sensibles Thema,",
-    accent: "klar und warm erzählt.",
+    lead: "Ein sensibles Thema —",
+    accent: "und tausend erreichte Menschen.",
+    result: "1.000+ Leads generiert. Heute täglich 5 neue Anfragen durch Performance-Marketing.",
     bullets: [
-      { icon: Send, label: "Landingpages, die führen", desc: "vom Meta-Ad bis zur Bewerbung in einem Fluss." },
-      { icon: MessageCircle, label: "Bewerbung statt Buchung", desc: "Formular und Kennenlerngespräch vor der Zusage." },
-      { icon: ShieldCheck, label: "Ton ohne Heilversprechen", desc: "warm, klar und ohne Guru-Sprache." },
+      { icon: Users, label: "Über 1.000 Menschen erreicht", desc: "Anfragen von Menschen, die Hilfe gesucht — und gefunden haben." },
+      { icon: TrendingUp, label: "Täglich 5 Anfragen durch Performance-Marketing", desc: "Planbare Reichweite bei einem Thema, bei dem Vertrauen alles ist." },
+      { icon: ShieldCheck, label: "Ton ohne Heilversprechen", desc: "Warm, klar, auf Augenhöhe — kein Marketing-Lärm, wo Fingerspitzengefühl zählt." },
     ],
     tiles: ["/referenzen/hope-1.webp", "/referenzen/hope-2.webp", "/referenzen/hope-3.webp", "/referenzen/hope-4.webp"],
   },
   {
     client: "Nouh-Wehres",
-    lead: "Ein Meisterbetrieb, der online",
-    accent: "so sauber auftritt wie vor Ort.",
+    lead: "Aus einem Meisterbetrieb wurde",
+    accent: "eine Anfragen-Maschine.",
+    result: "Täglich 3–5 qualifizierte Anfragen — planbar, jeden Tag.",
     bullets: [
-      { icon: Monitor, label: "Website für alle Gewerke", desc: "Heizung, Bad, Lüftung und Solar mit eigenen Leistungsseiten." },
-      { icon: FileText, label: "Landingpages mit Anfrageformular", desc: "in wenigen Schritten zur Wärmepumpe oder zum neuen Bad." },
-      { icon: Megaphone, label: "Meta-Kampagnen für Badsanierung", desc: "Anzeigen, die direkt zum Meisterbetrieb führen." },
+      { icon: Monitor, label: "Website für alle Gewerke", desc: "Heizung, Bad, Lüftung, Solar — jede Leistung mit eigener Seite, die Anfragen bringt." },
+      { icon: Inbox, label: "Jeden Tag neue Aufträge im Postfach", desc: "3 bis 5 Anfragen täglich — statt auf Empfehlungen zu hoffen." },
+      { icon: Target, label: "Kampagnen, die zum Betrieb führen", desc: "Keine Klicks um der Klicks willen — direkte Anfragen von Menschen, die kaufen wollen." },
     ],
     tiles: ["/referenzen/nouh-1.webp", "/referenzen/nouh-2.webp", "/referenzen/nouh-3.webp", "/referenzen/nouh-4.webp"],
   },
@@ -156,6 +164,28 @@ export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
 
+  // Below lg the cards stack with CSS sticky. A card taller than the space
+  // under the nav sticks later (negative offset), so its bottom is seen
+  // before the next card slides over it.
+  useEffect(() => {
+    const cards = Array.from(root.current?.querySelectorAll<HTMLElement>(".ref-card") ?? []);
+    const NAV = 76;
+    const update = () => {
+      cards.forEach((c, i) => {
+        const room = window.innerHeight - c.offsetHeight - 12;
+        c.style.setProperty("--ref-top", `${Math.min(NAV + i * 10, room)}px`);
+      });
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    cards.forEach((c) => ro.observe(c));
+    window.addEventListener("resize", update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
   useGSAP(
     () => {
       gsap.from(".ref-head > *", {
@@ -173,11 +203,11 @@ export default function Referenzen() {
 
       const mm = gsap.matchMedia();
 
-      // Pinned stacked deck — same choreography on desktop and mobile.
+      // Pinned stacked deck on desktop. Below lg the cards keep their natural
+      // height and stack with CSS sticky instead (no fixed stage, no gaps).
       mm.add(
-        { isDesktop: "(min-width: 1024px)", isMobile: "(max-width: 1023.98px)" },
-        (ctx) => {
-          const { isDesktop } = ctx.conditions as { isDesktop: boolean };
+        "(min-width: 1024px)",
+        () => {
           const cards = gsap.utils.toArray<HTMLElement>(".ref-card");
           if (!pinRef.current || cards.length === 0) return;
 
@@ -192,7 +222,7 @@ export default function Referenzen() {
 
           cards.forEach((card, i) => {
             gsap.set(card, {
-              x: isDesktop ? (OFFSETS[i] ?? 0) : 0,
+              x: OFFSETS[i] ?? 0,
               scale: 1,
               y: 0,
               autoAlpha: i === 0 ? 1 : 0,
@@ -253,7 +283,7 @@ export default function Referenzen() {
   );
 
   return (
-    <section id="referenzen" ref={root} className="overflow-hidden bg-white py-20 sm:py-24 lg:py-0">
+    <section id="referenzen" ref={root} className="overflow-x-clip bg-white py-14 sm:py-24 lg:overflow-hidden lg:py-0">
       <Container>
         <div className="ref-head max-w-[720px] lg:pt-24">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
@@ -275,29 +305,35 @@ export default function Referenzen() {
 
       {/* Pinned deck: a fixed-height stage centred in the viewport, all cards
           absolutely stacked in it. */}
-      <div ref={pinRef} className="mt-6 sm:mt-10 lg:mt-0">
-        <div className="flex h-[100svh] items-center justify-center">
+      <div ref={pinRef} className="mt-8 sm:mt-10 lg:mt-0">
+        <div className="lg:flex lg:h-[100svh] lg:items-center lg:justify-center">
           <Container className="w-full">
-            <div className="relative mx-auto h-[min(540px,82svh)] max-w-[1200px] lg:h-[min(440px,78vh)] ">
+            <div className="relative mx-auto flex max-w-[1200px] flex-col gap-5 lg:block lg:h-[min(510px,84vh)]">
               {PROJECTS.map((p, i) => (
                 <article
                   key={p.client}
                   aria-label={p.client}
-                  className="ref-card absolute inset-0 flex flex-col gap-5 overflow-hidden rounded-[22px] border border-[#eeedea] p-5 sm:p-7 lg:flex-row lg:items-start lg:justify-between lg:gap-8 lg:rounded-[28px] lg:pb-[31px] lg:pl-[47px] lg:pr-[31px] lg:pt-[31px]"
+                  className="ref-card sticky top-[var(--ref-top,76px)] flex flex-col gap-5 overflow-hidden lg:absolute lg:inset-0 rounded-[22px] border border-[#eeedea] p-5 sm:p-7 lg:flex-row lg:items-start lg:justify-between lg:gap-8 lg:rounded-[28px] lg:pb-[31px] lg:pl-[47px] lg:pr-[31px] lg:pt-[31px]"
                   style={{
                     zIndex: 10 + i * 10,
                     background: "linear-gradient(90deg, #ffffff 0%, #f4f7f8 100%)",
                     boxShadow: CARD_SHADOW,
                   }}
                 >
-                  <div className="flex flex-col gap-4 lg:mt-3 lg:w-[400px] lg:min-w-0 lg:shrink lg:gap-[26px]">
+                  <div className="ref-text flex flex-col gap-4 lg:mt-3 lg:min-w-0 lg:flex-1 lg:gap-[18px] xl:w-[400px] xl:flex-none">
                     <h3 className="font-display text-[clamp(1.3rem,4.6vw,1.6rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#1a1917] lg:text-[clamp(1.5rem,2.3vw,29px)] lg:leading-[36px] lg:tracking-[-0.8px]">
                       {p.lead}{" "}
                       <span className="font-[family-name:var(--font-instrument)] text-[1.07em] font-normal italic tracking-[-0.5px]">
                         {p.accent}
                       </span>
                     </h3>
-                    <ul className="flex flex-col gap-3 lg:gap-5">
+                    {p.result && (
+                      <p className="ref-result rounded-[12px] border border-[#efe2cb] bg-[#fbf6ee] px-3.5 py-2.5 text-[13px] font-medium leading-[1.45] text-[#1a1917] lg:text-[14px]">
+                        <span className="mb-0.5 block font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#94713f]">Das Ergebnis</span>
+                        {p.result}
+                      </p>
+                    )}
+                    <ul className="flex flex-col gap-3 lg:gap-3.5">
                       {p.bullets.map((b) => (
                         <li key={b.label} className="flex items-start gap-3">
                           <span className="flex size-[26px] shrink-0 items-center justify-center rounded-full border border-[#d1aa71] bg-[#fbf6ee]">
@@ -311,7 +347,7 @@ export default function Referenzen() {
                     </ul>
                   </div>
 
-                  <div className="mt-auto w-full lg:mt-0 lg:w-[min(680px,60%)] lg:shrink-0">
+                  <div className="mt-auto w-full lg:mt-0 lg:w-[50%] lg:shrink-0 xl:w-[min(680px,60%)]">
                     <Bento p={p} />
                   </div>
                 </article>

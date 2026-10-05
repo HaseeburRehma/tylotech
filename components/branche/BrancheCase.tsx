@@ -35,7 +35,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
   );
 
   return (
-    <section id="case" ref={root} className="scroll-mt-20 bg-white py-20 sm:py-24 lg:py-28">
+    <section id="case" ref={root} className="scroll-mt-20 bg-white py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-6">
         <div className="bhc-card flex flex-col items-center gap-10 overflow-hidden rounded-[28px] border border-[#eeedea] bg-white p-6 shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05),0_51px_49px_rgba(8,34,44,0.03)] sm:rounded-[32px] sm:p-10 lg:flex-row lg:gap-16 lg:p-16">
           <div className="bhc-content flex w-full min-w-0 flex-1 flex-col items-start gap-6">

@@ -103,16 +103,16 @@ export default function Footer() {
   );
 
   return (
-    <footer ref={root} className="relative overflow-hidden border-t border-white/10 bg-[#001620] pb-10 pt-16 text-white lg:pt-[88px]">
+    <footer ref={root} className="relative overflow-hidden border-t border-white/10 bg-[#001620] pb-10 pt-12 text-white sm:pt-16 lg:pt-[88px]">
       {/* Figma "Warmes Licht": 900×520 gold radial glow behind the logo */}
       <div
         aria-hidden
         className="pointer-events-none absolute -left-[140px] -top-[200px] h-[520px] w-[900px] max-w-[160vw] motion-safe:animate-[footGlow_9s_ease-in-out_infinite]"
         style={{ background: "radial-gradient(ellipse closest-side, rgba(209,170,113,0.2), rgba(209,170,113,0.06) 55%, rgba(209,170,113,0))" }}
       />
-      <Container className="relative flex flex-col gap-12 lg:gap-14">
+      <Container className="relative flex flex-col gap-10 sm:gap-12 lg:gap-14">
         {/* Figma "Footer Oben": Marke 360 · Haltung 290 · Spalten */}
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:flex lg:gap-16">
+        <div className="grid grid-cols-1 gap-10 sm:gap-12 md:grid-cols-2 lg:flex lg:gap-16">
           <div className="footer-reveal flex flex-col items-start gap-[26px] lg:w-[360px] lg:shrink-0">
             <Link href="/" className="inline-flex" aria-label="TyloTech Startseite">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -156,7 +156,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="footer-reveal grid grid-cols-2 gap-12 md:col-span-2 lg:flex-1">
+          <div className="footer-reveal grid grid-cols-2 gap-x-8 gap-y-10 sm:gap-12 md:col-span-2 lg:flex-1">
             {[
               { title: "Navigation", items: NAV.map((l) => ({ l, href: l === "Kontakt" ? "/kontakt" : "#" })) },
               { title: "Mehr", items: MEHR.map((l) => ({ l, href: LEGAL[l] ?? "#" })) },

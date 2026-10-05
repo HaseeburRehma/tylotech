@@ -221,7 +221,7 @@ export default function Stimmen() {
     <section
       id="stimmen"
       ref={root}
-      className="border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
+      className="border-t border-line bg-[#f3f5f6] py-14 sm:py-24"
     >
       <Container>
         <div className="stimmen-head max-w-[720px]">

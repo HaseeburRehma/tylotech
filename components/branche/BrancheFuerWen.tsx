@@ -33,7 +33,7 @@ export default function BrancheFuerWen({ b }: { b: Branche }) {
   }
 
   return (
-    <section ref={root} className="bg-[#f6f5f3] py-20 sm:py-24 lg:py-28">
+    <section ref={root} className="bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
         <SectionHead icon={f.icon} eyebrow="Für wen genau" title={f.title} sub={f.sub} />
         <div className="bhf-grid flex flex-col gap-5">

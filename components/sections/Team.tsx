@@ -108,7 +108,7 @@ export default function Team() {
   );
 
   return (
-    <section id="team" ref={root} data-nav-dark className="overflow-hidden bg-[#001620] py-24 text-white">
+    <section id="team" ref={root} data-nav-dark className="overflow-hidden bg-[#001620] py-14 text-white sm:py-24">
       <Container>
         <div className="team-head mx-auto max-w-[880px] text-center">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70 mb-6 mx-auto">

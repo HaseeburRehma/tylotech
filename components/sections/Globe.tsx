@@ -371,7 +371,7 @@ export default function Globe() {
       id="reichweite"
       ref={root}
       data-nav-dark
-      className="relative overflow-hidden bg-[#001620] py-24 text-white"
+      className="relative overflow-hidden bg-[#001620] py-14 text-white sm:py-24"
     >
       <Container className="relative">
         <div className="relative mx-auto w-full max-w-[1280px]">

@@ -69,7 +69,7 @@ export default function Wachstum() {
   );
 
   return (
-    <section id="hebel" ref={root} className="bg-page py-24">
+    <section id="hebel" ref={root} className="bg-page py-14 sm:py-24">
       <Container>
         <div className="hebel-head max-w-[760px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
@@ -89,7 +89,7 @@ export default function Wachstum() {
           </p>
         </div>
 
-        <div className="hebel-grid mt-12 grid grid-cols-1 gap-5 sm:mt-14 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
+        <div className="hebel-grid mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
           {LEVERS.map(({ icon: Icon, title, body }) => (
             <article
               key={title}
@@ -101,7 +101,7 @@ export default function Wachstum() {
                 <Icon className="size-5" strokeWidth={1.7} />
               </span>
 
-              <h3 className="mt-12 text-[19px] font-semibold leading-snug tracking-[-0.01em] text-ink sm:mt-14">
+              <h3 className="mt-6 text-[19px] font-semibold leading-snug tracking-[-0.01em] text-ink sm:mt-14">
                 {title}
               </h3>
               <p className="mt-3 text-[15px] leading-relaxed text-ink/55">

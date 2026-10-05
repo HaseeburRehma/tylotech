@@ -22,7 +22,7 @@ export default function BrancheKennst({ b }: { b: Branche }) {
   );
 
   return (
-    <section ref={root} className="bg-[#f6f5f3] py-20 sm:py-24 lg:py-28">
+    <section ref={root} className="bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
         <SectionHead center icon="circle-alert" eyebrow="Das Problem" title="„Kennst du das?“" sub={k.intro} />
 

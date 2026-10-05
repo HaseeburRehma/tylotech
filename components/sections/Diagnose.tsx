@@ -147,7 +147,7 @@ export default function Diagnose() {
       id="woran"
       ref={root}
       data-nav-dark
-      className="bg-[#001620] py-20 text-white sm:py-24"
+      className="bg-[#001620] py-14 text-white sm:py-24"
     >
       <Container>
         <div className="dg-head max-w-[900px]">

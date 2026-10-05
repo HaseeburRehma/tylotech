@@ -61,7 +61,7 @@ export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: str
     <section
       id="faq"
       ref={root}
-      className={br ? "scroll-mt-20 bg-[#f6f5f3] py-20 sm:py-24 lg:py-28" : "border-t border-line bg-[#f3f5f6] py-20 sm:py-24"}
+      className={br ? "scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-28" : "border-t border-line bg-[#f3f5f6] py-14 sm:py-24"}
     >
       <Container className={br ? "grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,400px)_1fr] lg:gap-14 xl:gap-20" : "grid grid-cols-1 gap-10 lg:grid-cols-[380px_1fr] lg:gap-14"}>
         <div className="faq-left">

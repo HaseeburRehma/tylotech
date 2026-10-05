@@ -41,7 +41,7 @@ export default function Gruender() {
     <section
       id="gruender"
       ref={root}
-      className="border-t border-line bg-[#f3f5f6] py-20 sm:py-24"
+      className="border-t border-line bg-[#f3f5f6] py-14 sm:py-24"
     >
       <Container>
         <div className="gr-card relative mx-auto max-w-[1120px] overflow-hidden rounded-[28px] border border-line bg-white p-6 shadow-[0_40px_90px_-50px_rgba(15,14,13,0.3)] sm:p-10 lg:p-14">

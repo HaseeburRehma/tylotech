@@ -93,7 +93,7 @@ function ChannelsCard() {
 /* ------------------------------------------------------------------ */
 const RANKS = [
   { kw: "gebäudereinigung düsseldorf", pos: 1, trend: 0.92 },
-  { kw: "fahrschule düsseldorf", pos: 3, trend: 0.58 },
+  { kw: "fahrschule düsseldorf", pos: 1, trend: 0.92 },
   { kw: "pizza lieferservice köln", pos: 2, trend: 0.76 },
   { kw: "rohrreinigung nrw", pos: 1, trend: 0.9 },
 ];
@@ -669,7 +669,7 @@ export default function Praxis() {
   );
 
   return (
-    <section id="praxis" ref={root} className="bg-page py-24">
+    <section id="praxis" ref={root} className="bg-page py-14 sm:py-24">
       <Container>
         <div className="praxis-head max-w-[640px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
@@ -689,7 +689,7 @@ export default function Praxis() {
           </p>
         </div>
 
-        <div className="praxis-grid mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="praxis-grid mt-8 grid grid-cols-1 gap-4 sm:mt-12 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
           <ChannelsCard />
           <LocalCard />
           <ReachCard />

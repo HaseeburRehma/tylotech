@@ -34,7 +34,7 @@ export default function BrancheUeberUns() {
   );
 
   return (
-    <section id="gruender" ref={root} className="scroll-mt-20 bg-[#f6f5f3] py-20 sm:py-24 lg:py-[120px]">
+    <section id="gruender" ref={root} className="scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-[120px]">
       <Container>
         <div className="bhu-card flex flex-col items-center gap-10 overflow-hidden rounded-[24px] border border-[#eeedea] bg-white px-5 py-8 shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05),0_51px_49px_rgba(8,34,44,0.03)] sm:rounded-[32px] sm:p-12 lg:flex-row lg:gap-[72px] lg:py-16 lg:pl-16 lg:pr-[72px]">
           {/* portrait */}

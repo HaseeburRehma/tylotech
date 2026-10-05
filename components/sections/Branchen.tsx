@@ -154,7 +154,7 @@ export default function Branchen() {
 
   return (
     <section id="branchen" ref={root} className="bg-[#f3f5f6] lg:h-[336vh]">
-      <div className="py-20 sm:py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0">
+      <div className="py-14 sm:py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0">
         <Container className="w-full">
           <div className="br-head max-w-[720px]">
             <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">

@@ -63,7 +63,7 @@ export default function Leistungen() {
   );
 
   return (
-    <section id="leistungen" ref={root} className="bg-page py-24">
+    <section id="leistungen" ref={root} className="bg-page py-14 sm:py-24">
       <Container>
         <div className="leist-head mx-auto max-w-[760px] text-center">
           <p className="eyebrow mb-[18px] flex items-center justify-center gap-2.5 text-[#94713f]">
@@ -76,7 +76,7 @@ export default function Leistungen() {
           </h2>
         </div>
 
-        <div className="leist-grid mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-[22px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        <div className="leist-grid mt-8 sm:mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-[22px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s) => (
             <div
               key={s.title}

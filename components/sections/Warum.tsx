@@ -79,7 +79,7 @@ export default function Warum() {
   );
 
   return (
-    <section id="warum" ref={root} className="bg-page pb-24 pt-8">
+    <section id="warum" ref={root} className="bg-page pb-14 pt-8 sm:pb-24">
       <Container>
         <div className="warum-head max-w-[760px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
@@ -100,7 +100,7 @@ export default function Warum() {
           </p>
         </div>
 
-        <div className="warum-grid mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
+        <div className="warum-grid mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
           {SERVICES.map(({ icon: Icon, title, body }) => (
             <article
               key={title}
@@ -112,7 +112,7 @@ export default function Warum() {
                 <Icon className="size-5" strokeWidth={1.6} />
               </span>
 
-              <h3 className="mt-14 text-[19px] font-semibold leading-snug tracking-[-0.01em] text-ink">
+              <h3 className="mt-6 text-[19px] font-semibold leading-snug tracking-[-0.01em] text-ink sm:mt-14">
                 {title}
               </h3>
               <p className="mt-3 text-[15px] leading-relaxed text-ink/55">

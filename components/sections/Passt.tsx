@@ -49,7 +49,7 @@ export default function Passt() {
     <section
       id="passt"
       ref={root}
-      className="relative overflow-hidden border-t border-line bg-[#f6f7f7] py-20 sm:py-24"
+      className="relative overflow-hidden border-t border-line bg-[#f6f7f7] py-14 sm:py-24"
     >
       <div
         aria-hidden

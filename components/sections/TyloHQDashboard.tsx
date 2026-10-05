@@ -69,7 +69,7 @@ export default function TyloHQDashboard() {
   );
 
   return (
-    <section id="tylohq-app" ref={root} className="overflow-hidden border-t border-line bg-[#f6f5f3] py-20 sm:py-24 lg:py-28">
+    <section id="tylohq-app" ref={root} className="overflow-hidden border-t border-line bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container>
         <div className="hqd-head mx-auto flex max-w-[800px] flex-col items-center text-center">
           <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md sm:text-[12px]">

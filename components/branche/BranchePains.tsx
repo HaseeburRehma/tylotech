@@ -12,7 +12,7 @@ import { BrandLogo, SectionHead, useInView } from "./ui";
 
 const RANKS = [
   { term: "gebäudereinigung düsseldorf", pos: 1, from: 6, trend: 0.95 },
-  { term: "fahrschule düsseldorf", pos: 3, from: 11, trend: 0.62 },
+  { term: "fahrschule düsseldorf", pos: 1, from: 11, trend: 0.92 },
   { term: "pizza lieferservice köln", pos: 2, from: 9, trend: 0.78 },
   { term: "rohrreinigung nrw", pos: 1, from: 7, trend: 0.88 },
 ];
@@ -185,7 +185,7 @@ export default function BranchePains({ b }: { b: Branche }) {
   );
 
   return (
-    <section ref={root} className="bg-[#f6f5f3] py-20 sm:py-24 lg:py-28">
+    <section ref={root} className="bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
         <SectionHead icon="target" eyebrow="Schmerz und Lösung" title="So _lösen_ wir es." />
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">

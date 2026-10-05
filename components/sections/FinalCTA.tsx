@@ -41,7 +41,7 @@ export default function FinalCTA() {
     <section
       id="kontakt"
       ref={root}
-      className="border-t border-line bg-[#f3f5f6] py-16 sm:py-20"
+      className="border-t border-line bg-[#f3f5f6] py-12 sm:py-20"
     >
       <Container>
         <div className="cta-panel relative mx-auto max-w-[1180px] overflow-hidden rounded-[28px] bg-gradient-to-br from-[#0b3a4d] via-[#062430] to-[#031a24] px-6 py-16 shadow-[0_50px_110px_-50px_rgba(3,26,36,0.7)] sm:px-10 sm:py-20">

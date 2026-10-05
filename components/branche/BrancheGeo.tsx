@@ -24,7 +24,7 @@ export default function BrancheGeo() {
   );
 
   return (
-    <section ref={root} data-nav-dark className="bg-[#001620] py-20 sm:py-24 lg:py-[120px]">
+    <section ref={root} data-nav-dark className="bg-[#001620] py-14 sm:py-24 lg:py-[120px]">
       <Container className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,564px)] lg:gap-[88px]">
         <div className="bhg-text flex flex-col items-start gap-6">
           <Eyebrow icon="sparkles" dark>

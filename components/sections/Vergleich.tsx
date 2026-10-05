@@ -44,7 +44,7 @@ export default function Vergleich() {
   );
 
   return (
-    <section id="vergleich" ref={root} className="bg-[#001620] py-24 text-white">
+    <section id="vergleich" ref={root} className="bg-[#001620] py-14 text-white sm:py-24">
       <Container>
         <SectionHeading
           dark
@@ -87,7 +87,7 @@ export default function Vergleich() {
         </div>
 
         {/* Stacked cards — mobile */}
-        <div className="verg-table mt-12 flex flex-col gap-3.5 md:hidden">
+        <div className="verg-table mt-8 flex flex-col gap-3.5 md:hidden">
           {ROWS.map((r) => (
             <div
               key={r.c}
