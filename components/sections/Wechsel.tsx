@@ -23,7 +23,7 @@ const ITEMS: Item[] = [
   {
     t: "Alles messbar, alles sichtbar",
     b: "Vorher: kein System, viel Bauchgefühl. Nachher: ein Dashboard, das dir zeigt, was läuft, was nicht läuft und was der nächste Hebel ist.",
-    img: "/wechsel/03.jpg",
+    img: "/wechsel/03-messbar.webp",
     tint: "from-[#e6dcc7] to-[#cdb78a]",
   },
   {

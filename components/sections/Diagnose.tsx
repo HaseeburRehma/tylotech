@@ -39,7 +39,7 @@ const CASES: Case[] = [
     to: { v: "1 Ansprechpartner", l: "mit TyloTech" },
     icon: Users,
     tint: "from-[#123141] to-[#08202b]",
-    img: "/diagnose/01.jpg",
+    img: "/diagnose/01-dienstleister.webp",
   },
   {
     idx: "02",
