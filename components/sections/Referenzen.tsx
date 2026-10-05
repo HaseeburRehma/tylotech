@@ -48,7 +48,7 @@ const PROJECTS: Project[] = [
       { icon: FileText, label: "Rechnungen im selben System", desc: "offene Posten und Kundenkonten ohne zweite Liste." },
       { icon: HeartPulse, label: "Alltagshilfe mit Nachweis", desc: "Leistungsnachweise und Pflegegrad für die Abrechnung mit den Kassen." },
     ],
-    tiles: ["/referenzen/priya-1.webp", null, null, "/referenzen/priya-4.webp"],
+    tiles: ["/referenzen/priya-1.webp", "/referenzen/priya-2.webp", "/referenzen/priya-3.webp", "/referenzen/priya-4.webp"],
   },
   {
     client: "Fahrschule Abgefahrn",
@@ -62,7 +62,7 @@ const PROJECTS: Project[] = [
     tiles: ["/referenzen/fahrschule-1.webp", "/referenzen/fahrschule-2.webp", "/referenzen/fahrschule-3.webp", "/referenzen/fahrschule-4.webp"],
   },
   {
-    client: "Cleanpany Gebäudeservice",
+    client: "Rohr Cleaner",
     lead: "Aus unregelmäßigen Anrufen wurden",
     accent: "planbare Anfragen.",
     bullets: [
@@ -70,7 +70,7 @@ const PROJECTS: Project[] = [
       { icon: Target, label: "Ads auf Anfragen optimiert", desc: "nicht auf Klicks und nicht auf Reichweite." },
       { icon: TrendingUp, label: "5 bis 7 Leads pro Tag", desc: "täglich planbar statt nur zum Monatsanfang." },
     ],
-    tiles: ["/referenzen/cleanpany-1.webp", null, null, null],
+    tiles: ["/referenzen/rohr-1.webp", "/referenzen/rohr-2.webp", "/referenzen/rohr-3.webp", "/referenzen/rohr-4.webp"],
   },
   {
     client: "Light of Hope",
