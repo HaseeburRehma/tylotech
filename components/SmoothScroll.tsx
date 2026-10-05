@@ -37,6 +37,8 @@ export default function SmoothScroll({
       });
 
       lenis.on("scroll", ScrollTrigger.update);
+      // modals (TyloLens) pause page scrolling via window.__lenis.stop()/start()
+      (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
       const raf = (time: number) => lenis!.raf(time * 1000);
       gsap.ticker.add(raf);
       gsap.ticker.lagSmoothing(0);

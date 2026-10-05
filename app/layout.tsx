@@ -9,6 +9,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
 import CookieBanner from "@/components/CookieBanner";
+import TyloLens from "@/components/TyloLens";
 
 // Figma type system: Instrument Sans for headings and labels
 const instrumentSans = Instrument_Sans({
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <ScrollProgress />
         <SmoothScroll>{children}</SmoothScroll>
+        <TyloLens />
         <CookieBanner />
       </body>
     </html>

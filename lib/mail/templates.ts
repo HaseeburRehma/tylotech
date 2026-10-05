@@ -197,3 +197,91 @@ export function customerConfirmation(e: Enquiry, origin: string): Mail {
     text,
   };
 }
+
+/* ---- 3 · TyloLens: lead for a personal 48 h video analysis ------------------ */
+
+export type LensLead = { website: string; branche: string; ziel: string; budget: string; budgetLabel: string; priority: string; name: string; email: string };
+
+const PRIO_COLOR: Record<string, string> = { top: "#1e7a52", high: "#1e7a52", mid: "#94713f", low: "#7d7973" };
+
+export function lensTeamNotification(l: LensLead, origin: string): Mail {
+  const host = l.website.replace(/^https?:\/\//, "");
+  const reply = `mailto:${l.email}?subject=${encodeURIComponent(`Deine TyloLens-Analyse für ${host}`)}`;
+  const rows: [string, string][] = [
+    ["Website", `<a href="${esc(l.website)}" style="color:${C.goldText};text-decoration:underline">${esc(host)}</a>`],
+    ["Branche", esc(l.branche)],
+    ["Größtes Ziel", esc(l.ziel)],
+    ["Budget / Monat", `<b>${esc(l.budgetLabel)}</b>`],
+    ["Name", esc(l.name)],
+    ["E-Mail", `<a href="mailto:${esc(l.email)}" style="color:${C.goldText};text-decoration:underline">${esc(l.email)}</a>`],
+  ];
+  const body = `
+    ${label("TyloLens · neue Analyse-Anfrage")}
+    ${h1(`${esc(l.name)} möchte wissen, was wir ${accent("anders machen")} würden.`)}
+    <p style="margin:0 0 20px"><span style="display:inline-block;padding:5px 12px;border-radius:999px;background:${PRIO_COLOR[l.budget] ?? C.faint};color:#fff;font:600 12px/16px ${SANS}">${esc(l.priority)} · Budget ${esc(l.budgetLabel)}</span></p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;border-top:1px solid ${C.line}">
+      ${rows
+        .map(
+          ([k, v]) =>
+            `<tr><td style="padding:11px 0;border-bottom:1px solid ${C.line};width:140px;font:500 13px/20px ${SANS};color:${C.faint};vertical-align:top">${k}</td><td style="padding:11px 0;border-bottom:1px solid ${C.line};font:400 15px/20px ${SANS};color:${C.ink}">${v}</td></tr>`,
+        )
+        .join("")}
+    </table>
+    <div style="margin:0 0 26px;padding:14px 18px;background:${C.cream};border-left:3px solid ${C.gold};border-radius:4px 12px 12px 4px;font:400 14px/22px ${SANS};color:${C.ink}">
+      Zugesagt: persönliches Loom-Video mit 3 konkreten Hebeln, <b>innerhalb von 48 Stunden</b>.
+    </div>
+    <div>${button(l.website, "Website öffnen")}${button(reply, "Analyse senden", false)}</div>`;
+  const footer = `Eingegangen am ${when()} über TyloLens auf ${esc(new URL(origin).host)}.<br>„Antworten“ geht direkt an ${esc(l.email)}.`;
+  const text = [
+    "TyloLens · neue Analyse-Anfrage",
+    `${l.priority} · Budget ${l.budgetLabel}`,
+    "",
+    `Website: ${l.website}`,
+    `Branche: ${l.branche}`,
+    `Größtes Ziel: ${l.ziel}`,
+    `Budget / Monat: ${l.budgetLabel}`,
+    `Name: ${l.name}`,
+    `E-Mail: ${l.email}`,
+    "",
+    "Zugesagt: persönliches Video mit 3 Hebeln innerhalb von 48 Stunden.",
+  ].join("\n");
+  return {
+    subject: `TyloLens [${l.budgetLabel}] ${host} · ${l.name}`,
+    html: layout({ preheader: `${l.priority}: ${host} · ${l.ziel}`, badge: "TyloLens", body, footer, origin }),
+    text,
+  };
+}
+
+export function lensConfirmation(l: LensLead, origin: string): Mail {
+  const first = firstName(l.name);
+  const host = l.website.replace(/^https?:\/\//, "");
+  const body = `
+    ${h1(first ? `Danke, ${accent(esc(first))}!` : `Danke für deine ${accent("Anfrage")}!`)}
+    ${p(`Unser Team schaut sich <b style="color:${C.ink}">${esc(host)}</b> jetzt persönlich an.`)}
+    ${p(`Du bekommst deine individuelle Analyse als <b style="color:${C.ink}">kurzes Video</b> innerhalb von <b style="color:${C.ink}">48 Stunden</b> per E-Mail — mit 3 konkreten Hebeln, die wir bei dir anders machen würden.`)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 28px;background:${C.cream};border:1px solid ${C.creamLine};border-radius:14px">
+      <tr><td style="padding:16px 20px;font:400 14px/22px ${SANS};color:${C.muted}">
+        <b style="color:${C.ink}">Dein Fokus:</b> ${esc(l.ziel)} · ${esc(l.branche)}
+      </td></tr>
+    </table>
+    <p style="margin:0;font:400 15px/24px ${SANS};color:${C.muted}">Bis gleich<br><span style="font-family:${SERIF};font-style:italic;font-size:19px;color:${C.ink}">Dein TyloTech-Team</span></p>`;
+  const footer = `TyloTech · ${CONTACT.street} · ${CONTACT.city}<br>
+    <a href="${esc(origin)}/impressum" style="color:${C.faint}">Impressum</a> · <a href="${esc(origin)}/datenschutz" style="color:${C.faint}">Datenschutz</a><br>
+    Du erhältst diese E-Mail, weil du über TyloLens eine Analyse angefordert hast.`;
+  const text = [
+    first ? `Danke, ${first}!` : "Danke für deine Anfrage!",
+    "",
+    `Unser Team schaut sich ${host} jetzt persönlich an.`,
+    "Du bekommst deine individuelle Analyse als kurzes Video innerhalb von 48 Stunden per E-Mail — mit 3 konkreten Hebeln, die wir bei dir anders machen würden.",
+    "",
+    `Dein Fokus: ${l.ziel} · ${l.branche}`,
+    "",
+    "Bis gleich",
+    "Dein TyloTech-Team",
+  ].join("\n");
+  return {
+    subject: "Deine TyloLens-Analyse ist in Arbeit",
+    html: layout({ preheader: "Dein persönliches Analyse-Video kommt innerhalb von 48 Stunden.", badge: "TyloLens", body, footer, origin }),
+    text,
+  };
+}

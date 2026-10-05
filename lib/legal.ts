@@ -157,7 +157,17 @@ export const DATENSCHUTZ: LegalDoc = {
           p: "Besucher können über ein Online-Kontaktformular auf der Webseite Nachrichten an TyloTech übermitteln. Pflichtangaben sind Name, eine gültige E-Mail-Adresse, damit wir antworten können, und die Nachricht. Alle weiteren Angaben kann die anfragende Person freiwillig geben. Mit Absenden der Nachricht über das Kontaktformular willigt der Besucher in die Verarbeitung der übermittelten personenbezogenen Daten ein. Die Datenverarbeitung erfolgt ausschließlich zu dem Zweck der Abwicklung und Beantwortung von Anfragen über das Kontaktformular. Dies geschieht auf Basis der freiwillig erteilten Einwilligung gem. Art. 6 Abs. 1 Satz 1 Buchst. a) DSGVO. Die für die Benutzung des Kontaktformulars erhobenen personenbezogenen Daten werden automatisch gelöscht, sobald die Anfrage erledigt ist und keine Gründe für eine weitere Aufbewahrung gegeben sind.",
         },
         {
-          p: "Die Anfrage wird über den E-Mail-Versanddienst Resend (USA) an unser Postfach info@tylotech.de zugestellt. Weitere Informationen: [resend.com/legal/privacy-policy](https://resend.com/legal/privacy-policy).",
+          p: "Die Anfrage wird über unseren E-Mail-Server bei Microsoft 365 (Microsoft Ireland Operations Limited, One Microsoft Place, South County Business Park, Leopardstown, Dublin 18, Irland) an unser Postfach info@tylotech.de zugestellt. Zusätzlich senden wir dir eine Eingangsbestätigung an die angegebene E-Mail-Adresse.",
+        },
+      ],
+    },
+    {
+      id: "tylolens",
+      title: "TyloLens-Analyse",
+      added: true,
+      blocks: [
+        {
+          p: "Über TyloLens kannst du eine kostenlose, persönliche Analyse deines Marketings anfordern. Dafür verarbeiten wir die Adresse deiner Website, deine Branche, dein wichtigstes Ziel, dein ungefähres monatliches Marketing-Budget, deinen Namen und deine E-Mail-Adresse. Wir nutzen diese Angaben ausschließlich, um die Analyse zu erstellen, sie dir als kurzes Video per E-Mail zu senden und deine Anfrage einzuordnen. Rechtsgrundlage ist Art. 6 Abs. 1 Satz 1 Buchst. b) DSGVO (Durchführung vorvertraglicher Maßnahmen auf deine Anfrage). Die Zustellung erfolgt wie beim Kontaktformular über unseren E-Mail-Server bei Microsoft 365. Die Daten werden gelöscht, sobald sie für diesen Zweck nicht mehr erforderlich sind und keine gesetzlichen Aufbewahrungspflichten bestehen.",
         },
       ],
     },

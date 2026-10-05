@@ -32,9 +32,13 @@ const LINKS = [
   { label: "Branchen", href: "#branchen", dropdown: true },
   { label: "Portfolio", href: "#referenzen" },
   { label: "TyloHQ", href: "#tylohq-app" },
+  { label: "TyloLens", href: "#tylolens", lens: true },
   { label: "Über uns", href: "#gruender", everywhere: true },
   { label: "Kontakt", href: "/kontakt", everywhere: true },
 ];
+
+/** TyloLens modal lives in <TyloLens /> (root layout); the menu just asks it to open. */
+const openLens = () => window.dispatchEvent(new CustomEvent("tylolens:open", { detail: { source: "menu" } }));
 
 export default function Nav() {
   const pathname = usePathname();
@@ -164,6 +168,17 @@ export default function Nav() {
                   </div>
                 </div>
               </div>
+            ) : "lens" in l ? (
+              <button
+                key={l.label}
+                type="button"
+                onClick={openLens}
+                className={`flex h-10 items-center whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-extrabold tracking-[-0.2px] transition-colors duration-500 xl:px-3.5 xl:text-[15px] ${
+                  dark ? "text-[#D4A863] hover:bg-white/[0.06] hover:text-[#e2bd80]" : "text-[#A8863A] hover:bg-[rgba(212,168,99,0.12)] hover:text-[#8f7130]"
+                }`}
+              >
+                {l.label}
+              </button>
             ) : (
               <Link key={l.label} href={to(l)} className={linkCls}>
                 {l.label}
@@ -259,6 +274,19 @@ export default function Nav() {
                   </div>
                 </div>
               </div>
+            ) : "lens" in l ? (
+              <button
+                key={l.label}
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openLens();
+                }}
+                className="flex items-center justify-between rounded-xl px-4 py-3.5 text-left text-[16px] font-extrabold tracking-[-0.2px] text-[#A8863A] transition-colors hover:bg-[rgba(212,168,99,0.12)]"
+              >
+                {l.label}
+                <span className="rounded-full bg-[rgba(212,168,99,0.16)] px-2.5 py-1 text-[11px] font-semibold text-[#8f7130]">Gratis-Analyse</span>
+              </button>
             ) : (
               <Link
                 key={l.label}

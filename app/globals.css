@@ -369,3 +369,9 @@ html.lenis body {
   72%  { rotate: 0.6deg;  translate: 1px -1px; }
   100% { rotate: 0deg;    translate: 0 -1px; }
 }
+
+/* TyloLens · success tick */
+@keyframes tlPop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
