@@ -224,7 +224,7 @@ export const DATENSCHUTZ: LegalDoc = {
       added: true,
       blocks: [
         {
-          p: "Wir binden Videos der Plattform YouTube ein. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Wir nutzen dabei den erweiterten Datenschutzmodus (youtube-nocookie.com). Beim Abspielen eines Videos wird eine Verbindung zu den Servern von YouTube hergestellt; dabei werden unter anderem Ihre IP-Adresse und Informationen zu Ihrem Browser übertragen, eine Übermittlung in die USA ist möglich. Rechtsgrundlage ist Art. 6 Abs. 1 Satz 1 Buchst. f) DSGVO; unser berechtigtes Interesse liegt in einer ansprechenden Darstellung unserer Inhalte. Weitere Informationen: [policies.google.com/privacy](https://policies.google.com/privacy).",
+          p: "Wir binden Videos der Plattform YouTube ein. Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Wir nutzen dabei den erweiterten Datenschutzmodus (youtube-nocookie.com). Einige Videos starten automatisch und stumm, sobald der jeweilige Bereich sichtbar wird. Sobald ein Video geladen oder abgespielt wird, wird eine Verbindung zu den Servern von YouTube hergestellt; dabei werden unter anderem Ihre IP-Adresse und Informationen zu Ihrem Browser übertragen, eine Übermittlung in die USA ist möglich. Rechtsgrundlage ist Art. 6 Abs. 1 Satz 1 Buchst. f) DSGVO; unser berechtigtes Interesse liegt in einer ansprechenden Darstellung unserer Inhalte. Weitere Informationen: [policies.google.com/privacy](https://policies.google.com/privacy).",
         },
       ],
     },

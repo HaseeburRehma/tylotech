@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Play, Music, ArrowUpRight, Headphones } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Play, Music, ArrowUpRight, Headphones, Volume2 } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
@@ -53,7 +53,25 @@ function PlatformButton({
 
 export default function Podcast() {
   const root = useRef<HTMLDivElement>(null);
-  const [play, setPlay] = useState(false);
+  const videoRef = useRef<HTMLDivElement>(null);
+  // muted autoplay starts once the video is near the viewport (like the hero);
+  // a click restarts it with sound and player controls
+  const [near, setNear] = useState(false);
+  const [sound, setSound] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        setNear(true);
+        io.disconnect();
+      }
+    }, { rootMargin: "300px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useGSAP(
     () => {
@@ -157,19 +175,35 @@ export default function Podcast() {
           </div>
         </div>
 
-        <div className="podcast-video relative aspect-video w-full overflow-hidden rounded-[22px] border border-black/5 bg-[#0a1813] shadow-[0_30px_70px_-28px_rgba(10,30,20,0.5)]">
-          {play ? (
+        <div ref={videoRef} className="podcast-video relative aspect-video w-full overflow-hidden rounded-[22px] border border-black/5 bg-[#0a1813] shadow-[0_30px_70px_-28px_rgba(10,30,20,0.5)]">
+          {sound ? (
             <iframe
               className="absolute inset-0 size-full"
-              src={`https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&rel=0&modestbranding=1`}
+              src={`https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
               title="Deine eigene ERP Software – Kontrolle + Kostensenkung"
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
             />
           ) : (
-            <button onClick={() => setPlay(true)} className="group absolute inset-0 size-full text-left" aria-label="Video abspielen: Eigene Software für dein Unternehmen">
-              {/* poster is served from our own domain — nothing loads from YouTube before the click */}
-              <span className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-[1.03]" style={{ backgroundImage: "url(/podcast/erp-software.webp)" }} />
+            <button onClick={() => setSound(true)} className="group absolute inset-0 size-full text-left" aria-label="Video mit Ton abspielen: Eigene Software für dein Unternehmen">
+              {near && (
+                <iframe
+                  className="pointer-events-none absolute inset-0 size-full origin-center scale-[1.02]"
+                  src={`https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&controls=0&iv_load_policy=3&loop=1&playlist=${YT_ID}&disablekb=1`}
+                  title="Eigene Software für dein Unternehmen (stumm)"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  tabIndex={-1}
+                  onLoad={() => setTimeout(() => setLoaded(true), 2500)}
+                />
+              )}
+              {/* poster from our own domain — covers the player until it runs (and YouTube's title bar) */}
+              <span
+                className={cn(
+                  "absolute inset-0 bg-cover bg-center transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.03]",
+                  loaded && "opacity-0",
+                )}
+                style={{ backgroundImage: "url(/podcast/erp-software.webp)" }}
+              />
               <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,22,32,0.55)_0%,rgba(0,22,32,0.05)_32%,rgba(0,22,32,0.05)_55%,rgba(0,22,32,0.78)_100%)]" />
 
               {/* title */}
@@ -179,20 +213,23 @@ export default function Podcast() {
                 <span className="font-display text-[clamp(15px,1.5vw,19px)] font-semibold leading-tight text-white">Eigene Software für dein Unternehmen</span>
               </span>
 
-              {/* play */}
-              <span className="pointer-events-none absolute inset-0 grid place-items-center">
+              {/* play (until the muted video runs) */}
+              <span className={cn("pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-500", loaded && "opacity-0")}>
                 <span className="podcast-pulse size-16 rounded-full bg-accent/30" />
               </span>
-              <span className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-accent text-[#001620] shadow-lg transition-transform group-hover:scale-110 sm:size-[72px]">
+              <span className={cn("absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-accent text-[#001620] shadow-lg transition-[transform,opacity] duration-500 group-hover:scale-110 sm:size-[72px]", loaded && "opacity-0")}>
                 <Play className="size-7 translate-x-0.5 fill-current" />
               </span>
 
               {/* caption */}
-              <span className="pointer-events-none absolute inset-x-5 bottom-6 max-w-[440px] text-[clamp(13px,1.25vw,16px)] font-medium leading-snug text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.6)] sm:inset-x-6 sm:bottom-7">
+              <span className="pointer-events-none absolute inset-x-5 bottom-6 max-w-[440px] text-[clamp(13px,1.25vw,16px)] font-medium leading-snug text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.6)] sm:inset-x-6 sm:bottom-7 max-sm:hidden">
                 Warum Standard-Software dich ausbremst — und was die Alternative ist.
               </span>
-              <span className="absolute inset-x-0 bottom-0 h-[5px] bg-white/25">
-                <span className="block h-full w-[8%] bg-[#ff2d2d]" />
+
+              {/* sound on */}
+              <span className="absolute bottom-5 right-5 inline-flex items-center gap-2 rounded-full bg-white/90 px-3.5 py-2 text-[12.5px] font-semibold text-[#001620] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.5)] backdrop-blur transition-transform duration-200 group-hover:scale-105 sm:bottom-6 sm:right-6">
+                <Volume2 className="size-4" strokeWidth={2.2} />
+                Mit Ton ansehen
               </span>
             </button>
           )}
