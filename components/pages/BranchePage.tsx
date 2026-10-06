@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import FloatingActionBar from "@/components/FloatingActionBar";
@@ -15,31 +13,9 @@ import BrancheFuerWen from "@/components/branche/BrancheFuerWen";
 import BrancheCase from "@/components/branche/BrancheCase";
 import BrancheUeberUns from "@/components/branche/BrancheUeberUns";
 import BrancheCTA from "@/components/branche/BrancheCTA";
-import { BRANCHEN, getBranche } from "@/lib/branchen";
+import type { Branche } from "@/lib/branchen";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return BRANCHEN.map((b) => ({ slug: b.slug }));
-}
-
-export async function generateMetadata(props: PageProps<"/branchen/[slug]">): Promise<Metadata> {
-  const { slug } = await props.params;
-  const b = getBranche(slug);
-  if (!b) return {};
-  return {
-    title: b.metaTitle,
-    description: b.metaDescription,
-    alternates: { canonical: `/branchen/${b.slug}` },
-    openGraph: { title: b.metaTitle, description: b.metaDescription, images: [b.hero.image] },
-  };
-}
-
-export default async function BranchePage(props: PageProps<"/branchen/[slug]">) {
-  const { slug } = await props.params;
-  const b = getBranche(slug);
-  if (!b) notFound();
-
+export default function BranchePage({ b }: { b: Branche }) {
   return (
     <>
       <Nav />

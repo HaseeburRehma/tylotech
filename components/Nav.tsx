@@ -18,23 +18,25 @@ import {
 } from "lucide-react";
 import Container from "./ui/Container";
 import { TYLOHQ_URL } from "@/lib/site";
+import { useLocalePath, useT } from "./i18n/LocaleProvider";
+import LanguageSwitch from "./i18n/LanguageSwitch";
 
 const INDUSTRIES = [
-  { label: "Online-Dienstleistungen", icon: Globe, href: "/branchen/online-dienstleistungen" },
-  { label: "Handwerk", icon: Hammer, href: "/branchen/handwerk" },
-  { label: "Lokale Dienstleister", icon: MapPin, href: "/branchen/lokale-dienstleister" },
-  { label: "E-Commerce", icon: ShoppingCart, href: "/branchen/e-commerce" },
-  { label: "B2B-Dienstleistung", icon: Building2, href: "/branchen/b2b-dienstleistung" },
-  { label: "Finanz & Investment", icon: TrendingUp, href: "/branchen/finanz-investment" },
+  { de: "Online-Dienstleistungen", en: "Online Services", icon: Globe, href: "/branchen/online-dienstleistungen" },
+  { de: "Handwerk", en: "Trades & Crafts", icon: Hammer, href: "/branchen/handwerk" },
+  { de: "Lokale Dienstleister", en: "Local Services", icon: MapPin, href: "/branchen/lokale-dienstleister" },
+  { de: "E-Commerce", en: "E-Commerce", icon: ShoppingCart, href: "/branchen/e-commerce" },
+  { de: "B2B-Dienstleistung", en: "B2B Services", icon: Building2, href: "/branchen/b2b-dienstleistung" },
+  { de: "Finanz & Investment", en: "Finance & Investment", icon: TrendingUp, href: "/branchen/finanz-investment" },
 ];
 
 const LINKS = [
-  { label: "Branchen", href: "#branchen", dropdown: true },
-  { label: "Portfolio", href: "#referenzen" },
-  { label: "TyloHQ", href: "#tylohq-app" },
-  { label: "TyloLens", href: "#tylolens", lens: true },
-  { label: "Über uns", href: "#gruender", everywhere: true },
-  { label: "Kontakt", href: "/kontakt", everywhere: true },
+  { de: "Branchen", en: "Industries", href: "#branchen", dropdown: true },
+  { de: "Portfolio", en: "Portfolio", href: "#referenzen" },
+  { de: "TyloHQ", en: "TyloHQ", href: "#tylohq-app" },
+  { de: "TyloLens", en: "TyloLens", href: "#tylolens", lens: true },
+  { de: "Über uns", en: "About us", href: "#gruender", everywhere: true },
+  { de: "Kontakt", en: "Contact", href: "/kontakt", everywhere: true },
 ];
 
 /** TyloLens modal lives in <TyloLens /> (root layout); the menu just asks it to open. */
@@ -42,9 +44,12 @@ const openLens = () => window.dispatchEvent(new CustomEvent("tylolens:open", { d
 
 export default function Nav() {
   const pathname = usePathname();
-  const home = pathname === "/";
-  // anchors that only exist on the home page need the "/" prefix elsewhere
-  const to = (l: { href: string; everywhere?: boolean }) => (home || l.everywhere ? l.href : `/${l.href}`);
+  const t = useT();
+  const lp = useLocalePath();
+  const home = pathname === "/" || pathname === "/en";
+  // anchors that only exist on the home page need the home path prefix elsewhere
+  const to = (l: { href: string; everywhere?: boolean }) =>
+    l.href.startsWith("/") ? lp(l.href) : home || l.everywhere ? l.href : `${lp("/")}${l.href}`;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);
@@ -107,7 +112,7 @@ export default function Nav() {
       }`}
     >
       <Container className="flex h-20 items-center justify-between">
-        <Link href={home ? "#top" : "/"} className="flex items-center" onClick={() => setOpen(false)}>
+        <Link href={home ? "#top" : lp("/")} className="flex items-center" onClick={() => setOpen(false)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/brand/tylotech-logo.svg"
@@ -131,13 +136,13 @@ export default function Nav() {
             }`;
             return l.dropdown ? (
               <div
-                key={l.label}
+                key={l.de}
                 className="relative"
                 onMouseEnter={openDropdown}
                 onMouseLeave={closeDropdown}
               >
                 <Link href={to(l)} className={linkCls}>
-                  {l.label}
+                  {t(l.de, l.en)}
                   <ChevronDown
                     className={`size-[15px] transition-transform duration-200 ${dark ? "text-white/40" : "text-ink/45"} ${dropdownOpen ? "rotate-180" : ""}`}
                   />
@@ -155,13 +160,13 @@ export default function Nav() {
                       const Icon = ind.icon;
                       return (
                         <Link
-                          key={ind.label}
-                          href={ind.href}
+                          key={ind.de}
+                          href={lp(ind.href)}
                           onClick={() => setDropdownOpen(false)}
                           className="flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[14px] font-medium text-[#5c5954] transition-colors hover:bg-ink/[0.04] hover:text-ink"
                         >
                           <Icon className="size-4 text-accent" strokeWidth={1.8} />
-                          {ind.label}
+                          {t(ind.de, ind.en)}
                         </Link>
                       );
                     })}
@@ -170,54 +175,57 @@ export default function Nav() {
               </div>
             ) : "lens" in l ? (
               <button
-                key={l.label}
+                key={l.de}
                 type="button"
                 onClick={openLens}
                 className={`flex h-10 items-center whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-extrabold tracking-[-0.2px] transition-colors duration-500 xl:px-3.5 xl:text-[15px] ${
                   dark ? "text-[#D4A863] hover:bg-white/[0.06] hover:text-[#e2bd80]" : "text-[#A8863A] hover:bg-[rgba(212,168,99,0.12)] hover:text-[#8f7130]"
                 }`}
               >
-                {l.label}
+                {t(l.de, l.en)}
               </button>
             ) : (
-              <Link key={l.label} href={to(l)} className={linkCls}>
-                {l.label}
+              <Link key={l.de} href={to(l)} className={linkCls}>
+                {t(l.de, l.en)}
               </Link>
             );
           })}
         </nav>
 
         <div className="flex items-center gap-2.5">
+          <div className="hidden md:block">
+            <LanguageSwitch dark={dark} />
+          </div>
           <a
             href={TYLOHQ_URL}
             target="_blank"
             rel="noopener"
-            title="Zum Kundenportal TyloHQ"
+            title={t("Zum Kundenportal TyloHQ", "To the TyloHQ client portal")}
             className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex xl:px-[18px] xl:text-[16px] ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#43413d] hover:bg-ink/[0.04]"
             }`}
           >
-            Kunden-Login
+            {t("Kunden-Login", "Client login")}
             <ArrowUpRight className="size-4 opacity-50 transition-[opacity,translate] duration-200 group-hover:-translate-y-px group-hover:translate-x-px group-hover:opacity-100" strokeWidth={1.9} />
           </a>
           <Link
-            href="/kontakt"
+            href={lp("/kontakt")}
             className={`group hidden h-12 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 sm:inline-flex xl:px-[22px] xl:text-[16px] ${
               dark
                 ? "bg-accent text-[#001620] hover:bg-[#ddb97e]"
                 : "bg-[#002e3d] text-inverse hover:bg-[#013a4d]"
             }`}
           >
-            Jetzt anfragen
+            {t("Jetzt anfragen", "Get in touch")}
             <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-0.5" />
           </Link>
 
           {/* Mobile menu toggle */}
           <button
             type="button"
-            aria-label={open ? "Menü schließen" : "Menü öffnen"}
+            aria-label={open ? t("Menü schließen", "Close menu") : t("Menü öffnen", "Open menu")}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className={`grid size-11 place-items-center rounded-xl border transition-colors duration-500 lg:hidden ${
@@ -240,13 +248,13 @@ export default function Nav() {
         <Container className="flex flex-col gap-1 py-4">
           {LINKS.map((l) =>
             l.dropdown ? (
-              <div key={l.label}>
+              <div key={l.de}>
                 <button
                   type="button"
                   onClick={() => setMobileDropdownOpen((v) => !v)}
                   className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-[16px] font-medium tracking-[-0.1px] text-[#43413d] transition-colors hover:bg-ink/[0.04] hover:text-ink"
                 >
-                  {l.label}
+                  {t(l.de, l.en)}
                   <ChevronDown
                     className={`size-[16px] text-ink/40 transition-transform duration-200 ${mobileDropdownOpen ? "rotate-180" : ""}`}
                   />
@@ -261,13 +269,13 @@ export default function Nav() {
                       const Icon = ind.icon;
                       return (
                         <Link
-                          key={ind.label}
-                          href={ind.href}
+                          key={ind.de}
+                          href={lp(ind.href)}
                           onClick={() => { setOpen(false); setMobileDropdownOpen(false); }}
                           className="flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-[15px] font-medium text-[#5c5954] transition-colors hover:bg-ink/[0.04]"
                         >
                           <Icon className="size-4 text-accent" strokeWidth={1.8} />
-                          {ind.label}
+                          {t(ind.de, ind.en)}
                         </Link>
                       );
                     })}
@@ -276,7 +284,7 @@ export default function Nav() {
               </div>
             ) : "lens" in l ? (
               <button
-                key={l.label}
+                key={l.de}
                 type="button"
                 onClick={() => {
                   setOpen(false);
@@ -284,21 +292,25 @@ export default function Nav() {
                 }}
                 className="flex items-center justify-between rounded-xl px-4 py-3.5 text-left text-[16px] font-extrabold tracking-[-0.2px] text-[#A8863A] transition-colors hover:bg-[rgba(212,168,99,0.12)]"
               >
-                {l.label}
-                <span className="rounded-full bg-[rgba(212,168,99,0.16)] px-2.5 py-1 text-[11px] font-semibold text-[#8f7130]">Gratis-Analyse</span>
+                {t(l.de, l.en)}
+                <span className="rounded-full bg-[rgba(212,168,99,0.16)] px-2.5 py-1 text-[11px] font-semibold text-[#8f7130]">{t("Gratis-Analyse", "Free analysis")}</span>
               </button>
             ) : (
               <Link
-                key={l.label}
+                key={l.de}
                 href={to(l)}
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[16px] font-medium tracking-[-0.1px] text-[#43413d] transition-colors hover:bg-ink/[0.04] hover:text-ink"
               >
-                {l.label}
+                {t(l.de, l.en)}
               </Link>
             ),
           )}
           <div className="mt-2 flex flex-col gap-2.5 border-t border-line pt-4">
+            <div className="flex items-center justify-between px-1">
+              <span className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink/45">{t("Sprache", "Language")}</span>
+              <LanguageSwitch size="lg" onNavigate={() => setOpen(false)} />
+            </div>
             <a
               href={TYLOHQ_URL}
               target="_blank"
@@ -306,15 +318,15 @@ export default function Nav() {
               onClick={() => setOpen(false)}
               className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-line text-[16px] font-medium text-[#43413d] transition-colors hover:bg-ink/[0.04]"
             >
-              Kunden-Login
+              {t("Kunden-Login", "Client login")}
               <ArrowUpRight className="size-4 opacity-60" strokeWidth={1.9} />
             </a>
             <Link
-              href="/kontakt"
+              href={lp("/kontakt")}
               onClick={() => setOpen(false)}
               className="flex h-12 items-center justify-center gap-2 rounded-xl bg-[#002e3d] text-[16px] font-medium text-inverse transition-colors hover:bg-[#013a4d]"
             >
-              Jetzt anfragen
+              {t("Jetzt anfragen", "Get in touch")}
               <ArrowRight className="size-[18px]" />
             </Link>
           </div>

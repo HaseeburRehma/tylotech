@@ -26,7 +26,7 @@ import FinalCTA from "@/components/sections/FinalCTA";
 import Footer from "@/components/Footer";
 import FloatingActionBar from "@/components/FloatingActionBar";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <Nav />
