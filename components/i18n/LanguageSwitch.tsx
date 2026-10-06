@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { alternatePath, type Locale } from "@/lib/i18n";
 import { useLocale } from "./LocaleProvider";
+import { LANG_COOKIE, LANG_COOKIE_MAX_AGE } from "@/lib/langPref";
 
 const LABEL: Record<Locale, { short: string; long: string }> = {
   de: { short: "DE", long: "Deutsch" },
@@ -36,7 +37,11 @@ export default function LanguageSwitch({ dark = false, size = "sm", onNavigate }
             aria-current={on ? "true" : undefined}
             aria-label={LABEL[l].long}
             title={LABEL[l].long}
-            onClick={onNavigate}
+            onClick={() => {
+              // remember the choice so automatic detection (proxy.ts) never overrides it
+              document.cookie = `${LANG_COOKIE}=${l}; path=/; max-age=${LANG_COOKIE_MAX_AGE}; samesite=lax`;
+              onNavigate?.();
+            }}
             className={`grid place-items-center rounded-full font-mono font-medium tracking-[0.08em] transition-colors duration-300 ${
               big ? "h-10 min-w-[64px] px-4 text-[13px]" : "h-8 min-w-[38px] px-2.5 text-[11.5px]"
             } ${

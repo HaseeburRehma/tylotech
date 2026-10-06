@@ -206,6 +206,9 @@ export const DATENSCHUTZ: LegalDoc = {
         {
           p: "In Abhängigkeit von Ihrer Einwilligung erfolgt der Einsatz von Cookies außerdem, um die Aufrufe der Webseite zu statistischen Zwecken und zum Zwecke der Verbesserung des Angebotes zu analysieren. Diese Cookies ermöglichen es, bei einem erneuten Besuch automatisch zu erkennen, dass die Webseite bereits zuvor vom Besucher aufgerufen wurde. Hier erfolgt nach einer jeweils festgelegten Zeit eine automatische Löschung der Cookies.",
         },
+        {
+          p: "Spracheinstellung: Beim ersten Aufruf der Webseite wird anhand der vom Browser übermittelten bevorzugten Sprache (Accept-Language) entschieden, ob die deutsche oder die englische Fassung angezeigt wird. Die erkannte oder über die Sprachauswahl (DE | EN) gewählte Sprache wird im Cookie „tt-lang“ für ein Jahr gespeichert, damit die Webseite weiter in dieser Sprache erscheint. Der Cookie enthält ausschließlich den Wert „de“ oder „en“ und wird nicht ausgewertet oder weitergegeben. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG (unbedingt erforderlich für den vom Nutzer gewünschten Dienst) i. V. m. Art. 6 Abs. 1 Satz 1 Buchst. f) DSGVO; unser berechtigtes Interesse liegt darin, die Webseite in der passenden Sprache anzuzeigen.",
+        },
       ],
     },
     {

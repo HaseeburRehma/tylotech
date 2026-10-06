@@ -211,6 +211,9 @@ export const DATENSCHUTZ_EN: LegalDoc = {
         {
           p: "Subject to your consent, cookies are also used to analyse visits to the website for statistical purposes and to improve our offering. These cookies make it possible to recognise automatically on a subsequent visit that the visitor has already accessed the website. These cookies are deleted automatically after a defined period.",
         },
+        {
+          p: "Language setting: on your first visit, the preferred language sent by your browser (Accept-Language) determines whether the German or the English version is shown. The detected language, or the one you choose with the language switch (DE | EN), is stored in the cookie “tt-lang” for one year so that the website keeps appearing in that language. The cookie contains only the value “de” or “en” and is neither analysed nor shared. The legal basis is Section 25(2) No. 2 TDDDG (strictly necessary for the service requested by the user) in conjunction with Art. 6(1)(f) GDPR; our legitimate interest lies in showing the website in the right language.",
+        },
       ],
     },
     {
