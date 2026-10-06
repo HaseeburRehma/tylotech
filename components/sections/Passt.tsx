@@ -5,16 +5,20 @@ import Link from "next/link";
 import { Target, CircleCheck, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useT } from "../i18n/LocaleProvider";
 
-const ITEMS: { normal: string; bold: string }[] = [
-  { normal: "Du hast ein gutes Geschäft, ", bold: "aber kein System, das mitwächst" },
-  { normal: "Du willst einen Partner, ", bold: "der umsetzt statt nur redet" },
-  { normal: "Du willst Transparenz ", bold: "statt Blackbox" },
-  { normal: "Du bist offen dafür, ", bold: "dass wir bei echtem Potenzial mit einsteigen" },
+type Item = { normal: string; bold: string };
+
+const ITEMS: (Item & { en: Item })[] = [
+  { normal: "Du hast ein gutes Geschäft, ", bold: "aber kein System, das mitwächst", en: { normal: "You have a good business, ", bold: "but no system that grows with it" } },
+  { normal: "Du willst einen Partner, ", bold: "der umsetzt statt nur redet", en: { normal: "You want a partner ", bold: "who delivers instead of just talking" } },
+  { normal: "Du willst Transparenz ", bold: "statt Blackbox", en: { normal: "You want transparency ", bold: "instead of a black box" } },
+  { normal: "Du bist offen dafür, ", bold: "dass wir bei echtem Potenzial mit einsteigen", en: { normal: "You’re open to ", bold: "us buying in when there’s real potential" } },
 ];
 
 export default function Passt() {
   const root = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -60,17 +64,19 @@ export default function Passt() {
         <div className="passt-head max-w-[720px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <Target className="size-3.5 text-accent" />
-            Wir arbeiten nicht mit jedem
+            {t("Wir arbeiten nicht mit jedem", "We don’t work with everyone")}
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            Woran du merkst,{" "}
+            {t("Woran du merkst,", "How you know")}{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              dass es passt.
+              {t("dass es passt.", "it’s a fit.")}
             </span>
           </h2>
           <p className="mt-4 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            Wir arbeiten mit Unternehmen, die wirklich wachsen wollen und bereit
-            sind, mitzuziehen. Wenn du Folgendes erkennst, passen wir zusammen:
+            {t(
+              "Wir arbeiten mit Unternehmen, die wirklich wachsen wollen und bereit sind, mitzuziehen. Wenn du Folgendes erkennst, passen wir zusammen:",
+              "We work with businesses that genuinely want to grow and are ready to pull their weight. If this sounds like you, we’re a match:",
+            )}
           </p>
         </div>
 
@@ -87,8 +93,8 @@ export default function Passt() {
                   strokeWidth={2}
                 />
                 <p className="text-[clamp(14px,1.4vw,16px)] leading-snug text-ink/70">
-                  {it.normal}
-                  <span className="font-semibold text-ink">{it.bold}</span>
+                  {t(it.normal, it.en.normal)}
+                  <span className="font-semibold text-ink">{t(it.bold, it.en.bold)}</span>
                 </p>
               </li>
             ))}
@@ -99,7 +105,7 @@ export default function Passt() {
               href="#kontakt"
               className="group inline-flex h-[54px] items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-7 text-[15px] font-medium text-ink shadow-[0_16px_36px_-14px_rgba(209,170,113,0.95)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
             >
-              Erstgespräch sichern
+              {t("Erstgespräch sichern", "Book your intro call")}
               <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>

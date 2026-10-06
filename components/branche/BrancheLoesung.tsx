@@ -6,6 +6,7 @@ import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import type { Branche, Kanal } from "@/lib/branchen";
 import { BrandLogo, Eyebrow, GoldButton, Icon } from "./ui";
+import { useT } from "../i18n/LocaleProvider";
 
 /* Figma "System-Fluss" frame: 600×420, channels left, hub centre, results right */
 const KANAL_Y = [31, 135, 239, 343];
@@ -131,6 +132,7 @@ function FlowStacked({ b }: { b: Branche }) {
 
 export default function BrancheLoesung({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -157,13 +159,13 @@ export default function BrancheLoesung({ b }: { b: Branche }) {
         >
           <div className="bhl-text flex w-full min-w-0 flex-col items-start gap-6 lg:flex-1">
             <Eyebrow icon="layers" dark>
-              Unsere Lösung
+              {t("Unsere Lösung", "Our solution")}
             </Eyebrow>
             <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-white">
-              Ein System,
+              {t("Ein System,", "One system,")}
               <br />
               <span className="font-[family-name:var(--font-instrument)] text-[1.06em] font-normal italic tracking-[-0.02em] text-[#d8b682]">
-                ein Ansprechpartner.
+                {t("ein Ansprechpartner.", "one point of contact.")}
               </span>
             </h2>
             <p className="max-w-[502px] text-[clamp(16px,1.4vw,18px)] leading-[1.6] tracking-[-0.01em] text-[#cbc8c2]">{b.loesung.text}</p>

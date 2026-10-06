@@ -5,9 +5,12 @@ import Link from "next/link";
 import { CalendarDays, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 export default function FinalCTA() {
   const root = useRef<HTMLDivElement>(null);
+  const t = useT();
+  const lp = useLocalePath();
 
   useGSAP(
     () => {
@@ -58,35 +61,47 @@ export default function FinalCTA() {
           <div className="cta-in relative mx-auto max-w-[720px] text-center">
             <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-[13px] font-medium text-white/80 backdrop-blur">
               <CalendarDays className="size-4 text-accent" />
-              Kostenloses Erstgespräch
+              {t("Kostenloses Erstgespräch", "Free intro call")}
             </p>
 
             <h2 className="mt-6 font-display text-[clamp(2rem,4.4vw,3.2rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
-              Bereit, dein Wachstum{" "}
+              {t("Bereit, dein Wachstum", "Ready to make your growth")}{" "}
               <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#e5c48a]">
-                planbar
-              </span>{" "}
-              zu machen?
+                {t("planbar", "predictable")}
+              </span>
+              {t(<>{" "}zu machen?</>, "?")}
             </h2>
 
             <p className="mx-auto mt-5 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
-              Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter
-              Hebel liegt — und ob wir zueinander passen.
+              {t(
+                "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt — und ob wir zueinander passen.",
+                "No sales pitch. An honest assessment of where your biggest lever is — and whether we’re a good fit.",
+              )}
             </p>
 
             <div className="mt-9 flex justify-center">
               <Link
-                href="/kontakt"
+                href={lp("/kontakt")}
                 className="group inline-flex items-center gap-3.5 rounded-full bg-gradient-to-b from-[#e7c179] to-[#c99f5c] py-2 pl-2 pr-7 shadow-[0_0_44px_-6px_rgba(209,170,113,0.7)] transition-[transform,filter] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
               >
                 <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#03202c] text-white">
                   <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
                 </span>
                 <span className="text-[16px] text-[#1c1305]">
-                  <span className="font-[family-name:var(--font-instrument)] italic">
-                    Erstgespräch
-                  </span>{" "}
-                  <span className="font-semibold">sichern</span>
+                  {t(
+                    <>
+                      <span className="font-[family-name:var(--font-instrument)] italic">
+                        Erstgespräch
+                      </span>{" "}
+                      <span className="font-semibold">sichern</span>
+                    </>,
+                    <>
+                      <span className="font-semibold">Book your</span>{" "}
+                      <span className="font-[family-name:var(--font-instrument)] italic">
+                        intro call
+                      </span>
+                    </>,
+                  )}
                 </span>
               </Link>
             </div>

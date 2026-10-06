@@ -5,9 +5,11 @@ import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import type { Branche } from "@/lib/branchen";
 import { SectionHead } from "./ui";
+import { useT } from "../i18n/LocaleProvider";
 
 export default function BrancheSystem({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -22,7 +24,7 @@ export default function BrancheSystem({ b }: { b: Branche }) {
   return (
     <section ref={root} className="bg-white py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
-        <SectionHead icon="workflow" eyebrow="Unser System" title="Sechs Bausteine, die _ineinandergreifen_." />
+        <SectionHead icon="workflow" eyebrow={t("Unser System", "Our system")} title={t("Sechs Bausteine, die _ineinandergreifen_.", "Six building blocks that _work as one_.")} />
         <div className="bhs-grid grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {b.steps.map((s, i) => (
             <article

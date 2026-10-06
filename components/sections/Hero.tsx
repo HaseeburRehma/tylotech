@@ -6,11 +6,13 @@ import { Star, ArrowRight, Megaphone } from "lucide-react";
 import Container from "../ui/Container";
 import HeroVideoCard from "./HeroVideoCard";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useT } from "../i18n/LocaleProvider";
 
 const YT_ID = "vSIs3xcjzG4";
 
 export default function Hero() {
   const root = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -52,30 +54,41 @@ export default function Hero() {
         <div className="hero-content flex max-w-[600px] flex-col gap-6 sm:gap-7">
           <p className="hero-eyebrow inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white/70 px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink-60 backdrop-blur-sm">
             <Megaphone className="size-3.5 text-accent" />
-            Dein Wachstumspartner
+            {t("Dein Wachstumspartner", "Your growth partner")}
           </p>
 
           <h1 className="font-display text-[clamp(1.9rem,6vw,3.4rem)] font-bold leading-[1.06] tracking-[-0.03em] text-ink">
             <span className="block overflow-hidden pb-[0.05em]">
-              <span className="hero-line block">Wir bauen, was dein</span>
+              <span className="hero-line block">{t("Wir bauen, was dein", "We build what")}</span>
             </span>
             <span className="block overflow-hidden pb-[0.05em]">
               <span className="hero-line block">
-                Unternehmen{" "}
-                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-accent">
-                  wirklich
-                </span>
+                {t(
+                  <>
+                    Unternehmen{" "}
+                    <span className="font-[family-name:var(--font-instrument)] font-normal italic text-accent">
+                      wirklich
+                    </span>
+                  </>,
+                  <>
+                    <span className="font-[family-name:var(--font-instrument)] font-normal italic text-accent">
+                      truly
+                    </span>{" "}
+                    moves your
+                  </>,
+                )}
               </span>
             </span>
             <span className="block overflow-hidden pb-[0.05em]">
-              <span className="hero-line block">nach vorne bringt.</span>
+              <span className="hero-line block">{t("nach vorne bringt.", "business forward.")}</span>
             </span>
           </h1>
 
           <p className="hero-copy max-w-[520px] text-[clamp(15px,1.6vw,19px)] leading-[1.6] text-ink-60">
-            Marketing, Software und Vertrieb aus einer Hand — mit einem Team,
-            das nicht nur berät, sondern umsetzt. Und bei den richtigen Partnern
-            steigen wir sogar mit ein.
+            {t(
+              "Marketing, Software und Vertrieb aus einer Hand — mit einem Team, das nicht nur berät, sondern umsetzt. Und bei den richtigen Partnern steigen wir sogar mit ein.",
+              "Marketing, software and sales from one team — a team that doesn’t just advise, it delivers. And with the right partners, we even invest.",
+            )}
           </p>
 
           {/* CTAs — stacked on mobile, row on sm+ */}
@@ -88,14 +101,14 @@ export default function Hero() {
                   "linear-gradient(180deg,rgba(255,255,255,0.42) 0%,rgba(255,255,255,0.02) 55%,rgba(255,255,255,0) 100%),linear-gradient(90deg,#EFDCBC 0%,#D8B681 45%,#B4894D 100%)",
               }}
             >
-              Erstgespräch sichern
+              {t("Erstgespräch sichern", "Book your intro call")}
               <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="#ablauf"
               className="hero-cta inline-flex h-14 w-full items-center justify-center whitespace-nowrap rounded-full border border-[#e8e6e1] bg-white px-7 text-[16px] font-medium leading-none tracking-[-0.006em] text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07)] transition-colors duration-200 hover:bg-[#fafaf9] sm:w-[260px]"
             >
-              So arbeiten wir
+              {t("So arbeiten wir", "How we work")}
             </Link>
           </div>
 
@@ -103,7 +116,7 @@ export default function Hero() {
           <div className="hero-proof">
             <div className="h-px w-full max-w-[520px] bg-line" />
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] text-ink-60 sm:text-[14px]">
-              <span>100+ Projekte</span>
+              <span>{t("100+ Projekte", "100+ projects")}</span>
               <span className="hidden h-4 w-px bg-line sm:block" />
               <span className="flex items-center gap-2.5">
                 <span className="flex gap-[3px]">
@@ -115,11 +128,11 @@ export default function Hero() {
                     />
                   ))}
                 </span>
-                <span className="text-[15px] font-semibold text-ink">5,0</span>
-                <span>Bewertung</span>
+                <span className="text-[15px] font-semibold text-ink">{t("5,0", "5.0")}</span>
+                <span>{t("Bewertung", "rating")}</span>
               </span>
               <span className="hidden h-4 w-px bg-line sm:block" />
-              <span>vom Handwerk bis zum Mittelstand</span>
+              <span>{t("vom Handwerk bis zum Mittelstand", "from trades to established SMEs")}</span>
             </div>
           </div>
         </div>

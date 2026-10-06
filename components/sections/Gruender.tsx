@@ -4,9 +4,11 @@ import { useRef } from "react";
 import { UserRound, Quote } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useT } from "../i18n/LocaleProvider";
 
 export default function Gruender() {
   const root = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -61,7 +63,7 @@ export default function Gruender() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/team/ilias-el-aradi-podcast.jpg"
-                  alt="Ilias El Aradi, Gründer von TyloTech"
+                  alt={t("Ilias El Aradi, Gründer von TyloTech", "Ilias El Aradi, founder of TyloTech")}
                   className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
                 />
               </div>
@@ -71,15 +73,15 @@ export default function Gruender() {
             <div className="gr-body">
               <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
                 <UserRound className="size-3.5 text-accent" />
-                Der Gründer
+                {t("Der Gründer", "The founder")}
               </p>
 
               <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-                Warum es{" "}
+                {t("Warum es", "Why")}{" "}
                 <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
                   TyloTech
                 </span>{" "}
-                gibt.
+                {t("gibt.", "exists.")}
               </h2>
 
               {/* quote */}
@@ -89,9 +91,18 @@ export default function Gruender() {
                   strokeWidth={0}
                 />
                 <p className="font-[family-name:var(--font-instrument)] text-[clamp(16px,1.6vw,19px)] italic leading-[1.55] text-ink/85">
-                  „Ich habe jeden dieser Prozesse selbst durchlaufen — Marketing,
-                  Code, Vertrieb, Aufbau. Deshalb sehen wir, was andere
-                  übersehen. Und deshalb bauen wir mit, statt nur zu beraten.“
+                  {t(
+                    <>
+                      „Ich habe jeden dieser Prozesse selbst durchlaufen — Marketing,
+                      Code, Vertrieb, Aufbau. Deshalb sehen wir, was andere
+                      übersehen. Und deshalb bauen wir mit, statt nur zu beraten.“
+                    </>,
+                    <>
+                      “I’ve been through every one of these processes myself — marketing,
+                      code, sales, building a company. That’s why we see what others
+                      miss. And that’s why we build with you instead of just advising.”
+                    </>,
+                  )}
                 </p>
               </div>
 
@@ -102,7 +113,7 @@ export default function Gruender() {
                   Ilias El Aradi
                 </p>
                 <p className="mt-1 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/45">
-                  Gründer von TyloTech · Dein Wachstumspartner
+                  {t("Gründer von TyloTech · Dein Wachstumspartner", "Founder of TyloTech · Your growth partner")}
                 </p>
               </div>
             </div>

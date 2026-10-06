@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, ChevronDown, CircleAlert, LoaderCircle, Lock, Mail, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, validate, type FieldErrors } from "@/lib/contact";
+import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, topicLabel, validate, type FieldErrors } from "@/lib/contact";
+import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 
 type Status = "idle" | "sending" | "sent" | "fallback" | "rate-limited";
 
@@ -12,13 +13,14 @@ const field =
   "w-full rounded-[14px] border bg-[#fbfaf9] px-4 text-[15px] leading-[22px] tracking-[-0.1px] text-[#1a1917] outline-none transition-[border-color,background-color,box-shadow] duration-200 placeholder:text-[#a8a49d] hover:border-[#d6d3ce] focus:border-[#d1aa71] focus:bg-white focus:shadow-[0_0_0_4px_rgba(209,170,113,0.18)]";
 
 function Label({ htmlFor, children, optional }: { htmlFor: string; children: React.ReactNode; optional?: boolean }) {
+  const t = useT();
   return (
     <label htmlFor={htmlFor} className="mb-2 flex items-baseline justify-between text-[13.5px] font-medium tracking-[-0.1px] text-[#1a1917]">
       <span>
         {children}
         {!optional && <span className="text-[#b4894d]"> *</span>}
       </span>
-      {optional && <span className="text-[12px] font-normal text-[#a8a49d]">optional</span>}
+      {optional && <span className="text-[12px] font-normal text-[#a8a49d]">{t("optional", "optional")}</span>}
     </label>
   );
 }
@@ -34,6 +36,9 @@ function Err({ id, msg }: { id: string; msg?: string }) {
 }
 
 export default function KontaktForm({ initialBranche = "" }: { initialBranche?: string }) {
+  const locale = useLocale();
+  const t = useT();
+  const lp = useLocalePath();
   const opened = useRef(0);
   const [v, setV] = useState({ name: "", company: "", email: "", phone: "", branche: initialBranche, message: "", website: "" });
   const [topics, setTopics] = useState<string[]>([]);
@@ -51,36 +56,37 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
   const set = (k: keyof typeof v) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const next = { ...v, [k]: e.target.value };
     setV(next);
-    if (touched[k]) setErrors(validate({ ...next, topics, consent }));
+    if (touched[k]) setErrors(validate({ ...next, topics, consent }, locale));
   };
   // Only check a field on blur once something was typed — an error appearing for an empty
   // field would shift the layout under the pointer and swallow the click that caused the blur.
   const blur = (k: keyof typeof v) => () => {
     if (!v[k].trim()) return;
     setTouched((t) => ({ ...t, [k]: true }));
-    setErrors(validate(fields()));
+    setErrors(validate(fields(), locale));
   };
-  const toggleTopic = (t: string) => setTopics((ts) => (ts.includes(t) ? ts.filter((x) => x !== t) : [...ts, t]));
+  const toggleTopic = (topic: string) => setTopics((ts) => (ts.includes(topic) ? ts.filter((x) => x !== topic) : [...ts, topic]));
   const show = (k: keyof FieldErrors) => (touched[k] ? errors[k] : undefined);
 
   const mailto = () => {
+    const branche = BRANCHE_OPTIONS.find((o) => o.value === v.branche);
     const body = [
       `Name: ${v.name}`,
-      v.company && `Unternehmen: ${v.company}`,
-      v.phone && `Telefon: ${v.phone}`,
-      v.branche && `Branche: ${BRANCHE_OPTIONS.find((o) => o.value === v.branche)?.label}`,
-      topics.length > 0 && `Anliegen: ${topics.join(", ")}`,
+      v.company && `${t("Unternehmen", "Company")}: ${v.company}`,
+      v.phone && `${t("Telefon", "Phone")}: ${v.phone}`,
+      v.branche && `${t("Branche", "Industry")}: ${t(branche?.label, branche?.labelEn)}`,
+      topics.length > 0 && `${t("Anliegen", "Topics")}: ${topics.map((x) => topicLabel(x, locale)).join(", ")}`,
     ]
       .filter(Boolean)
       .concat("", v.message)
       .join("\n");
-    return `mailto:${CONTACT.email}?subject=${encodeURIComponent(`Anfrage von ${v.name}`)}&body=${encodeURIComponent(body)}`;
+    return `mailto:${CONTACT.email}?subject=${encodeURIComponent(t(`Anfrage von ${v.name}`, `Enquiry from ${v.name}`))}&body=${encodeURIComponent(body)}`;
   };
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const p = { ...fields(), elapsed: Date.now() - opened.current };
-    const errs = validate(p);
+    const p = { ...fields(), elapsed: Date.now() - opened.current, locale };
+    const errs = validate(p, locale);
     setErrors(errs);
     setTouched({ name: true, email: true, phone: true, message: true, consent: true });
     if (Object.keys(errs).length) {
@@ -93,7 +99,10 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
       const data: { ok: boolean; reason?: string; errors?: FieldErrors } = await res.json().catch(() => ({ ok: false }));
       if (data.ok) return setStatus("sent");
       if (data.reason === "invalid" && data.errors) {
-        setErrors(data.errors);
+        // the server answers in German; show the messages in the page's language
+        const local = validate(p, locale);
+        const serverErrors: FieldErrors = data.errors;
+        setErrors(Object.fromEntries(Object.entries(serverErrors).map(([k, m]) => [k, local[k as keyof FieldErrors] ?? m])));
         return setStatus("idle");
       }
       setStatus(data.reason === "rate-limited" ? "rate-limited" : "fallback");
@@ -120,10 +129,11 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           <path d="M28 45.5 39.5 57 61 33" fill="none" stroke="#94713f" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" className="animate-[ktDraw_0.5s_0.55s_ease-out_both]" />
         </svg>
         <h3 className="font-display text-[clamp(1.6rem,2.6vw,2rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-[#1a1917]">
-          Danke, {v.name.trim().split(/\s+/)[0]}!
+          {t("Danke", "Thank you")}, {v.name.trim().split(/\s+/)[0]}!
         </h3>
         <p className="max-w-[400px] text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954]">
-          Deine Anfrage ist bei uns angekommen. Wir melden uns persönlich bei dir unter <span className="font-medium text-[#1a1917]">{v.email}</span>.
+          {t("Deine Anfrage ist bei uns angekommen. Wir melden uns persönlich bei dir unter ", "Your enquiry has reached us. We'll get back to you personally at ")}
+          <span className="font-medium text-[#1a1917]">{v.email}</span>.
         </p>
         <button
           type="button"
@@ -131,7 +141,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           className="mt-2 inline-flex h-11 items-center gap-2 rounded-full border border-[rgba(8,34,44,0.08)] bg-white px-5 text-[14px] font-medium text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07)] transition-colors hover:bg-[#fbfaf9]"
         >
           <RotateCcw className="size-4" strokeWidth={1.8} />
-          Weitere Anfrage senden
+          {t("Weitere Anfrage senden", "Send another enquiry")}
         </button>
       </div>
     );
@@ -149,17 +159,17 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
 
       <fieldset className="kf-row">
         <legend className="mb-3 text-[13.5px] font-medium tracking-[-0.1px] text-[#1a1917]">
-          Worum geht es? <span className="font-normal text-[#a8a49d]">Mehrfachauswahl möglich</span>
+          {t("Worum geht es?", "What's it about?")} <span className="font-normal text-[#a8a49d]">{t("Mehrfachauswahl möglich", "Select all that apply")}</span>
         </legend>
         <div className="flex flex-wrap gap-2">
-          {TOPICS.map((t) => {
-            const on = topics.includes(t);
+          {TOPICS.map((topic) => {
+            const on = topics.includes(topic);
             return (
               <button
-                key={t}
+                key={topic}
                 type="button"
                 aria-pressed={on}
-                onClick={() => toggleTopic(t)}
+                onClick={() => toggleTopic(topic)}
                 className={cn(
                   "inline-flex h-10 items-center gap-1.5 rounded-full border px-4 text-[13.5px] font-medium tracking-[-0.1px] transition-[background-color,border-color,color,box-shadow] duration-200 active:scale-[0.98]",
                   on
@@ -170,7 +180,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
                 <span className={cn("grid place-items-center overflow-hidden transition-[width,opacity] duration-200", on ? "w-3.5 opacity-100" : "w-0 opacity-0")}>
                   <Check className="size-3.5 shrink-0" strokeWidth={2.4} />
                 </span>
-                {t}
+                {topicLabel(topic, locale)}
               </button>
             );
           })}
@@ -189,14 +199,14 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             onBlur={blur("name")}
             aria-invalid={!!show("name")}
             aria-describedby={show("name") ? "kf-name-err" : undefined}
-            placeholder="Vor- und Nachname"
+            placeholder={t("Vor- und Nachname", "First and last name")}
             className={cn(field, "h-[52px]", show("name") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
           />
           <Err id="kf-name-err" msg={show("name")} />
         </div>
         <div>
           <Label htmlFor="kf-company" optional>
-            Unternehmen
+            {t("Unternehmen", "Company")}
           </Label>
           <input
             id="kf-company"
@@ -204,12 +214,12 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             maxLength={LIMITS.company}
             value={v.company}
             onChange={set("company")}
-            placeholder="Firmenname"
+            placeholder={t("Firmenname", "Company name")}
             className={cn(field, "h-[52px] border-[#e2e0dc]")}
           />
         </div>
         <div>
-          <Label htmlFor="kf-email">E-Mail</Label>
+          <Label htmlFor="kf-email">{t("E-Mail", "Email")}</Label>
           <input
             id="kf-email"
             type="email"
@@ -221,14 +231,14 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             onBlur={blur("email")}
             aria-invalid={!!show("email")}
             aria-describedby={show("email") ? "kf-email-err" : undefined}
-            placeholder="du@firma.de"
+            placeholder={t("du@firma.de", "you@company.com")}
             className={cn(field, "h-[52px]", show("email") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
           />
           <Err id="kf-email-err" msg={show("email")} />
         </div>
         <div>
           <Label htmlFor="kf-phone" optional>
-            Telefon
+            {t("Telefon", "Phone")}
           </Label>
           <input
             id="kf-phone"
@@ -241,7 +251,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             onBlur={blur("phone")}
             aria-invalid={!!show("phone")}
             aria-describedby={show("phone") ? "kf-phone-err" : undefined}
-            placeholder="Für einen schnellen Rückruf"
+            placeholder={t("Für einen schnellen Rückruf", "For a quick call back")}
             className={cn(field, "h-[52px]", show("phone") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
           />
           <Err id="kf-phone-err" msg={show("phone")} />
@@ -250,7 +260,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
 
       <div className="kf-row">
         <Label htmlFor="kf-branche" optional>
-          Branche
+          {t("Branche", "Industry")}
         </Label>
         <div className="relative">
           <select
@@ -259,10 +269,10 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             onChange={set("branche")}
             className={cn(field, "h-[52px] cursor-pointer appearance-none border-[#e2e0dc] pr-11", !v.branche && "text-[#a8a49d]")}
           >
-            <option value="">Bitte auswählen</option>
+            <option value="">{t("Bitte auswählen", "Please select")}</option>
             {BRANCHE_OPTIONS.map((o) => (
               <option key={o.value} value={o.value} className="text-[#1a1917]">
-                {o.label}
+                {t(o.label, o.labelEn)}
               </option>
             ))}
           </select>
@@ -271,7 +281,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
       </div>
 
       <div className="kf-row">
-        <Label htmlFor="kf-message">Nachricht</Label>
+        <Label htmlFor="kf-message">{t("Nachricht", "Message")}</Label>
         <textarea
           id="kf-message"
           rows={5}
@@ -281,7 +291,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           onBlur={blur("message")}
           aria-invalid={!!show("message")}
           aria-describedby={show("message") ? "kf-message-err" : "kf-message-hint"}
-          placeholder="Wo stehst du gerade, und was soll sich ändern?"
+          placeholder={t("Wo stehst du gerade, und was soll sich ändern?", "Where are you right now, and what should change?")}
           className={cn(field, "min-h-[140px] resize-y py-3.5", show("message") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
         />
         <div className="flex items-start justify-between gap-3">
@@ -301,7 +311,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             onChange={(e) => {
               setConsent(e.target.checked);
               setTouched((t) => ({ ...t, consent: true }));
-              setErrors(validate({ ...fields(), consent: e.target.checked }));
+              setErrors(validate({ ...fields(), consent: e.target.checked }, locale));
             }}
             aria-invalid={!!show("consent")}
             aria-describedby={show("consent") ? "kf-consent-err" : undefined}
@@ -316,10 +326,19 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             <Check className={cn("size-3.5 transition-transform duration-200", consent ? "scale-100" : "scale-0")} strokeWidth={3} />
           </span>
           <span className="text-[13.5px] leading-[21px] text-[#5c5954]">
-            Ich bin einverstanden, dass TyloTech meine Angaben zur Bearbeitung meiner Anfrage verarbeitet. Die Einwilligung kann ich jederzeit per
-            E-Mail an {CONTACT.email} widerrufen. Mehr in der{" "}
-            <Link href="/datenschutz" target="_blank" className="font-medium text-[#94713f] underline decoration-[#d1aa71]/50 underline-offset-2 hover:text-[#6d5330]">
-              Datenschutzerklärung
+            {locale === "en" ? (
+              <>
+                I agree that TyloTech may process my details in order to handle my enquiry. I can withdraw my consent at any time by emailing{" "}
+                {CONTACT.email}. More in the{" "}
+              </>
+            ) : (
+              <>
+                Ich bin einverstanden, dass TyloTech meine Angaben zur Bearbeitung meiner Anfrage verarbeitet. Die Einwilligung kann ich jederzeit per
+                E-Mail an {CONTACT.email} widerrufen. Mehr in der{" "}
+              </>
+            )}
+            <Link href={lp("/datenschutz")} target="_blank" className="font-medium text-[#94713f] underline decoration-[#d1aa71]/50 underline-offset-2 hover:text-[#6d5330]">
+              {t("Datenschutzerklärung", "privacy policy")}
             </Link>
             .<span className="text-[#b4894d]"> *</span>
           </span>
@@ -330,22 +349,28 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
       {status === "fallback" && (
         <div role="alert" className="flex flex-col gap-3 rounded-[16px] border border-[#ecd8b6] bg-[#fbf6ee] p-4 sm:flex-row sm:items-center">
           <p className="flex-1 text-[14px] leading-[21px] text-[#5c4524]">
-            Das Senden hat gerade nicht geklappt. Deine Nachricht ist schon vorbereitet: öffne sie einfach in deinem E-Mail-Programm.
+            {t(
+              "Das Senden hat gerade nicht geklappt. Deine Nachricht ist schon vorbereitet: öffne sie einfach in deinem E-Mail-Programm.",
+              "Sending didn't work just now. Your message is ready to go: simply open it in your email app.",
+            )}
           </p>
           <a
             href={mailto()}
             className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#002e3d] px-5 text-[14px] font-medium text-white transition-colors hover:bg-[#013a4d]"
           >
             <Mail className="size-4" strokeWidth={1.8} />
-            E-Mail öffnen
+            {t("E-Mail öffnen", "Open email")}
           </a>
         </div>
       )}
       {status === "rate-limited" && (
         <p role="alert" className="rounded-[16px] border border-[#ecd8b6] bg-[#fbf6ee] p-4 text-[14px] leading-[21px] text-[#5c4524]">
-          Gerade kamen sehr viele Anfragen von deinem Anschluss. Bitte versuch es in ein paar Minuten erneut oder ruf uns direkt an:{" "}
+          {t(
+            "Gerade kamen sehr viele Anfragen von deinem Anschluss. Bitte versuch es in ein paar Minuten erneut oder ruf uns direkt an:",
+            "We've just received a lot of requests from your connection. Please try again in a few minutes or call us directly:",
+          )}{" "}
           <a href={CONTACT.phoneHref} className="font-medium underline underline-offset-2">
-            {CONTACT.phone}
+            {t(CONTACT.phone, CONTACT.phoneIntl)}
           </a>
           .
         </p>
@@ -360,18 +385,18 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           {sending ? (
             <>
               <LoaderCircle className="size-[18px] animate-spin" strokeWidth={2} />
-              Wird gesendet …
+              {t("Wird gesendet …", "Sending …")}
             </>
           ) : (
             <>
-              Anfrage senden
+              {t("Anfrage senden", "Send enquiry")}
               <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
             </>
           )}
         </button>
         <p className="flex items-center justify-center gap-1.5 text-[12.5px] text-[#7d7973]">
           <Lock className="size-3.5" strokeWidth={1.8} />
-          Verschlüsselte Übertragung · kein Newsletter, kein Spam
+          {t("Verschlüsselte Übertragung · kein Newsletter, kein Spam", "Encrypted transmission · no newsletter, no spam")}
         </p>
       </div>
     </form>

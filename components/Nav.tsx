@@ -112,7 +112,7 @@ export default function Nav() {
       }`}
     >
       <Container className="flex h-20 items-center justify-between">
-        <Link href={home ? "#top" : lp("/")} className="flex items-center" onClick={() => setOpen(false)}>
+        <Link href={home ? "#top" : lp("/")} className="flex shrink-0 items-center" onClick={() => setOpen(false)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/brand/tylotech-logo.svg"
@@ -201,7 +201,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener"
             title={t("Zum Kundenportal TyloHQ", "To the TyloHQ client portal")}
-            className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex xl:px-[18px] xl:text-[16px] ${
+            className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex lg:hidden min-[1400px]:flex xl:px-[18px] xl:text-[16px] ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#43413d] hover:bg-ink/[0.04]"

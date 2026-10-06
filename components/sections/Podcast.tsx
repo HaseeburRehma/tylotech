@@ -6,11 +6,13 @@ import { useYouTubePlaying } from "@/lib/useYouTubePlaying";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
+import { pick } from "@/lib/i18n";
+import { useLocale, useT } from "../i18n/LocaleProvider";
 
 const YT_ID = "UY_O3ifoQ40"; // "Deine eigene ERP Software – Kontrolle + Kostensenkung"
 
 /* the dialogue that opens the section — them (light) / us (dark), last line is the turn */
-const DIALOG: { who: "them" | "us"; text: React.ReactNode }[] = [
+const DIALOG_DE: { who: "them" | "us"; text: React.ReactNode }[] = [
   { who: "them", text: "Welche Software nutzt ihr?" },
   { who: "us", text: "Die, die alle nutzen." },
   { who: "them", text: "Und passt die zu euch?" },
@@ -23,6 +25,22 @@ const DIALOG: { who: "them" | "us"; text: React.ReactNode }[] = [
     ),
   },
 ];
+
+const DIALOG_EN: { who: "them" | "us"; text: React.ReactNode }[] = [
+  { who: "them", text: "What software do you use?" },
+  { who: "us", text: "The same as everyone else." },
+  { who: "them", text: "And does it fit you?" },
+  {
+    who: "us",
+    text: (
+      <>
+        …honestly? <span className="text-[#d8b682]">Not really.</span>
+      </>
+    ),
+  },
+];
+
+const DIALOG = { de: DIALOG_DE, en: DIALOG_EN };
 
 function PlatformButton({
   badge,
@@ -54,6 +72,10 @@ function PlatformButton({
 
 export default function Podcast() {
   const root = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const t = useT();
+  const dialog = pick(locale, DIALOG);
+  const videoTitle = t("Eigene Software für dein Unternehmen", "Custom software for your business");
   const videoRef = useRef<HTMLDivElement>(null);
   // muted autoplay starts once the video is near the viewport (like the hero);
   // a click restarts it with sound and player controls
@@ -125,15 +147,15 @@ export default function Podcast() {
         <div>
           <p className="podcast-eyebrow mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <Headphones className="size-3.5 text-accent" />
-            Zum Mithören
+            {t("Zum Mithören", "Listen in")}
           </p>
 
-          <h2 className="sr-only">Eigene Software für dein Unternehmen</h2>
+          <h2 className="sr-only">{videoTitle}</h2>
 
           {/* dialogue as chat bubbles */}
-          <div className="podcast-chat flex max-w-[520px] flex-col gap-3 sm:gap-3.5" aria-label="Dialog">
-            {DIALOG.map((d, i) => {
-              const last = i === DIALOG.length - 1;
+          <div className="podcast-chat flex max-w-[520px] flex-col gap-3 sm:gap-3.5" aria-label={t("Dialog", "Dialogue")}>
+            {dialog.map((d, i) => {
+              const last = i === dialog.length - 1;
               return (
                 <div key={i} className={cn("flex", d.who === "us" ? "justify-end" : "justify-start")}>
                   <p
@@ -152,17 +174,33 @@ export default function Podcast() {
 
           <div className="podcast-after">
             <p className="mb-5 mt-8 font-[family-name:var(--font-instrument)] text-[clamp(28px,3vw,38px)] leading-[1.12] tracking-[-0.02em] text-ink">
-              Genau da <span className="italic text-[#94713f]">fangen wir an.</span>
+              {t(
+                <>
+                  Genau da <span className="italic text-[#94713f]">fangen wir an.</span>
+                </>,
+                <>
+                  That’s exactly <span className="italic text-[#94713f]">where we start.</span>
+                </>,
+              )}
             </p>
             <p className="max-w-[50ch] text-[clamp(16px,1.4vw,17.5px)] leading-[1.6] tracking-[-0.1px] text-[#5c5954]">
-              Die meisten Unternehmen zwängen ihre Abläufe in Software, die nie für sie gebaut wurde. Wir drehen das um — und
-              bauen eine Lösung, die sich um <span className="font-semibold text-ink">dein</span> Unternehmen biegt, nicht
-              andersrum. Maßgeschneidert auf deine Prozesse, deine Branche, deine Regeln. So wie zuletzt für Priya.
+              {t(
+                <>
+                  Die meisten Unternehmen zwängen ihre Abläufe in Software, die nie für sie gebaut wurde. Wir drehen das um — und
+                  bauen eine Lösung, die sich um <span className="font-semibold text-ink">dein</span> Unternehmen biegt, nicht
+                  andersrum. Maßgeschneidert auf deine Prozesse, deine Branche, deine Regeln. So wie zuletzt für Priya.
+                </>,
+                <>
+                  Most businesses squeeze their workflows into software that was never built for them. We flip that — and
+                  build a solution that bends around <span className="font-semibold text-ink">your</span> business, not the
+                  other way round. Tailored to your processes, your industry, your rules. Just like we recently did for Priya.
+                </>,
+              )}
             </p>
             <div className="mt-8 grid grid-cols-2 gap-2.5 sm:flex sm:gap-3.5">
               <PlatformButton
                 href={`https://www.youtube.com/watch?v=${YT_ID}`}
-                over="Ansehen auf"
+                over={t("Ansehen auf", "Watch on")}
                 name="YouTube"
                 badge={
                   <span className="grid size-[26px] place-items-center rounded-[7px] bg-[#FF0000]">
@@ -172,7 +210,7 @@ export default function Podcast() {
               />
               <PlatformButton
                 href="https://open.spotify.com"
-                over="Anhören auf"
+                over={t("Anhören auf", "Listen on")}
                 name="Spotify"
                 badge={
                   <span className="grid size-[26px] place-items-center rounded-full bg-[#1DB954]">
@@ -189,17 +227,17 @@ export default function Podcast() {
             <iframe
               className="absolute inset-0 size-full"
               src={`https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-              title="Deine eigene ERP Software – Kontrolle + Kostensenkung"
+              title={t("Deine eigene ERP Software – Kontrolle + Kostensenkung", "Your own ERP software – control + lower costs (in German)")}
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
             />
           ) : (
-            <button onClick={() => setSound(true)} className="group absolute inset-0 size-full text-left" aria-label="Video mit Ton abspielen: Eigene Software für dein Unternehmen">
+            <button onClick={() => setSound(true)} className="group absolute inset-0 size-full text-left" aria-label={t("Video mit Ton abspielen: Eigene Software für dein Unternehmen", "Play video with sound: Custom software for your business (in German)")}>
               {near && (
                 <iframe
                   className="pointer-events-none absolute inset-0 size-full origin-center scale-[1.02]"
                   src={`https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&controls=0&iv_load_policy=3&loop=1&playlist=${YT_ID}&disablekb=1&enablejsapi=1`}
-                  title="Eigene Software für dein Unternehmen (stumm)"
+                  title={t("Eigene Software für dein Unternehmen (stumm)", "Custom software for your business (muted)")}
                   allow="autoplay; encrypted-media; picture-in-picture"
                   tabIndex={-1}
                   ref={mutedFrame}
@@ -219,7 +257,8 @@ export default function Podcast() {
               <span className="absolute inset-x-5 top-5 flex items-center gap-2.5 sm:inset-x-6 sm:top-6">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/brand/tylotech-mark.svg" alt="" className="h-[30px] w-[30px] shrink-0 rounded-lg bg-[#001620] p-1" />
-                <span className="font-display text-[clamp(15px,1.5vw,19px)] font-semibold leading-tight text-white">Eigene Software für dein Unternehmen</span>
+                <span className="font-display text-[clamp(15px,1.5vw,19px)] font-semibold leading-tight text-white">{videoTitle}</span>
+                {locale === "en" && <span className="shrink-0 rounded-full bg-white/15 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-white/85 backdrop-blur">In German</span>}
               </span>
 
               {/* play (until the muted video runs) */}
@@ -232,13 +271,16 @@ export default function Podcast() {
 
               {/* caption */}
               <span className="pointer-events-none absolute inset-x-5 bottom-6 max-w-[440px] text-[clamp(13px,1.25vw,16px)] font-medium leading-snug text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.6)] sm:inset-x-6 sm:bottom-7 max-sm:hidden">
-                Warum Standard-Software dich ausbremst — und was die Alternative ist.
+                {t(
+                  "Warum Standard-Software dich ausbremst — und was die Alternative ist.",
+                  "Why off-the-shelf software holds you back — and what the alternative is.",
+                )}
               </span>
 
               {/* sound on */}
               <span className="absolute bottom-5 right-5 inline-flex items-center gap-2 rounded-full bg-white/90 px-3.5 py-2 text-[12.5px] font-semibold text-[#001620] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.5)] backdrop-blur transition-transform duration-200 group-hover:scale-105 sm:bottom-6 sm:right-6">
                 <Volume2 className="size-4" strokeWidth={2.2} />
-                Mit Ton ansehen
+                {t("Mit Ton ansehen", "Watch with sound")}
               </span>
             </button>
           )}

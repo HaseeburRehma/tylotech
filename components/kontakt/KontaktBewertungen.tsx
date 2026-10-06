@@ -7,6 +7,8 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import type { Review, ReviewData } from "@/lib/reviews";
 import { Accent, Eyebrow } from "../branche/ui";
+import { useLocale, useT } from "../i18n/LocaleProvider";
+import { formatNumber } from "@/lib/i18n";
 
 const AUTOPLAY_MS = 5500;
 const RM = "(prefers-reduced-motion: reduce)";
@@ -29,8 +31,9 @@ function GoogleG({ size = 20 }: { size?: number }) {
 }
 
 function Stars({ n = 5, size = 17 }: { n?: number; size?: number }) {
+  const t = useT();
   return (
-    <span className="flex items-center gap-[3px]" aria-label={`${n} von 5 Sternen`}>
+    <span className="flex items-center gap-[3px]" aria-label={t(`${n} von 5 Sternen`, `${n} out of 5 stars`)}>
       {Array.from({ length: 5 }).map((_, i) => (
         <Star key={i} style={{ width: size, height: size }} className={i < n ? "fill-[#d1aa71] text-[#d1aa71]" : "fill-[#e2e0dc] text-[#e2e0dc]"} strokeWidth={0} />
       ))}
@@ -46,15 +49,35 @@ const initials = (name: string) =>
     .map((p) => p[0]!.toUpperCase())
     .join("");
 
+/* Google's relative dates come in German (languageCode=de): "vor 2 Monaten" → "2 months ago".
+   Anything not recognised is shown as it is. */
+const REL_UNITS: Record<string, string> = {
+  Minute: "minute", Minuten: "minute",
+  Stunde: "hour", Stunden: "hour",
+  Tag: "day", Tagen: "day",
+  Woche: "week", Wochen: "week",
+  Monat: "month", Monaten: "month",
+  Jahr: "year", Jahren: "year",
+};
+function relativeDateEn(when: string) {
+  const m = when.trim().match(/^vor (einer|einem|\d+) (\p{L}+)$/u);
+  const unit = m && REL_UNITS[m[2]];
+  if (!m || !unit) return when;
+  const n = /^\d+$/.test(m[1]) ? Number(m[1]) : 1;
+  return n === 1 ? `${unit === "hour" ? "an" : "a"} ${unit} ago` : `${n} ${unit}s ago`;
+}
+
 /* Figma "Review Card" */
 function ReviewCard({ r }: { r: Review }) {
+  const t = useT();
   return (
     <article className="flex h-full flex-col gap-4 rounded-[18px] border border-[#e2e0dc] bg-white px-7 py-[26px] shadow-[0_1px_2px_rgba(8,34,44,0.04)] transition-[border-color,box-shadow] duration-300 hover:border-[#e2d2b4] hover:shadow-[0_22px_44px_-28px_rgba(8,34,44,0.35)]">
       <div className="flex items-center justify-between">
         <Stars n={r.rating} />
         <GoogleG size={20} />
       </div>
-      <p className="line-clamp-7 flex-1 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954]">{r.text}</p>
+      {/* reviews come from Google in German — marked so screen readers pronounce them right */}
+      <p lang="de" className="line-clamp-7 flex-1 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954]">{r.text}</p>
       <div className="flex items-center gap-3">
         {/* initials instead of Google profile photos: no request to Google from the visitor's browser */}
         {r.author ? (
@@ -67,8 +90,10 @@ function ReviewCard({ r }: { r: Review }) {
           </span>
         )}
         <div className="flex min-w-0 flex-col gap-px">
-          <p className="truncate font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-[#1a1917]">{r.author ?? "Google-Rezension"}</p>
-          <p className="text-[13px] leading-5 tracking-[-0.05px] text-[#7d7973]">{r.when ?? "Bewertung auf Google"}</p>
+          <p className="truncate font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-[#1a1917]">{r.author ?? t("Google-Rezension", "Google review")}</p>
+          <p className="text-[13px] leading-5 tracking-[-0.05px] text-[#7d7973]">
+            {r.when ? t(r.when, relativeDateEn(r.when)) : t("Bewertung auf Google", "Review on Google")}
+          </p>
         </div>
       </div>
     </article>
@@ -77,6 +102,8 @@ function ReviewCard({ r }: { r: Review }) {
 
 export default function KontaktBewertungen({ data }: { data: ReviewData }) {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
+  const locale = useLocale();
   const track = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
@@ -147,15 +174,15 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
     { scope: root },
   );
 
-  const rating = data.rating.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const rating = formatNumber(locale, data.rating, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
   return (
     <section id="bewertungen" ref={root} className="scroll-mt-20 overflow-hidden bg-page py-14 sm:py-24 lg:py-28">
       <Container className="kb-grid grid grid-cols-1 gap-10 lg:grid-cols-[360px_minmax(0,1fr)] lg:gap-14 xl:gap-16">
         <div className="kb-summary flex flex-col items-start gap-6">
-          <Eyebrow icon="star">Google-Bewertungen</Eyebrow>
+          <Eyebrow icon="star">{t("Google-Bewertungen", "Google reviews")}</Eyebrow>
           <h2 className="font-display text-[clamp(1.9rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1a1917]">
-            <Accent text="Was Kunden über _uns_ sagen." />
+            <Accent text={t("Was Kunden über _uns_ sagen.", "What clients say about _us_.")} />
           </h2>
           <div className="flex w-full items-center gap-5 rounded-[20px] border border-[#eeedea] bg-white p-5 shadow-[0_1px_2px_rgba(8,34,44,0.04),0_2px_6px_rgba(8,34,44,0.06)]">
             <span className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[#eeedea] bg-[#fbfaf9]">
@@ -166,16 +193,19 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
                 <span className="font-display text-[40px] font-semibold leading-none tracking-[-0.03em] text-[#1a1917]">{rating}</span>
                 <Stars n={Math.round(data.rating)} size={18} />
               </div>
-              <span className="text-[13.5px] text-[#7d7973]">aus {data.count} Bewertungen auf Google</span>
+              <span className="text-[13.5px] text-[#7d7973]">
+                {t(`aus ${data.count} Bewertungen auf Google`, `from ${formatNumber(locale, data.count)} reviews on Google`)}
+              </span>
             </div>
           </div>
+          {locale === "en" && <p className="-mt-2 text-[13px] leading-[1.5] text-[#7d7973]">Reviews are shown in their original language (German).</p>}
           <a
             href={data.url}
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex h-12 items-center gap-2 rounded-full border border-[rgba(8,34,44,0.08)] bg-white/[0.72] px-[22px] text-[15px] font-medium text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07),inset_0_1px_1px_rgba(255,255,255,0.7)] transition-colors hover:bg-white"
           >
-            Alle Bewertungen ansehen
+            {t("Alle Bewertungen ansehen", "See all reviews")}
             <ArrowUpRight className="size-[18px] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.9} />
           </a>
         </div>
@@ -192,8 +222,8 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
             ref={track}
             data-lenis-prevent-wheel
             role="region"
-            aria-roledescription="Karussell"
-            aria-label="Google-Bewertungen"
+            aria-roledescription={t("Karussell", "carousel")}
+            aria-label={t("Google-Bewertungen", "Google reviews")}
             className="-mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-6 pb-2 [scrollbar-width:none] md:-mx-10 md:px-10 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden"
           >
             {data.reviews.map((r, i) => (
@@ -201,8 +231,8 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
                 key={i}
                 className="kb-card w-[86%] shrink-0 snap-start sm:w-[calc(50%-10px)]"
                 role="group"
-                aria-roledescription="Bewertung"
-                aria-label={`${i + 1} von ${data.reviews.length}`}
+                aria-roledescription={t("Bewertung", "review")}
+                aria-label={t(`${i + 1} von ${data.reviews.length}`, `${i + 1} of ${data.reviews.length}`)}
               >
                 <ReviewCard r={r} />
               </div>
@@ -213,8 +243,8 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
             <div className="flex items-center gap-5">
               <div className="flex gap-2.5">
                 {[
-                  { I: ArrowLeft, d: -1, label: "Vorherige Bewertung" },
-                  { I: ArrowRight, d: 1, label: "Nächste Bewertung" },
+                  { I: ArrowLeft, d: -1, label: t("Vorherige Bewertung", "Previous review") },
+                  { I: ArrowRight, d: 1, label: t("Nächste Bewertung", "Next review") },
                 ].map(({ I, d, label }) => (
                   <button
                     key={d}
@@ -233,7 +263,7 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
                     key={i}
                     type="button"
                     onClick={() => go(i)}
-                    aria-label={`Zu Bewertung ${i + 1}`}
+                    aria-label={t(`Zu Bewertung ${i + 1}`, `Go to review ${i + 1}`)}
                     aria-current={i === page}
                     className={cn("relative h-1.5 overflow-hidden rounded-full transition-[width,background-color] duration-300", i === page ? "w-12 bg-[#eeedea]" : "w-6 bg-[#e2e0dc] hover:bg-[#d6d3ce]")}
                   >
@@ -247,7 +277,7 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
                   </button>
                 ))}
               </div>
-              {!data.live && <span className="hidden text-[12.5px] text-[#a8a49d] sm:block">Auszug aus unseren Google-Bewertungen</span>}
+              {!data.live && <span className="hidden text-[12.5px] text-[#a8a49d] sm:block">{t("Auszug aus unseren Google-Bewertungen", "A selection of our Google reviews")}</span>}
             </div>
           )}
         </div>

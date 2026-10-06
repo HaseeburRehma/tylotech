@@ -26,11 +26,45 @@ export type LiveFeedResponse = { configured: boolean; events: LiveEvent[]; ok?: 
 /** Max age of an event that may still be shown. */
 export const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
-export function agoLabel(occurredAt: string, now = Date.now()) {
+export function agoLabel(occurredAt: string, now = Date.now(), locale: "de" | "en" = "de") {
   const min = Math.floor((now - Date.parse(occurredAt)) / 60000);
+  if (locale === "en") {
+    if (!Number.isFinite(min) || min < 1) return "just now";
+    if (min < 60) return `${min} min ago`;
+    const h = Math.floor(min / 60);
+    return `${h} ${h === 1 ? "hr" : "hrs"} ago`;
+  }
   if (!Number.isFinite(min) || min < 1) return "gerade eben";
   if (min < 60) return `vor ${min} Min.`;
   return `vor ${Math.floor(min / 60)} Std.`;
+}
+
+/** English headline for an event — TyloHQ sends its titles in German only (e.g. "3 neue Leads",
+ *  "23 Besucher gerade live", "Ranking verbessert auf Platz 1"), so the English site builds its own
+ *  line from `kind`, keeping the count / position from the German title where there is one. `detail` stays as is. */
+export function liveTitleEn(e: Pick<LiveEvent, "kind" | "title">): string {
+  const n = Number(e.title.match(/^\s*(\d+)\b/)?.[1]); // leading count only ("3 neue Leads")
+  const has = Number.isFinite(n) && n > 0;
+  switch (e.kind) {
+    case "query": {
+      const via = e.title.match(/über\s+([A-Za-z][\w-]*)/)?.[1];
+      return via ? `New enquiry via ${via}` : "New enquiry received";
+    }
+    case "visitors":
+      return has ? `${n} visitors live right now` : "Visitors live right now";
+    case "leads":
+      return has ? `${n} new ${n === 1 ? "lead" : "leads"}` : "New leads for a partner";
+    case "ranking": {
+      const pos = Number(e.title.match(/Platz\s+(\d+)/)?.[1]);
+      return Number.isFinite(pos) && pos > 0 ? `Ranking up to #${pos}` : "Google ranking improved";
+    }
+    case "booking":
+      return "Initial consultation booked";
+    case "review": {
+      const stars = Number(e.title.match(/(\d)\s*★/)?.[1]);
+      return stars >= 1 && stars <= 5 ? `New ${stars}★ review` : "New review";
+    }
+  }
 }
 
 /** Strict runtime check — anything that doesn't match is dropped. */

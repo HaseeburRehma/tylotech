@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Container from "../ui/Container";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { useT } from "../i18n/LocaleProvider";
 
 /* ------------------------------------------------------------------ */
 /* Rotating dot sphere (canvas) — draggable, hover-parts, scroll-fills  */
@@ -235,6 +236,7 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
 /* ------------------------------------------------------------------ */
 type Lbl = {
   t: string;
+  en: string;
   side: "left" | "right";
   lx: number;
   ly: number;
@@ -243,12 +245,12 @@ type Lbl = {
 };
 
 const LABELS: Lbl[] = [
-  { t: "Vertrieb", side: "left", lx: 210, ly: 96, nx: 356, ny: 168 },
-  { t: "Marketing", side: "left", lx: 180, ly: 280, nx: 322, ny: 280 },
-  { t: "Recruiting", side: "left", lx: 210, ly: 464, nx: 356, ny: 392 },
-  { t: "Kundenerlebnis", side: "right", lx: 990, ly: 96, nx: 844, ny: 168 },
-  { t: "Reputation", side: "right", lx: 1020, ly: 280, nx: 878, ny: 280 },
-  { t: "Prozesse", side: "right", lx: 990, ly: 464, nx: 844, ny: 392 },
+  { t: "Vertrieb", en: "Sales", side: "left", lx: 210, ly: 96, nx: 356, ny: 168 },
+  { t: "Marketing", en: "Marketing", side: "left", lx: 180, ly: 280, nx: 322, ny: 280 },
+  { t: "Recruiting", en: "Recruiting", side: "left", lx: 210, ly: 464, nx: 356, ny: 392 },
+  { t: "Kundenerlebnis", en: "Customer experience", side: "right", lx: 990, ly: 96, nx: 844, ny: 168 },
+  { t: "Reputation", en: "Reputation", side: "right", lx: 1020, ly: 280, nx: 878, ny: 280 },
+  { t: "Prozesse", en: "Processes", side: "right", lx: 990, ly: 464, nx: 844, ny: 392 },
 ];
 
 const VW = 1200;
@@ -258,6 +260,7 @@ const VH = 560;
 export default function Globe() {
   const root = useRef<HTMLDivElement>(null);
   const progress = useRef(0);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -442,13 +445,13 @@ export default function Globe() {
                 />
                 <p className="eyebrow mb-3 flex items-center justify-center gap-2.5 text-[#d8b682]">
                   <span className="size-[7px] rounded-[2px] bg-accent" />
-                  Reichweite
+                  {t("Reichweite", "Reach")}
                 </p>
                 <h2 className="font-display text-[clamp(1.7rem,2.3vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-white">
-                  Digitalisierung berührt alles.
+                  {t("Digitalisierung berührt alles.", "Digitalisation touches everything.")}
                 </h2>
                 <p className="mx-auto mt-3 max-w-[330px] text-[14px] leading-[22px] text-[#b3d6e2]">
-                  Nicht nur das Marketing — jeder Bereich Ihres Unternehmens.
+                  {t("Nicht nur das Marketing — jeder Bereich Ihres Unternehmens.", "Not just marketing — every part of your business.")}
                 </p>
               </div>
             </div>
@@ -470,7 +473,7 @@ export default function Globe() {
                         : "translate(10px, -50%)",
                   }}
                 >
-                  {l.t}
+                  {t(l.t, l.en)}
                 </span>
               );
             })}
@@ -483,7 +486,7 @@ export default function Globe() {
                 key={l.t}
                 className="glb-label rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.1em] text-white/85"
               >
-                {l.t}
+                {t(l.t, l.en)}
               </span>
             ))}
           </div>

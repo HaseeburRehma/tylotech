@@ -1,4 +1,7 @@
-/* Demo data for the interactive TyloHQ mock. Nothing here is live client data. */
+/* Demo data for the interactive TyloHQ mock. Nothing here is live client data.
+ * German strings double as ids/state keys; English copy sits alongside in `en`. */
+
+import { formatNumber, type Locale } from "@/lib/i18n";
 
 export type ViewId =
   | "dashboard"
@@ -27,6 +30,11 @@ export type ClientId = (typeof CLIENTS)[number]["id"];
 
 export type Month = "September 2026" | "August 2026" | "Juli 2026";
 export const MONTHS: Month[] = ["September 2026", "August 2026", "Juli 2026"];
+export const MONTH_EN: Record<Month, string> = {
+  "September 2026": "September 2026",
+  "August 2026": "August 2026",
+  "Juli 2026": "July 2026",
+};
 
 type Kpi = { value: string; delta: string; down?: boolean };
 export const DASH: Record<
@@ -78,63 +86,65 @@ export const DASH: Record<
 };
 
 export const INTEGRATIONS = [
-  { id: "meta", name: "Meta Ads", logo: "/icons/brands/meta.svg", hint: "Ohne Meta fehlen Werbebudget, Leads und ROAS im Portal." },
-  { id: "gads", name: "Google Ads", logo: "/icons/brands/google-ads.svg", hint: "Such- und Displaykampagnen laufen an der Auswertung vorbei." },
-  { id: "ga4", name: "GA4", logo: "/icons/brands/google-analytics.svg", hint: "Sitzungen lassen sich noch keiner Kampagne zuordnen." },
-  { id: "sc", name: "Search Console", logo: "/icons/brands/google.svg", hint: "Rankings, Klicks und Impressionen aus der Google-Suche." },
-  { id: "tiktok", name: "TikTok Ads", logo: "/icons/brands/tiktok.svg", hint: "Reichweite und Recruiting-Kampagnen." },
-  { id: "linkedin", name: "LinkedIn Ads", logo: "/icons/brands/linkedin.svg", hint: "B2B-Leads und Lead-Gen-Formulare." },
+  { id: "meta", name: "Meta Ads", logo: "/icons/brands/meta.svg", hint: "Ohne Meta fehlen Werbebudget, Leads und ROAS im Portal.", en: "Without Meta, ad spend, leads and ROAS are missing from the portal." },
+  { id: "gads", name: "Google Ads", logo: "/icons/brands/google-ads.svg", hint: "Such- und Displaykampagnen laufen an der Auswertung vorbei.", en: "Search and display campaigns aren't showing up in your reporting." },
+  { id: "ga4", name: "GA4", logo: "/icons/brands/google-analytics.svg", hint: "Sitzungen lassen sich noch keiner Kampagne zuordnen.", en: "Sessions can't be attributed to a campaign yet." },
+  { id: "sc", name: "Search Console", logo: "/icons/brands/google.svg", hint: "Rankings, Klicks und Impressionen aus der Google-Suche.", en: "Rankings, clicks and impressions from Google Search." },
+  { id: "tiktok", name: "TikTok Ads", logo: "/icons/brands/tiktok.svg", hint: "Reichweite und Recruiting-Kampagnen.", en: "Reach and recruiting campaigns." },
+  { id: "linkedin", name: "LinkedIn Ads", logo: "/icons/brands/linkedin.svg", hint: "B2B-Leads und Lead-Gen-Formulare.", en: "B2B leads and lead gen forms." },
 ] as const;
 export type IntegrationId = (typeof INTEGRATIONS)[number]["id"];
 
-export type Task = { id: number; title: string; meta: string; due: string; blocker?: boolean; done?: boolean };
+type TaskText = { title: string; meta: string; due: string };
+export type Task = TaskText & { id: number; en: TaskText; blocker?: boolean; done?: boolean };
 export const TASKS: Task[] = [
-  { id: 1, title: "Meta Ads für Fixdone verbinden", meta: "Einrichtung · Growth", due: "Heute", blocker: true },
-  { id: 2, title: "Projektplan für LokShift anlegen", meta: "Projekte · seit Sep 2026", due: "Fr, 26.9." },
-  { id: 3, title: "Monatsbericht September vorbereiten", meta: "Berichte · 10 Kunden", due: "Mo, 29.9." },
-  { id: 4, title: "Search Console für Nouh-Wehres prüfen", meta: "SEO · Abdul", due: "erledigt", done: true },
+  { id: 1, title: "Meta Ads für Fixdone verbinden", meta: "Einrichtung · Growth", due: "Heute", blocker: true, en: { title: "Connect Meta Ads for Fixdone", meta: "Setup · Growth", due: "Today" } },
+  { id: 2, title: "Projektplan für LokShift anlegen", meta: "Projekte · seit Sep 2026", due: "Fr, 26.9.", en: { title: "Create project plan for LokShift", meta: "Projects · since Sep 2026", due: "Fri, 26 Sep" } },
+  { id: 3, title: "Monatsbericht September vorbereiten", meta: "Berichte · 10 Kunden", due: "Mo, 29.9.", en: { title: "Prepare September monthly report", meta: "Reports · 10 clients", due: "Mon, 29 Sep" } },
+  { id: 4, title: "Search Console für Nouh-Wehres prüfen", meta: "SEO · Abdul", due: "erledigt", done: true, en: { title: "Check Search Console for Nouh-Wehres", meta: "SEO · Abdul", due: "done" } },
 ];
 
 /* ---- performance ("Leistung") ------------------------------------------- */
 
 export type Range = "7 T" | "30 T" | "90 T" | "Jahr";
 export const RANGES: Range[] = ["7 T", "30 T", "90 T", "Jahr"];
+export const RANGE_EN: Record<Range, string> = { "7 T": "7 D", "30 T": "30 D", "90 T": "90 D", Jahr: "Year" };
 
 export type Source = "all" | "meta" | "gads" | "ga4" | "sc";
-export const SOURCES: { id: Source; label: string }[] = [
-  { id: "all", label: "Alle Quellen" },
-  { id: "meta", label: "Meta Ads" },
-  { id: "gads", label: "Google Ads" },
-  { id: "ga4", label: "GA4" },
-  { id: "sc", label: "Search Console" },
+export const SOURCES: { id: Source; label: string; en: string }[] = [
+  { id: "all", label: "Alle Quellen", en: "All sources" },
+  { id: "meta", label: "Meta Ads", en: "Meta Ads" },
+  { id: "gads", label: "Google Ads", en: "Google Ads" },
+  { id: "ga4", label: "GA4", en: "GA4" },
+  { id: "sc", label: "Search Console", en: "Search Console" },
 ];
 
-type MetricDef = { key: string; label: string; base: number; unit?: "€" | "%"; chart?: boolean; avg?: boolean };
+type MetricDef = { key: string; label: string; en: string; base: number; unit?: "€" | "%"; chart?: boolean; avg?: boolean };
 export const METRICS: Record<Source, MetricDef[]> = {
   all: [
-    { key: "leads", label: "Leads", base: 15.5, chart: true },
-    { key: "klicks", label: "Klicks", base: 260, chart: true },
-    { key: "impr", label: "Impressionen", base: 11800, chart: true },
+    { key: "leads", label: "Leads", en: "Leads", base: 15.5, chart: true },
+    { key: "klicks", label: "Klicks", en: "Clicks", base: 260, chart: true },
+    { key: "impr", label: "Impressionen", en: "Impressions", base: 11800, chart: true },
   ],
   meta: [
-    { key: "reach", label: "Reichweite", base: 4200, chart: true },
-    { key: "klicks", label: "Klicks", base: 96, chart: true },
-    { key: "leads", label: "Leads", base: 9.2, chart: true },
+    { key: "reach", label: "Reichweite", en: "Reach", base: 4200, chart: true },
+    { key: "klicks", label: "Klicks", en: "Clicks", base: 96, chart: true },
+    { key: "leads", label: "Leads", en: "Leads", base: 9.2, chart: true },
   ],
   gads: [
-    { key: "klicks", label: "Klicks", base: 64, chart: true },
-    { key: "conv", label: "Conversions", base: 1.4, chart: true },
-    { key: "kosten", label: "Kosten", base: 38, unit: "€", chart: true },
+    { key: "klicks", label: "Klicks", en: "Clicks", base: 64, chart: true },
+    { key: "conv", label: "Conversions", en: "Conversions", base: 1.4, chart: true },
+    { key: "kosten", label: "Kosten", en: "Cost", base: 38, unit: "€", chart: true },
   ],
   ga4: [
-    { key: "sessions", label: "Sitzungen", base: 230, chart: true },
-    { key: "users", label: "Nutzer", base: 184, chart: true },
-    { key: "cr", label: "Conversion-Rate", base: 2.7, unit: "%", avg: true },
+    { key: "sessions", label: "Sitzungen", en: "Sessions", base: 230, chart: true },
+    { key: "users", label: "Nutzer", en: "Users", base: 184, chart: true },
+    { key: "cr", label: "Conversion-Rate", en: "Conversion rate", base: 2.7, unit: "%", avg: true },
   ],
   sc: [
-    { key: "klicks", label: "Klicks", base: 150, chart: true },
-    { key: "impr", label: "Impressionen", base: 7290, chart: true },
-    { key: "pos", label: "Ø Position", base: 8, avg: true },
+    { key: "klicks", label: "Klicks", en: "Clicks", base: 150, chart: true },
+    { key: "impr", label: "Impressionen", en: "Impressions", base: 7290, chart: true },
+    { key: "pos", label: "Ø Position", en: "Avg. position", base: 8, avg: true },
   ],
 };
 
@@ -153,17 +163,23 @@ export function rng(seed: string) {
   };
 }
 
-const MONTHS_SHORT = ["Okt", "Nov", "Dez", "Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep"];
+const MONTHS_SHORT = {
+  de: ["Okt", "Nov", "Dez", "Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep"],
+  en: ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+};
 
-export function rangeLabels(range: Range) {
-  if (range === "Jahr") return MONTHS_SHORT;
+/** Chart axis day label: "26.8" in German, "26/8" in English. */
+export const axisLabel = (locale: Locale, l: string) => (locale === "en" ? l.replace(".", "/") : l);
+
+export function rangeLabels(range: Range, locale: Locale = "de") {
+  if (range === "Jahr") return MONTHS_SHORT[locale];
   const n = range === "7 T" ? 7 : range === "30 T" ? 30 : 45;
   const step = range === "90 T" ? 2 : 1;
   const end = new Date(2026, 8, 24);
   return Array.from({ length: n }, (_, i) => {
     const d = new Date(end);
     d.setDate(end.getDate() - (n - 1 - i) * step);
-    return `${d.getDate()}.${d.getMonth() + 1}`;
+    return axisLabel(locale, `${d.getDate()}.${d.getMonth() + 1}`);
   });
 }
 
@@ -179,8 +195,21 @@ export function series(seed: string, n: number, base: number, growth = 0.35) {
   });
 }
 
-export const de = (v: number, digits = 0) =>
-  v.toLocaleString("de-DE", { minimumFractionDigits: digits, maximumFractionDigits: digits });
+export const num = (locale: Locale, v: number, digits = 0) =>
+  formatNumber(locale, v, { minimumFractionDigits: digits, maximumFractionDigits: digits });
+
+/** Euro amount: "1.234 €" (de) / "€1,234" (en). */
+export const eur = (locale: Locale, v: number, digits = 0) =>
+  locale === "en" ? `€${num(locale, v, digits)}` : `${num(locale, v, digits)} €`;
+
+/** Re-spell a German-formatted figure for English: "10.346 €" → "€10,346", "−3,8 %" → "−3.8%", "2,4 MB" → "2.4 MB". */
+export function figure(locale: Locale, s: string) {
+  if (locale === "de") return s;
+  return s
+    .replace(/(\d)([.,])(?=\d)/g, (_, d: string, sep: string) => d + (sep === "." ? "," : "."))
+    .replace(/^([+−-]?)(.+?) €$/, "$1€$2")
+    .replace(/ %$/, "%");
+}
 
 export function niceMax(v: number) {
   const exp = Math.pow(10, Math.floor(Math.log10(v)));
@@ -198,6 +227,12 @@ export const KI_TOOLS = [
     desc: "Meta & Google Ads",
     out: (c: string) =>
       `Headline: Diese Woche noch Termine frei.\nText: ${c} – schnell, zuverlässig und mit festen Preisen. In 60 Sekunden anfragen, Rückmeldung am selben Tag.\nCTA: Jetzt Termin sichern`,
+    en: {
+      title: "Ad copy",
+      desc: "Meta & Google Ads",
+      out: (c: string) =>
+        `Headline: Slots still free this week.\nText: ${c} – fast, reliable and with fixed prices. Enquire in 60 seconds, hear back the same day.\nCTA: Book your slot now`,
+    },
   },
   {
     id: "seo",
@@ -205,6 +240,12 @@ export const KI_TOOLS = [
     desc: "Title & Description",
     out: (c: string) =>
       `Title: ${c} | Termin in 60 Sekunden anfragen\nDescription: Ehrliche Beratung, feste Preise und schnelle Rückmeldung. Über 120 Bewertungen mit 4,9 ★ – jetzt unverbindlich anfragen.`,
+    en: {
+      title: "SEO meta",
+      desc: "Title & description",
+      out: (c: string) =>
+        `Title: ${c} | Book an appointment in 60 seconds\nDescription: Honest advice, fixed prices and a fast response. Over 120 reviews at 4.9 ★ – enquire now, no strings attached.`,
+    },
   },
   {
     id: "social",
@@ -212,6 +253,12 @@ export const KI_TOOLS = [
     desc: "Instagram & LinkedIn",
     out: (c: string) =>
       `Hinter jedem Termin steckt ein Team, das es ernst meint. 👋\nBei ${c} bekommst du keine Warteschleife, sondern eine Antwort – am selben Tag.\n#lokal #qualität #team`,
+    en: {
+      title: "Social post",
+      desc: "Instagram & LinkedIn",
+      out: (c: string) =>
+        `Behind every appointment is a team that means it. 👋\nAt ${c} you don't get put on hold – you get an answer, the same day.\n#local #quality #team`,
+    },
   },
   {
     id: "mail",
@@ -219,34 +266,48 @@ export const KI_TOOLS = [
     desc: "Newsletter & Follow-up",
     out: (c: string) =>
       `1. Kurze Frage zu deiner Anfrage bei ${c}\n2. Dein Termin wartet noch auf dich\n3. Nur noch 3 freie Plätze im Oktober`,
+    en: {
+      title: "Email subject",
+      desc: "Newsletter & follow-up",
+      out: (c: string) =>
+        `1. Quick question about your enquiry with ${c}\n2. Your appointment is still waiting for you\n3. Only 3 spots left in October`,
+    },
   },
 ];
 
 /* ---- Dokumente ------------------------------------------------------------ */
 
+/** Document filter / type keys (German) with their English labels. */
+export const DOC_TYPES = [
+  { id: "Alle", en: "All" },
+  { id: "Berichte", en: "Reports" },
+  { id: "Verträge", en: "Contracts" },
+  { id: "Assets", en: "Assets" },
+];
+
 export const DOCS = [
-  { name: "Monatsbericht August 2026.pdf", type: "Berichte", size: "2,4 MB", date: "02.09.2026" },
-  { name: "Rahmenvertrag TyloTech.pdf", type: "Verträge", size: "380 KB", date: "14.06.2026" },
-  { name: "Kampagnen-Assets Herbst.zip", type: "Assets", size: "48 MB", date: "18.09.2026" },
-  { name: "Keyword-Recherche Q4.xlsx", type: "Berichte", size: "1,1 MB", date: "11.09.2026" },
-  { name: "Logo-Paket & Farben.zip", type: "Assets", size: "12 MB", date: "03.07.2026" },
-  { name: "Auftragsverarbeitung (AVV).pdf", type: "Verträge", size: "210 KB", date: "14.06.2026" },
-  { name: "Monatsbericht Juli 2026.pdf", type: "Berichte", size: "2,1 MB", date: "04.08.2026" },
+  { name: "Monatsbericht August 2026.pdf", type: "Berichte", size: "2,4 MB", date: "02.09.2026", en: { name: "Monthly report August 2026.pdf", date: "2 Sep 2026" } },
+  { name: "Rahmenvertrag TyloTech.pdf", type: "Verträge", size: "380 KB", date: "14.06.2026", en: { name: "Master agreement TyloTech.pdf", date: "14 Jun 2026" } },
+  { name: "Kampagnen-Assets Herbst.zip", type: "Assets", size: "48 MB", date: "18.09.2026", en: { name: "Campaign assets autumn.zip", date: "18 Sep 2026" } },
+  { name: "Keyword-Recherche Q4.xlsx", type: "Berichte", size: "1,1 MB", date: "11.09.2026", en: { name: "Keyword research Q4.xlsx", date: "11 Sep 2026" } },
+  { name: "Logo-Paket & Farben.zip", type: "Assets", size: "12 MB", date: "03.07.2026", en: { name: "Logo pack & colours.zip", date: "3 Jul 2026" } },
+  { name: "Auftragsverarbeitung (AVV).pdf", type: "Verträge", size: "210 KB", date: "14.06.2026", en: { name: "Data processing agreement (DPA).pdf", date: "14 Jun 2026" } },
+  { name: "Monatsbericht Juli 2026.pdf", type: "Berichte", size: "2,1 MB", date: "04.08.2026", en: { name: "Monthly report July 2026.pdf", date: "4 Aug 2026" } },
 ];
 
 export const TEAM = [
-  { name: "Ilias El Aradi", role: "Gründer · Strategie", img: "/team/ilias-el-aradi.jpg", online: true },
-  { name: "Lena Brandt", role: "Performance Marketing", img: "/team/lena-brandt.png", online: true },
-  { name: "Marc Hoffmann", role: "Webentwicklung", img: "/team/marc-hoffmann.png", online: false },
-  { name: "Aylin Demir", role: "Content & Social", img: "/team/aylin-demir.png", online: true },
-  { name: "Jonas Reiter", role: "SEO", img: "/team/jonas-reiter.png", online: false },
-  { name: "Sabine Kraus", role: "Projektleitung", img: "/team/sabine-kraus.png", online: true },
+  { name: "Ilias El Aradi", role: "Gründer · Strategie", en: "Founder · Strategy", img: "/team/ilias-el-aradi.jpg", online: true },
+  { name: "Lena Brandt", role: "Performance Marketing", en: "Performance marketing", img: "/team/lena-brandt.png", online: true },
+  { name: "Marc Hoffmann", role: "Webentwicklung", en: "Web development", img: "/team/marc-hoffmann.png", online: false },
+  { name: "Aylin Demir", role: "Content & Social", en: "Content & social", img: "/team/aylin-demir.png", online: true },
+  { name: "Jonas Reiter", role: "SEO", en: "SEO", img: "/team/jonas-reiter.png", online: false },
+  { name: "Sabine Kraus", role: "Projektleitung", en: "Project management", img: "/team/sabine-kraus.png", online: true },
 ];
 
 export const PROJECTS = [
-  { name: "Website-Relaunch Fixdone", phase: "Umsetzung", progress: 72, due: "15.10." },
-  { name: "Meta-Kampagne Herbst · Fahrschule Abgefahrn", phase: "Live", progress: 100, due: "läuft" },
-  { name: "Local SEO · Priya's Reinigungsservice", phase: "Optimierung", progress: 58, due: "laufend" },
-  { name: "Onboarding LokShift", phase: "Kick-off", progress: 18, due: "03.10." },
-  { name: "Recruiting-Funnel Rohr Cleaner", phase: "Konzept", progress: 34, due: "22.10." },
+  { name: "Website-Relaunch Fixdone", phase: "Umsetzung", progress: 72, due: "15.10.", en: { name: "Website relaunch Fixdone", phase: "Build", due: "15 Oct" } },
+  { name: "Meta-Kampagne Herbst · Fahrschule Abgefahrn", phase: "Live", progress: 100, due: "läuft", en: { name: "Meta autumn campaign · Fahrschule Abgefahrn", phase: "Live", due: "running" } },
+  { name: "Local SEO · Priya's Reinigungsservice", phase: "Optimierung", progress: 58, due: "laufend", en: { name: "Local SEO · Priya's Reinigungsservice", phase: "Optimisation", due: "ongoing" } },
+  { name: "Onboarding LokShift", phase: "Kick-off", progress: 18, due: "03.10.", en: { name: "Onboarding LokShift", phase: "Kick-off", due: "3 Oct" } },
+  { name: "Recruiting-Funnel Rohr Cleaner", phase: "Konzept", progress: 34, due: "22.10.", en: { name: "Recruiting funnel Rohr Cleaner", phase: "Concept", due: "22 Oct" } },
 ];

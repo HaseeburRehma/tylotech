@@ -17,7 +17,8 @@ export function useLocale(): Locale {
 /** t("Deutsch", "English") → the string (or any value) for the current language. */
 export function useT() {
   const locale = useLocale();
-  return useCallback(<T,>(de: T, en: T): T => (locale === "en" ? en : de), [locale]);
+  // two type params so t(<jsx />, "text") or t("a", 1) type-check without annotations
+  return useCallback(<A, B = A>(de: A, en: B): A | B => (locale === "en" ? en : de), [locale]);
 }
 
 /** lp("/kontakt") → "/kontakt" on the German site, "/en/contact" on the English one. */

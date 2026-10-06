@@ -15,15 +15,21 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 
-type Industry = {
+type IndustryText = {
   name: string;
   lead: string;
   accent: string;
   body: string;
+};
+
+type Industry = IndustryText & {
   icon: LucideIcon;
   img: string;
   tint: string;
+  /** English copy; `name` (German) stays the key for slugs and React keys */
+  en: IndustryText;
 };
 
 const SLUGS: Record<string, string> = {
@@ -44,6 +50,12 @@ const INDUSTRIES: Industry[] = [
     icon: Globe,
     img: "/branchen/online.jpg",
     tint: "from-[#e9dccb] to-[#c9a774]",
+    en: {
+      name: "Online Services",
+      lead: "Make your expertise visible,",
+      accent: "win clients.",
+      body: "Coaches, consultants, software and online providers — we sharpen your positioning, build authority and turn visitors into paying clients. With a system that doesn’t depend on you alone.",
+    },
   },
   {
     name: "Handwerk",
@@ -53,6 +65,12 @@ const INDUSTRIES: Industry[] = [
     icon: Hammer,
     img: "/branchen/handwerk.jpg",
     tint: "from-[#e7d8c2] to-[#cba46f]",
+    en: {
+      name: "Trades & Crafts",
+      lead: "Visibility that",
+      accent: "brings in jobs.",
+      body: "Renovation, electrical, drain cleaning — businesses that don’t need more clicks, they need full calendars. We build the presence, the enquiry funnel and the campaigns that work.",
+    },
   },
   {
     name: "Lokale Dienstleister",
@@ -62,6 +80,12 @@ const INDUSTRIES: Industry[] = [
     icon: MapPin,
     img: "/branchen/lokale-dienstleister.jpg",
     tint: "from-[#d7e2e6] to-[#a9c2ca]",
+    en: {
+      name: "Local Services",
+      lead: "Get found",
+      accent: "where it counts.",
+      body: "Cleaning, care, restaurants, driving schools — local businesses that belong at the top of every nearby search. We deliver the visibility and a steady flow of enquiries.",
+    },
   },
   {
     name: "E-Commerce",
@@ -71,6 +95,12 @@ const INDUSTRIES: Industry[] = [
     icon: ShoppingCart,
     img: "/branchen/ecommerce.jpg",
     tint: "from-[#ebd9c0] to-[#d9a86a]",
+    en: {
+      name: "E-Commerce",
+      lead: "Sell more,",
+      accent: "not just get more traffic.",
+      body: "Online shops, marketplaces, D2C brands — we optimise conversion, checkout and campaigns so visitors become buyers. Measurably, not by gut feeling.",
+    },
   },
   {
     name: "B2B-Dienstleistung",
@@ -80,6 +110,12 @@ const INDUSTRIES: Industry[] = [
     icon: Building2,
     img: "/branchen/b2b.jpg",
     tint: "from-[#dbe0d9] to-[#b3c0ab]",
+    en: {
+      name: "B2B Services",
+      lead: "Generate leads",
+      accent: "that actually buy.",
+      body: "Agencies, consultancies, IT service providers — we build funnels and systems that deliver qualified enquiries, not just reach without results.",
+    },
   },
   {
     name: "Finanz & Investment",
@@ -89,6 +125,12 @@ const INDUSTRIES: Industry[] = [
     icon: TrendingUp,
     img: "/branchen/finanz.jpg",
     tint: "from-[#e6dcc9] to-[#c9b389]",
+    en: {
+      name: "Finance & Investment",
+      lead: "Build trust,",
+      accent: "scale digitally.",
+      body: "Financial advisers, wealth management, investment — we create the digital presence that shows expertise and builds trust before the first conversation even happens.",
+    },
   },
 ];
 
@@ -97,6 +139,11 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 export default function Branchen() {
   const root = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const t = useT();
+  const lp = useLocalePath();
+  /** visible copy for the current language */
+  const tx = (ind: Industry): IndustryText => (locale === "en" ? ind.en : ind);
   const [active, setActive] = useState(0);
   const lastIdx = useRef(0);
   const lockUntil = useRef(0);
@@ -159,20 +206,20 @@ export default function Branchen() {
           <div className="br-head max-w-[720px]">
             <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
               <Briefcase className="size-3.5 text-accent" />
-              Erprobt, nicht theoretisch
+              {t("Erprobt, nicht theoretisch", "Proven, not theoretical")}
             </p>
             <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-              Wo wir uns{" "}
+              {t("Wo wir uns", "Industries we")}{" "}
               <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-                auskennen
+                {t("auskennen", "know inside out")}
               </span>
               .
             </h2>
             <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-              Vom Handwerksbetrieb bis zum Mittelständer — wir haben in vielen
-              Branchen gebaut und wissen, was funktioniert. Handwerk,
-              Dienstleistung, lokale Betriebe, E-Commerce, spezialisierte
-              Nischen.
+              {t(
+                "Vom Handwerksbetrieb bis zum Mittelständer — wir haben in vielen Branchen gebaut und wissen, was funktioniert. Handwerk, Dienstleistung, lokale Betriebe, E-Commerce, spezialisierte Nischen.",
+                "From the local trades business to the established mid-sized company — we’ve built across many industries and know what works. Trades, services, local businesses, e-commerce, specialist niches.",
+              )}
             </p>
           </div>
 
@@ -207,7 +254,7 @@ export default function Branchen() {
                             on ? "text-white" : "text-ink/65"
                           }`}
                         >
-                          {ind.name}
+                          {tx(ind).name}
                         </span>
                       </button>
                     </li>
@@ -218,23 +265,23 @@ export default function Branchen() {
               {/* content */}
               <div className="order-2 flex flex-col justify-center px-1 lg:px-2">
                 <h3 className="font-display text-[clamp(1.4rem,2.1vw,2rem)] font-bold leading-[1.15] tracking-[-0.02em] text-ink">
-                  {it.lead}{" "}
+                  {tx(it).lead}{" "}
                   <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-                    {it.accent}
+                    {tx(it).accent}
                   </span>
                 </h3>
                 <p className="mt-4 max-w-[400px] text-[14.5px] leading-[1.65] text-[#5c5954]">
-                  {it.body}
+                  {tx(it).body}
                 </p>
                 <Link
-                  href={`/branchen/${SLUGS[it.name]}`}
+                  href={lp(`/branchen/${SLUGS[it.name]}`)}
                   className="group mt-5 inline-flex w-fit items-center gap-1.5 text-[14px] font-medium text-ink underline decoration-[#d1aa71] decoration-2 underline-offset-[5px] transition-colors hover:text-[#94713f]"
                 >
-                  Zur Branchenseite
+                  {t("Zur Branchenseite", "View industry page")}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <p className="mt-6 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/40">
-                  {pad(active + 1)} von {pad(STEPS)}
+                  {pad(active + 1)} {t("von", "of")} {pad(STEPS)}
                 </p>
               </div>
 

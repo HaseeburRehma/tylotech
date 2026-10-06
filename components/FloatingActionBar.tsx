@@ -18,8 +18,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { gsap } from "@/lib/gsap";
-import { agoLabel, type LiveEvent, type LiveFeedResponse, type LiveKind } from "@/lib/liveFeed";
+import { agoLabel, liveTitleEn, type LiveEvent, type LiveFeedResponse, type LiveKind } from "@/lib/liveFeed";
 import { TICKER_MESSAGES, shuffledOrder, type TickerIcon } from "@/lib/tickerMessages";
+import { useLocale, useLocalePath, useT } from "@/components/i18n/LocaleProvider";
 
 const AVATARS = [
   { src: "/avatars/tt.png", alt: "Team TT" },
@@ -77,6 +78,8 @@ const RESULT_ICONS: Record<TickerIcon, LucideIcon> = {
 type Slide = { key: string; type: "event"; e: LiveEvent } | { key: string; type: "result"; i: number };
 
 function LiveTicker() {
+  const locale = useLocale();
+  const t = useT();
   const [queue, setQueue] = useState<LiveEvent[]>([]);
   const [slide, setSlide] = useState<Slide | null>(null);
   const [outgoing, setOutgoing] = useState<Slide | null>(null);
@@ -165,26 +168,28 @@ function LiveTicker() {
       return (
         <span className="block min-w-0">
           <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">TyloTech</span>
-          <span className="mt-0.5 block truncate text-[11.5px] leading-4 text-[#8cc0d1]">Ergebnisse unserer Partner</span>
+          <span className="mt-0.5 block truncate text-[11.5px] leading-4 text-[#8cc0d1]">{t("Ergebnisse unserer Partner", "Results from our partners")}</span>
         </span>
       );
     if (sl.type === "result")
       return (
         <span className="block min-w-0">
           <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">
-            {TICKER_MESSAGES[sl.i].text}
+            {t(TICKER_MESSAGES[sl.i].text, TICKER_MESSAGES[sl.i].textEn)}
           </span>
           <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11.5px] leading-4 text-[#8cc0d1]">
             <span className="shrink-0 font-medium text-[#d8b682]">TyloTech</span>
             <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
-            <span className="truncate">{TICKER_MESSAGES[sl.i].time ?? "Ergebnis aus Partnerprojekten"}</span>
+            <span className="truncate">
+              {t(TICKER_MESSAGES[sl.i].time ?? "Ergebnis aus Partnerprojekten", TICKER_MESSAGES[sl.i].timeEn ?? "Result from partner projects")}
+            </span>
           </span>
         </span>
       );
     const e = sl.e;
     return (
       <span className="block min-w-0">
-        <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">{e.title}</span>
+        <span className="block truncate font-display text-[13.5px] font-semibold leading-[18px] tracking-[-0.01em] text-white sm:text-[14.5px]">{locale === "en" ? liveTitleEn(e) : e.title}</span>
         <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[11.5px] leading-4 text-[#8cc0d1]">
           <span className="shrink-0 font-medium text-[#d8b682]">Live · TyloHQ</span>
           <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
@@ -194,7 +199,7 @@ function LiveTicker() {
               <span className="size-[3px] shrink-0 rounded-full bg-[#8cc0d1]/50" />
             </>
           )}
-          <span className="shrink-0 tabular-nums">{agoLabel(e.occurredAt)}</span>
+          <span className="shrink-0 tabular-nums">{agoLabel(e.occurredAt, undefined, locale)}</span>
         </span>
       </span>
     );
@@ -263,6 +268,8 @@ function LiveTicker() {
 
 export default function FloatingActionBar() {
   const bar = useRef<HTMLDivElement>(null);
+  const t = useT();
+  const lp = useLocalePath();
 
   // Slide in from below once the hero has scrolled away — a scroll-position
   // listener is more robust than a ScrollTrigger crossing (survives the tab
@@ -303,8 +310,8 @@ export default function FloatingActionBar() {
 
         {/* Termin pill */}
         <Link
-          href="/kontakt"
-          aria-label="Erstgespräch buchen"
+          href={lp("/kontakt")}
+          aria-label={t("Erstgespräch buchen", "Book an intro call")}
           className="group flex h-11 shrink-0 items-center gap-3 rounded-full bg-white pl-1.5 pr-1.5 sm:pl-2"
         >
           <span className="hidden items-center sm:flex">
@@ -325,7 +332,7 @@ export default function FloatingActionBar() {
             ))}
           </span>
           <span className="hidden text-[14.5px] font-medium text-ink sm:inline">
-            Erstgespräch buchen
+            {t("Erstgespräch buchen", "Book an intro call")}
           </span>
           <span className="grid size-8 place-items-center rounded-full bg-accent">
             <ArrowUpRight className="size-4 text-[#001620] transition-transform duration-300 group-hover:rotate-45" />

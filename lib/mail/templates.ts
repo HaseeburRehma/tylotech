@@ -1,4 +1,6 @@
-import { CONTACT } from "../contact";
+import { CONTACT, topicLabel } from "../contact";
+import type { Locale } from "../i18n";
+import { TL_BRANCHEN_EN, TL_ZIELE_EN } from "../tylolens";
 
 /* Branded e-mails for the contact form. Table layout + inline styles so they render in
    Outlook, Gmail and Apple Mail alike; images are PNG (SVG is blocked by most clients). */
@@ -56,9 +58,9 @@ const button = (href: string, label: string, primary = true) =>
     primary ? `background:${C.teal};color:#ffffff;border:1px solid ${C.teal}` : `background:#ffffff;color:${C.ink};border:1px solid #e2e0dc`
   };font:600 14px/18px ${SANS};text-decoration:none">${label}</a>`;
 
-function layout({ preheader, badge, body, footer, origin }: { preheader: string; badge: string; body: string; footer: string; origin: string }) {
+function layout({ preheader, badge, body, footer, origin, lang = "de" }: { preheader: string; badge: string; body: string; footer: string; origin: string; lang?: Locale }) {
   return `<!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>TyloTech</title></head>
+<html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>TyloTech</title></head>
 <body style="margin:0;padding:0;background:${C.page};-webkit-text-size-adjust:100%">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">${esc(preheader)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.page}">
@@ -84,7 +86,10 @@ const accent = (t: string) => `<span style="font-family:${SERIF};font-style:ital
 
 /* ---- 1 · notification to the team ---------------------------------------- */
 
-export function teamNotification(e: Enquiry, origin: string, source: string): Mail {
+/** extra line in team e-mails when the visitor wrote from the English site */
+const LANG_EN = "Englisch (EN-Seite)";
+
+export function teamNotification(e: Enquiry, origin: string, source: string, locale: Locale = "de"): Mail {
   const tel = e.phone ? `tel:${e.phone.replace(/[^\d+]/g, "")}` : "";
   const rows: [string, string][] = [
     ["Name", esc(e.name)],
@@ -92,8 +97,9 @@ export function teamNotification(e: Enquiry, origin: string, source: string): Ma
     ["E-Mail", `<a href="mailto:${esc(e.email)}" style="color:${C.goldText};text-decoration:underline">${esc(e.email)}</a>`],
     ["Telefon", e.phone ? `<a href="${esc(tel)}" style="color:${C.goldText};text-decoration:underline">${esc(e.phone)}</a>` : "—"],
     ["Branche", esc(e.branche) || "—"],
+    ...(locale === "en" ? ([["Sprache", LANG_EN]] as [string, string][]) : []),
   ];
-  const reply = `mailto:${e.email}?subject=${encodeURIComponent("Deine Anfrage bei TyloTech")}`;
+  const reply = `mailto:${e.email}?subject=${encodeURIComponent(locale === "en" ? "Your enquiry at TyloTech" : "Deine Anfrage bei TyloTech")}`;
 
   const body = `
     ${label("Neue Anfrage über die Website")}
@@ -123,6 +129,7 @@ export function teamNotification(e: Enquiry, origin: string, source: string): Ma
     `Telefon: ${e.phone || "—"}`,
     `Branche: ${e.branche || "—"}`,
     `Anliegen: ${e.topics.join(", ") || "—"}`,
+    ...(locale === "en" ? [`Sprache: ${LANG_EN}`] : []),
     "",
     "Nachricht:",
     e.message,
@@ -145,7 +152,14 @@ const STEPS = [
   ["Kostenloses Erstgespräch", "Eine ehrliche Einschätzung, wo dein größter Hebel liegt."],
 ];
 
-export function customerConfirmation(e: Enquiry, origin: string): Mail {
+const STEPS_EN = [
+  ["We read your enquiry", "Personally, not a bot."],
+  ["We get back to you", "By email or phone, whichever you prefer."],
+  ["Free initial consultation", "An honest assessment of where your biggest lever lies."],
+];
+
+export function customerConfirmation(e: Enquiry, origin: string, locale: Locale = "de"): Mail {
+  if (locale === "en") return customerConfirmationEn(e, origin);
   const first = firstName(e.name);
   const hello = first ? `Danke, ${accent(esc(first))}!` : `Danke für deine ${accent("Anfrage")}!`;
 
@@ -198,13 +212,68 @@ export function customerConfirmation(e: Enquiry, origin: string): Mail {
   };
 }
 
+function customerConfirmationEn(e: Enquiry, origin: string): Mail {
+  const first = firstName(e.name);
+  const hello = first ? `Thank you, ${accent(esc(first))}!` : `Thank you for your ${accent("enquiry")}!`;
+  const topics = e.topics.map((t) => topicLabel(t, "en"));
+  const intro = "Your message has reached us. We’ll take a close look at it and get back to you personally: honest, direct and with no sales pressure.";
+
+  const body = `
+    ${h1(hello)}
+    ${p(intro)}
+    ${topics.length ? `${label("Your topics")}<div style="margin:0 0 18px">${chips(topics)}</div>` : ""}
+    ${label("What happens next")}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px">
+      ${STEPS_EN.map(
+        ([t, d], i) => `<tr>
+          <td style="width:44px;padding:0 0 14px;vertical-align:top"><div style="width:30px;height:30px;border:1px solid ${C.gold};border-radius:999px;text-align:center;font:600 12px/30px ${MONO};color:${C.goldText}">${i + 1}</div></td>
+          <td style="padding:3px 0 14px;vertical-align:top"><div style="font:600 15px/21px ${SANS};color:${C.ink}">${t}</div><div style="font:400 14px/21px ${SANS};color:${C.faint}">${d}</div></td>
+        </tr>`,
+      ).join("")}
+    </table>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;background:${C.cream};border:1px solid ${C.creamLine};border-radius:14px">
+      <tr><td style="padding:18px 20px">
+        <div style="font:600 15px/21px ${SANS};color:${C.ink};margin:0 0 4px">Don’t want to wait?</div>
+        <div style="font:400 14px/22px ${SANS};color:${C.muted}">Call us on <a href="${CONTACT.phoneHref}" style="color:${C.goldText};text-decoration:underline">${CONTACT.phoneIntl}</a> or email <a href="mailto:${CONTACT.email}" style="color:${C.goldText};text-decoration:underline">${CONTACT.email}</a>.</div>
+      </td></tr>
+    </table>
+    <p style="margin:0;font:400 15px/24px ${SANS};color:${C.muted}">Kind regards<br><span style="font-family:${SERIF};font-style:italic;font-size:19px;color:${C.ink}">The TyloTech team</span></p>`;
+
+  const footer = `TyloTech · ${CONTACT.street} · ${CONTACT.city} · Germany<br>
+    <a href="${esc(origin)}/en/imprint" style="color:${C.faint}">Legal notice</a> · <a href="${esc(origin)}/en/privacy" style="color:${C.faint}">Privacy policy</a><br>
+    You’re receiving this email because you sent us an enquiry via our website.`;
+
+  const text = [
+    first ? `Thank you, ${first}!` : "Thank you for your enquiry!",
+    "",
+    intro,
+    "",
+    ...(topics.length ? [`Your topics: ${topics.join(", ")}`, ""] : []),
+    "What happens next:",
+    ...STEPS_EN.map(([t, d], i) => `${i + 1}. ${t}: ${d}`),
+    "",
+    `Don’t want to wait? Call us on ${CONTACT.phoneIntl} or email ${CONTACT.email}.`,
+    "",
+    "Kind regards",
+    "The TyloTech team",
+    "",
+    `TyloTech · ${CONTACT.street} · ${CONTACT.city} · Germany`,
+  ].join("\n");
+
+  return {
+    subject: "Thank you for your enquiry to TyloTech",
+    html: layout({ preheader: "We’ve received your enquiry and will get back to you personally.", badge: "Enquiry received", body, footer, origin, lang: "en" }),
+    text,
+  };
+}
+
 /* ---- 3 · TyloLens: lead for a personal 48 h video analysis ------------------ */
 
 export type LensLead = { website: string; branche: string; ziel: string; budget: string; budgetLabel: string; priority: string; name: string; email: string };
 
 const PRIO_COLOR: Record<string, string> = { top: "#1e7a52", high: "#1e7a52", mid: "#94713f", low: "#7d7973" };
 
-export function lensTeamNotification(l: LensLead, origin: string): Mail {
+export function lensTeamNotification(l: LensLead, origin: string, locale: Locale = "de"): Mail {
   const host = l.website.replace(/^https?:\/\//, "");
   const reply = `mailto:${l.email}?subject=${encodeURIComponent(`Deine TyloLens-Analyse für ${host}`)}`;
   const rows: [string, string][] = [
@@ -214,6 +283,7 @@ export function lensTeamNotification(l: LensLead, origin: string): Mail {
     ["Budget / Monat", `<b>${esc(l.budgetLabel)}</b>`],
     ["Name", esc(l.name)],
     ["E-Mail", `<a href="mailto:${esc(l.email)}" style="color:${C.goldText};text-decoration:underline">${esc(l.email)}</a>`],
+    ...(locale === "en" ? ([["Sprache", LANG_EN]] as [string, string][]) : []),
   ];
   const body = `
     ${label("TyloLens · neue Analyse-Anfrage")}
@@ -242,6 +312,7 @@ export function lensTeamNotification(l: LensLead, origin: string): Mail {
     `Budget / Monat: ${l.budgetLabel}`,
     `Name: ${l.name}`,
     `E-Mail: ${l.email}`,
+    ...(locale === "en" ? [`Sprache: ${LANG_EN}`] : []),
     "",
     "Zugesagt: persönliches Video mit 3 Hebeln innerhalb von 48 Stunden.",
   ].join("\n");
@@ -252,7 +323,12 @@ export function lensTeamNotification(l: LensLead, origin: string): Mail {
   };
 }
 
-export function lensConfirmation(l: LensLead, origin: string): Mail {
+/* TyloLens options arrive as their canonical German values; English display labels live in lib/tylolens.ts */
+const TL_EN: Record<string, string> = { ...TL_BRANCHEN_EN, ...TL_ZIELE_EN };
+const tlEn = (v: string) => TL_EN[v] ?? v;
+
+export function lensConfirmation(l: LensLead, origin: string, locale: Locale = "de"): Mail {
+  if (locale === "en") return lensConfirmationEn(l, origin);
   const first = firstName(l.name);
   const host = l.website.replace(/^https?:\/\//, "");
   const body = `
@@ -282,6 +358,41 @@ export function lensConfirmation(l: LensLead, origin: string): Mail {
   return {
     subject: "Deine TyloLens-Analyse ist in Arbeit",
     html: layout({ preheader: "Dein persönliches Analyse-Video kommt innerhalb von 48 Stunden.", badge: "TyloLens", body, footer, origin }),
+    text,
+  };
+}
+
+function lensConfirmationEn(l: LensLead, origin: string): Mail {
+  const first = firstName(l.name);
+  const host = l.website.replace(/^https?:\/\//, "");
+  const focus = `${tlEn(l.ziel)} · ${tlEn(l.branche)}`;
+  const body = `
+    ${h1(first ? `Thank you, ${accent(esc(first))}!` : `Thank you for your ${accent("request")}!`)}
+    ${p(`Our team is now taking a personal look at <b style="color:${C.ink}">${esc(host)}</b>.`)}
+    ${p(`You’ll receive your individual analysis as a <b style="color:${C.ink}">short video</b> by email within <b style="color:${C.ink}">48 hours</b> — with 3 concrete levers we would approach differently in your case.`)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 28px;background:${C.cream};border:1px solid ${C.creamLine};border-radius:14px">
+      <tr><td style="padding:16px 20px;font:400 14px/22px ${SANS};color:${C.muted}">
+        <b style="color:${C.ink}">Your focus:</b> ${esc(focus)}
+      </td></tr>
+    </table>
+    <p style="margin:0;font:400 15px/24px ${SANS};color:${C.muted}">Speak soon<br><span style="font-family:${SERIF};font-style:italic;font-size:19px;color:${C.ink}">The TyloTech team</span></p>`;
+  const footer = `TyloTech · ${CONTACT.street} · ${CONTACT.city} · Germany<br>
+    <a href="${esc(origin)}/en/imprint" style="color:${C.faint}">Legal notice</a> · <a href="${esc(origin)}/en/privacy" style="color:${C.faint}">Privacy policy</a><br>
+    You’re receiving this email because you requested an analysis via TyloLens.`;
+  const text = [
+    first ? `Thank you, ${first}!` : "Thank you for your request!",
+    "",
+    `Our team is now taking a personal look at ${host}.`,
+    "You’ll receive your individual analysis as a short video by email within 48 hours — with 3 concrete levers we would approach differently in your case.",
+    "",
+    `Your focus: ${focus}`,
+    "",
+    "Speak soon",
+    "The TyloTech team",
+  ].join("\n");
+  return {
+    subject: "Your TyloLens analysis is under way",
+    html: layout({ preheader: "Your personal analysis video will arrive within 48 hours.", badge: "TyloLens", body, footer, origin, lang: "en" }),
     text,
   };
 }

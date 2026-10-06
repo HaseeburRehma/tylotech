@@ -9,9 +9,11 @@ import { cn } from "@/lib/cn";
 import { CONTACT } from "@/lib/contact";
 import type { Block, LegalDoc } from "@/lib/legal";
 import { Eyebrow } from "../branche/ui";
+import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 /* [label](href) → link; internal paths use next/link */
 function Rich({ text }: { text: string }) {
+  const lp = useLocalePath();
   const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
   return (
     <>
@@ -22,7 +24,7 @@ function Rich({ text }: { text: string }) {
         const cls = "break-words font-medium text-[#94713f] underline decoration-[#d1aa71]/50 underline-offset-[3px] transition-colors hover:text-[#6d5330] hover:decoration-[#94713f]";
         if (href.startsWith("/"))
           return (
-            <Link key={i} href={href} className={cls}>
+            <Link key={i} href={lp(href)} className={cls}>
               {label}
             </Link>
           );
@@ -96,6 +98,7 @@ function Toc({ sections, active, onPick }: { sections: LegalDoc["sections"]; act
 
 export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-text" | "shield-check" }) {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
   const [active, setActive] = useState(doc.sections[0]?.id);
 
   // scrollspy: the section crossing the upper third of the viewport is active
@@ -140,7 +143,7 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
           {doc.stand && (
             <span className="inline-flex items-center gap-2 rounded-full border border-[#eeedea] bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">
               <span className="size-1.5 rounded-full bg-[#d1aa71]" />
-              Stand: {doc.stand}
+              {t("Stand:", "Last updated:")} {doc.stand}
             </span>
           )}
         </header>
@@ -150,15 +153,15 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
           <aside className="lg-toc lg:sticky lg:top-28 lg:self-start">
             <details className="group rounded-[18px] border border-[#eeedea] bg-white/80 p-2 backdrop-blur lg:hidden">
               <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#5c5954] [&::-webkit-details-marker]:hidden">
-                Inhalt
+                {t("Inhalt", "Contents")}
                 <ChevronDown className="size-4 transition-transform duration-200 group-open:rotate-180" strokeWidth={1.8} />
               </summary>
               <div className="pb-1 pt-1">
                 <Toc sections={doc.sections} active={active} onPick={() => document.querySelector<HTMLDetailsElement>(".lg-toc details")?.removeAttribute("open")} />
               </div>
             </details>
-            <nav aria-label="Inhalt" className="hidden lg:block">
-              <p className="mb-3 px-3 font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">Inhalt</p>
+            <nav aria-label={t("Inhalt", "Contents")} className="hidden lg:block">
+              <p className="mb-3 px-3 font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">{t("Inhalt", "Contents")}</p>
               <Toc sections={doc.sections} active={active} />
             </nav>
           </aside>
@@ -182,8 +185,10 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
 
             <div className="flex flex-col gap-4 rounded-[24px] border border-[#ecd8b6] bg-[#fbf6ee] p-6 sm:flex-row sm:items-center sm:p-8">
               <div className="flex-1">
-                <p className="font-display text-[18px] font-semibold tracking-[-0.02em] text-[#1a1917]">Fragen dazu?</p>
-                <p className="mt-1 text-[14.5px] leading-[22px] text-[#5c5954]">Schreib uns oder ruf an, wir antworten persönlich.</p>
+                <p className="font-display text-[18px] font-semibold tracking-[-0.02em] text-[#1a1917]">{t("Fragen dazu?", "Any questions?")}</p>
+                <p className="mt-1 text-[14.5px] leading-[22px] text-[#5c5954]">
+                  {t("Schreib uns oder ruf an, wir antworten persönlich.", "Email or call us – we'll answer personally.")}
+                </p>
               </div>
               <div className="flex flex-wrap gap-2.5">
                 <a
@@ -198,7 +203,7 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
                   className="inline-flex h-11 items-center gap-2 rounded-full border border-[rgba(8,34,44,0.08)] bg-white px-5 text-[14px] font-medium text-[#1a1917] transition-colors hover:bg-[#fbfaf9]"
                 >
                   <Phone className="size-4" strokeWidth={1.8} />
-                  {CONTACT.phone}
+                  {t(CONTACT.phone, CONTACT.phoneIntl)}
                 </a>
               </div>
             </div>

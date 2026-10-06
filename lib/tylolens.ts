@@ -14,12 +14,32 @@ export const TL_BRANCHEN = [
 
 export const TL_ZIELE = ["Mehr Anfragen / Leads", "Bessere Google-Rankings", "Mehr Umsatz", "Personal finden", "Marke aufbauen"] as const;
 
+/** English display labels for the English site. The submitted values stay German (canonical) —
+ *  the server validates against TL_BRANCHEN / TL_ZIELE. */
+export const TL_BRANCHEN_EN: Record<(typeof TL_BRANCHEN)[number], string> = {
+  Handwerk: "Trades",
+  "Lokaler Dienstleister": "Local services",
+  "E-Commerce": "E-commerce",
+  "B2B-Dienstleistung": "B2B services",
+  "Finanz & Investment": "Finance & investment",
+  "Gesundheit / Praxis": "Healthcare / practice",
+  Immobilien: "Real estate",
+  Sonstiges: "Other",
+};
+export const TL_ZIELE_EN: Record<(typeof TL_ZIELE)[number], string> = {
+  "Mehr Anfragen / Leads": "More enquiries / leads",
+  "Bessere Google-Rankings": "Better Google rankings",
+  "Mehr Umsatz": "More revenue",
+  "Personal finden": "Find staff",
+  "Marke aufbauen": "Build the brand",
+};
+
 /** Budget is the lead-qualification filter — values stay low / mid / high / top as in the brief. */
 export const TL_BUDGETS = [
-  { value: "low", label: "Unter 1.000 €" },
-  { value: "mid", label: "1.000 – 5.000 €" },
-  { value: "high", label: "5.000 – 15.000 €" },
-  { value: "top", label: "Über 15.000 €" },
+  { value: "low", label: "Unter 1.000 €", labelEn: "Under €1,000" },
+  { value: "mid", label: "1.000 – 5.000 €", labelEn: "€1,000 – 5,000" },
+  { value: "high", label: "5.000 – 15.000 €", labelEn: "€5,000 – 15,000" },
+  { value: "top", label: "Über 15.000 €", labelEn: "Over €15,000" },
 ] as const;
 export type TlBudget = (typeof TL_BUDGETS)[number]["value"];
 
@@ -41,6 +61,8 @@ export type TlPayload = {
   company: string;
   /** ms the modal was open before submit */
   elapsed: number;
+  /** site language the form was sent from — the confirmation email follows it (default "de") */
+  locale?: "de" | "en";
 };
 
 export type TlErrors = Partial<Record<"website" | "branche" | "ziel" | "budget" | "name" | "email", string>>;
@@ -61,16 +83,37 @@ export function normalizeWebsite(raw: string): string | null {
   }
 }
 
-export function validateLens(p: Partial<TlPayload>): TlErrors {
+/** Validation messages per language (German is the default, used by the server). */
+const MSG = {
+  de: {
+    website: "Bitte gib eine gültige Website an, z. B. deine-firma.de.",
+    branche: "Bitte wähle deine Branche.",
+    ziel: "Bitte wähle dein Ziel.",
+    budget: "Bitte wähle dein Budget.",
+    name: "Bitte gib deinen Namen an.",
+    email: "Bitte gib eine gültige E-Mail-Adresse an.",
+  },
+  en: {
+    website: "Please enter a valid website, e.g. your-company.com.",
+    branche: "Please choose your industry.",
+    ziel: "Please choose your goal.",
+    budget: "Please choose your budget.",
+    name: "Please enter your name.",
+    email: "Please enter a valid email address.",
+  },
+} satisfies Record<"de" | "en", Required<TlErrors>>;
+
+export function validateLens(p: Partial<TlPayload>, locale: "de" | "en" = "de"): TlErrors {
+  const m = MSG[locale] ?? MSG.de;
   const e: TlErrors = {};
-  if (!normalizeWebsite(p.website ?? "")) e.website = "Bitte gib eine gültige Website an, z. B. deine-firma.de.";
-  if (!TL_BRANCHEN.includes((p.branche ?? "") as never)) e.branche = "Bitte wähle deine Branche.";
-  if (!TL_ZIELE.includes((p.ziel ?? "") as never)) e.ziel = "Bitte wähle dein Ziel.";
-  if (!TL_BUDGETS.some((b) => b.value === p.budget)) e.budget = "Bitte wähle dein Budget.";
+  if (!normalizeWebsite(p.website ?? "")) e.website = m.website;
+  if (!TL_BRANCHEN.includes((p.branche ?? "") as never)) e.branche = m.branche;
+  if (!TL_ZIELE.includes((p.ziel ?? "") as never)) e.ziel = m.ziel;
+  if (!TL_BUDGETS.some((b) => b.value === p.budget)) e.budget = m.budget;
   const name = (p.name ?? "").trim();
-  if (name.length < 2 || name.length > 100) e.name = "Bitte gib deinen Namen an.";
+  if (name.length < 2 || name.length > 100) e.name = m.name;
   const email = (p.email ?? "").trim();
-  if (!EMAIL_RE.test(email) || email.length > 160) e.email = "Bitte gib eine gültige E-Mail-Adresse an.";
+  if (!EMAIL_RE.test(email) || email.length > 160) e.email = m.email;
   return e;
 }
 

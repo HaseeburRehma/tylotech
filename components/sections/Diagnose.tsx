@@ -12,9 +12,9 @@ import {
 } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useT } from "../i18n/LocaleProvider";
 
-type Case = {
-  idx: string;
+type CaseText = {
   eyebrow: string;
   finding: string;
   title: string;
@@ -22,48 +22,84 @@ type Case = {
   tags: string[];
   from: { v: string; l: string };
   to: { v: string; l: string };
+};
+
+type Case = CaseText & {
+  idx: string;
   icon: LucideIcon;
   tint: string;
   img: string;
 };
 
-const CASES: Case[] = [
+const CASES: (Omit<Case, keyof CaseText> & { de: CaseText; en: CaseText })[] = [
   {
     idx: "01",
-    eyebrow: "Koordination",
-    finding: "Der häufigste Befund im Erstgespräch",
-    title: "Fünf Dienstleister, keiner sieht das Ganze",
-    body: "Die Website-Agentur zeigt auf die Marketing-Agentur, die zeigt auf die IT. Am Ende koordinierst du selbst — und bezahlst dafür auch noch.",
-    tags: ["Website", "Marketing", "IT"],
-    from: { v: "3 Verträge", l: "heute" },
-    to: { v: "1 Ansprechpartner", l: "mit TyloTech" },
+    de: {
+      eyebrow: "Koordination",
+      finding: "Der häufigste Befund im Erstgespräch",
+      title: "Fünf Dienstleister, keiner sieht das Ganze",
+      body: "Die Website-Agentur zeigt auf die Marketing-Agentur, die zeigt auf die IT. Am Ende koordinierst du selbst — und bezahlst dafür auch noch.",
+      tags: ["Website", "Marketing", "IT"],
+      from: { v: "3 Verträge", l: "heute" },
+      to: { v: "1 Ansprechpartner", l: "mit TyloTech" },
+    },
+    en: {
+      eyebrow: "Coordination",
+      finding: "The most common finding in a first call",
+      title: "Five providers, nobody sees the whole",
+      body: "The web agency points at the marketing agency, which points at IT. In the end you coordinate it all yourself — and pay for the privilege.",
+      tags: ["Website", "Marketing", "IT"],
+      from: { v: "3 contracts", l: "today" },
+      to: { v: "1 point of contact", l: "with TyloTech" },
+    },
     icon: Users,
     tint: "from-[#123141] to-[#08202b]",
     img: "/diagnose/01-dienstleister.webp",
   },
   {
     idx: "02",
-    eyebrow: "Sichtbarkeit",
-    finding: "Was wir im Audit am zweithäufigsten sehen",
-    title: "Kampagnen ohne Fundament",
-    body: "Budget fließt in Anzeigen, während Website, Tracking und Angebot nicht zusammenspielen. Die Klicks kommen — aber unten passiert nichts.",
-    tags: ["Ads", "Tracking", "Conversion"],
-    from: { v: "Viele Klicks", l: "wenig Wirkung" },
-    to: { v: "Weniger Streuverlust", l: "mehr Anfragen" },
+    de: {
+      eyebrow: "Sichtbarkeit",
+      finding: "Was wir im Audit am zweithäufigsten sehen",
+      title: "Kampagnen ohne Fundament",
+      body: "Budget fließt in Anzeigen, während Website, Tracking und Angebot nicht zusammenspielen. Die Klicks kommen — aber unten passiert nichts.",
+      tags: ["Ads", "Tracking", "Conversion"],
+      from: { v: "Viele Klicks", l: "wenig Wirkung" },
+      to: { v: "Weniger Streuverlust", l: "mehr Anfragen" },
+    },
+    en: {
+      eyebrow: "Visibility",
+      finding: "The second thing we see most in audits",
+      title: "Campaigns without a foundation",
+      body: "Budget pours into ads while the website, tracking and offer don’t work together. The clicks come in — but nothing happens further down.",
+      tags: ["Ads", "Tracking", "Conversion"],
+      from: { v: "Lots of clicks", l: "little impact" },
+      to: { v: "Less wasted spend", l: "more enquiries" },
+    },
     icon: Megaphone,
     tint: "from-[#14313f] to-[#091f28]",
     img: "/diagnose/02.jpg",
   },
   {
     idx: "03",
-    eyebrow: "Technik",
-    finding: "Der Grund, warum Projekte einschlafen",
-    title: "Systeme, die niemand anfasst",
-    body: "Tools wurden eingeführt, aber nie zu Ende gedacht. Keiner weiß, wie sie laufen — also läuft am Ende wieder alles über E-Mail und Bauchgefühl.",
-
-    tags: ["CRM", "Automatisierung", "Prozesse"],
-    from: { v: "Insellösungen", l: "ungenutzt" },
-    to: { v: "Ein System", l: "das bleibt" },
+    de: {
+      eyebrow: "Technik",
+      finding: "Der Grund, warum Projekte einschlafen",
+      title: "Systeme, die niemand anfasst",
+      body: "Tools wurden eingeführt, aber nie zu Ende gedacht. Keiner weiß, wie sie laufen — also läuft am Ende wieder alles über E-Mail und Bauchgefühl.",
+      tags: ["CRM", "Automatisierung", "Prozesse"],
+      from: { v: "Insellösungen", l: "ungenutzt" },
+      to: { v: "Ein System", l: "das bleibt" },
+    },
+    en: {
+      eyebrow: "Tech",
+      finding: "Why projects quietly stall",
+      title: "Systems nobody touches",
+      body: "Tools were rolled out but never thought through. Nobody knows how they work — so everything ends up running on email and gut feeling again.",
+      tags: ["CRM", "Automation", "Processes"],
+      from: { v: "Isolated tools", l: "unused" },
+      to: { v: "One system", l: "that sticks" },
+    },
     icon: Lock,
     tint: "from-[#122f3c] to-[#081d26]",
     img: "/diagnose/03.jpg",
@@ -120,6 +156,8 @@ function MetaLine({ c }: { c: Case }) {
 export default function Diagnose() {
   const root = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const t = useT();
+  const cases: Case[] = CASES.map(({ de, en, ...base }) => ({ ...base, ...t(de, en) }));
 
   useGSAP(
     () => {
@@ -153,26 +191,26 @@ export default function Diagnose() {
         <div className="dg-head max-w-[900px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
             <AlertCircle className="size-3.5 text-accent" />
-            Der Denkfehler
+            {t("Der Denkfehler", "The misconception")}
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,4.4vw,3.1rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
-            Digitalisierung scheitert{" "}
+            {t("Digitalisierung scheitert", "Digitalisation doesn’t fail")}{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#d8b682]">
-              nicht an der Technik
+              {t("nicht an der Technik", "because of the tech")}
             </span>
             .
           </h2>
           <p className="mt-5 max-w-[820px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-white/60">
-            Sie scheitert daran, dass fünf Dienstleister nebeneinander arbeiten
-            und keiner das Ganze sieht. Einer macht Ads, einer die Website,
-            einer die Software — und niemand trägt das Ergebnis. Wir machen es
-            anders: ein Team, ein Plan, eine Verantwortung.
+            {t(
+              "Sie scheitert daran, dass fünf Dienstleister nebeneinander arbeiten und keiner das Ganze sieht. Einer macht Ads, einer die Website, einer die Software — und niemand trägt das Ergebnis. Wir machen es anders: ein Team, ein Plan, eine Verantwortung.",
+              "It fails because five providers work side by side and nobody sees the whole. One runs the ads, one the website, one the software — and no one owns the result. We do it differently: one team, one plan, one owner.",
+            )}
           </p>
         </div>
 
         {/* ---------- Desktop: horizontal expanding accordion ---------- */}
         <div className="dg-stage mt-12 hidden gap-3 lg:flex lg:h-[440px] min-[1280px]:h-[468px]">
-          {CASES.map((c, i) => {
+          {cases.map((c, i) => {
             const on = active === i;
             const Icon = c.icon;
             return (
@@ -258,7 +296,7 @@ export default function Diagnose() {
 
         {/* ---------- Mobile: vertical stacked accordion ---------- */}
         <div className="dg-stage mt-10 flex flex-col gap-3 lg:hidden">
-          {CASES.map((c, i) => {
+          {cases.map((c, i) => {
             const on = active === i;
             const Icon = c.icon;
             return (

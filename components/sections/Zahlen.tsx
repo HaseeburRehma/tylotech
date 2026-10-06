@@ -10,21 +10,23 @@ import {
 } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { formatNumber, type Locale } from "@/lib/i18n";
+import { useLocale, useT } from "../i18n/LocaleProvider";
 
 const STATS = [
-  { value: 100, decimals: 0, suffix: "+", label: "Projekte umgesetzt" },
-  { value: 5, decimals: 1, suffix: "", label: "Durchschnittsbewertung" },
-  { value: 3, decimals: 0, suffix: "-in-1", label: "Marketing · Software · Vertrieb" },
+  { value: 100, decimals: 0, suffix: "+", label: "Projekte umgesetzt", labelEn: "Projects delivered" },
+  { value: 5, decimals: 1, suffix: "", label: "Durchschnittsbewertung", labelEn: "Average rating" },
+  { value: 3, decimals: 0, suffix: "-in-1", label: "Marketing · Software · Vertrieb", labelEn: "Marketing · Software · Sales" },
 ];
 
-const TAGS: { t: string; icon: LucideIcon }[] = [
-  { t: "Made in Germany", icon: MapPin },
-  { t: "DSGVO-konform", icon: ShieldCheck },
-  { t: "Sitz in Düsseldorf", icon: Building2 },
+const TAGS: { de: string; en: string; icon: LucideIcon }[] = [
+  { de: "Made in Germany", en: "Made in Germany", icon: MapPin },
+  { de: "DSGVO-konform", en: "GDPR-compliant", icon: ShieldCheck },
+  { de: "Sitz in Düsseldorf", en: "Based in Düsseldorf", icon: Building2 },
 ];
 
-function fmt(n: number, decimals: number) {
-  return n.toLocaleString("de-DE", {
+function fmt(locale: Locale, n: number, decimals: number) {
+  return formatNumber(locale, n, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });
@@ -32,6 +34,8 @@ function fmt(n: number, decimals: number) {
 
 export default function Zahlen() {
   const root = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const t = useT();
 
   useGSAP(
     () => {
@@ -75,7 +79,7 @@ export default function Zahlen() {
           ease: "power2.out",
           scrollTrigger: { trigger: ".zahlen-grid", start: "top 78%" , toggleActions: "play none none none" },
           onUpdate: () => {
-            el.textContent = fmt(obj.n, decimals) + suffix;
+            el.textContent = fmt(locale, obj.n, decimals) + suffix;
           },
         });
       });
@@ -99,18 +103,31 @@ export default function Zahlen() {
         <div className="zahlen-head mx-auto max-w-[640px] text-center">
           <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <BarChart3 className="size-3.5 text-accent" />
-            Zahlen, die bleiben
+            {t("Zahlen, die bleiben", "Numbers that hold up")}
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.6vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            Was{" "}
-            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              nachprüfbar
-            </span>{" "}
-            ist.
+            {t(
+              <>
+                Was{" "}
+                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                  nachprüfbar
+                </span>{" "}
+                ist.
+              </>,
+              <>
+                What you can{" "}
+                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                  verify
+                </span>
+                .
+              </>,
+            )}
           </h2>
           <p className="mx-auto mt-5 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            Hier steht nur, was du selbst überprüfen kannst, auf Google, bei
-            unseren Partnern oder in einem Gespräch.
+            {t(
+              "Hier steht nur, was du selbst überprüfen kannst, auf Google, bei unseren Partnern oder in einem Gespräch.",
+              "Only what you can check for yourself — on Google, with our partners or in a conversation.",
+            )}
           </p>
         </div>
 
@@ -121,20 +138,20 @@ export default function Zahlen() {
               className="zahlen-card rounded-[20px] border border-line bg-white px-7 py-8 transition-shadow duration-300 hover:shadow-[0_24px_50px_-30px_rgba(15,14,13,0.28)] sm:px-8 sm:py-9"
             >
               <p className="zahlen-num font-display text-[clamp(2.6rem,4vw,3.25rem)] font-bold leading-none tracking-[-0.03em] text-ink">
-                {fmt(0, s.decimals) + s.suffix}
+                {fmt(locale, 0, s.decimals) + s.suffix}
               </p>
               <p className="mt-4 text-[15px] leading-snug text-[#5c5954]">
-                {s.label}
+                {t(s.label, s.labelEn)}
               </p>
             </div>
           ))}
         </div>
 
         <div className="zahlen-tags mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[14px] text-[#5c5954] sm:mt-10">
-          {TAGS.map(({ t, icon: Icon }) => (
-            <span key={t} className="zahlen-tag flex items-center gap-2">
+          {TAGS.map(({ de, en, icon: Icon }) => (
+            <span key={de} className="zahlen-tag flex items-center gap-2">
               <Icon className="size-[17px] text-accent" strokeWidth={2} />
-              {t}
+              {t(de, en)}
             </span>
           ))}
         </div>

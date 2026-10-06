@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { Star, Quote, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { pick } from "@/lib/i18n";
+import { useLocale, useT } from "../i18n/LocaleProvider";
 
 function Stars({ size = 15 }: { size?: number }) {
   return (
@@ -49,7 +51,7 @@ type Review = { kind: "google"; text: string; meta: string };
 type Summary = { kind: "summary" };
 type Card = Summary | Client | Review;
 
-const CARDS: Card[] = [
+const CARDS_DE: Card[] = [
   { kind: "summary" },
   {
     kind: "client",
@@ -83,35 +85,75 @@ const CARDS: Card[] = [
   },
 ];
 
+/* English site: the (originally German) quotes and review snippets in English, same order */
+const CARDS_EN: Card[] = [
+  { kind: "summary" },
+  {
+    kind: "client",
+    quote: "TyloTech is the exact opposite of Germany’s sluggish service desert.",
+    name: "Enes Seker",
+    firma: "Crusty Slices, Cologne",
+    initials: "ES",
+  },
+  {
+    kind: "google",
+    text: "I’m always very sceptical personally, but I was pleasantly surprised here. He responds to messages and requests promptly.",
+    meta: "verified, 5 out of 5",
+  },
+  {
+    kind: "client",
+    quote:
+      "I recommend TyloTech to any business that needs structure and growth.",
+    name: "Fahrschule Abgefahrn",
+    firma: "Driving school, Düsseldorf",
+    initials: "FA",
+  },
+  {
+    kind: "google",
+    text: "Finally an agency that delivers results instead of excuses. Clear communication, fast execution, everything transparent.",
+    meta: "verified, 5 out of 5",
+  },
+  {
+    kind: "google",
+    text: "Excellent support from day one. You can tell they actually think along with you here, not just send invoices.",
+    meta: "verified, 5 out of 5",
+  },
+];
+
+const CARDS = { de: CARDS_DE, en: CARDS_EN };
+
 const GAP = 24;
 
 function SummaryCard() {
+  const t = useT();
   return (
     <div className="flex h-full flex-col gap-4 p-7">
       <div className="flex items-center gap-2.5">
         <GoogleG size={22} />
         <span className="text-[14px] font-medium text-ink/60">
-          Google-Bewertungen
+          {t("Google-Bewertungen", "Google reviews")}
         </span>
       </div>
       <div className="flex items-center gap-3">
         <span className="font-display text-[48px] font-bold leading-none tracking-[-0.03em] text-ink">
-          5,0
+          {t("5,0", "5.0")}
         </span>
         <span className="flex flex-col gap-1">
           <Stars />
-          <span className="text-[12px] text-ink/45">aus 31 Bewertungen</span>
+          <span className="text-[12px] text-ink/45">{t("aus 31 Bewertungen", "from 31 reviews")}</span>
         </span>
       </div>
       <p className="text-[13.5px] leading-[1.55] text-ink/55">
-        Wir bitten nach jedem abgeschlossenen Projekt um eine ehrliche Bewertung
-        — auch dann, wenn nicht alles glattgelaufen ist.
+        {t(
+          "Wir bitten nach jedem abgeschlossenen Projekt um eine ehrliche Bewertung — auch dann, wenn nicht alles glattgelaufen ist.",
+          "We ask for an honest review after every completed project — even when not everything went smoothly.",
+        )}
       </p>
       <a
         href="#"
         className="group mt-auto inline-flex h-11 w-fit items-center gap-2 rounded-full border border-line bg-white px-5 text-[14px] font-medium text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
       >
-        Alle Bewertungen ansehen
+        {t("Alle Bewertungen ansehen", "See all reviews")}
         <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
       </a>
     </div>
@@ -139,6 +181,7 @@ function ClientCard({ c }: { c: Client }) {
 }
 
 function ReviewCard({ r }: { r: Review }) {
+  const t = useT();
   return (
     <div className="flex h-full flex-col gap-3.5 p-7">
       <div className="flex items-center justify-between">
@@ -152,7 +195,7 @@ function ReviewCard({ r }: { r: Review }) {
         </span>
         <span>
           <span className="block text-[14px] font-semibold text-ink">
-            Google-Rezension
+            {t("Google-Rezension", "Google review")}
           </span>
           <span className="block text-[13px] text-ink/50">{r.meta}</span>
         </span>
@@ -163,6 +206,9 @@ function ReviewCard({ r }: { r: Review }) {
 
 export default function Stimmen() {
   const root = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const t = useT();
+  const cards = pick(locale, CARDS);
   const scroller = useRef<HTMLDivElement>(null);
   const paused = useRef(false);
 
@@ -227,18 +273,20 @@ export default function Stimmen() {
         <div className="stimmen-head max-w-[720px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <Star className="size-3.5 fill-accent text-accent" strokeWidth={0} />
-            Was Kunden sagen
+            {t("Was Kunden sagen", "What clients say")}
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            Was Kunden{" "}
+            {t("Was Kunden", "What clients")}{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              sagen
+              {t("sagen", "say")}
             </span>
             .
           </h2>
           <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            Nachlesbar bei Google, wir verlinken die Bewertungen direkt, statt
-            sie hier nur abzuschreiben.
+            {t(
+              "Nachlesbar bei Google, wir verlinken die Bewertungen direkt, statt sie hier nur abzuschreiben.",
+              "All on Google for you to read — we link straight to the reviews instead of just copying them here. Quotes translated from German.",
+            )}
           </p>
         </div>
 
@@ -252,7 +300,7 @@ export default function Stimmen() {
           }}
           className="stimmen-track no-scrollbar -mx-6 mt-10 flex snap-x snap-mandatory items-stretch gap-6 overflow-x-auto px-6 pb-2 sm:mt-12 md:mx-0 md:px-0"
         >
-          {CARDS.map((card, i) => (
+          {cards.map((card, i) => (
             <article
               key={i}
               className="stimmen-card w-[85%] shrink-0 snap-start overflow-hidden rounded-[20px] border border-line bg-white shadow-[0_18px_40px_-28px_rgba(15,14,13,0.22)] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"

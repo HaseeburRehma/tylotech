@@ -4,25 +4,39 @@ import { useRef, useState } from "react";
 import { Monitor } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { useT } from "../i18n/LocaleProvider";
 
-type Item = { t: string; b: string; img: string; tint: string; alt?: string; pos?: string };
+type Text = { t: string; b: string; alt?: string };
+type Item = Text & { en: Text; img: string; tint: string; pos?: string };
 
 const ITEMS: Item[] = [
   {
     t: "Prozesse, die ohne dich laufen",
     b: "Anfragen, Angebote, Nachfassen — einmal sauber aufgesetzt, läuft es, ohne dass du hinterherräumen musst.",
+    en: {
+      t: "Processes that run without you",
+      b: "Enquiries, quotes, follow-ups — set up properly once, it all runs without you having to tidy up after it.",
+    },
     img: "/wechsel/01.jpg",
     tint: "from-[#e8ddcb] to-[#d6c3a3]",
   },
   {
     t: "Planbare Anfragen über eigene Kanäle",
     b: "Kein Empfehlungsglück, keine Kaltakquise. Sondern ein System, das dir Woche für Woche qualifizierte Anfragen bringt.",
+    en: {
+      t: "Predictable enquiries through your own channels",
+      b: "No hoping for referrals, no cold calling. Just a system that brings you qualified enquiries week after week.",
+    },
     img: "/wechsel/02.jpg",
     tint: "from-[#dde3e6] to-[#c4cfd4]",
   },
   {
     t: "Alles messbar, alles sichtbar",
     b: "Vorher: kein System, viel Bauchgefühl. Nachher: ein Dashboard, das dir zeigt, was läuft, was nicht läuft und was der nächste Hebel ist.",
+    en: {
+      t: "Everything measurable, everything visible",
+      b: "Before: no system, lots of gut feeling. After: a dashboard that shows you what’s working, what isn’t and what the next lever is.",
+    },
     img: "/wechsel/03-messbar.webp",
     tint: "from-[#e6dcc7] to-[#cdb78a]",
   },
@@ -31,6 +45,11 @@ const ITEMS: Item[] = [
     b: "Keine Agentur, die abrechnet und weiterleitet. Sondern ein Team, das sich am Ergebnis messen lässt — und bei echtem Potenzial sogar mit einsteigt.",
     img: "/wechsel/04-ilias.jpg",
     alt: "Ilias El Aradi, Gründer von TyloTech, vor dem Google-Campus in Mountain View",
+    en: {
+      t: "A partner who owns the result",
+      b: "Not an agency that bills and passes things on. A team that’s measured by results — and where there’s real potential, even takes a stake.",
+      alt: "Ilias El Aradi, founder of TyloTech, outside the Google campus in Mountain View",
+    },
     pos: "50% 30%",
     tint: "from-[#dfe1dc] to-[#c6cabf]",
   },
@@ -44,6 +63,7 @@ export default function Wechsel() {
   const [active, setActive] = useState(0);
   const lastIdx = useRef(0);
   const lockUntil = useRef(0);
+  const t = useT();
 
   const setFromProgress = (p: number) => {
     if (performance.now() < lockUntil.current) return;
@@ -110,12 +130,12 @@ export default function Wechsel() {
           <div className="wx-head max-w-[760px]">
             <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)] mb-4">
               <span className="size-[7px] rounded-[2px] bg-accent" />
-              Wo klemmt es wirklich?
+              {t("Wo klemmt es wirklich?", "Where’s the real bottleneck?")}
             </p>
             <h2 className="font-display text-[clamp(1.9rem,4.2vw,3rem)] font-bold leading-[1.08] tracking-[-0.03em] text-ink">
-              Zwei Zustände.{" "}
+              {t("Zwei Zustände.", "Two realities.")}{" "}
               <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-                Dazwischen liegt die Arbeit.
+                {t("Dazwischen liegt die Arbeit.", "The work lies in between.")}
               </span>
             </h2>
           </div>
@@ -152,7 +172,7 @@ export default function Wechsel() {
                               on ? "font-semibold text-ink" : "text-ink/65"
                             }`}
                           >
-                            {it.t}
+                            {t(it.t, it.en.t)}
                           </span>
                           <span
                             className={`grid transition-[grid-template-rows,opacity,margin] duration-[400ms] ease-out ${
@@ -163,7 +183,7 @@ export default function Wechsel() {
                           >
                             <span className="overflow-hidden">
                               <span className="block max-w-[460px] text-[13.5px] leading-[1.55] text-ink/55">
-                                {it.b}
+                                {t(it.b, it.en.b)}
                               </span>
                             </span>
                           </span>
@@ -216,7 +236,7 @@ export default function Wechsel() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={it.img}
-                        alt={it.alt ?? ""}
+                        alt={t(it.alt, it.en.alt) ?? ""}
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                         }}

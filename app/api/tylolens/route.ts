@@ -42,6 +42,9 @@ export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (rateLimited(ip)) return Response.json({ ok: false, reason: "rate-limited" }, { status: 429 });
 
+  // language of the page the modal was opened on — only the lead's confirmation changes
+  const locale = (body as { locale?: unknown }).locale === "en" ? "en" : "de";
+
   const p = {
     website: clip(body.website, 200),
     branche: clip(body.branche, 60),
@@ -70,7 +73,7 @@ export async function POST(request: Request) {
 
   if (transport()) {
     try {
-      const mail = lensTeamNotification(lead, origin);
+      const mail = lensTeamNotification(lead, origin, locale);
       await sendMail({ to: process.env.TYLOLENS_TO || process.env.CONTACT_TO || CONTACT.email, replyTo: lead.email, ...mail });
       delivered = true;
     } catch (err) {
@@ -102,7 +105,7 @@ export async function POST(request: Request) {
   // confirmation to the lead — best effort, never fails the request
   if (transport() && process.env.TYLOLENS_AUTOREPLY !== "false") {
     try {
-      const mail = lensConfirmation(lead, origin);
+      const mail = lensConfirmation(lead, origin, locale);
       await sendMail({ to: lead.email, replyTo: process.env.TYLOLENS_TO || process.env.CONTACT_TO || CONTACT.email, ...mail });
     } catch (err) {
       console.error("tylolens: confirmation failed", err instanceof MailError ? err.code : err);

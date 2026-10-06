@@ -5,11 +5,13 @@ import { Star } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import type { Branche } from "@/lib/branchen";
+import { useT } from "../i18n/LocaleProvider";
 import { Accent, BrandLogo, Eyebrow, GlassButton, GoldButton } from "./ui";
 
 export default function BrancheHero({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
   const h = b.hero;
+  const t = useT();
 
   useGSAP(
     () => {
@@ -39,11 +41,11 @@ export default function BrancheHero({ b }: { b: Branche }) {
           <p className="max-w-[716px] text-[clamp(17px,1.5vw,20px)] leading-[1.5] tracking-[-0.01em] text-[#5c5954]">{h.sub}</p>
           <div className="flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row">
             <GoldButton href="#kontakt">{h.cta}</GoldButton>
-            <GlassButton href="#case">Ergebnisse ansehen</GlassButton>
+            <GlassButton href="#case">{t("Ergebnisse ansehen", "See the results")}</GlassButton>
           </div>
           <div className="h-px w-full max-w-[716px] bg-[#eeedea]" />
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[14px] leading-[22px] tracking-[-0.1px] text-[#7d7973]">
-            <span>100+ Projekte</span>
+            <span>{t("100+ Projekte", "100+ projects")}</span>
             <span className="h-4 w-px bg-[#e2e0dc]" />
             <span className="flex items-center gap-3">
               <span className="flex gap-[3px]">
@@ -51,11 +53,11 @@ export default function BrancheHero({ b }: { b: Branche }) {
                   <Star key={i} className="size-[17px] fill-[#d1aa71] text-[#d1aa71]" strokeWidth={0} />
                 ))}
               </span>
-              <span className="font-display text-[16px] font-medium tracking-[-0.02em] text-[#1a1917]">5,0</span>
-              <span>Bewertung</span>
+              <span className="font-display text-[16px] font-medium tracking-[-0.02em] text-[#1a1917]">{t("5,0", "5.0")}</span>
+              <span>{t("Bewertung", "rating")}</span>
             </span>
             <span className="hidden h-4 w-px bg-[#e2e0dc] sm:block" />
-            <span>vom Handwerk bis zum Mittelstand</span>
+            <span>{t("vom Handwerk bis zum Mittelstand", "from trades to mid-sized companies")}</span>
           </div>
         </div>
 

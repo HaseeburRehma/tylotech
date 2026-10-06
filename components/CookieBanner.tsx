@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useLocalePath, useT } from "./i18n/LocaleProvider";
 
 const STORAGE_KEY = "tt-cookie-consent";
 
@@ -47,6 +48,8 @@ function Toggle({
 }
 
 export default function CookieBanner() {
+  const t = useT();
+  const lp = useLocalePath();
   const [visible, setVisible] = useState(false);
   const [functional, setFunctional] = useState(false);
   const [marketing, setMarketing] = useState(false);
@@ -81,27 +84,28 @@ export default function CookieBanner() {
   return (
     <div
       role="dialog"
-      aria-label="Cookie-Einstellungen"
+      aria-label={t("Cookie-Einstellungen", "Cookie settings")}
       className="fixed inset-x-4 bottom-24 z-[70] sm:inset-x-auto sm:bottom-[96px] sm:right-6 sm:w-[400px]"
     >
       <div className="rounded-[18px] border border-line bg-white p-6 shadow-[0_24px_60px_-20px_rgba(15,14,13,0.28)]">
         <p className="text-[17px] font-semibold tracking-[-0.01em] text-ink">
-          Wir verwenden Cookies
+          {t("Wir verwenden Cookies", "We use cookies")}
         </p>
         <p className="mt-2 text-[13.5px] leading-[20px] text-[#5c5954]">
-          Wir verwenden Cookies, um die Seite zu betreiben, zu verstehen, wie sie
-          genutzt wird, und sie zu verbessern. Sie entscheiden, was an ist. Mehr
-          in unserer{" "}
-          <Link href="/datenschutz" className="text-ink underline underline-offset-2 hover:text-accent">
-            Datenschutzerklärung
+          {t(
+            "Wir verwenden Cookies, um die Seite zu betreiben, zu verstehen, wie sie genutzt wird, und sie zu verbessern. Sie entscheiden, was an ist. Mehr in unserer",
+            "We use cookies to run this site, understand how it’s used and improve it. You decide what’s switched on. More in our",
+          )}{" "}
+          <Link href={lp("/datenschutz")} className="text-ink underline underline-offset-2 hover:text-accent">
+            {t("Datenschutzerklärung", "privacy policy")}
           </Link>
           .
         </p>
 
         <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
-          <Toggle on disabled label="Notwendig" />
-          <Toggle on={functional} onChange={setFunctional} label="Funktional" />
-          <Toggle on={marketing} onChange={setMarketing} label="Marketing" />
+          <Toggle on disabled label={t("Notwendig", "Necessary")} />
+          <Toggle on={functional} onChange={setFunctional} label={t("Funktional", "Functional")} />
+          <Toggle on={marketing} onChange={setMarketing} label={t("Marketing", "Marketing")} />
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-2.5">
@@ -110,21 +114,21 @@ export default function CookieBanner() {
             onClick={() => persist({ necessary: true, functional: true, marketing: true })}
             className="h-10 rounded-[10px] bg-[#002e3d] px-4 text-[14px] font-medium text-inverse transition-colors hover:bg-[#013a4d]"
           >
-            Alle erlauben
+            {t("Alle erlauben", "Allow all")}
           </button>
           <button
             type="button"
             onClick={() => persist({ necessary: true, functional, marketing })}
             className="h-10 rounded-[10px] border border-[#cbc8c2] px-4 text-[14px] font-medium text-ink transition-colors hover:bg-page"
           >
-            Auswahl erlauben
+            {t("Auswahl erlauben", "Allow selection")}
           </button>
           <button
             type="button"
             onClick={() => persist({ necessary: true, functional: false, marketing: false })}
             className="h-10 rounded-[10px] border border-[#cbc8c2] px-4 text-[14px] font-medium text-ink transition-colors hover:bg-page"
           >
-            Ablehnen
+            {t("Ablehnen", "Reject")}
           </button>
         </div>
       </div>

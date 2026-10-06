@@ -8,18 +8,36 @@ import Container from "./ui/Container";
 import PartnerLogo from "./PartnerLogo";
 import { PARTNERS } from "@/lib/partners";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useLocalePath, useT } from "./i18n/LocaleProvider";
+import LanguageSwitch from "./i18n/LanguageSwitch";
 
 const CONTACT = [
-  { icon: MapPin, text: "Behrenstraße 4, 40233 Düsseldorf" },
+  { icon: MapPin, text: "Behrenstraße 4, 40233 Düsseldorf", en: "Behrenstraße 4, 40233 Düsseldorf, Germany" },
   { icon: Mail, text: "info@tylotech.de", href: "mailto:info@tylotech.de" },
-  { icon: Phone, text: "0211 15847097", href: "tel:+4921115847097" },
+  { icon: Phone, text: "0211 15847097", en: "+49 211 15847097", href: "tel:+4921115847097" },
 ];
 
 const TRUST = [
   { icon: MapPin, text: "Made in Germany" },
-  { icon: ShieldCheck, text: "DSGVO-konform" },
-  { icon: Server, text: "Hosting in Deutschland" },
+  { icon: ShieldCheck, text: "DSGVO-konform", en: "GDPR-compliant" },
+  { icon: Server, text: "Hosting in Deutschland", en: "Hosted in Germany" },
 ];
+
+/** English labels for the link columns (the German label stays the key). */
+const LABEL_EN: Record<string, string> = {
+  Navigation: "Navigation",
+  Mehr: "More",
+  Konzept: "Concept",
+  Leistungen: "Services",
+  Ergebnisse: "Results",
+  "Über uns": "About us",
+  Kontakt: "Contact",
+  "TyloTech HQ Login": "TyloTech HQ Login",
+  Impressum: "Imprint",
+  Datenschutz: "Privacy policy",
+  "Cookie-Einstellungen": "Cookie settings",
+  Karriere: "Careers",
+};
 
 const NAV = ["Konzept", "Leistungen", "Ergebnisse", "Über uns", "Kontakt"];
 const MEHR = [
@@ -87,6 +105,9 @@ function PartnerTile({ p }: { p: (typeof PARTNERS)[number] }) {
 
 export default function Footer() {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
+  const lp = useLocalePath();
+  const label = (de: string) => t(de, LABEL_EN[de] ?? de);
 
   useGSAP(
     () => {
@@ -114,30 +135,30 @@ export default function Footer() {
         {/* Figma "Footer Oben": Marke 360 · Haltung 290 · Spalten */}
         <div className="grid grid-cols-1 gap-10 sm:gap-12 md:grid-cols-2 lg:flex lg:gap-16">
           <div className="footer-reveal flex flex-col items-start gap-[26px] lg:w-[360px] lg:shrink-0">
-            <Link href="/" className="inline-flex" aria-label="TyloTech Startseite">
+            <Link href={lp("/")} className="inline-flex" aria-label={t("TyloTech Startseite", "TyloTech home")}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/tylotech-logo-dark.svg" alt="TyloTech" width={264} height={67} className="h-12 w-auto sm:h-[56px] lg:h-[66.7px]" />
             </Link>
-            <p className="font-display text-[20px] font-medium leading-7 tracking-[-0.4px] text-white/[0.92]">Wir bauen. Du wächst.</p>
+            <p className="font-display text-[20px] font-medium leading-7 tracking-[-0.4px] text-white/[0.92]">{t("Wir bauen. Du wächst.", "We build. You grow.")}</p>
             <ul className="flex flex-col gap-[9px]">
               {CONTACT.map((c) => (
                 <li key={c.text} className="flex items-center gap-2.5 text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.62]">
                   <c.icon className="size-[15px] shrink-0 text-[#d8b682]" strokeWidth={1.7} />
                   {c.href ? (
                     <a href={c.href} className="transition-colors hover:text-white">
-                      {c.text}
+                      {t(c.text, c.en ?? c.text)}
                     </a>
                   ) : (
-                    <span>{c.text}</span>
+                    <span>{t(c.text, c.en ?? c.text)}</span>
                   )}
                 </li>
               ))}
             </ul>
             <div className="flex flex-wrap gap-x-4 gap-y-2.5">
-              {TRUST.map((t) => (
-                <span key={t.text} className="flex items-center gap-[7px] whitespace-nowrap text-[13px] leading-5 tracking-[-0.05px] text-white/50">
-                  <t.icon className="size-3.5 text-[#d8b682]" strokeWidth={1.8} />
-                  {t.text}
+              {TRUST.map((tr_) => (
+                <span key={tr_.text} className="flex items-center gap-[7px] whitespace-nowrap text-[13px] leading-5 tracking-[-0.05px] text-white/50">
+                  <tr_.icon className="size-3.5 text-[#d8b682]" strokeWidth={1.8} />
+                  {t(tr_.text, tr_.en ?? tr_.text)}
                 </span>
               ))}
             </div>
@@ -145,14 +166,14 @@ export default function Footer() {
 
           <div className="footer-reveal flex flex-col items-start gap-7 lg:w-[290px] lg:shrink-0">
             <Quote className="size-[26px] fill-[#d8b682] text-[#d8b682]" strokeWidth={0} />
-            <p className="font-[family-name:var(--font-instrument)] text-[23px] italic leading-8 tracking-[-0.3px] text-white/90">„Building unique brands with unique people.“</p>
+            <p className="font-[family-name:var(--font-instrument)] text-[23px] italic leading-8 tracking-[-0.3px] text-white/90">{t("„Building unique brands with unique people.“", "“Building unique brands with unique people.”")}</p>
             <div className="flex flex-col gap-3.5">
               <div className="flex gap-2">
                 {FOOTER_PARTNERS.map((p) => (
                   <PartnerTile key={p.name} p={p} />
                 ))}
               </div>
-              <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.62]">Über 100 Projekte umgesetzt</p>
+              <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.62]">{t("Über 100 Projekte umgesetzt", "Over 100 projects delivered")}</p>
             </div>
           </div>
 
@@ -162,15 +183,15 @@ export default function Footer() {
               { title: "Mehr", items: MEHR.map((l) => ({ l, href: LEGAL[l] ?? "#" })) },
             ].map((col) => (
               <div key={col.title} className="flex flex-col gap-3.5">
-                <p className="font-[family-name:var(--font-instrument)] text-[19px] italic leading-6 text-[#d8b681]">{col.title}</p>
+                <p className="font-[family-name:var(--font-instrument)] text-[19px] italic leading-6 text-[#d8b681]">{label(col.title)}</p>
                 {col.items.map(({ l, href }) => (
                   <Link
                     key={l}
-                    href={href}
+                    href={lp(href)}
                     {...(href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
                     className="w-fit text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.66] transition-colors hover:text-white"
                   >
-                    {l}
+                    {label(l)}
                   </Link>
                 ))}
               </div>
@@ -189,6 +210,9 @@ export default function Footer() {
             ))}
           </div>
           <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.56]">© 2026 TyloTech. Building unique brands with unique people.</p>
+          <div className="sm:ml-auto">
+            <LanguageSwitch dark />
+          </div>
         </div>
       </Container>
     </footer>

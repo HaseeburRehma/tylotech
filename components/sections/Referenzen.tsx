@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useLocale, useT } from "../i18n/LocaleProvider";
 
 type Bullet = { icon: LucideIcon; label: string; desc: string };
 
@@ -104,17 +105,91 @@ const PROJECTS: Project[] = [
   },
 ];
 
+type ProjectText = {
+  lead: string;
+  accent: string;
+  result?: string;
+  /** same order as the German bullets (icons come from there) */
+  bullets: { label: string; desc: string }[];
+};
+
+/** English copy per client; merged over PROJECTS on the English site. */
+const PROJECTS_EN: Record<string, ProjectText> = {
+  "Priya's Cleaning Service": {
+    lead: "A cleaning company that",
+    accent: "runs on one piece of software.",
+    bullets: [
+      { label: "Scheduling at a glance", desc: "clients, sites and shifts in one dashboard." },
+      { label: "Invoices in the same system", desc: "open items and client accounts without a second list." },
+      { label: "Home help with proof", desc: "service records and care grades for billing the health insurers." },
+    ],
+  },
+  "Fahrschule Abgefahrn": {
+    lead: "The driving school all of Düsseldorf",
+    accent: "sees first.",
+    result: "#1 on Google — SEO & AI search. Plus a social media presence that reaches the whole city.",
+    bullets: [
+      { label: "No. 1 where it counts", desc: "Right at the top for “Fahrschule Düsseldorf” — in Google and in AI search. Whoever searches finds them first." },
+      { label: "Social media muscle", desc: "A presence that looks less like a driving school and more like a brand — with reach no competitor can match." },
+      { label: "From profile to contract in one flow", desc: "Sign-up without detours, from the first click to the signature." },
+    ],
+  },
+  "Rohr Cleaner": {
+    lead: "5 enquiries a day.",
+    accent: "Zero euros on ads.",
+    result: "#1 on Google & in AI search — ~5 enquiries every day, without any ad budget.",
+    bullets: [
+      { label: "Found where the job begins", desc: "No. 1 on Google and in AI search — right at the top, without paying for every click." },
+      { label: "94,034 impressions in 90 days", desc: "Visibility that brings in customers around the clock." },
+      { label: "5 enquiries a day, €0 ad budget", desc: "Predictable jobs from visibility alone — the difference between hoping and knowing." },
+    ],
+  },
+  "Light of Hope": {
+    lead: "A sensitive subject —",
+    accent: "and a thousand people reached.",
+    result: "1,000+ leads generated. Now 5 new enquiries every day through performance marketing.",
+    bullets: [
+      { label: "Over 1,000 people reached", desc: "Enquiries from people who were looking for help — and found it." },
+      { label: "5 enquiries a day through performance marketing", desc: "Predictable reach on a subject where trust is everything." },
+      { label: "A tone without miracle promises", desc: "Warm, clear, on equal terms — no marketing noise where sensitivity matters." },
+    ],
+  },
+  "Nouh-Wehres": {
+    lead: "A master craftsman’s business turned into",
+    accent: "an enquiry machine.",
+    result: "3–5 qualified enquiries a day — predictable, every single day.",
+    bullets: [
+      { label: "One website for every trade", desc: "Heating, bathrooms, ventilation, solar — every service with its own page that brings in enquiries." },
+      { label: "New jobs in the inbox every day", desc: "3 to 5 enquiries a day — instead of hoping for referrals." },
+      { label: "Campaigns that lead to the business", desc: "No clicks for clicks’ sake — direct enquiries from people who want to buy." },
+    ],
+  },
+};
+
+function localize(p: Project): Project {
+  const en = PROJECTS_EN[p.client];
+  if (!en) return p;
+  return {
+    ...p,
+    lead: en.lead,
+    accent: en.accent,
+    result: en.result,
+    bullets: p.bullets.map((b, i) => ({ ...b, ...en.bullets[i] })),
+  };
+}
+
 // Figma "Elevation XL" (three stacked drop shadows in petrol).
 const CARD_SHADOW =
   "0 12px 32px rgba(8,34,44,0.10), 0 40px 60px rgba(8,34,44,0.06), 0 80px 90px rgba(8,34,44,0.04)";
 
 function BentoTile({ src, wide, client, n }: { src: Tile; wide: boolean; client: string; n: number }) {
+  const t = useT();
   return (
     <div className="relative h-full overflow-hidden rounded-[12px] border border-[#eeedea] bg-[#eeedea] lg:rounded-[16px]">
       {src ? (
         <Image
           src={src}
-          alt={`${client}, Einblick ${n}`}
+          alt={t(`${client}, Einblick ${n}`, `${client}, snapshot ${n}`)}
           fill
           sizes={wide ? "(min-width: 1280px) 400px, (min-width: 1024px) 34vw, 55vw" : "(min-width: 1280px) 268px, (min-width: 1024px) 23vw, 37vw"}
           className="object-cover"
@@ -163,6 +238,9 @@ const OFFSETS = [0, 10, -8, 6, -4];
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const t = useT();
+  const projects = locale === "en" ? PROJECTS.map(localize) : PROJECTS;
 
   // Below lg the cards stack with CSS sticky. A card taller than the space
   // under the nav sticks later (negative offset), so its bottom is seen
@@ -288,17 +366,20 @@ export default function Referenzen() {
         <div className="ref-head max-w-[720px] lg:pt-24">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <FolderOpen className="size-3.5 text-accent" />
-            Ausgewählte Projekte
+            {t("Ausgewählte Projekte", "Selected projects")}
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            Arbeiten, die{" "}
+            {t("Arbeiten, die", "Work that")}{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              weiterlaufen
+              {t("weiterlaufen", "keeps running")}
             </span>
-            , wenn wir nicht mehr im Raum sind.
+            {t(", wenn wir nicht mehr im Raum sind.", " long after we’ve left the room.")}
           </h2>
           <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            Fünf Projekte aus der Zusammenarbeit mit Unternehmen, die du im Zweifel selbst anrufen kannst.
+            {t(
+              "Fünf Projekte aus der Zusammenarbeit mit Unternehmen, die du im Zweifel selbst anrufen kannst.",
+              "Five projects with businesses you can simply call yourself if you have any doubts.",
+            )}
           </p>
         </div>
       </Container>
@@ -309,7 +390,7 @@ export default function Referenzen() {
         <div className="lg:flex lg:h-[100svh] lg:items-center lg:justify-center">
           <Container className="w-full">
             <div className="relative mx-auto flex max-w-[1200px] flex-col gap-5 lg:block lg:h-[min(510px,84vh)]">
-              {PROJECTS.map((p, i) => (
+              {projects.map((p, i) => (
                 <article
                   key={p.client}
                   aria-label={p.client}
@@ -329,7 +410,7 @@ export default function Referenzen() {
                     </h3>
                     {p.result && (
                       <p className="ref-result rounded-[12px] border border-[#efe2cb] bg-[#fbf6ee] px-3.5 py-2.5 text-[13px] font-medium leading-[1.45] text-[#1a1917] lg:text-[14px]">
-                        <span className="mb-0.5 block font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#94713f]">Das Ergebnis</span>
+                        <span className="mb-0.5 block font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#94713f]">{t("Das Ergebnis", "The result")}</span>
                         {p.result}
                       </p>
                     )}

@@ -5,8 +5,9 @@ import Link from "next/link";
 import { Plus, Minus, HelpCircle, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 
-const ITEMS = [
+const ITEMS_DE = [
   {
     q: "Seid ihr eine Agentur?",
     a: "Nein. Wir sind eine Unternehmensberatung, die baut — Marketing, Software und Vertrieb aus einer Hand, mit voller Verantwortung fürs Ergebnis.",
@@ -29,8 +30,35 @@ const ITEMS = [
   },
 ];
 
+const ITEMS_EN = [
+  {
+    q: "Are you an agency?",
+    a: "No. We’re a consultancy that builds — marketing, software and sales from a single source, with full responsibility for the result.",
+  },
+  {
+    q: "What does “shared deals” mean?",
+    a: "On the right projects, we don’t just work for a fee — we take a share in the success. We buy in when we believe in the potential, and we share the risk.",
+  },
+  {
+    q: "Who is this worth it for?",
+    a: "For businesses with an offer that works, that want to grow but have no system for it. Size is secondary — what counts is the willingness to pull your weight.",
+  },
+  {
+    q: "What does working together cost?",
+    a: "That depends on the scope, and we give you the number in the intro call, not only in the proposal. Ongoing support runs on monthly packages, projects on fixed prices — no timesheets with a surprise at the end of the month.",
+  },
+  {
+    q: "How quickly will I see results?",
+    a: "Paid campaigns deliver reliable data after two to three weeks; organic growth takes longer. We set milestones so you always know where you stand.",
+  },
+];
+
 /** `tone="branche"` follows the industry-page Figma frames (subtle surface, Accordion Item styling). */
-export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: string; a: string }[]; tone?: "home" | "branche" }) {
+export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: string; a: string }[]; tone?: "home" | "branche" }) {
+  const locale = useLocale();
+  const t = useT();
+  const lp = useLocalePath();
+  const items = itemsProp ?? (locale === "en" ? ITEMS_EN : ITEMS_DE);
   const br = tone === "branche";
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(0);
@@ -67,32 +95,34 @@ export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: str
         <div className="faq-left">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <HelpCircle className="size-3.5 text-accent" />
-            Häufige Fragen
+            {t("Häufige Fragen", "Common questions")}
           </p>
           <h2 className="mt-5 font-display text-[clamp(1.9rem,3.6vw,2.6rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            Fragen, die uns{" "}
+            {t("Fragen, die uns", "Questions")}{" "}
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
-              fast jeder stellt.
+              {t("fast jeder stellt.", "almost everyone asks.")}
             </span>
           </h2>
 
           <div className="mt-8 rounded-[18px] border border-line bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,14,13,0.2)]">
             <p className="text-[16px] font-semibold text-ink">
-              Deine Frage steht nicht dabei?
+              {t("Deine Frage steht nicht dabei?", "Your question isn’t here?")}
             </p>
             <p className="mt-2 text-[14px] leading-[1.6] text-[#5c5954]">
-              Ruf einfach an:{" "}
+              {t("Ruf einfach an:", "Just give us a call:")}{" "}
               <a href="tel:+4921115847097" className="whitespace-nowrap font-medium text-ink underline-offset-2 hover:underline">
-                0211 15847097
+                {t("0211 15847097", "+49 211 15847097")}
               </a>
-              . Du sprichst direkt mit jemandem, der
-              antworten kann.
+              {t(
+                ". Du sprichst direkt mit jemandem, der antworten kann.",
+                ". You’ll speak directly to someone who can actually answer.",
+              )}
             </p>
             <Link
-              href="/kontakt"
+              href={lp("/kontakt")}
               className="group mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-5 text-[14px] font-medium text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
             >
-              Erstgespräch sichern
+              {t("Erstgespräch sichern", "Book your intro call")}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>

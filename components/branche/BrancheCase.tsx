@@ -7,6 +7,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import type { Branche } from "@/lib/branchen";
 import { Accent, Eyebrow } from "./ui";
+import { useT } from "../i18n/LocaleProvider";
 
 /* Figma shows dashed "PLATZHALTER" notes where numbers will go once a case is
  * live (in-card note + "next case" teaser below). Shown as designed; set to
@@ -21,6 +22,7 @@ const dashed = (color: string, r: number) => ({
 export default function BrancheCase({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
   const c = b.case;
+  const t = useT();
 
   useGSAP(
     () => {
@@ -40,7 +42,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
         <div className="bhc-card flex flex-col items-center gap-10 overflow-hidden rounded-[28px] border border-[#eeedea] bg-white p-6 shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05),0_51px_49px_rgba(8,34,44,0.03)] sm:rounded-[32px] sm:p-10 lg:flex-row lg:gap-16 lg:p-16">
           <div className="bhc-content flex w-full min-w-0 flex-1 flex-col items-start gap-6">
             <div className="flex items-center gap-4">
-              <Eyebrow icon="award">Case / Beweis</Eyebrow>
+              <Eyebrow icon="award">{t("Case / Beweis", "Case / Proof")}</Eyebrow>
               {c.logo === "rohrcleaner" && (
                 <span
                   aria-label="Rohr Cleaner"
@@ -50,14 +52,14 @@ export default function BrancheCase({ b }: { b: Branche }) {
                 />
               )}
             </div>
-            <h2 className="font-display text-[clamp(1.9rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1a1917]">
+            <h2 className="hyphens-auto break-words font-display text-[clamp(1.75rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1a1917]">
               <Accent text={c.title} />
             </h2>
             {c.text && <p className="text-[clamp(16px,1.4vw,18px)] leading-[1.6] tracking-[-0.01em] text-[#5c5954]">{c.text}</p>}
 
             {c.before && (
               <div className="flex w-full flex-col gap-3.5">
-                <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">Ausgangssituation</p>
+                <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">{t("Ausgangssituation", "Starting point")}</p>
                 <ul className="flex flex-col gap-3">
                   {c.before.map((t) => (
                     <li key={t} className="flex items-start gap-3 text-[17px] leading-[28px] tracking-[-0.01em] text-[#5c5954] sm:text-[18px]">
@@ -71,7 +73,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
             {c.before && c.after && <div className="h-px w-full bg-[#e2e0dc]" />}
             {c.after && (
               <div className="flex w-full flex-col gap-3.5">
-                <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#94713f]">Ergebnis mit TyloTech</p>
+                <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#94713f]">{t("Ergebnis mit TyloTech", "Results with TyloTech")}</p>
                 <ul className="flex flex-col gap-3">
                   {c.after.map((t) => (
                     <li key={t} className="flex items-start gap-3 text-[17px] leading-[28px] tracking-[-0.01em] text-[#1a1917] sm:text-[18px]">
@@ -84,7 +86,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
             )}
             {SHOW_PLACEHOLDERS && (
               <div className="flex w-full flex-col gap-1.5 rounded-[18px] bg-[#fbf6ee] px-[22px] py-[18px]" style={dashed("D1AA71", 18)}>
-                <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#94713f]">Platzhalter</p>
+                <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#94713f]">{t("Platzhalter", "Placeholder")}</p>
                 <p className="text-[16px] leading-[26px] text-[#5c5954]">{c.placeholder}</p>
               </div>
             )}
@@ -118,9 +120,9 @@ export default function BrancheCase({ b }: { b: Branche }) {
                   <img src="/brand/tylotech-logo.svg" alt="TyloTech" className="h-6 w-auto sm:h-7" />
                   <span className="h-6 w-px bg-[#e2e0dc]" />
                   <span className="font-mono text-[10.5px] font-medium uppercase leading-[13px] tracking-[0.4px] text-[#94713f] sm:text-[11px]">
-                    Eigene
+                    {t("Eigene", "Our own")}
                     <br />
-                    Marke
+                    {t("Marke", "brand")}
                   </span>
                 </div>
               </>
@@ -130,7 +132,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
 
         {c.extraPlaceholder && (
           <div className="bhc-extra flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-[20px] px-5 py-4 sm:px-7 sm:py-5" style={dashed("CBC8C2", 20)}>
-            <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">Platzhalter</p>
+            <p className="font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">{t("Platzhalter", "Placeholder")}</p>
             <p className="text-[16px] text-[#5c5954]">{c.extraPlaceholder}</p>
           </div>
         )}

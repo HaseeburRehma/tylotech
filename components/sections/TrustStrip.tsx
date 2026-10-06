@@ -5,11 +5,13 @@ import Container from "../ui/Container";
 import PartnerLogo from "../PartnerLogo";
 import { PARTNERS } from "@/lib/partners";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useT } from "../i18n/LocaleProvider";
 
 /** `tone="branche"`: industry-page Figma frame (white, 56/72 padding, own caption) */
 export default function TrustStrip({ tone = "home" }: { tone?: "home" | "branche" }) {
   const br = tone === "branche";
   const track = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -41,8 +43,8 @@ export default function TrustStrip({ tone = "home" }: { tone?: "home" | "branche
       <Container>
         <p className={`${br ? "mb-8" : "mb-10"} text-center text-[15px] tracking-[-0.01em] text-ink/55`}>
           {br
-            ? "Vertraut von über 100 Unternehmen, vom Handwerk bis zum Mittelstand"
-            : "Vertraut von über 100 Unternehmen — vom Handwerksbetrieb bis zur Mehrfachgründung"}
+            ? t("Vertraut von über 100 Unternehmen, vom Handwerk bis zum Mittelstand", "Trusted by 100+ businesses, from trades to established SMEs")
+            : t("Vertraut von über 100 Unternehmen — vom Handwerksbetrieb bis zur Mehrfachgründung", "Trusted by 100+ businesses — from local trades to serial founders")}
         </p>
       </Container>
 

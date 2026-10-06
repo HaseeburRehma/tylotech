@@ -7,6 +7,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import type { Branche } from "@/lib/branchen";
 import { SectionHead } from "./ui";
+import { useT } from "../i18n/LocaleProvider";
 
 /* Tailwind needs literal class names for each row width */
 const COLS: Record<number, string> = { 2: "md:grid-cols-2", 3: "md:grid-cols-3", 4: "md:grid-cols-2 xl:grid-cols-4" };
@@ -14,6 +15,7 @@ const COLS: Record<number, string> = { 2: "md:grid-cols-2", 3: "md:grid-cols-3",
 export default function BrancheFuerWen({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
   const f = b.fuerWen;
+  const t = useT();
 
   useGSAP(
     () => {
@@ -35,7 +37,7 @@ export default function BrancheFuerWen({ b }: { b: Branche }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
-        <SectionHead icon={f.icon} eyebrow="Für wen genau" title={f.title} sub={f.sub} />
+        <SectionHead icon={f.icon} eyebrow={t("Für wen genau", "Who it’s for")} title={f.title} sub={f.sub} />
         <div className="bhf-grid flex flex-col gap-5">
           {rows.map((row, ri) => (
             <div key={ri} className={cn("grid grid-cols-1 gap-5 sm:grid-cols-2", COLS[row.length])}>

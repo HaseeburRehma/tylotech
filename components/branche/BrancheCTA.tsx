@@ -6,10 +6,13 @@ import { ArrowRight, Calendar } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import type { Branche } from "@/lib/branchen";
+import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 /* Figma "10 · CTA" — dark teal panel with a cool and a warm glow, per-industry eyebrow. */
 export default function BrancheCTA({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
+  const lp = useLocalePath();
 
   useGSAP(
     () => {
@@ -45,14 +48,18 @@ export default function BrancheCTA({ b }: { b: Branche }) {
               <span className="min-w-0">{b.ctaEyebrow}</span>
             </p>
             <h2 className="font-display text-[clamp(2.1rem,4.6vw,3.375rem)] font-semibold leading-[1.11] tracking-[-0.033em] text-white">
-              Bereit, dein Wachstum{" "}
-              <span className="font-[family-name:var(--font-instrument)] text-[1.07em] font-normal italic tracking-[-0.01em]">planbar</span> zu machen?
+              {t("Bereit, dein Wachstum", "Ready to make your growth")}{" "}
+              <span className="font-[family-name:var(--font-instrument)] text-[1.07em] font-normal italic tracking-[-0.01em]">{t("planbar", "predictable")}</span>
+              {t(" zu machen?", "?")}
             </h2>
             <p className="max-w-[720px] text-[clamp(16px,1.5vw,18px)] leading-[1.56] tracking-[-0.01em] text-white/[0.94]">
-              Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt — und ob wir zueinander passen.
+              {t(
+                "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt — und ob wir zueinander passen.",
+                "No sales pitch. An honest take on where your biggest lever is — and whether we’re a good fit.",
+              )}
             </p>
             <Link
-              href={`/kontakt?branche=${b.slug}`}
+              href={lp(`/kontakt?branche=${b.slug}`)}
               className="group relative inline-flex items-center gap-3.5 rounded-full py-2 pl-2 pr-[30px] shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 hover:-translate-y-0.5 hover:brightness-105"
               style={{ backgroundImage: "linear-gradient(90deg, #efdcbc 0%, #d8b681 45%, #b4894d 100%)" }}
             >
@@ -60,7 +67,9 @@ export default function BrancheCTA({ b }: { b: Branche }) {
                 <ArrowRight className="size-[19px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
               </span>
               <span className="whitespace-nowrap text-[18px] font-medium leading-6 tracking-[-0.3px] text-[#04161d]">
-                <span className="font-[family-name:var(--font-instrument)] text-[19px] font-normal italic">Erstgespräch</span> sichern
+                {t(null, "Book your ")}
+                <span className="font-[family-name:var(--font-instrument)] text-[19px] font-normal italic">{t("Erstgespräch", "intro call")}</span>
+                {t(" sichern", null)}
               </span>
             </Link>
           </div>

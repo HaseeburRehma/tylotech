@@ -2,16 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useYouTubePlaying } from "@/lib/useYouTubePlaying";
+import { useT } from "../i18n/LocaleProvider";
 
 export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const frame = useRef<HTMLIFrameElement>(null);
+  const t = useT();
   const playing = useYouTubePlaying(frame);
   // poster stays until the player really plays (autoplay can be blocked),
   // plus a beat so YouTube's start-up title bar is gone
   const [posterVisible, setPosterVisible] = useState(true);
   useEffect(() => {
     if (!playing) return;
-    const t = setTimeout(() => setPosterVisible(false), 1200);
+    const t = setTimeout(() => setPosterVisible(false), 2600);
     return () => clearTimeout(t);
   }, [playing]);
   const [poster, setPoster] = useState(
@@ -31,7 +33,7 @@ export default function HeroVideoCard({ videoId }: { videoId: string }) {
         <iframe
           className="pointer-events-none absolute inset-0 h-full w-full origin-center scale-[1.35]"
           src={src}
-          title="Imagefilm"
+          title={t("Imagefilm", "Brand film")}
           allow="autoplay; encrypted-media; picture-in-picture"
           loading="eager"
           ref={frame}

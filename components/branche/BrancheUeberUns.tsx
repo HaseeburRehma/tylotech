@@ -5,11 +5,13 @@ import { Quote } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { Eyebrow } from "./ui";
+import { useT } from "../i18n/LocaleProvider";
 
 /* Figma "08 · Über uns" — a letter card: stacked portrait left, founder quote right.
    Portrait positions are % of Figma's 420×520 frame so it scales on smaller screens. */
 export default function BrancheUeberUns() {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -50,7 +52,7 @@ export default function BrancheUeberUns() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/branchen/gruender.webp"
-                alt="Ilias El Aradi, Gründer von TyloTech"
+                alt={t("Ilias El Aradi, Gründer von TyloTech", "Ilias El Aradi, founder of TyloTech")}
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
               />
@@ -60,24 +62,26 @@ export default function BrancheUeberUns() {
 
           {/* letter */}
           <div className="bhu-text flex w-full min-w-0 flex-col items-start gap-6 lg:flex-1">
-            <Eyebrow icon="user">Der Gründer</Eyebrow>
+            <Eyebrow icon="user">{t("Der Gründer", "The founder")}</Eyebrow>
             <h2 className="font-display text-[clamp(2rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1a1917]">
-              Warum es{" "}
+              {t("Warum es", "Why")}{" "}
               <span className="font-[family-name:var(--font-instrument)] text-[1.05em] font-normal italic tracking-[-0.015em] text-[#94713f]">TyloTech</span>{" "}
-              gibt.
+              {t("gibt.", "exists.")}
             </h2>
             <blockquote className="flex w-full items-start gap-4 sm:items-center rounded-[18px] border border-[#d1aa71] bg-[#fbf6ee] py-5 pl-[22px] pr-[26px]">
               <Quote className="mt-1 size-[22px] shrink-0 sm:mt-0 fill-[#c79a53] text-[#c79a53]" strokeWidth={0} aria-hidden />
               <p className="font-[family-name:var(--font-instrument)] text-[clamp(18px,1.6vw,21px)] italic leading-[1.43] tracking-[-0.18px] text-[#1a1917]">
-                „Ich habe jeden dieser Prozesse selbst durchlaufen — Marketing, Code, Vertrieb, Aufbau. Deshalb sehen wir, was andere übersehen. Und
-                deshalb bauen wir mit, statt nur zu beraten.“
+                {t(
+                  "„Ich habe jeden dieser Prozesse selbst durchlaufen — Marketing, Code, Vertrieb, Aufbau. Deshalb sehen wir, was andere übersehen. Und deshalb bauen wir mit, statt nur zu beraten.“",
+                  "“I’ve been through every one of these processes myself — marketing, code, sales, building a company. That’s why we see what others miss. And that’s why we build with you instead of just advising.”",
+                )}
               </p>
             </blockquote>
             <div className="flex flex-col gap-3 pt-4">
               <span className="bhu-line block h-px w-[72px] bg-[#d1aa71]" />
               <p className="font-display text-[22px] font-medium leading-[28px] tracking-[-0.4px] text-[#1a1917]">Ilias El Aradi</p>
               <p className="font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#7d7973] sm:text-[12px]">
-                Gründer von TyloTech · Dein Wachstumspartner
+                {t("Gründer von TyloTech · Dein Wachstumspartner", "Founder of TyloTech · Your growth partner")}
               </p>
             </div>
           </div>

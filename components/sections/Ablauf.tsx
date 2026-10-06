@@ -13,6 +13,7 @@ import {
 import Container from "../ui/Container";
 import { cn } from "@/lib/cn";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 const STEPS = [
   {
@@ -20,24 +21,44 @@ const STEPS = [
     step: "Schritt 01",
     title: "Anfrage",
     body: "Du meldest dich — kurz, unkompliziert. Wir schauen, ob wir zueinander passen.",
+    en: {
+      step: "Step 01",
+      title: "Enquiry",
+      body: "You get in touch — quick and easy. We see whether we're a good fit.",
+    },
   },
   {
     icon: Search,
     step: "Schritt 02",
     title: "Analyse & Planung",
     body: "Wir finden den echten Engpass in deinem Unternehmen und zeigen dir, wo dein größter Hebel liegt.",
+    en: {
+      step: "Step 02",
+      title: "Analysis & planning",
+      body: "We find the real bottleneck in your business and show you where your biggest lever is.",
+    },
   },
   {
     icon: MessageCircle,
     step: "Schritt 03",
     title: "Erstgespräch",
     body: "Ehrliche Einschätzung, klare Empfehlung — kein Verkaufsgespräch, sondern ein Plan.",
+    en: {
+      step: "Step 03",
+      title: "Intro call",
+      body: "An honest assessment, a clear recommendation — not a sales pitch, a plan.",
+    },
   },
   {
     icon: Rocket,
     step: "Schritt 04",
     title: "Strategie & Start",
     body: "Wir setzen um. Schnell, sichtbar, messbar. Du siehst ab Tag eins, was passiert.",
+    en: {
+      step: "Step 04",
+      title: "Strategy & launch",
+      body: "We deliver. Fast, visible, measurable. From day one you see what's happening.",
+    },
   },
 ];
 
@@ -50,6 +71,8 @@ const CELL_BORDERS = [
 
 export default function Ablauf() {
   const root = useRef<HTMLDivElement>(null);
+  const t = useT();
+  const lp = useLocalePath();
 
   useGSAP(
     () => {
@@ -94,22 +117,27 @@ export default function Ablauf() {
         <div className="ablauf-head mx-auto max-w-[680px] text-center">
           <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
             <Workflow className="size-3.5 text-accent" />
-            So arbeiten wir
+            {t("So arbeiten wir", "How we work")}
           </p>
           <h2 className="mt-5 font-display text-[clamp(2rem,4.4vw,3.4rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
             <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#d8b682]">
-              Vier Schritte
+              {t("Vier Schritte", "Four steps")}
             </span>{" "}
-            bis zur Zusammenarbeit.
+            {t("bis zur Zusammenarbeit.", "to working together.")}
           </h2>
           <p className="mx-auto mt-5 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
-            Kein Vertrieb, der dich durch einen Funnel schiebt. Nach dem dritten
-            Schritt weißt du genau, was du bekommst.
+            {t(
+              <>
+                Kein Vertrieb, der dich durch einen Funnel schiebt. Nach dem dritten
+                Schritt weißt du genau, was du bekommst.
+              </>,
+              "No sales team pushing you through a funnel. After step three you know exactly what you're getting.",
+            )}
           </p>
         </div>
 
         <div className="ablauf-grid mx-auto mt-6 grid sm:mt-14 max-w-[1040px] grid-cols-1 md:grid-cols-2">
-          {STEPS.map(({ icon: Icon, step, title, body }, i) => (
+          {STEPS.map(({ icon: Icon, step, title, body, en }, i) => (
             <div
               key={title}
               className={cn(
@@ -119,12 +147,12 @@ export default function Ablauf() {
               )}
             >
               <Icon className="ablauf-icon size-6 text-accent" strokeWidth={1.6} />
-              <p className="eyebrow mt-6 text-[#7fbacd]">{step}</p>
+              <p className="eyebrow mt-6 text-[#7fbacd]">{t(step, en.step)}</p>
               <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.015em] text-white">
-                {title}
+                {t(title, en.title)}
               </h3>
               <p className="mt-2.5 max-w-[420px] text-[15px] leading-relaxed text-[#7fbacd]">
-                {body}
+                {t(body, en.body)}
               </p>
             </div>
           ))}
@@ -132,10 +160,10 @@ export default function Ablauf() {
 
         <div className="ablauf-cta mt-8 flex sm:mt-14 justify-center">
           <Link
-            href="/kontakt"
+            href={lp("/kontakt")}
             className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[16px] font-medium text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
           >
-            Erstgespräch sichern
+            {t("Erstgespräch sichern", "Book your intro call")}
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>

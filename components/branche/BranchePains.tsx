@@ -7,17 +7,19 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import type { Branche, Brand, PainVisual } from "@/lib/branchen";
 import { BrandLogo, SectionHead, useInView } from "./ui";
+import { useT } from "../i18n/LocaleProvider";
 
 /* ---- visuals (Figma "Bento Visual / …") ----------------------------------- */
 
 const RANKS = [
-  { term: "gebäudereinigung düsseldorf", pos: 1, from: 6, trend: 0.95 },
-  { term: "fahrschule düsseldorf", pos: 1, from: 11, trend: 0.92 },
-  { term: "pizza lieferservice köln", pos: 2, from: 9, trend: 0.78 },
-  { term: "rohrreinigung nrw", pos: 1, from: 7, trend: 0.88 },
+  { term: "gebäudereinigung düsseldorf", en: "commercial cleaning düsseldorf", pos: 1, from: 6, trend: 0.95 },
+  { term: "fahrschule düsseldorf", en: "driving school düsseldorf", pos: 1, from: 11, trend: 0.92 },
+  { term: "pizza lieferservice köln", en: "pizza delivery cologne", pos: 2, from: 9, trend: 0.78 },
+  { term: "rohrreinigung nrw", en: "drain cleaning nrw", pos: 1, from: 7, trend: 0.88 },
 ];
 
 function RankRow({ r, i, on }: { r: (typeof RANKS)[number]; i: number; on: boolean }) {
+  const t = useT();
   const [pos, setPos] = useState(r.from);
   useEffect(() => {
     if (!on) return;
@@ -40,7 +42,7 @@ function RankRow({ r, i, on }: { r: (typeof RANKS)[number]; i: number; on: boole
       className="group/row -mx-2 flex items-center gap-2.5 rounded-lg border-t border-[#eeedea] px-2 py-[9px] transition-[background-color,translate,opacity] duration-500 hover:bg-[#fbf6ee]"
       style={{ opacity: on ? 1 : 0, translate: on ? "0 0" : "0 14px", transitionDelay: on ? `${i * 120}ms` : "0ms" }}
     >
-      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917] sm:text-[13px]">{r.term}</p>
+      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917] sm:text-[13px]">{t(r.term, r.en)}</p>
       <span className={cn("grid h-6 w-[26px] place-items-center rounded-[7px] font-mono text-[12px] font-medium tabular-nums", pos === 1 ? "bg-[#fbf6ee] text-[#94713f]" : "bg-[#f6f5f3] text-[#5c5954]")}>
         {pos}
       </span>
@@ -56,11 +58,12 @@ function RankRow({ r, i, on }: { r: (typeof RANKS)[number]; i: number; on: boole
 
 function Rankings() {
   const [ref, on] = useInView<HTMLDivElement>(0.35);
+  const t = useT();
   return (
     <div ref={ref} className="flex h-full items-center justify-center bg-[#fbf6ee] px-5 sm:px-10">
       <div className="w-full max-w-[413px] rounded-[14px] border border-[#eeedea] bg-white px-5 py-[18px] shadow-[0_10px_30px_-20px_rgba(8,34,44,0.25)]">
         <div className="flex items-center gap-2.5 pb-2.5 font-mono text-[9.5px] font-medium uppercase leading-[13px] tracking-[0.7px] text-[#7d7973]">
-          <span className="flex-1">Suchbegriff</span>
+          <span className="flex-1">{t("Suchbegriff", "Search term")}</span>
           <span className="w-[34px]">Pos.</span>
           <span className="w-[52px]">Trend</span>
         </div>
@@ -80,6 +83,7 @@ function Kpi({ label, value, falling }: { label: string; value: string; falling?
   const bars = falling ? BARS_DOWN : BARS_UP;
   const [hover, setHover] = useState<number | null>(null);
   const T = falling ? TrendingDown : TrendingUp;
+  const t = useT();
   return (
     <div ref={ref} className="flex h-full items-stretch justify-center bg-[#fbf6ee] px-5 py-6 sm:px-10">
       <div className="flex w-full max-w-[413px] flex-col gap-4 rounded-[14px] border border-[#eeedea] bg-white px-[22px] py-5 shadow-[0_10px_30px_-20px_rgba(8,34,44,0.25)]">
@@ -90,7 +94,7 @@ function Kpi({ label, value, falling }: { label: string; value: string; falling?
           </div>
           <span className="inline-flex h-[22px] items-center gap-[5px] rounded-full bg-[#e7f4ed] px-2 text-[11px] font-medium text-[#0e5836]">
             <T className="size-3" strokeWidth={2.2} />
-            30 Tage
+            {t("30 Tage", "30 days")}
           </span>
         </div>
         <div className="flex min-h-0 flex-1 items-end gap-2" onMouseLeave={() => setHover(null)}>
@@ -172,6 +176,7 @@ function Visual({ v }: { v: PainVisual }) {
 
 export default function BranchePains({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -187,7 +192,7 @@ export default function BranchePains({ b }: { b: Branche }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
-        <SectionHead icon="target" eyebrow="Schmerz und Lösung" title="So _lösen_ wir es." />
+        <SectionHead icon="target" eyebrow={t("Schmerz und Lösung", "Pain and solution")} title={t("So _lösen_ wir es.", "How we _solve_ it.")} />
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           {b.pains.map((p, i) => (
             <article
@@ -198,10 +203,10 @@ export default function BranchePains({ b }: { b: Branche }) {
                 <Visual v={p.visual} />
               </div>
               <div className="flex flex-col gap-3.5 px-6 pb-9 pt-7 sm:px-8 sm:pt-8">
-                <p className="font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#7d7973]">Schmerz</p>
+                <p className="font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#7d7973]">{t("Schmerz", "Pain point")}</p>
                 <h3 className="font-display text-[clamp(1.3rem,2vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.025em] text-[#1a1917]">{p.title}</h3>
                 <div className="h-px w-full bg-[#eeedea]" />
-                <p className="font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#94713f]">So lösen wir es</p>
+                <p className="font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#94713f]">{t("So lösen wir es", "How we solve it")}</p>
                 <p className="text-[16px] leading-[26px] tracking-[-0.01em] text-[#5c5954]">{p.text}</p>
               </div>
             </article>

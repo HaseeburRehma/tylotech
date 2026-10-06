@@ -6,6 +6,7 @@ import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { CONTACT, mapsEmbedUrl, mapsRouteUrl, mapsSearchUrl } from "@/lib/contact";
 import { SectionHead } from "../branche/ui";
+import { useT } from "../i18n/LocaleProvider";
 
 /* Google Maps only loads after consent ("Funktional" in the cookie banner) or an
    explicit click — until then an illustrated map stands in, so nothing is sent to Google. */
@@ -44,6 +45,7 @@ const MINOR = [
 ];
 
 function MapPlaceholder({ onLoad }: { onLoad: () => void }) {
+  const t = useT();
   return (
     <div className="absolute inset-0 overflow-hidden bg-[#efece6]">
       <svg viewBox="0 0 1000 580" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full" aria-hidden>
@@ -76,7 +78,10 @@ function MapPlaceholder({ onLoad }: { onLoad: () => void }) {
       {/* load */}
       <div className="absolute inset-x-3 bottom-3 flex flex-col gap-3 rounded-[18px] border border-white/70 bg-white/80 p-4 shadow-[0_12px_30px_-18px_rgba(8,34,44,0.4)] backdrop-blur-md sm:inset-x-5 sm:bottom-5 sm:flex-row sm:items-center sm:gap-4 sm:p-5">
         <p className="flex-1 text-[13px] leading-[20px] text-[#5c5954]">
-          Die interaktive Karte wird von Google Maps geladen. Dabei werden Daten an Google übertragen.
+          {t(
+            "Die interaktive Karte wird von Google Maps geladen. Dabei werden Daten an Google übertragen.",
+            "The interactive map is loaded from Google Maps. This transfers data to Google.",
+          )}
         </p>
         <button
           type="button"
@@ -84,7 +89,7 @@ function MapPlaceholder({ onLoad }: { onLoad: () => void }) {
           className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#002e3d] px-5 text-[14px] font-medium text-white transition-colors hover:bg-[#013a4d]"
         >
           <MapPin className="size-4" strokeWidth={1.8} />
-          Karte laden
+          {t("Karte laden", "Load map")}
         </button>
       </div>
     </div>
@@ -93,6 +98,7 @@ function MapPlaceholder({ onLoad }: { onLoad: () => void }) {
 
 export default function KontaktStandort() {
   const root = useRef<HTMLElement>(null);
+  const t = useT();
   const [clicked, setClicked] = useState(false);
   const [ready, setReady] = useState(false);
   const consented = useSyncExternalStore(subscribeStorage, hasMapConsent, () => false);
@@ -111,13 +117,21 @@ export default function KontaktStandort() {
   return (
     <section id="standort" ref={root} className="scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
-        <SectionHead icon="map-pin" eyebrow="Standort" title="Mitten in _Düsseldorf._" sub="Unser Büro in der Behrenstraße. Ruf an, schreib uns oder plan direkt deine Route." />
+        <SectionHead
+          icon="map-pin"
+          eyebrow={t("Standort", "Location")}
+          title={t("Mitten in _Düsseldorf._", "Right in the heart of _Düsseldorf._")}
+          sub={t(
+            "Unser Büro in der Behrenstraße. Ruf an, schreib uns oder plan direkt deine Route.",
+            "Our office on Behrenstraße. Give us a call, drop us a line or plan your route straight away.",
+          )}
+        />
         <div className="ks-grid grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_400px]">
           <div className="ks-map relative h-[380px] overflow-hidden rounded-[24px] border border-[#e2e0dc] bg-[#efece6] shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05)] sm:h-[460px] sm:rounded-[28px] lg:h-auto lg:min-h-[480px]">
             {load ? (
               <>
                 <iframe
-                  title="TyloTech auf Google Maps"
+                  title={t("TyloTech auf Google Maps", "TyloTech on Google Maps")}
                   src={mapsEmbedUrl}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -139,7 +153,7 @@ export default function KontaktStandort() {
                 <img src="/brand/tylotech-mark.svg" alt="" className="h-9 w-[29px]" />
                 <div>
                   <p className="font-display text-[19px] font-semibold leading-6 tracking-[-0.02em] text-[#1a1917]">TyloTech</p>
-                  <p className="text-[13px] leading-5 text-[#7d7973]">Marketing × Digitalisierung</p>
+                  <p className="text-[13px] leading-5 text-[#7d7973]">{t("Marketing × Digitalisierung", "Marketing × Digitalisation")}</p>
                 </div>
               </div>
               <div className="h-px bg-[#eeedea]" />
@@ -150,11 +164,12 @@ export default function KontaktStandort() {
                     {CONTACT.street}
                     <br />
                     {CONTACT.city}
+                    {t(null, <><br />Germany</>)}
                   </span>
                 </a>
                 <a href={CONTACT.phoneHref} className="group flex items-center gap-3.5">
                   <Phone className="size-[18px] shrink-0 text-[#b4894d]" strokeWidth={1.8} />
-                  <span className="text-[15px] text-[#1a1917] transition-colors group-hover:text-[#94713f]">{CONTACT.phone}</span>
+                  <span className="text-[15px] text-[#1a1917] transition-colors group-hover:text-[#94713f]">{t(CONTACT.phone, CONTACT.phoneIntl)}</span>
                 </a>
                 <a href={`mailto:${CONTACT.email}`} className="group flex items-center gap-3.5">
                   <Mail className="size-[18px] shrink-0 text-[#b4894d]" strokeWidth={1.8} />
@@ -170,7 +185,7 @@ export default function KontaktStandort() {
               className="group inline-flex h-[58px] items-center justify-center gap-2.5 rounded-full bg-[linear-gradient(180deg,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0.02)_55%,rgba(255,255,255,0)_100%),linear-gradient(90deg,#efdcbc_0%,#d8b681_45%,#b4894d_100%)] text-[16px] font-medium tracking-[-0.1px] text-[#0f0e0d] shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px"
             >
               <Navigation className="size-[18px]" strokeWidth={1.9} />
-              Route planen
+              {t("Route planen", "Plan your route")}
             </a>
             <a
               href={mapsSearchUrl}
@@ -178,7 +193,7 @@ export default function KontaktStandort() {
               rel="noopener noreferrer"
               className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full border border-[rgba(8,34,44,0.08)] bg-white/[0.72] text-[15px] font-medium text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07),inset_0_1px_1px_rgba(255,255,255,0.7)] transition-colors hover:bg-white"
             >
-              In Google Maps öffnen
+              {t("In Google Maps öffnen", "Open in Google Maps")}
               <ExternalLink className="size-4 text-[#7d7973]" strokeWidth={1.8} />
             </a>
           </div>

@@ -56,6 +56,9 @@ export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (rateLimited(ip)) return Response.json({ ok: false, reason: "rate-limited" }, { status: 429 });
 
+  // language of the page the form was sent from — only the customer confirmation changes
+  const locale = body.locale === "en" ? "en" : "de";
+
   const p = {
     name: clip(body.name, LIMITS.name),
     company: clip(body.company, LIMITS.company),
@@ -72,10 +75,10 @@ export async function POST(request: Request) {
   if (!transport()) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
 
   const origin = (process.env.SITE_URL || new URL(request.url).origin).replace(/\/$/, "");
-  const source = `${new URL(origin).host}/kontakt${p.branche ? ` (Branche: ${p.branche})` : ""}`;
+  const source = `${new URL(origin).host}${locale === "en" ? "/en/contact" : "/kontakt"}${p.branche ? ` (Branche: ${p.branche})` : ""}`;
 
   try {
-    const team = teamNotification(p, origin, source);
+    const team = teamNotification(p, origin, source, locale);
     await sendMail({ to: process.env.CONTACT_TO || CONTACT.email, replyTo: p.email, ...team });
   } catch (err) {
     const code = err instanceof MailError ? err.code : "unknown";
@@ -87,7 +90,7 @@ export async function POST(request: Request) {
   // confirmation to the sender — best effort, never fails the request
   if (process.env.CONTACT_AUTOREPLY !== "false") {
     try {
-      const mail = customerConfirmation(p, origin);
+      const mail = customerConfirmation(p, origin, locale);
       await sendMail({ to: p.email, replyTo: process.env.CONTACT_TO || CONTACT.email, ...mail });
     } catch (err) {
       console.error("kontakt: confirmation failed", err instanceof MailError ? err.code : err);

@@ -5,10 +5,12 @@ import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import type { Branche } from "@/lib/branchen";
 import { Accent, Icon, SectionHead } from "./ui";
+import { useT } from "../i18n/LocaleProvider";
 
 export default function BrancheKennst({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
   const k = b.kennst;
+  const t = useT();
 
   useGSAP(
     () => {
@@ -24,7 +26,7 @@ export default function BrancheKennst({ b }: { b: Branche }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
-        <SectionHead center icon="circle-alert" eyebrow="Das Problem" title="„Kennst du das?“" sub={k.intro} />
+        <SectionHead center icon="circle-alert" eyebrow={t("Das Problem", "The problem")} title={t("„Kennst du das?“", "“Sound familiar?”")} sub={k.intro} />
 
         <div className="bhk-grid grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {k.points.map((p, i) => (

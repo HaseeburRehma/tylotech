@@ -5,6 +5,8 @@ import { ArrowUpRight, LayoutDashboard, TrendingDown, TrendingUp } from "lucide-
 import Container from "../ui/Container";
 import { cn } from "@/lib/cn";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { formatNumber } from "@/lib/i18n";
+import { useLocale, useT } from "../i18n/LocaleProvider";
 
 /* ------------------------------------------------------------------ */
 /* data                                                                */
@@ -19,6 +21,11 @@ const LABELS: Record<Range, string[]> = {
   7: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So", "Mo", "Di", "Mi"],
   30: ["KW 1", "KW 1", "KW 2", "KW 2", "KW 2", "KW 3", "KW 3", "KW 4", "KW 4", "KW 4"],
   90: ["Jul", "Jul", "Jul", "Aug", "Aug", "Aug", "Sep", "Sep", "Sep", "Sep"],
+};
+const LABELS_EN: Record<Range, string[]> = {
+  7: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"],
+  30: ["Wk 1", "Wk 1", "Wk 2", "Wk 2", "Wk 2", "Wk 3", "Wk 3", "Wk 4", "Wk 4", "Wk 4"],
+  90: LABELS[90],
 };
 
 /* Bar heights are the Figma pixel values (panel visual = 92 px tall at max). */
@@ -39,21 +46,21 @@ const CPL: Record<Range, Series> = {
 };
 
 const CHANNELS = [
-  { name: "Google Ads", src: "/icons/brands/google-ads.svg", note: "Suche & Performance Max" },
-  { name: "Meta", src: "/icons/brands/meta.svg", note: "Facebook & Instagram Ads" },
-  { name: "TikTok", src: "/icons/brands/tiktok.svg", note: "Reichweite & Recruiting" },
-  { name: "YouTube", src: "/icons/brands/youtube.svg", note: "Video-Kampagnen" },
-  { name: "LinkedIn", src: "/icons/brands/linkedin.svg", note: "B2B-Leads" },
-  { name: "Instagram", src: "/icons/brands/instagram.svg", note: "Content & Reels" },
-  { name: "Google Analytics", src: "/icons/brands/google-analytics.svg", note: "Tracking & Attribution" },
-  { name: "Google", src: "/icons/brands/google.svg", note: "SEO & Unternehmensprofil" },
+  { name: "Google Ads", src: "/icons/brands/google-ads.svg", note: "Suche & Performance Max", en: "Search & Performance Max" },
+  { name: "Meta", src: "/icons/brands/meta.svg", note: "Facebook & Instagram Ads", en: "Facebook & Instagram Ads" },
+  { name: "TikTok", src: "/icons/brands/tiktok.svg", note: "Reichweite & Recruiting", en: "Reach & recruiting" },
+  { name: "YouTube", src: "/icons/brands/youtube.svg", note: "Video-Kampagnen", en: "Video campaigns" },
+  { name: "LinkedIn", src: "/icons/brands/linkedin.svg", note: "B2B-Leads", en: "B2B leads" },
+  { name: "Instagram", src: "/icons/brands/instagram.svg", note: "Content & Reels", en: "Content & Reels" },
+  { name: "Google Analytics", src: "/icons/brands/google-analytics.svg", note: "Tracking & Attribution", en: "Tracking & attribution" },
+  { name: "Google", src: "/icons/brands/google.svg", note: "SEO & Unternehmensprofil", en: "SEO & Business Profile" },
 ];
 
 const RANKINGS = [
-  { term: "gebäudereinigung düsseldorf", pos: 1, from: 6, trend: 0.95 },
-  { term: "fahrschule düsseldorf", pos: 1, from: 11, trend: 0.92 },
-  { term: "Wärmepumpen Spezialist", pos: 2, from: 9, trend: 0.78 },
-  { term: "Badsanierung Berlin", pos: 1, from: 7, trend: 0.88 },
+  { term: "gebäudereinigung düsseldorf", en: "commercial cleaning düsseldorf", pos: 1, from: 6, trend: 0.95 },
+  { term: "fahrschule düsseldorf", en: "driving school düsseldorf", pos: 1, from: 11, trend: 0.92 },
+  { term: "Wärmepumpen Spezialist", en: "Heat pump specialist", pos: 2, from: 9, trend: 0.78 },
+  { term: "Badsanierung Berlin", en: "Bathroom renovation Berlin", pos: 1, from: 7, trend: 0.88 },
 ];
 
 /* Figma "Skin in the Game" pairs: Du / Wir heights in px */
@@ -146,6 +153,7 @@ function BarsTile({
   title,
   desc,
   label,
+  range,
   series,
   shown,
   falling = false,
@@ -153,10 +161,15 @@ function BarsTile({
   title: string;
   desc: string;
   label: string;
+  range: Range;
   series: Series;
   shown: boolean;
   falling?: boolean;
 }) {
+  const locale = useLocale();
+  const t = useT();
+  const en = locale === "en";
+  const labels = t(series.labels, LABELS_EN[range]);
   const [hover, setHover] = useState<number | null>(null);
   const num = useCountUp(series.value, shown);
   const max = 92;
@@ -171,14 +184,14 @@ function BarsTile({
               {label}
             </p>
             <p className="mt-0.5 font-display text-[30px] font-semibold leading-[34px] tracking-[-0.8px] text-[#1a1917] tabular-nums">
-              {series.prefix}
-              {num.toLocaleString("de-DE")}
-              {series.suffix}
+              {en && series.suffix === " €" ? "€" : series.prefix}
+              {formatNumber(locale, num)}
+              {en ? series.suffix?.trim().replace("€", "") : series.suffix}
             </p>
           </div>
           <span className="inline-flex h-[22px] items-center gap-[5px] rounded-full bg-[#e7f4ed] px-2 text-[11px] font-medium text-[#0e5836]">
             <Icon className="size-3" strokeWidth={2.2} />
-            {series.labels === LABELS[7] ? "7 Tage" : series.labels === LABELS[90] ? "90 Tage" : "30 Tage"}
+            {range} {t("Tage", "days")}
           </span>
         </div>
 
@@ -190,7 +203,7 @@ function BarsTile({
               <button
                 type="button"
                 key={i}
-                aria-label={`${series.labels[i]}: ${h}`}
+                aria-label={`${labels[i]}: ${h}`}
                 onMouseEnter={() => setHover(i)}
                 onFocus={() => setHover(i)}
                 className="relative flex h-full min-w-0 flex-1 cursor-pointer items-end outline-none"
@@ -217,8 +230,9 @@ function BarsTile({
                     className="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1917] px-2 py-1 font-mono text-[10px] text-white shadow-lg"
                     style={{ bottom: h + 8 }}
                   >
-                    {series.labels[i]} · {Math.round((h / max) * (falling ? 30 : 100))}
-                    {falling ? " €" : ""}
+                    {labels[i]} · {falling && en ? "€" : ""}
+                    {Math.round((h / max) * (falling ? 30 : 100))}
+                    {falling && !en ? " €" : ""}
                   </span>
                 )}
               </button>
@@ -242,6 +256,7 @@ export default function TyloHQ() {
   const [hl, setHl] = useState(1); // Meta is highlighted in Figma
   const [hoverCh, setHoverCh] = useState<number | null>(null);
   const [skinHover, setSkinHover] = useState<number | null>(null);
+  const t = useT();
 
   useGSAP(
     () => {
@@ -305,24 +320,26 @@ export default function TyloHQ() {
           <div className="hq-head max-w-[780px]">
             <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md sm:text-[12px]">
               <LayoutDashboard className="size-3.5 text-[#c79a53]" strokeWidth={1.8} />
-              Alles sichtbar · TyloTech HQ
+              {t("Alles sichtbar · TyloTech HQ", "Full visibility · TyloTech HQ")}
             </p>
             <h2 className="font-display text-[clamp(2rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-1.3px] text-[#1a1917]">
-              Bei uns läufst du{" "}
+              {t("Bei uns läufst du", "With us, you’re never")}{" "}
               <span className="font-[family-name:var(--font-instrument)] text-[1.05em] font-normal italic tracking-[-0.5px] text-[#94713f]">
-                nicht im Blindflug.
+                {t("nicht im Blindflug.", "flying blind.")}
               </span>
             </h2>
             <p className="mt-[18px] max-w-[640px] text-[clamp(16px,1.4vw,18px)] leading-[28px] tracking-[-0.18px] text-[#5c5954]">
-              Dein eigenes Portal zeigt dir jederzeit, was läuft — Zahlen, Fortschritt, nächste Schritte. Keine
-              Reportings per Mail, keine Blackbox.
+              {t(
+                "Dein eigenes Portal zeigt dir jederzeit, was läuft — Zahlen, Fortschritt, nächste Schritte. Keine Reportings per Mail, keine Blackbox.",
+                "Your own portal shows you what’s happening at any time — numbers, progress, next steps. No reports by email, no black box.",
+              )}
             </p>
           </div>
 
           {/* range switch drives the three KPI tiles */}
           <div
             role="tablist"
-            aria-label="Zeitraum"
+            aria-label={t("Zeitraum", "Time range")}
             className="hq-head inline-flex w-fit items-center gap-1 rounded-full border border-[#e2e0dc] bg-white p-1 shadow-[0_1px_2px_rgba(8,34,44,0.04)]"
           >
             {RANGES.map((r) => (
@@ -336,7 +353,7 @@ export default function TyloHQ() {
                   range === r ? "bg-[#1a1917] text-white" : "text-[#5c5954] hover:bg-[#f6f5f3] hover:text-ink",
                 )}
               >
-                {r} Tage
+                {r} {t("Tage", "days")}
               </button>
             ))}
           </div>
@@ -345,30 +362,37 @@ export default function TyloHQ() {
         <div className="hq-grid mt-10 grid grid-cols-1 gap-5 sm:mt-14 md:grid-cols-2 xl:grid-cols-3">
           {/* row 1 — KPIs */}
             <BarsTile
-              title={`Website-Traffic · ${range} Tage`}
-              desc="Echtzeit, jederzeit einsehbar"
-              label="Website-Traffic"
+              title={t(`Website-Traffic · ${range} Tage`, `Website traffic · ${range} days`)}
+              desc={t("Echtzeit, jederzeit einsehbar", "Real time, visible whenever you like")}
+              label={t("Website-Traffic", "Website traffic")}
+              range={range}
               series={TRAFFIC[range]}
               shown={shown}
             />
             <BarsTile
-              title="Neue Anfragen"
-              desc="Automatisch erfasst und zugeordnet"
-              label="Neue Anfragen"
+              title={t("Neue Anfragen", "New enquiries")}
+              desc={t("Automatisch erfasst und zugeordnet", "Captured and assigned automatically")}
+              label={t("Neue Anfragen", "New enquiries")}
+              range={range}
               series={ANFRAGEN[range]}
               shown={shown}
             />
             <BarsTile
               title="Cost per Lead"
-              desc="Transparent, kein geschöntes Reporting"
+              desc={t("Transparent, kein geschöntes Reporting", "Transparent, no sugar-coated reporting")}
               label="Cost per Lead"
+              range={range}
               series={CPL[range]}
               shown={shown}
               falling
             />
 
             {/* 04 · channels */}
-            <Tile title="Marketing aus einer Hand" desc="Ads, SEO, Content, Funnels" className="hq-row2">
+            <Tile
+              title={t("Marketing aus einer Hand", "All your marketing, one team")}
+              desc={t("Ads, SEO, Content, Funnels", "Ads, SEO, content, funnels")}
+              className="hq-row2"
+            >
               <div className="pb-2" onMouseLeave={() => setHoverCh(null)}>
                 {/* two rows of logos running continuously left → right */}
                 <div className="flex flex-col gap-3">
@@ -418,17 +442,20 @@ export default function TyloHQ() {
                   <span key={activeCh} className="animate-[hqfade_.35s_ease]">
                     <span className="font-medium text-[#1a1917]">{CHANNELS[activeCh].name}</span>
                     {" · "}
-                    {CHANNELS[activeCh].note}
+                    {t(CHANNELS[activeCh].note, CHANNELS[activeCh].en)}
                   </span>
                 </p>
               </div>
             </Tile>
 
             {/* 05 · rankings */}
-            <Tile title="Anfragen auf Autopilot" desc="über Google, Social und KI-Suche">
+            <Tile
+              title={t("Anfragen auf Autopilot", "Enquiries on autopilot")}
+              desc={t("über Google, Social und KI-Suche", "via Google, social and AI search")}
+            >
               <div className="mx-0 rounded-[14px] border border-[#eeedea] bg-white px-5 py-[18px]">
                 <div className="flex items-center gap-2.5 pb-2.5 font-mono text-[9.5px] font-medium uppercase leading-[13px] tracking-[0.7px] text-[#7d7973]">
-                  <span className="flex-1">Suchbegriff</span>
+                  <span className="flex-1">{t("Suchbegriff", "Search term")}</span>
                   <span className="w-[34px]">Pos.</span>
                   <span className="w-[52px]">Trend</span>
                 </div>
@@ -446,7 +473,7 @@ export default function TyloHQ() {
                     Skin in the Game
                   </h3>
                   <p className="mt-[3px] text-[14px] leading-[22px] tracking-[-0.1px] text-[#7d7973]">
-                    wir steigen mit ein
+                    {t("wir steigen mit ein", "we invest alongside you")}
                   </p>
                 </div>
                 <OpenButton />
@@ -455,11 +482,11 @@ export default function TyloHQ() {
                 <div className="flex items-center gap-5 font-mono text-[10px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#7d7973]">
                   <span className="inline-flex items-center gap-[7px]">
                     <span className="size-2 rounded-full bg-[#12313d]" />
-                    Dein Wachstum
+                    {t("Dein Wachstum", "Your growth")}
                   </span>
                   <span className="inline-flex items-center gap-[7px]">
                     <span className="size-2 rounded-full bg-[#d1aa71]" />
-                    Unser Anteil
+                    {t("Unser Anteil", "Our share")}
                   </span>
                 </div>
                 <div
@@ -473,7 +500,7 @@ export default function TyloHQ() {
                       <button
                         type="button"
                         key={i}
-                        aria-label={`Monat ${i + 1}`}
+                        aria-label={`${t("Monat", "Month")} ${i + 1}`}
                         onMouseEnter={() => setSkinHover(i)}
                         onFocus={() => setSkinHover(i)}
                         className={cn(
@@ -505,9 +532,10 @@ export default function TyloHQ() {
                             className="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1a1917] px-2 py-1 text-left font-mono text-[10px] leading-[14px] text-white shadow-lg"
                             style={{ bottom: du + 8 }}
                           >
-                            Monat {i + 1}
+                            {t("Monat", "Month")} {i + 1}
                             <br />
-                            <span className="text-white/60">Umsatz</span> +{Math.round((du / 38) * 100 - 100)} %
+                            <span className="text-white/60">{t("Umsatz", "Revenue")}</span> +{Math.round((du / 38) * 100 - 100)}
+                            {t(" %", "%")}
                           </span>
                         )}
                       </button>
@@ -515,7 +543,7 @@ export default function TyloHQ() {
                   })}
                 </div>
                 <p className="text-center text-[14px] leading-[22px] tracking-[-0.1px] text-[#5c5954]">
-                  Wir verdienen, wenn du wächst.
+                  {t("Wir verdienen, wenn du wächst.", "We earn when you grow.")}
                 </p>
               </div>
             </article>
@@ -553,6 +581,7 @@ function RankRow({
     };
   }, [shown, row.from, row.pos, index]);
 
+  const t = useT();
   const top = pos === 1;
   return (
     <div
@@ -563,7 +592,7 @@ function RankRow({
         transitionDelay: shown ? `${index * 120}ms` : "0ms",
       }}
     >
-      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917]">{row.term}</p>
+      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917]">{t(row.term, row.en)}</p>
       <span
         className={cn(
           "grid h-6 w-[26px] place-items-center rounded-[7px] font-mono text-[12px] font-medium leading-4 tabular-nums transition-colors",

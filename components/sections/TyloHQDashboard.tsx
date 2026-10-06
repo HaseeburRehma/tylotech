@@ -7,28 +7,43 @@ import Button from "../ui/Button";
 import HQApp from "../tylohq/HQApp";
 import { TYLOHQ_URL } from "@/lib/site";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 const FEATURES = [
   {
     icon: Gauge,
     title: "Echtzeit-KPIs statt Monatsbericht",
     body: "Meta, Google und SEO laufen in einer Ansicht zusammen. Du siehst am Dienstag, was am Montag passiert ist, nicht drei Wochen später.",
+    en: {
+      title: "Real-time KPIs, not a monthly report",
+      body: "Meta, Google and SEO come together in one view. On Tuesday you see what happened on Monday, not three weeks later.",
+    },
   },
   {
     icon: Sparkles,
     title: "Inhalte und Anzeigentexte in Sekunden",
     body: "Markengerechte Texte für Anzeigen, Landingpages und SEO, auf Basis deiner eigenen Tonalität, nicht aus der Schablone.",
+    en: {
+      title: "Content and ad copy in seconds",
+      body: "On-brand copy for ads, landing pages and SEO, built on your own tone of voice, not a template.",
+    },
   },
   {
     icon: Users,
     title: "Ein Ort für Freigaben und Absprachen",
     body: "Feedback, Freigaben und Dateien liegen beim Projekt. Kein Suchen in E-Mail-Verläufen, kein „welche Version war aktuell?“.",
+    en: {
+      title: "One place for approvals and decisions",
+      body: "Feedback, approvals and files live with the project. No digging through email threads, no “which version is the latest?”.",
+    },
   },
 ];
 
 export default function TyloHQDashboard() {
   const root = useRef<HTMLElement>(null);
   const [live, setLive] = useState(false);
+  const t = useT();
+  const lp = useLocalePath();
 
   useGSAP(
     () => {
@@ -74,18 +89,23 @@ export default function TyloHQDashboard() {
         <div className="hqd-head mx-auto flex max-w-[800px] flex-col items-center text-center">
           <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md sm:text-[12px]">
             <LayoutDashboard className="size-3.5 text-[#c79a53]" strokeWidth={1.8} />
-            Ergebnisse, keine Erzählungen
+            {t("Ergebnisse, keine Erzählungen", "Results, not stories")}
           </p>
           <h2 className="font-display text-[clamp(2rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-1.3px] text-[#1a1917]">
-            Dein Projekt läuft und du siehst es{" "}
+            {t("Dein Projekt läuft und du siehst es", "Your project is running and you see it")}{" "}
             <span className="font-[family-name:var(--font-instrument)] text-[1.05em] font-normal italic tracking-[-0.5px] text-[#b08547]">
-              in Echtzeit
+              {t("in Echtzeit", "in real time")}
             </span>
             .
           </h2>
           <p className="mt-[18px] text-[clamp(16px,1.4vw,18px)] leading-[28px] tracking-[-0.18px] text-[#5c5954]">
-            Kein Ratespiel, kein monatliches PDF. In TyloTech HQ siehst du jederzeit, wo dein Projekt steht: Leads,
-            Kosten pro Lead, Conversions, Traffic. Transparenz ist bei uns kein Extra: sie ist die Grundlage.
+            {t(
+              <>
+                Kein Ratespiel, kein monatliches PDF. In TyloTech HQ siehst du jederzeit, wo dein Projekt steht: Leads,
+                Kosten pro Lead, Conversions, Traffic. Transparenz ist bei uns kein Extra: sie ist die Grundlage.
+              </>,
+              "No guesswork, no monthly PDF. In TyloTech HQ you can see where your project stands at any time: leads, cost per lead, conversions, traffic. Transparency isn't an extra for us: it's the foundation.",
+            )}
           </p>
         </div>
 
@@ -93,7 +113,7 @@ export default function TyloHQDashboard() {
           <HQApp live={live} />
           <p className="mt-4 flex items-center justify-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.6px] text-[#7d7973]">
             <MousePointerClick className="size-3.5 text-[#c79a53]" strokeWidth={1.8} />
-            Live-Demo · klick dich durch die Bereiche
+            {t("Live-Demo · klick dich durch die Bereiche", "Live demo · click through the sections")}
           </p>
         </div>
 
@@ -106,17 +126,17 @@ export default function TyloHQDashboard() {
                   <Icon className="size-[21px]" strokeWidth={1.6} />
                 </span>
                 <h3 className="mt-[14px] font-display text-[19px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917] sm:text-[20px]">
-                  {f.title}
+                  {t(f.title, f.en.title)}
                 </h3>
-                <p className="mt-3.5 text-[15px] leading-[26px] tracking-[-0.1px] text-[#5c5954] sm:text-[16px]">{f.body}</p>
+                <p className="mt-3.5 text-[15px] leading-[26px] tracking-[-0.1px] text-[#5c5954] sm:text-[16px]">{t(f.body, f.en.body)}</p>
               </div>
             );
           })}
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-3">
-          <Button href="/kontakt" variant="dark" withArrow>
-            TyloHQ-Zugang anfragen
+          <Button href={lp("/kontakt")} variant="dark" withArrow>
+            {t("TyloHQ-Zugang anfragen", "Request TyloHQ access")}
           </Button>
           <a
             href={TYLOHQ_URL}
@@ -124,7 +144,7 @@ export default function TyloHQDashboard() {
             rel="noopener"
             className="group inline-flex items-center gap-2 rounded-[10px] border border-[#e2e0dc] bg-white/60 px-7 py-4 text-[16px] font-medium leading-5 tracking-[-0.01em] text-[#1a1917] transition-colors hover:bg-white"
           >
-            Kunden-Login
+            {t("Kunden-Login", "Client login")}
             <ArrowUpRight className="size-[18px] text-[#7d7973] transition-[color,translate] duration-200 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-[#94713f]" strokeWidth={1.9} />
           </a>
         </div>
