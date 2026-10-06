@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { alternatePath, type Locale } from "@/lib/i18n";
 import { useLocale } from "./LocaleProvider";
@@ -11,7 +10,9 @@ const LABEL: Record<Locale, { short: string; long: string }> = {
 };
 
 /** DE | EN segmented switch; links to the same page in the other language.
- *  The two languages have separate root layouts, so this is a full navigation. */
+ *  The two languages have separate root layouts, so a plain <a> (one direct
+ *  document load) is faster than a client-side <Link>, which would fetch the
+ *  RSC payload first and then fall back to a full reload anyway. */
 export default function LanguageSwitch({ dark = false, size = "sm", onNavigate }: { dark?: boolean; size?: "sm" | "lg"; onNavigate?: () => void }) {
   const locale = useLocale();
   const pathname = usePathname() || "/";
@@ -27,7 +28,7 @@ export default function LanguageSwitch({ dark = false, size = "sm", onNavigate }
       {(["de", "en"] as Locale[]).map((l) => {
         const on = l === locale;
         return (
-          <Link
+          <a
             key={l}
             href={alternatePath(pathname, l)}
             hrefLang={l}
@@ -35,7 +36,6 @@ export default function LanguageSwitch({ dark = false, size = "sm", onNavigate }
             aria-current={on ? "true" : undefined}
             aria-label={LABEL[l].long}
             title={LABEL[l].long}
-            prefetch={false}
             onClick={onNavigate}
             className={`grid place-items-center rounded-full font-mono font-medium tracking-[0.08em] transition-colors duration-300 ${
               big ? "h-10 min-w-[64px] px-4 text-[13px]" : "h-8 min-w-[38px] px-2.5 text-[11.5px]"
@@ -50,7 +50,7 @@ export default function LanguageSwitch({ dark = false, size = "sm", onNavigate }
             }`}
           >
             {big ? LABEL[l].long : LABEL[l].short}
-          </Link>
+          </a>
         );
       })}
     </div>
