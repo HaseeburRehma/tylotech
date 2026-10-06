@@ -70,7 +70,7 @@ function Flow({ b }: { b: Branche }) {
         >
           <span className="absolute inset-0 animate-[bhlPulse_2.8s_ease-out_infinite] rounded-full border border-[#d1aa71]/60" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[46px] w-[37px] motion-safe:animate-[bhSpin_10s_linear_infinite]" />
+          <img loading="lazy" decoding="async" src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[46px] w-[37px] motion-safe:animate-[bhSpin_10s_linear_infinite]" />
         </div>
 
         {b.loesung.kanaele.map((k, i) => (
@@ -115,7 +115,7 @@ function FlowStacked({ b }: { b: Branche }) {
       <div className="bhl-hub relative grid size-[84px] place-items-center rounded-full border border-[#d1aa71] bg-[#002e3d] shadow-[0_6px_24px_rgba(209,170,113,0.4)]">
         <span className="absolute inset-0 animate-[bhlPulse_2.8s_ease-out_infinite] rounded-full border border-[#d1aa71]/60" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[37px] w-[30px] motion-safe:animate-[bhSpin_10s_linear_infinite]" />
+        <img loading="lazy" decoding="async" src="/brand/tylotech-mark.svg" alt="TyloTech" className="h-[37px] w-[30px] motion-safe:animate-[bhSpin_10s_linear_infinite]" />
       </div>
       <ArrowDown className="size-4 text-[#d1aa71]" />
       <div className="flex w-full flex-col gap-2.5">

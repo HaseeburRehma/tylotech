@@ -235,7 +235,7 @@ export default function Diagnose() {
                     className={`relative h-full w-[42%] shrink-0 overflow-hidden bg-gradient-to-br ${c.tint}`}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={c.img}
                       alt=""
                       className="absolute inset-0 h-full w-full object-cover"
@@ -341,7 +341,7 @@ export default function Diagnose() {
                         className={`relative mb-4 aspect-[16/9] overflow-hidden rounded-[14px] bg-gradient-to-br ${c.tint}`}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <img loading="lazy" decoding="async"
                           src={c.img}
                           alt=""
                           className="absolute inset-0 h-full w-full object-cover"

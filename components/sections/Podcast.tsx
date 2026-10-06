@@ -256,7 +256,7 @@ export default function Podcast() {
               {/* title */}
               <span className="absolute inset-x-5 top-5 flex items-center gap-2.5 sm:inset-x-6 sm:top-6">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/tylotech-mark.svg" alt="" className="h-[30px] w-[30px] shrink-0 rounded-lg bg-[#001620] p-1" />
+                <img loading="lazy" decoding="async" src="/brand/tylotech-mark.svg" alt="" className="h-[30px] w-[30px] shrink-0 rounded-lg bg-[#001620] p-1" />
                 <span className="font-display text-[clamp(15px,1.5vw,19px)] font-semibold leading-tight text-white">{videoTitle}</span>
                 {locale === "en" && <span className="shrink-0 rounded-full bg-white/15 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-white/85 backdrop-blur">In German</span>}
               </span>

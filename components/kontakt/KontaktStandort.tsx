@@ -150,7 +150,7 @@ export default function KontaktStandort() {
             <div className="flex flex-col gap-5 rounded-[24px] border border-[#eeedea] bg-white p-7 shadow-[0_1px_2px_rgba(8,34,44,0.04),0_2px_6px_rgba(8,34,44,0.06)] sm:p-8">
               <div className="flex items-center gap-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/tylotech-mark.svg" alt="" className="h-9 w-[29px]" />
+                <img loading="lazy" decoding="async" src="/brand/tylotech-mark.svg" alt="" className="h-9 w-[29px]" />
                 <div>
                   <p className="font-display text-[19px] font-semibold leading-6 tracking-[-0.02em] text-[#1a1917]">TyloTech</p>
                   <p className="text-[13px] leading-5 text-[#7d7973]">{t("Marketing × Digitalisierung", "Marketing × Digitalisation")}</p>

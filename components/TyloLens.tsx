@@ -157,16 +157,38 @@ export default function TyloLens() {
     if (NO_AUTO.includes(pathname)) return;
     const blocked = () => !!(store.get(ss(), SS_AUTO) || store.get(ss(), SS_DISMISSED) || store.get(ls(), LS_SENT) || store.get(ls(), LS_NEVER));
     if (blocked()) return;
-    const onScroll = () => {
-      if (openRef.current || blocked()) return;
+    // Never interrupt a jump: a click on an in-page link (menu, CTA) scrolls
+    // smoothly past 55 %, so those scrolls don't count, and the check only
+    // runs once scrolling has paused.
+    let jumpUntil = 0;
+    let settle: ReturnType<typeof setTimeout> | undefined;
+    const onClick = (e: MouseEvent) => {
+      if ((e.target as Element | null)?.closest?.('a[href*="#"]')) jumpUntil = Date.now() + 3000;
+    };
+    const onHash = () => {
+      jumpUntil = Date.now() + 3000;
+    };
+    const check = () => {
+      if (openRef.current || blocked() || Date.now() < jumpUntil) return;
       const pct = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
       if (pct >= 0.55) {
         store.set(ss(), SS_AUTO, "1");
         show("scroll");
       }
     };
+    const onScroll = () => {
+      clearTimeout(settle);
+      settle = setTimeout(check, 450);
+    };
+    document.addEventListener("click", onClick, true);
+    window.addEventListener("hashchange", onHash);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      clearTimeout(settle);
+      document.removeEventListener("click", onClick, true);
+      window.removeEventListener("hashchange", onHash);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [pathname, show]);
 
   /* floating button: visible once the hero is passed, hidden over the footer and while the cookie notice is up */
@@ -442,7 +464,7 @@ export default function TyloLens() {
                     </h3>
                     <div className="mt-3 flex items-center gap-3">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/team/ilias-el-aradi.jpg" alt="" className="size-9 shrink-0 rounded-full object-cover object-top ring-2 ring-[#D4A863]/60" />
+                      <img loading="lazy" decoding="async" src="/team/ilias-el-aradi.jpg" alt="" className="size-9 shrink-0 rounded-full object-cover object-top ring-2 ring-[#D4A863]/60" />
                       <p className="text-[13px] leading-[18px] text-white/80">
                         <span className="font-semibold text-white">Ilias El Aradi</span>{" "}
                         {t("& Team schauen persönlich drauf — kein Bot, keine Automatik.", "& team take a personal look — no bot, no automation.")}

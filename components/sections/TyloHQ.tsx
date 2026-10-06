@@ -428,7 +428,7 @@ export default function TyloHQ() {
                                 )}
                               >
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={c.src} alt="" className="size-[30px] object-contain" draggable={false} />
+                                <img loading="lazy" decoding="async" src={c.src} alt="" className="size-[30px] object-contain" draggable={false} />
                               </button>
                             );
                           })}

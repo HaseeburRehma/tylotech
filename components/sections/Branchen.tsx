@@ -302,7 +302,7 @@ export default function Branchen() {
                         <Icon className="size-16 text-white/45" strokeWidth={1} />
                       </div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={ind.img}
                         alt=""
                         onError={(e) => {

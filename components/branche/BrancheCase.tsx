@@ -109,7 +109,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
             ) : (
               c.tyloLogo && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src="/brand/tylotech-logo.svg" alt="TyloTech" className="absolute left-1/2 top-1/2 w-[35%] -translate-x-1/2 -translate-y-1/2" />
+                <img loading="lazy" decoding="async" src="/brand/tylotech-logo.svg" alt="TyloTech" className="absolute left-1/2 top-1/2 w-[35%] -translate-x-1/2 -translate-y-1/2" />
               )
             )}
             {c.image && c.tyloLogo && (
@@ -117,7 +117,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,rgba(3,21,28,0)_0%,rgba(3,21,28,0.55)_100%)]" />
                 <div className="absolute bottom-4 left-4 flex items-center gap-3 rounded-[16px] border border-white/60 bg-white/90 py-3 pl-3.5 pr-4 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.45)] backdrop-blur-md sm:bottom-6 sm:left-6">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/brand/tylotech-logo.svg" alt="TyloTech" className="h-6 w-auto sm:h-7" />
+                  <img loading="lazy" decoding="async" src="/brand/tylotech-logo.svg" alt="TyloTech" className="h-6 w-auto sm:h-7" />
                   <span className="h-6 w-px bg-[#e2e0dc]" />
                   <span className="font-mono text-[10.5px] font-medium uppercase leading-[13px] tracking-[0.4px] text-[#94713f] sm:text-[11px]">
                     {t("Eigene", "Our own")}

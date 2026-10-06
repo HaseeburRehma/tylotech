@@ -234,7 +234,7 @@ export default function Wechsel() {
                         />
                       </div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={it.img}
                         alt={t(it.alt, it.en.alt) ?? ""}
                         onError={(e) => {

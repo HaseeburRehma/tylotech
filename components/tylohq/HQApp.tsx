@@ -396,7 +396,7 @@ export default function HQApp({ live }: { live: boolean }) {
           <div className="mt-auto pt-4">
             <div className="flex items-center gap-2 rounded-[11px] border border-[#eeedea] py-[7px] pl-[6.5px] pr-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/team/ilias-el-aradi.jpg" alt="" className="size-[23px] rounded-full object-cover" />
+              <img loading="lazy" decoding="async" src="/team/ilias-el-aradi.jpg" alt="" className="size-[23px] rounded-full object-cover" />
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-display text-[11px] font-medium leading-[14.75px] text-[#1a1917]">Ilias El Aradi</span>
                 <span className="block text-[9.4px] leading-3 text-[#7d7973]">Super Admin</span>
@@ -986,7 +986,7 @@ function IntegrationenView({
                 <div className="flex items-center gap-2.5">
                   <span className="grid size-9 place-items-center rounded-[10px] border border-[#eeedea] bg-[#f6f5f3]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={it.logo} alt="" className="size-[18px] object-contain" />
+                    <img loading="lazy" decoding="async" src={it.logo} alt="" className="size-[18px] object-contain" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="font-display text-[12px] font-semibold text-[#1a1917]">{it.name}</p>
@@ -1150,7 +1150,7 @@ function AustauschView() {
             <div key={i} className={cn("flex items-end gap-2 animate-[hqfade_.35s_ease_both]", m.me && "flex-row-reverse")}>
               {m.img ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={m.img} alt="" className="size-6 shrink-0 rounded-full object-cover" />
+                <img loading="lazy" decoding="async" src={m.img} alt="" className="size-6 shrink-0 rounded-full object-cover" />
               ) : (
                 <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[#12313d] font-display text-[9px] font-semibold text-[#e3c79e]">IA</span>
               )}
@@ -1366,7 +1366,7 @@ function TeamView() {
           >
             <span className="relative">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={m.img} alt="" className="size-12 rounded-full object-cover ring-2 ring-white transition-transform duration-300 group-hover/tm:scale-105" />
+              <img loading="lazy" decoding="async" src={m.img} alt="" className="size-12 rounded-full object-cover ring-2 ring-white transition-transform duration-300 group-hover/tm:scale-105" />
               <span className={cn("absolute bottom-0 right-0 size-2.5 rounded-full ring-2 ring-white", m.online ? "bg-[#2f8a5f]" : "bg-[#cbc8c2]")} />
             </span>
             <p className="mt-2 font-display text-[11.5px] font-semibold text-[#1a1917]">{m.name}</p>
