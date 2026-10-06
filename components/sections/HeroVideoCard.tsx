@@ -1,14 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useYouTubePlaying } from "@/lib/useYouTubePlaying";
 
 export default function HeroVideoCard({ videoId }: { videoId: string }) {
+  const frame = useRef<HTMLIFrameElement>(null);
+  const playing = useYouTubePlaying(frame);
+  // poster stays until the player really plays (autoplay can be blocked),
+  // plus a beat so YouTube's start-up title bar is gone
   const [posterVisible, setPosterVisible] = useState(true);
+  useEffect(() => {
+    if (!playing) return;
+    const t = setTimeout(() => setPosterVisible(false), 1200);
+    return () => clearTimeout(t);
+  }, [playing]);
   const [poster, setPoster] = useState(
     `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
   );
 
-  const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&controls=0&showinfo=0&iv_load_policy=3&loop=1&playlist=${videoId}&start=2&vq=hd1080`;
+  const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&controls=0&showinfo=0&iv_load_policy=3&loop=1&playlist=${videoId}&start=2&vq=hd1080&enablejsapi=1`;
 
   return (
     <div className="hero-media relative w-full">
@@ -24,9 +34,7 @@ export default function HeroVideoCard({ videoId }: { videoId: string }) {
           title="Imagefilm"
           allow="autoplay; encrypted-media; picture-in-picture"
           loading="eager"
-          onLoad={() => {
-            setTimeout(() => setPosterVisible(false), 600);
-          }}
+          ref={frame}
         />
 
         {/* Poster overlay — fades out once video loads */}

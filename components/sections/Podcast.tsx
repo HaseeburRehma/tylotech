@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Play, Music, ArrowUpRight, Headphones, Volume2 } from "lucide-react";
+import { useYouTubePlaying } from "@/lib/useYouTubePlaying";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
@@ -58,7 +59,15 @@ export default function Podcast() {
   // a click restarts it with sound and player controls
   const [near, setNear] = useState(false);
   const [sound, setSound] = useState(false);
+  const mutedFrame = useRef<HTMLIFrameElement>(null);
+  const playing = useYouTubePlaying(mutedFrame, near && !sound);
+  // poster stays until the muted player really plays, plus a beat for YouTube's title bar
   const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (!playing) return;
+    const t = setTimeout(() => setLoaded(true), 2000);
+    return () => clearTimeout(t);
+  }, [playing]);
 
   useEffect(() => {
     const el = videoRef.current;
@@ -189,11 +198,11 @@ export default function Podcast() {
               {near && (
                 <iframe
                   className="pointer-events-none absolute inset-0 size-full origin-center scale-[1.02]"
-                  src={`https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&controls=0&iv_load_policy=3&loop=1&playlist=${YT_ID}&disablekb=1`}
+                  src={`https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&controls=0&iv_load_policy=3&loop=1&playlist=${YT_ID}&disablekb=1&enablejsapi=1`}
                   title="Eigene Software für dein Unternehmen (stumm)"
                   allow="autoplay; encrypted-media; picture-in-picture"
                   tabIndex={-1}
-                  onLoad={() => setTimeout(() => setLoaded(true), 2500)}
+                  ref={mutedFrame}
                 />
               )}
               {/* poster from our own domain — covers the player until it runs (and YouTube's title bar) */}

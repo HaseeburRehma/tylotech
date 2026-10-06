@@ -180,19 +180,19 @@ export default function Branchen() {
           <div className="mt-8 rounded-[28px] border border-line bg-white p-4 shadow-[0_40px_90px_-55px_rgba(15,14,13,0.3)] sm:mt-12 sm:p-6 lg:p-8">
             <div className="grid items-stretch gap-5 lg:grid-cols-[170px_minmax(0,1fr)_minmax(240px,300px)] lg:gap-7 xl:grid-cols-[220px_minmax(0,1fr)_minmax(300px,380px)] xl:gap-10">
               {/* list */}
-              <ul className="no-scrollbar order-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:order-1 lg:mx-0 lg:flex-col lg:gap-1.5 lg:overflow-visible lg:px-0 lg:pb-0">
+              <ul className="order-3 grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:order-1 lg:flex lg:flex-col lg:gap-1.5">
                 {INDUSTRIES.map((ind, i) => {
                   const on = active === i;
                   return (
-                    <li key={ind.name} className="shrink-0 lg:shrink">
+                    <li key={ind.name} className="min-w-0">
                       <button
                         type="button"
                         aria-current={on}
                         onClick={() => pick(i)}
-                        className={`flex items-center gap-2 rounded-[14px] px-4 py-3 text-left transition-colors duration-300 lg:w-full lg:flex-col lg:items-start lg:gap-1 ${
+                        className={`flex h-full w-full items-baseline gap-2 rounded-[14px] px-3 py-2.5 text-left transition-colors duration-300 sm:px-4 sm:py-3 lg:flex-col lg:items-start lg:gap-1 ${
                           on
                             ? "bg-[#0b2b39] shadow-[0_10px_24px_-14px_rgba(11,43,57,0.55)]"
-                            : "hover:bg-black/[0.04]"
+                            : "bg-[#f6f5f3] hover:bg-black/[0.04] lg:bg-transparent"
                         }`}
                       >
                         <span
@@ -203,7 +203,7 @@ export default function Branchen() {
                           {pad(i + 1)}
                         </span>
                         <span
-                          className={`whitespace-nowrap text-[13.5px] font-medium tracking-[-0.01em] transition-colors lg:whitespace-normal ${
+                          className={`min-w-0 text-[13px] font-medium leading-snug tracking-[-0.01em] transition-colors sm:text-[13.5px] ${
                             on ? "text-white" : "text-ink/65"
                           }`}
                         >
