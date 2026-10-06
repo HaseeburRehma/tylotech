@@ -116,7 +116,7 @@ export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: str
               >
                 <button
                   onClick={() => setOpen(on ? -1 : i)}
-                  className={br ? "flex w-full items-center gap-6 py-5 pl-6 pr-5 text-left sm:py-[26px] sm:pl-8 sm:pr-6" : "flex w-full items-center gap-5 py-6 pl-7 pr-5 text-left"}
+                  className={br ? `flex w-full items-center gap-6 py-5 pl-6 pr-5 text-left transition-[padding] duration-300 sm:py-[26px] sm:pl-8 sm:pr-6 ${on ? "pb-2.5 sm:pb-4" : ""}` : "flex w-full items-center gap-5 py-6 pl-7 pr-5 text-left"}
                   aria-expanded={on}
                 >
                   <span
@@ -150,7 +150,7 @@ export default function FAQ({ items = ITEMS, tone = "home" }: { items?: { q: str
                     <p
                       className={
                         br
-                          ? "-mt-2.5 pb-6 pl-6 pr-6 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954] sm:pb-[26px] sm:pl-8 sm:pr-[92px]"
+                          ? "pb-6 pl-6 pr-6 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954] sm:pb-[26px] sm:pl-8 sm:pr-[92px]"
                           : "pb-6 pl-7 pr-[68px] text-[15px] leading-[1.65] text-[#5c5954]"
                       }
                     >
