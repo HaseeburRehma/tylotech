@@ -38,7 +38,7 @@ function Rich({ text }: { text: string }) {
 }
 
 function BlockView({ b }: { b: Block }) {
-  if ("h" in b) return <h3 className="pt-2 font-display text-[17px] font-semibold leading-6 tracking-[-0.02em] text-[#1a1917] sm:text-[18px]">{b.h}</h3>;
+  if ("h" in b) return <h3 className="hyphens-auto break-words pt-2 font-display text-[17px] font-semibold leading-6 tracking-[-0.02em] text-[#1a1917] sm:text-[18px]">{b.h}</h3>;
   if ("lines" in b)
     return (
       <p className="border-l-2 border-[#d1aa71] pl-4 text-[15.5px] leading-[26px] text-[#1a1917]">
@@ -130,7 +130,7 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
       <Container className="relative pb-14 pt-8 sm:pb-20 sm:pt-14 lg:pb-28 lg:pt-16 xl:pt-[88px]">
         <header className="lg-head flex max-w-[760px] flex-col items-start gap-5 sm:gap-6">
           <Eyebrow icon={icon}>{doc.eyebrow}</Eyebrow>
-          <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">
+          <h1 className="font-display text-[clamp(1.85rem,9.4vw,2.3rem)] font-semibold sm:text-[clamp(2.3rem,4.6vw,3.25rem)] leading-[1.1] tracking-[-0.035em] text-[#1a1917]">
             {doc.title}
             {doc.accent && (
               <span className="font-[family-name:var(--font-instrument)] text-[1.06em] font-normal italic tracking-[-0.02em] text-[#94713f]">{doc.accent}</span>
@@ -167,9 +167,9 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
             <article className="lg-card rounded-[24px] border border-[#eeedea] bg-white px-5 py-8 shadow-[0_7px_20px_rgba(8,34,44,0.05),0_23px_36px_rgba(8,34,44,0.04)] sm:rounded-[28px] sm:px-10 sm:py-12 lg:px-14">
               {doc.sections.map((s, i) => (
                 <section key={s.id} id={s.id} className={cn("scroll-mt-28", i > 0 && "mt-10 border-t border-[#eeedea] pt-10")}>
-                  <h2 className="mb-5 flex items-baseline gap-3 font-display text-[clamp(1.3rem,2vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.025em] text-[#1a1917]">
+                  <h2 className="mb-5 flex min-w-0 items-baseline gap-3 break-words font-display text-[clamp(1.3rem,2vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.025em] text-[#1a1917]">
                     <span className="font-mono text-[12px] font-medium tracking-[0.4px] text-[#b4894d]">{String(i + 1).padStart(2, "0")}</span>
-                    {s.title}
+                    <span className="min-w-0 hyphens-auto">{s.title}</span>
                   </h2>
                   <div className="flex flex-col gap-4">
                     {s.blocks.map((b, j) => (
