@@ -28,9 +28,12 @@ export default function Hero() {
         .from(".hero-copy", { y: 18, opacity: 0 }, "-=0.55")
         .from(".hero-cta", { y: 16, opacity: 0, stagger: 0.1 }, "-=0.5")
         .from(".hero-proof", { y: 14, opacity: 0 }, "-=0.45")
+        // no fade on the media card: its poster is the page's largest element
+        // (LCP), and an element at opacity 0 doesn't count as painted until the
+        // JS animation runs — a slide/scale-in keeps the motion without that cost
         .from(
           ".hero-media",
-          { y: 30, opacity: 0, scale: 0.96, duration: 1 },
+          { y: 30, scale: 0.96, duration: 1 },
           "-=0.95",
         );
     },

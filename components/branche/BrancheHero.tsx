@@ -18,7 +18,8 @@ export default function BrancheHero({ b }: { b: Branche }) {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.from(".bhh-copy > *", { y: 26, opacity: 0, duration: 0.8, stagger: 0.08 })
         .from(".bhh-offset", { x: 30, y: 30, opacity: 0, duration: 0.9 }, 0.15)
-        .from(".bhh-photo", { y: 40, opacity: 0, scale: 0.96, duration: 1 }, 0.2)
+        // no fade on the photo: it is the LCP element (see Hero.tsx)
+        .from(".bhh-photo", { y: 40, scale: 0.96, duration: 1 }, 0.2)
         .from(".bhh-card", { y: 18, opacity: 0, scale: 0.94, duration: 0.6, stagger: 0.15 }, 0.65)
         .from(".bhh-chip", { y: 14, opacity: 0, duration: 0.6 }, 0.95);
     },

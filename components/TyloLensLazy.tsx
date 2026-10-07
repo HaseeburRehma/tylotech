@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 const TyloLens = dynamic(() => import("./TyloLens"), { ssr: false });
 
 /* TyloLens is a large modal that only matters once someone scrolls or clicks,
-   so its code loads in idle time after the page — or immediately if the menu
-   asks for it first (the pending open is handed over on mount). */
+   so its code loads on the first interaction — or immediately if the menu asks
+   for it first (the pending open is handed over on mount). */
 export default function TyloLensLazy() {
   const [load, setLoad] = useState<false | { openOnMount?: "menu" | "fab" }>(false);
 
@@ -18,21 +18,15 @@ export default function TyloLensLazy() {
     };
     window.addEventListener("tylolens:open", onOpen);
 
-    let idle = 0;
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    // nothing to show until the visitor scrolls (auto-open at 55 %, floating
+    // button after the hero) or clicks — load on the first interaction
+    const EVENTS = ["scroll", "pointerdown", "touchstart", "keydown"] as const;
     const go = () => setLoad((cur) => cur || {});
-    const schedule = () => {
-      if ("requestIdleCallback" in window) idle = window.requestIdleCallback(go, { timeout: 4000 });
-      else timer = setTimeout(go, 2500);
-    };
-    if (document.readyState === "complete") schedule();
-    else window.addEventListener("load", schedule, { once: true });
+    EVENTS.forEach((ev) => window.addEventListener(ev, go, { once: true, passive: true }));
 
     return () => {
       window.removeEventListener("tylolens:open", onOpen);
-      window.removeEventListener("load", schedule);
-      if (idle) window.cancelIdleCallback(idle);
-      clearTimeout(timer);
+      EVENTS.forEach((ev) => window.removeEventListener(ev, go));
     };
   }, []);
 

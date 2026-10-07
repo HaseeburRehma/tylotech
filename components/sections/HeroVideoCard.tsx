@@ -6,8 +6,8 @@ import { useT } from "../i18n/LocaleProvider";
 
 /* The poster is the hero's largest element, so it is served from our own
    domain (public/hero, WebP) at high priority. The YouTube player (~2 MB of
-   script and video) only mounts once the page has loaded and the browser is
-   idle — it no longer competes with the first paint. */
+   script and video) mounts on the first interaction or 3.5 s after load —
+   it no longer competes with the first paint. */
 export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const t = useT();
@@ -15,18 +15,19 @@ export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const playing = useYouTubePlaying(frame, mountVideo);
 
   useEffect(() => {
-    let idle = 0;
+    // start the player on the first interaction, or 3.5 s after load at the latest
+    const EVENTS = ["scroll", "pointermove", "pointerdown", "touchstart", "keydown"] as const;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const go = () => setMountVideo(true);
-    const schedule = () => {
-      if ("requestIdleCallback" in window) idle = window.requestIdleCallback(go, { timeout: 2500 });
-      else timer = setTimeout(go, 1200);
+    const afterLoad = () => {
+      timer = setTimeout(go, 3500);
     };
-    if (document.readyState === "complete") schedule();
-    else window.addEventListener("load", schedule, { once: true });
+    EVENTS.forEach((ev) => window.addEventListener(ev, go, { once: true, passive: true }));
+    if (document.readyState === "complete") afterLoad();
+    else window.addEventListener("load", afterLoad, { once: true });
     return () => {
-      window.removeEventListener("load", schedule);
-      if (idle) window.cancelIdleCallback(idle);
+      EVENTS.forEach((ev) => window.removeEventListener(ev, go));
+      window.removeEventListener("load", afterLoad);
       clearTimeout(timer);
     };
   }, []);
