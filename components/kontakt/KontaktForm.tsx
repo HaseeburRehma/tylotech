@@ -97,7 +97,12 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
     try {
       const res = await fetch("/api/kontakt", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) });
       const data: { ok: boolean; reason?: string; errors?: FieldErrors } = await res.json().catch(() => ({ ok: false }));
-      if (data.ok) return setStatus("sent");
+      if (data.ok) {
+        // GA4 recommended lead event for GTM (no personal data)
+        const w = window as Window & { dataLayer?: unknown[] };
+        (w.dataLayer ??= []).push({ event: "generate_lead", lead_source: "contact_form", language: locale, branche: p.branche || "none" });
+        return setStatus("sent");
+      }
       if (data.reason === "invalid" && data.errors) {
         // the server answers in German; show the messages in the page's language
         const local = validate(p, locale);

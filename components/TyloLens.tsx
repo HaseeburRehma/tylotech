@@ -312,6 +312,8 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
         setStatus("sent");
         store.set(ls(), LS_SENT, "1");
         trackLens("tylolens_submitted", { budget: v.budget, branche: v.branche, ziel: v.ziel });
+        // GA4 recommended lead event for GTM (no personal data)
+        ((window as Window & { dataLayer?: unknown[] }).dataLayer ??= []).push({ event: "generate_lead", lead_source: "tylolens", language: locale, budget: v.budget });
         window.setTimeout(() => dialog.current?.querySelector<HTMLElement>("button")?.focus(), 50);
         return;
       }
