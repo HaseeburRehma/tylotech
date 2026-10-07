@@ -48,9 +48,9 @@ export default function KontaktHero({ initialBranche }: { initialBranche?: strin
   useGSAP(
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(".kh-copy > *", { y: 26, opacity: 0, duration: 0.8, stagger: 0.08 })
-        .from(".kh-card", { y: 40, opacity: 0, duration: 1 }, 0.15)
-        .from(".kh-card .kf-row", { y: 16, opacity: 0, duration: 0.6, stagger: 0.06, clearProps: "transform,opacity" }, 0.45)
+      // heading copy and the form card enter via CSS (intro-stagger / intro-up)
+      // so the page's first content never waits on JS (FCP/LCP)
+      tl.from(".kh-card .kf-row", { y: 16, opacity: 0, duration: 0.6, stagger: 0.06, clearProps: "transform,opacity" }, 0.45)
         .from(".kh-channel", { x: -18, opacity: 0, duration: 0.6, stagger: 0.08, clearProps: "transform,opacity" }, 0.5)
         .from(".kh-step", { y: 14, opacity: 0, duration: 0.6, stagger: 0.1, clearProps: "transform,opacity" }, 0.8);
     },
@@ -65,7 +65,7 @@ export default function KontaktHero({ initialBranche }: { initialBranche?: strin
       />
       {/* phones: headline → form → channels; desktop: copy + channels left, form right */}
       <Container className="relative grid grid-cols-1 items-start gap-10 pb-14 pt-8 sm:pb-20 sm:pt-14 lg:pb-28 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,600px)] xl:grid-rows-[auto_1fr] xl:gap-x-16 xl:gap-y-10 xl:pt-[88px] 2xl:gap-x-20">
-        <div className="kh-copy flex min-w-0 flex-col items-start gap-6 sm:gap-7">
+        <div className="kh-copy intro-stagger flex min-w-0 flex-col items-start gap-6 sm:gap-7">
           <Eyebrow icon="message-circle">{t("Kontakt", "Contact")}</Eyebrow>
           <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">
             <Accent text={t("Lass uns über dein\n_Wachstum_ sprechen.", "Let's talk about\nyour _growth_.")} />
@@ -119,7 +119,7 @@ export default function KontaktHero({ initialBranche }: { initialBranche?: strin
           </div>
         </div>
 
-        <div className="kh-card relative rounded-[24px] w-full max-w-[760px] xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:max-w-none border border-[#eeedea] bg-white p-5 shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05),0_51px_49px_rgba(8,34,44,0.03)] sm:rounded-[28px] sm:p-8 lg:p-10">
+        <div className="kh-card intro-up [animation-delay:150ms] relative rounded-[24px] w-full max-w-[760px] xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:max-w-none border border-[#eeedea] bg-white p-5 shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05),0_51px_49px_rgba(8,34,44,0.03)] sm:rounded-[28px] sm:p-8 lg:p-10">
           <div className="mb-7 flex flex-col gap-1.5 border-b border-[#eeedea] pb-6">
             <h2 className="font-display text-[clamp(1.4rem,2.2vw,1.625rem)] font-semibold leading-[1.2] tracking-[-0.025em] text-[#1a1917]">
               {t("Erstgespräch", "Request a")}{" "}

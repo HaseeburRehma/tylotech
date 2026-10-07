@@ -4,7 +4,6 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronDown, Mail, Phone } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { CONTACT } from "@/lib/contact";
 import type { Block, LegalDoc } from "@/lib/legal";
@@ -115,14 +114,8 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
     return () => io.disconnect();
   }, [doc.sections]);
 
-  useGSAP(
-    () => {
-      gsap.from(".lg-head > *", { y: 24, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.08 });
-      gsap.from(".lg-card", { y: 36, opacity: 0, duration: 0.9, ease: "power3.out", delay: 0.2 });
-      gsap.from(".lg-toc", { x: -16, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.35 });
-    },
-    { scope: root },
-  );
+  // head, card and contents enter via CSS (intro-stagger / intro-up): the
+  // text is the page's LCP and must not wait on JS
 
   return (
     <section id="top" ref={root} className="relative overflow-hidden bg-page">
@@ -131,7 +124,7 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
         className="pointer-events-none absolute -top-40 left-[30%] h-[640px] w-[1100px] rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.18),rgba(209,170,113,0.04)_60%,transparent)]"
       />
       <Container className="relative pb-14 pt-8 sm:pb-20 sm:pt-14 lg:pb-28 lg:pt-16 xl:pt-[88px]">
-        <header className="lg-head flex max-w-[760px] flex-col items-start gap-5 sm:gap-6">
+        <header className="lg-head intro-stagger flex max-w-[760px] flex-col items-start gap-5 sm:gap-6">
           <Eyebrow icon={icon}>{doc.eyebrow}</Eyebrow>
           <h1 className="font-display text-[clamp(1.85rem,9.4vw,2.3rem)] font-semibold sm:text-[clamp(2.3rem,4.6vw,3.25rem)] leading-[1.1] tracking-[-0.035em] text-[#1a1917]">
             {doc.title}
@@ -150,7 +143,7 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
 
         <div className="mt-12 grid grid-cols-1 gap-8 lg:mt-14 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12 xl:gap-16">
           {/* table of contents */}
-          <aside className="lg-toc lg:sticky lg:top-28 lg:self-start">
+          <aside className="lg-toc intro-up [animation-delay:350ms] lg:sticky lg:top-28 lg:self-start">
             <details className="group rounded-[18px] border border-[#eeedea] bg-white/80 p-2 backdrop-blur lg:hidden">
               <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.4px] text-[#5c5954] [&::-webkit-details-marker]:hidden">
                 {t("Inhalt", "Contents")}
@@ -167,7 +160,7 @@ export default function LegalPage({ doc, icon }: { doc: LegalDoc; icon: "file-te
           </aside>
 
           <div className="flex min-w-0 flex-col gap-6">
-            <article className="lg-card rounded-[24px] border border-[#eeedea] bg-white px-5 py-8 shadow-[0_7px_20px_rgba(8,34,44,0.05),0_23px_36px_rgba(8,34,44,0.04)] sm:rounded-[28px] sm:px-10 sm:py-12 lg:px-14">
+            <article className="lg-card intro-up [animation-delay:200ms] rounded-[24px] border border-[#eeedea] bg-white px-5 py-8 shadow-[0_7px_20px_rgba(8,34,44,0.05),0_23px_36px_rgba(8,34,44,0.04)] sm:rounded-[28px] sm:px-10 sm:py-12 lg:px-14">
               {doc.sections.map((s, i) => (
                 <section key={s.id} id={s.id} className={cn("scroll-mt-28", i > 0 && "mt-10 border-t border-[#eeedea] pt-10")}>
                   <h2 className="mb-5 flex min-w-0 items-baseline gap-3 break-words font-display text-[clamp(1.3rem,2vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.025em] text-[#1a1917]">
