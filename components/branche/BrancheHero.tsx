@@ -16,10 +16,9 @@ export default function BrancheHero({ b }: { b: Branche }) {
   useGSAP(
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(".bhh-copy > *", { y: 26, opacity: 0, duration: 0.8, stagger: 0.08 })
-        .from(".bhh-offset", { x: 30, y: 30, opacity: 0, duration: 0.9 }, 0.15)
-        // no fade on the photo: it is the LCP element (see Hero.tsx)
-        .from(".bhh-photo", { y: 40, scale: 0.96, duration: 1 }, 0.2)
+      // copy and photo enter via CSS (intro-stagger / intro-slide in globals.css)
+      // so the headline and photo — the LCP candidates — never wait on JS
+      tl.from(".bhh-offset", { x: 30, y: 30, opacity: 0, duration: 0.9 }, 0.15)
         .from(".bhh-card", { y: 18, opacity: 0, scale: 0.94, duration: 0.6, stagger: 0.15 }, 0.65)
         .from(".bhh-chip", { y: 14, opacity: 0, duration: 0.6 }, 0.95);
     },
@@ -34,7 +33,7 @@ export default function BrancheHero({ b }: { b: Branche }) {
         className="pointer-events-none absolute -top-36 left-[32%] h-[760px] w-[1180px] rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.22),rgba(209,170,113,0.06)_60%,transparent)]"
       />
       <Container className="relative grid grid-cols-1 items-center gap-10 pb-14 pt-8 sm:gap-12 sm:pb-20 sm:pt-14 lg:pb-24 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,500px)] xl:gap-16 xl:pt-[88px]">
-        <div className="bhh-copy flex min-w-0 flex-col items-start gap-6 sm:gap-7">
+        <div className="bhh-copy intro-stagger flex min-w-0 flex-col items-start gap-6 sm:gap-7">
           <Eyebrow icon={h.icon}>{h.eyebrow}</Eyebrow>
           <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">
             <Accent text={h.title} />
@@ -66,7 +65,7 @@ export default function BrancheHero({ b }: { b: Branche }) {
           The float runs on CSS `translate`, so it never fights GSAP's transform. */}
         <div className="relative mx-auto aspect-[500/560] w-full max-w-[500px]">
           <div className="bhh-offset absolute left-[17.6%] top-[7.1%] h-[91.1%] w-[80%] rounded-[28px] bg-[#fbf6ee]" />
-          <div className="bhh-photo absolute left-[12%] top-[2.1%] h-[91.1%] w-[80%] overflow-hidden rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)]">
+          <div className="bhh-photo intro-slide absolute [animation-delay:200ms] left-[12%] top-[2.1%] h-[91.1%] w-[80%] overflow-hidden rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={h.image} alt="" className="absolute inset-0 h-full w-full object-cover" fetchPriority="high" />
           </div>

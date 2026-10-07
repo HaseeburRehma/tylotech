@@ -44,7 +44,7 @@ export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1&controls=0&showinfo=0&iv_load_policy=3&loop=1&playlist=${videoId}&start=2&vq=hd1080&enablejsapi=1`;
 
   return (
-    <div className="hero-media relative w-full">
+    <div className="hero-media intro-slide relative w-full [animation-delay:500ms]">
       {/* warm ambient glow behind the card */}
       <div
         aria-hidden
