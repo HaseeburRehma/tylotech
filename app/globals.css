@@ -389,12 +389,15 @@ html.lenis body {
 /* Hero entrances in pure CSS: they start at the very first paint instead of
    after hydration, so the hero is never waiting on JavaScript (FCP/LCP).
    Media only slides (no fade/scale): it is the LCP element. */
+/* fades start at 0.01, not 0: Chrome never counts an element first painted at
+   opacity 0 as the largest paint (LCP), even after it fades in — at 0.01 the
+   text is still invisible to the eye but counts as painted from the first frame */
 @keyframes introUp {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0.01; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes introLine {
-  from { opacity: 0; transform: translateY(118%); }
+  from { opacity: 0.01; transform: translateY(118%); }
   to { opacity: 1; transform: none; }
 }
 @keyframes introSlide {

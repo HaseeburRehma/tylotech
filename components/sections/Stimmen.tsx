@@ -1,5 +1,6 @@
 "use client";
 
+import { enableSnap, useLazySnap } from "@/lib/useLazySnap";
 import { useEffect, useRef } from "react";
 import { Star, Quote, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
@@ -210,6 +211,7 @@ export default function Stimmen() {
   const t = useT();
   const cards = pick(locale, CARDS);
   const scroller = useRef<HTMLDivElement>(null);
+  useLazySnap(scroller);
   const paused = useRef(false);
 
   useGSAP(
@@ -237,7 +239,7 @@ export default function Stimmen() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const el = scroller.current;
     if (!el) return;
-    let visible = true;
+    let visible = false; // set by the observer; no auto-scroll before it has seen the section
     const io = new IntersectionObserver(
       ([e]) => {
         visible = e.isIntersecting;
@@ -250,6 +252,7 @@ export default function Stimmen() {
       if (paused.current || !visible) return;
       const card = el.querySelector<HTMLElement>(".stimmen-card");
       const step = card ? card.offsetWidth + GAP : el.clientWidth;
+      enableSnap(el);
       if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 8) {
         el.scrollTo({ left: 0, behavior: "smooth" });
       } else {
@@ -298,7 +301,7 @@ export default function Stimmen() {
           onPointerLeave={() => {
             paused.current = false;
           }}
-          className="stimmen-track no-scrollbar -mx-6 mt-10 flex snap-x snap-mandatory items-stretch gap-6 overflow-x-auto px-6 pb-2 sm:mt-12 md:mx-0 md:px-0"
+          className="stimmen-track no-scrollbar -mx-6 mt-10 flex data-[snap=on]:snap-x data-[snap=on]:snap-mandatory items-stretch gap-6 overflow-x-auto px-6 pb-2 sm:mt-12 md:mx-0 md:px-0"
         >
           {cards.map((card, i) => (
             <article

@@ -1,5 +1,6 @@
 "use client";
 
+import { enableSnap, useLazySnap } from "@/lib/useLazySnap";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Star } from "lucide-react";
 import Container from "../ui/Container";
@@ -105,6 +106,7 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
   const t = useT();
   const locale = useLocale();
   const track = useRef<HTMLDivElement>(null);
+  useLazySnap(track);
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
   const [paused, setPaused] = useState(false);
@@ -128,6 +130,7 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
       if (!el) return;
       const n = ((i % pages) + pages) % pages;
       const card = el.children[n] as HTMLElement | undefined;
+      enableSnap(el);
       el.scrollTo({ left: card ? card.offsetLeft - (el.firstElementChild as HTMLElement).offsetLeft : 0, behavior: "smooth" });
       setPage(n);
       setTick((t) => t + 1);
@@ -224,7 +227,7 @@ export default function KontaktBewertungen({ data }: { data: ReviewData }) {
             role="region"
             aria-roledescription={t("Karussell", "carousel")}
             aria-label={t("Google-Bewertungen", "Google reviews")}
-            className="-mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-6 pb-2 [scrollbar-width:none] md:-mx-10 md:px-10 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden"
+            className="-mx-6 flex data-[snap=on]:snap-x data-[snap=on]:snap-mandatory gap-5 overflow-x-auto scroll-smooth px-6 pb-2 [scrollbar-width:none] md:-mx-10 md:px-10 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden"
           >
             {data.reviews.map((r, i) => (
               <div
