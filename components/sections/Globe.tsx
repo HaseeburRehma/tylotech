@@ -19,7 +19,8 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const N = 1500;
+    // fewer dots on small screens: same look on the smaller canvas, far less work per frame
+    const N = window.innerWidth < 768 ? 900 : 1500;
     const golden = Math.PI * (3 - Math.sqrt(5));
     const pts = Array.from({ length: N }, (_, i) => {
       const y = 1 - (i / (N - 1)) * 2;
@@ -215,11 +216,27 @@ function GlobeCanvas({ progress }: { progress: { current: number } }) {
       }
 
       if (!reduce) angle += 0.0014;
-      raf = requestAnimationFrame(draw);
+      if (visible) raf = requestAnimationFrame(draw);
     };
-    draw();
+
+    // only animate while the globe is on (or near) the screen
+    let visible = false;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && !visible) {
+          visible = true;
+          raf = requestAnimationFrame(draw);
+        } else if (!e.isIntersecting) {
+          visible = false;
+          cancelAnimationFrame(raf);
+        }
+      },
+      { rootMargin: "120px 0px" },
+    );
+    io.observe(canvas);
 
     return () => {
+      io.disconnect();
       cancelAnimationFrame(raf);
       ro.disconnect();
       host.removeEventListener("pointermove", onMove);
@@ -363,10 +380,27 @@ export default function Globe() {
           labels[i].style.boxShadow = "none";
         }
       }
-      raf = requestAnimationFrame(tick);
+      if (visible) raf = requestAnimationFrame(tick);
     };
-    tick();
-    return () => cancelAnimationFrame(raf);
+    // style writes every frame force style recalcs — only while visible
+    let visible = false;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && !visible) {
+          visible = true;
+          raf = requestAnimationFrame(tick);
+        } else if (!e.isIntersecting) {
+          visible = false;
+          cancelAnimationFrame(raf);
+        }
+      },
+      { rootMargin: "120px 0px" },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   return (

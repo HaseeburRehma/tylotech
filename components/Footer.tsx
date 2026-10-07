@@ -54,7 +54,7 @@ const LEGAL: Record<string, string> = { "TyloTech HQ Login": TYLOHQ_URL, Impress
 const FOOTER_PARTNERS = ["Priya's Reinigungsservice", "LokShift", "Crusty Slices", "Rohrcleaner"]
   .map((n) => PARTNERS.find((p) => p.name === n))
   .filter((p): p is (typeof PARTNERS)[number] => !!p)
-  .map((p) => (p.name === "Rohrcleaner" ? { ...p, src: "/partners/rohrcleaner.png", w: 48, h: 40 } : p));
+  .map((p) => (p.name === "Rohrcleaner" ? { ...p, src: "/partners/rohrcleaner.webp", w: 48, h: 40 } : p));
 
 const SOCIALS: { label: string; path: string }[] = [
   {

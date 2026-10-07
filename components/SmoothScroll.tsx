@@ -25,85 +25,70 @@ export default function SmoothScroll({
       window.scrollTo(0, 0);
     }
 
-    // Smooth anchor scrolling works with or without Lenis.
-    let lenis: Lenis | null = null;
+    // ScrollTrigger builds every trigger's start/end at mount — but web fonts
+    // (next/font) swap in AFTER hydration and reflow the whole page, so those
+    // positions go stale and no reveal ever fires. Refresh once the layout has
+    // settled (fonts, load event, one late safety net). Requests are coalesced
+    // into one refresh per frame: every refresh re-measures every trigger.
+    let pending = 0;
+    const refresh = () => {
+      cancelAnimationFrame(pending);
+      pending = requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+    const late = window.setTimeout(refresh, 1500);
+    document.fonts?.ready.then(refresh);
+    if (document.readyState === "complete") refresh();
+    else window.addEventListener("load", refresh, { once: true });
 
-    if (!reduce) {
+    // Lenis only where it changes something: wheel/trackpad scrolling. Touch
+    // devices scroll natively anyway, so there it would only add per-frame work.
+    const touch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    let lenis: Lenis | null = null;
+    let raf: ((time: number) => void) | null = null;
+    if (!reduce && !touch) {
       lenis = new Lenis({
         duration: 1.15,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 1.4,
       });
-
       lenis.on("scroll", ScrollTrigger.update);
       // modals (TyloLens) pause page scrolling via window.__lenis.stop()/start()
       (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
-      const raf = (time: number) => lenis!.raf(time * 1000);
+      raf = (time: number) => lenis!.raf(time * 1000);
       gsap.ticker.add(raf);
       gsap.ticker.lagSmoothing(0);
-
-      // ScrollTrigger builds every trigger's start/end at mount — but web fonts
-      // (next/font) swap in AFTER hydration and reflow the whole page, so those
-      // positions go stale and no reveal ever fires. Refresh once the layout has
-      // actually settled: after fonts load, after the load event, and on a few
-      // delayed ticks as a safety net for late images.
-      const refresh = () => ScrollTrigger.refresh();
-      const timers: number[] = [];
-      const scheduleRefresh = () => {
-        refresh();
-        [200, 600, 1200, 2000].forEach((d) =>
-          timers.push(window.setTimeout(refresh, d)),
-        );
-      };
-
-      if (document.fonts?.ready) {
-        document.fonts.ready.then(scheduleRefresh);
-      } else {
-        scheduleRefresh();
-      }
-      if (document.readyState === "complete") {
-        scheduleRefresh();
-      } else {
-        window.addEventListener("load", scheduleRefresh);
-      }
-
-      const onClick = (e: MouseEvent) => {
-        const target = e.target as HTMLElement;
-        const anchor = target.closest<HTMLAnchorElement>('a[href^="#"]');
-        if (!anchor) return;
-        const hash = anchor.getAttribute("href");
-        if (!hash || hash === "#") return;
-        const el = document.querySelector(hash);
-        if (!el) return;
-        e.preventDefault();
-        lenis!.scrollTo(el as HTMLElement, { offset: -72, duration: 1.2 });
-      };
-      document.addEventListener("click", onClick);
-
-      return () => {
-        document.removeEventListener("click", onClick);
-        window.removeEventListener("load", scheduleRefresh);
-        timers.forEach((id) => window.clearTimeout(id));
-        gsap.ticker.remove(raf);
-        lenis!.destroy();
-      };
     }
 
-    // Reduced motion: native smooth anchors only.
+    // Smooth anchor scrolling with or without Lenis (72px = sticky header).
     const onClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const anchor = target.closest<HTMLAnchorElement>('a[href^="#"]');
+      const anchor = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
       if (!anchor) return;
       const hash = anchor.getAttribute("href");
       if (!hash || hash === "#") return;
-      const el = document.querySelector(hash);
+      const el = document.querySelector<HTMLElement>(hash);
       if (!el) return;
       e.preventDefault();
-      el.scrollIntoView({ behavior: "smooth" });
+      const go = () => {
+        if (lenis) lenis.scrollTo(el, { offset: -72, duration: 1.2 });
+        else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: reduce ? "auto" : "smooth" });
+      };
+      // a link in the open mobile menu: the panel collapses first (300 ms) and
+      // shifts the page — measure the target only after that
+      if (anchor.closest("header") && window.innerWidth < 1024) window.setTimeout(go, 320);
+      else go();
     };
     document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
+
+    return () => {
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("load", refresh);
+      window.clearTimeout(late);
+      cancelAnimationFrame(pending);
+      if (raf) gsap.ticker.remove(raf);
+      lenis?.destroy();
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
+    };
   }, []);
 
   return <>{children}</>;

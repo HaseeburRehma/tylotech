@@ -1,10 +1,23 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { ArrowUpRight, Gauge, LayoutDashboard, MousePointerClick, Sparkles, Users } from "lucide-react";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
-import HQApp from "../tylohq/HQApp";
+
+/* The interactive demo (~1,400 lines, ~400 elements) sits far down the page:
+   its code loads and mounts only once the section comes near the viewport.
+   Until then a placeholder of the exact same size holds its place. */
+const HQApp = dynamic(() => import("../tylohq/HQApp"), { ssr: false, loading: () => <HQAppPlaceholder /> });
+
+function HQAppPlaceholder() {
+  return (
+    <div className="@container" aria-hidden>
+      <div className="h-[560px] rounded-[16px] border border-[#e2e0dc] bg-[#f6f5f3] shadow-[0_50px_100px_-50px_rgba(8,34,44,0.45),0_20px_40px_-30px_rgba(8,34,44,0.25)] @[760px]:h-[498px]" />
+    </div>
+  );
+}
 import { TYLOHQ_URL } from "@/lib/site";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useLocalePath, useT } from "../i18n/LocaleProvider";
@@ -42,6 +55,20 @@ const FEATURES = [
 export default function TyloHQDashboard() {
   const root = useRef<HTMLElement>(null);
   const [live, setLive] = useState(false);
+  const appSlot = useRef<HTMLDivElement>(null);
+  const [nearApp, setNearApp] = useState(false);
+  useEffect(() => {
+    const el = appSlot.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        setNearApp(true);
+        io.disconnect();
+      }
+    }, { rootMargin: "800px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   const t = useT();
   const lp = useLocalePath();
 
@@ -109,8 +136,8 @@ export default function TyloHQDashboard() {
           </p>
         </div>
 
-        <div className="hqd-app relative mx-auto mt-10 max-w-[1180px] sm:mt-14">
-          <HQApp live={live} />
+        <div ref={appSlot} className="hqd-app relative mx-auto mt-10 max-w-[1180px] sm:mt-14">
+          {nearApp ? <HQApp live={live} /> : <HQAppPlaceholder />}
           <p className="mt-4 flex items-center justify-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.6px] text-[#7d7973]">
             <MousePointerClick className="size-3.5 text-[#c79a53]" strokeWidth={1.8} />
             {t("Live-Demo · klick dich durch die Bereiche", "Live demo · click through the sections")}

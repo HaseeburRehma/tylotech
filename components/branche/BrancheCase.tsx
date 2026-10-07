@@ -48,7 +48,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
                   aria-label="Rohr Cleaner"
                   role="img"
                   className="block h-10 w-12 bg-[#7d7973]"
-                  style={{ WebkitMaskImage: "url(/partners/rohrcleaner.png)", maskImage: "url(/partners/rohrcleaner.png)", WebkitMaskSize: "contain", maskSize: "contain", WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat", WebkitMaskPosition: "center", maskPosition: "center" }}
+                  style={{ WebkitMaskImage: "url(/partners/rohrcleaner.webp)", maskImage: "url(/partners/rohrcleaner.webp)", WebkitMaskSize: "contain", maskSize: "contain", WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat", WebkitMaskPosition: "center", maskPosition: "center" }}
                 />
               )}
             </div>

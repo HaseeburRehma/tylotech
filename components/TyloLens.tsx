@@ -102,7 +102,7 @@ const ZIEL_ICON: Record<string, LucideIcon> = {
   "Marke aufbauen": Sparkles,
 };
 
-export default function TyloLens() {
+export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab" } = {}) {
   const pathname = usePathname();
   const locale = useLocale();
   const t = useT();
@@ -143,6 +143,13 @@ export default function TyloLens() {
       trackLens("tylolens_dismissed");
     }
     lastFocus.current?.focus?.();
+  }, []);
+
+  /* opened before this (lazy-loaded) component existed: open right away */
+  useEffect(() => {
+    if (openOnMount) show(openOnMount);
+    // only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* menu item / any other trigger */
