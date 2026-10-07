@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
 import CookieBanner from "@/components/CookieBanner";
+import Clarity from "@/components/Clarity";
 import TyloLensLazy from "@/components/TyloLensLazy";
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { fontVariables } from "@/lib/fonts";
@@ -17,6 +18,7 @@ export default function RootDocument({ locale, children }: { locale: Locale; chi
           <SmoothScroll>{children}</SmoothScroll>
           <TyloLensLazy />
           <CookieBanner />
+          <Clarity />
         </LocaleProvider>
       </body>
     </html>

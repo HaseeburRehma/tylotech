@@ -7,21 +7,22 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { CONTACT, mapsEmbedUrl, mapsRouteUrl, mapsSearchUrl } from "@/lib/contact";
 import { SectionHead } from "../branche/ui";
 import { useT } from "../i18n/LocaleProvider";
+import { CONSENT_EVENT, readConsent } from "@/lib/consent";
 
 /* Google Maps only loads after consent ("Funktional" in the cookie banner) or an
    explicit click — until then an illustrated map stands in, so nothing is sent to Google. */
 function hasMapConsent() {
-  try {
-    const c = JSON.parse(localStorage.getItem("tt-cookie-consent") || "null");
-    return c?.functional === true;
-  } catch {
-    return false;
-  }
+  return readConsent()?.functional === true;
 }
 
+// other tabs ("storage") and this tab (the banner's consent event)
 const subscribeStorage = (cb: () => void) => {
   window.addEventListener("storage", cb);
-  return () => window.removeEventListener("storage", cb);
+  window.addEventListener(CONSENT_EVENT, cb);
+  return () => {
+    window.removeEventListener("storage", cb);
+    window.removeEventListener(CONSENT_EVENT, cb);
+  };
 };
 
 /* deterministic street grid for the placeholder */

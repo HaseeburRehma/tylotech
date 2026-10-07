@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { TYLOHQ_URL } from "@/lib/site";
+import { openCookieSettings } from "@/lib/consent";
 import { MapPin, Mail, Phone, ShieldCheck, Server, Quote } from "lucide-react";
 import Container from "./ui/Container";
 import PartnerLogo from "./PartnerLogo";
@@ -184,7 +185,18 @@ export default function Footer() {
             ].map((col) => (
               <div key={col.title} className="flex flex-col gap-3.5">
                 <p className="font-[family-name:var(--font-instrument)] text-[19px] italic leading-6 text-[#d8b681]">{label(col.title)}</p>
-                {col.items.map(({ l, href }) => (
+                {col.items.map(({ l, href }) =>
+                  l === "Cookie-Einstellungen" ? (
+                    // reopens the cookie banner (change or withdraw consent)
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={openCookieSettings}
+                      className="w-fit text-left text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.66] transition-colors hover:text-white"
+                    >
+                      {label(l)}
+                    </button>
+                  ) : (
                   <Link
                     key={l}
                     href={lp(href)}
@@ -193,7 +205,8 @@ export default function Footer() {
                   >
                     {label(l)}
                   </Link>
-                ))}
+                  ),
+                )}
               </div>
             ))}
           </div>

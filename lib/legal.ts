@@ -233,12 +233,11 @@ export const DATENSCHUTZ: LegalDoc = {
     },
     {
       id: "analyse",
-      title: "Analyse-Dienste für Webseiten, Tracking",
+      title: "Analyse-Dienste für Webseiten (Microsoft Clarity)",
       blocks: [
-        { p: "Wir nutzen auf unserer Webseite den Webseiten-Analysedienst Google Analytics." },
-        {
-          p: "Rechtsgrundlage für die Verwendung der Analyse-Tools ist Ihre Einwilligung in unserer Consent-Box. Diese Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Die Webseitenanalyse liegt im Interesse unserer Agentur und dient der statistischen Erfassung der Seitennutzung zur fortlaufenden Verbesserung unserer Webseite und des Angebots unserer Dienstleistungen.",
-        },
+        { p: "Wir nutzen auf unserer Webseite den Analysedienst Microsoft Clarity der Microsoft Ireland Operations Limited, One Microsoft Place, South County Business Park, Leopardstown, Dublin 18, Irland. Clarity erstellt Heatmaps und Aufzeichnungen von Seitenbesuchen (zum Beispiel Mausbewegungen, Klicks und Scrolltiefe), damit wir erkennen, wie unsere Webseite genutzt wird und wo wir sie verbessern können. Eingaben in Formularfeldern werden von Clarity maskiert und nicht im Klartext aufgezeichnet." },
+        { p: "Clarity wird erst geladen, wenn Sie in unserer Cookie-Auswahl der Kategorie „Statistik“ zustimmen. Dann werden Cookies gesetzt (unter anderem „_clck“ und „_clsk“, Speicherdauer bis zu einem Jahr) und Nutzungsdaten, Geräte- und Browserinformationen sowie eine pseudonyme Kennung an Microsoft übermittelt. Eine Übermittlung in die USA ist möglich; Microsoft ist nach dem EU-US Data Privacy Framework zertifiziert." },
+        { p: "Rechtsgrundlage ist Ihre Einwilligung nach Art. 6 Abs. 1 Satz 1 Buchst. a) DSGVO und § 25 Abs. 1 TDDDG. Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft über „Cookie-Einstellungen“ im Fußbereich der Webseite widerrufen; die Clarity-Cookies werden dann gelöscht. Weitere Informationen: [privacy.microsoft.com/privacystatement](https://privacy.microsoft.com/privacystatement)." },
       ],
     },
     {

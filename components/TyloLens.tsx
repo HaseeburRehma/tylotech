@@ -1,5 +1,6 @@
 "use client";
 
+import { CONSENT_VERSION, readConsent } from "@/lib/consent";
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
@@ -203,7 +204,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
     const onScroll = () => {
       const footer = document.querySelector("footer");
       const overFooter = footer ? footer.getBoundingClientRect().top < window.innerHeight - 40 : false;
-      const cookieDecided = !!store.get(ls(), "tt-cookie-consent");
+      const cookieDecided = (readConsent()?.v ?? 0) >= CONSENT_VERSION; // banner answered (current version)
       setFab(window.scrollY > window.innerHeight * 0.6 && !overFooter && cookieDecided);
     };
     onScroll();

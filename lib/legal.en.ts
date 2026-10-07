@@ -238,12 +238,11 @@ export const DATENSCHUTZ_EN: LegalDoc = {
     },
     {
       id: "analyse",
-      title: "Website analysis services and tracking",
+      title: "Website analysis services (Microsoft Clarity)",
       blocks: [
-        { p: "We use the web analytics service Google Analytics on our website." },
-        {
-          p: "The legal basis for the use of the analysis tools is the consent you give in our consent box. You can withdraw this consent at any time with effect for the future. Website analysis is in the interest of our agency and serves the statistical recording of page usage in order to continuously improve our website and the services we offer.",
-        },
+        { p: "We use the analytics service Microsoft Clarity on our website, provided by Microsoft Ireland Operations Limited, One Microsoft Place, South County Business Park, Leopardstown, Dublin 18, Ireland. Clarity creates heatmaps and recordings of page visits (for example mouse movements, clicks and scroll depth) so that we can see how our website is used and where we can improve it. Input in form fields is masked by Clarity and not recorded in plain text." },
+        { p: "Clarity is only loaded once you consent to the “Statistics” category in our cookie settings. Cookies are then set (including “_clck” and “_clsk”, stored for up to one year) and usage data, device and browser information and a pseudonymous identifier are transmitted to Microsoft. A transfer to the USA is possible; Microsoft is certified under the EU-US Data Privacy Framework." },
+        { p: "The legal basis is your consent pursuant to Art. 6(1)(a) GDPR and Section 25(1) TDDDG. You can withdraw your consent at any time with effect for the future via “Cookie settings” in the footer of the website; the Clarity cookies are then deleted. Further information: [privacy.microsoft.com/privacystatement](https://privacy.microsoft.com/privacystatement)." },
       ],
     },
     {

@@ -3,14 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLocalePath, useT } from "./i18n/LocaleProvider";
-
-const STORAGE_KEY = "tt-cookie-consent";
-
-type Consent = {
-  necessary: true;
-  functional: boolean;
-  marketing: boolean;
-};
+import { CONSENT_VERSION, OPEN_SETTINGS_EVENT, readConsent, writeConsent } from "@/lib/consent";
 
 function Toggle({
   on,
@@ -52,30 +45,37 @@ export default function CookieBanner() {
   const lp = useLocalePath();
   const [visible, setVisible] = useState(false);
   const [functional, setFunctional] = useState(false);
+  const [statistics, setStatistics] = useState(false);
   const [marketing, setMarketing] = useState(false);
 
   useEffect(() => {
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem(STORAGE_KEY);
-    } catch {
-      stored = null;
+    const prefill = () => {
+      const c = readConsent();
+      setFunctional(!!c?.functional);
+      setStatistics(!!c?.statistics);
+      setMarketing(!!c?.marketing);
+    };
+    // footer "Cookie settings": reopen with the current choice
+    const open = () => {
+      prefill();
+      setVisible(true);
+    };
+    window.addEventListener(OPEN_SETTINGS_EVENT, open);
+
+    // no choice yet, or one made before the "statistics" category existed
+    const c = readConsent();
+    let timer: number | undefined;
+    if (!c || c.v < CONSENT_VERSION) {
+      timer = window.setTimeout(open, 700);
     }
-    if (!stored) {
-      const t = window.setTimeout(() => setVisible(true), 700);
-      return () => window.clearTimeout(t);
-    }
+    return () => {
+      window.removeEventListener(OPEN_SETTINGS_EVENT, open);
+      window.clearTimeout(timer);
+    };
   }, []);
 
-  const persist = (consent: Consent) => {
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ ...consent, ts: Date.now() }),
-      );
-    } catch {
-      /* storage unavailable — choice simply won't persist */
-    }
+  const persist = (c: { functional: boolean; statistics: boolean; marketing: boolean }) => {
+    writeConsent(c);
     setVisible(false);
   };
 
@@ -105,27 +105,28 @@ export default function CookieBanner() {
         <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
           <Toggle on disabled label={t("Notwendig", "Necessary")} />
           <Toggle on={functional} onChange={setFunctional} label={t("Funktional", "Functional")} />
+          <Toggle on={statistics} onChange={setStatistics} label={t("Statistik", "Statistics")} />
           <Toggle on={marketing} onChange={setMarketing} label={t("Marketing", "Marketing")} />
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-2.5">
           <button
             type="button"
-            onClick={() => persist({ necessary: true, functional: true, marketing: true })}
+            onClick={() => persist({ functional: true, statistics: true, marketing: true })}
             className="h-10 rounded-[10px] bg-[#002e3d] px-4 text-[14px] font-medium text-inverse transition-colors hover:bg-[#013a4d]"
           >
             {t("Alle erlauben", "Allow all")}
           </button>
           <button
             type="button"
-            onClick={() => persist({ necessary: true, functional, marketing })}
+            onClick={() => persist({ functional, statistics, marketing })}
             className="h-10 rounded-[10px] border border-[#cbc8c2] px-4 text-[14px] font-medium text-ink transition-colors hover:bg-page"
           >
             {t("Auswahl erlauben", "Allow selection")}
           </button>
           <button
             type="button"
-            onClick={() => persist({ necessary: true, functional: false, marketing: false })}
+            onClick={() => persist({ functional: false, statistics: false, marketing: false })}
             className="h-10 rounded-[10px] border border-[#cbc8c2] px-4 text-[14px] font-medium text-ink transition-colors hover:bg-page"
           >
             {t("Ablehnen", "Reject")}
