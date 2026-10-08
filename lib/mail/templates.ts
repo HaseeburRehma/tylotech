@@ -93,10 +93,10 @@ export function teamNotification(e: Enquiry, origin: string, source: string, loc
   const tel = e.phone ? `tel:${e.phone.replace(/[^\d+]/g, "")}` : "";
   const rows: [string, string][] = [
     ["Name", esc(e.name)],
-    ["Unternehmen", esc(e.company) || "—"],
+    ["Unternehmen", esc(e.company) || "-"],
     ["E-Mail", `<a href="mailto:${esc(e.email)}" style="color:${C.goldText};text-decoration:underline">${esc(e.email)}</a>`],
-    ["Telefon", e.phone ? `<a href="${esc(tel)}" style="color:${C.goldText};text-decoration:underline">${esc(e.phone)}</a>` : "—"],
-    ["Branche", esc(e.branche) || "—"],
+    ["Telefon", e.phone ? `<a href="${esc(tel)}" style="color:${C.goldText};text-decoration:underline">${esc(e.phone)}</a>` : "-"],
+    ["Branche", esc(e.branche) || "-"],
     ...(locale === "en" ? ([["Sprache", LANG_EN]] as [string, string][]) : []),
   ];
   const reply = `mailto:${e.email}?subject=${encodeURIComponent(locale === "en" ? "Your enquiry at TyloTech" : "Deine Anfrage bei TyloTech")}`;
@@ -124,11 +124,11 @@ export function teamNotification(e: Enquiry, origin: string, source: string, loc
     "Neue Anfrage über die Website",
     "",
     `Name: ${e.name}`,
-    `Unternehmen: ${e.company || "—"}`,
+    `Unternehmen: ${e.company || "-"}`,
     `E-Mail: ${e.email}`,
-    `Telefon: ${e.phone || "—"}`,
-    `Branche: ${e.branche || "—"}`,
-    `Anliegen: ${e.topics.join(", ") || "—"}`,
+    `Telefon: ${e.phone || "-"}`,
+    `Branche: ${e.branche || "-"}`,
+    `Anliegen: ${e.topics.join(", ") || "-"}`,
     ...(locale === "en" ? [`Sprache: ${LANG_EN}`] : []),
     "",
     "Nachricht:",
@@ -334,7 +334,7 @@ export function lensConfirmation(l: LensLead, origin: string, locale: Locale = "
   const body = `
     ${h1(first ? `Danke, ${accent(esc(first))}!` : `Danke für deine ${accent("Anfrage")}!`)}
     ${p(`Unser Team schaut sich <b style="color:${C.ink}">${esc(host)}</b> jetzt persönlich an.`)}
-    ${p(`Du bekommst deine individuelle Analyse als <b style="color:${C.ink}">kurzes Video</b> innerhalb von <b style="color:${C.ink}">48 Stunden</b> per E-Mail — mit 3 konkreten Hebeln, die wir bei dir anders machen würden.`)}
+    ${p(`Du bekommst deine individuelle Analyse als <b style="color:${C.ink}">kurzes Video</b> innerhalb von <b style="color:${C.ink}">48 Stunden</b> per E-Mail, mit 3 konkreten Hebeln, die wir bei dir anders machen würden.`)}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 28px;background:${C.cream};border:1px solid ${C.creamLine};border-radius:14px">
       <tr><td style="padding:16px 20px;font:400 14px/22px ${SANS};color:${C.muted}">
         <b style="color:${C.ink}">Dein Fokus:</b> ${esc(l.ziel)} · ${esc(l.branche)}
@@ -348,7 +348,7 @@ export function lensConfirmation(l: LensLead, origin: string, locale: Locale = "
     first ? `Danke, ${first}!` : "Danke für deine Anfrage!",
     "",
     `Unser Team schaut sich ${host} jetzt persönlich an.`,
-    "Du bekommst deine individuelle Analyse als kurzes Video innerhalb von 48 Stunden per E-Mail — mit 3 konkreten Hebeln, die wir bei dir anders machen würden.",
+    "Du bekommst deine individuelle Analyse als kurzes Video innerhalb von 48 Stunden per E-Mail, mit 3 konkreten Hebeln, die wir bei dir anders machen würden.",
     "",
     `Dein Fokus: ${l.ziel} · ${l.branche}`,
     "",
@@ -369,7 +369,7 @@ function lensConfirmationEn(l: LensLead, origin: string): Mail {
   const body = `
     ${h1(first ? `Thank you, ${accent(esc(first))}!` : `Thank you for your ${accent("request")}!`)}
     ${p(`Our team is now taking a personal look at <b style="color:${C.ink}">${esc(host)}</b>.`)}
-    ${p(`You’ll receive your individual analysis as a <b style="color:${C.ink}">short video</b> by email within <b style="color:${C.ink}">48 hours</b> — with 3 concrete levers we would approach differently in your case.`)}
+    ${p(`You’ll receive your individual analysis as a <b style="color:${C.ink}">short video</b> by email within <b style="color:${C.ink}">48 hours</b>, with 3 concrete levers we would approach differently in your case.`)}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 28px;background:${C.cream};border:1px solid ${C.creamLine};border-radius:14px">
       <tr><td style="padding:16px 20px;font:400 14px/22px ${SANS};color:${C.muted}">
         <b style="color:${C.ink}">Your focus:</b> ${esc(focus)}
@@ -383,7 +383,7 @@ function lensConfirmationEn(l: LensLead, origin: string): Mail {
     first ? `Thank you, ${first}!` : "Thank you for your request!",
     "",
     `Our team is now taking a personal look at ${host}.`,
-    "You’ll receive your individual analysis as a short video by email within 48 hours — with 3 concrete levers we would approach differently in your case.",
+    "You’ll receive your individual analysis as a short video by email within 48 hours, with 3 concrete levers we would approach differently in your case.",
     "",
     `Your focus: ${focus}`,
     "",

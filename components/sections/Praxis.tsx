@@ -683,7 +683,7 @@ export default function Praxis() {
             </span>
           </h2>
           <p className="mt-4 text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
-            Dein eigenes Portal zeigt dir jederzeit, was läuft — Zahlen,
+            Dein eigenes Portal zeigt dir jederzeit, was läuft: Zahlen,
             Fortschritt, nächste Schritte. Keine Reportings per Mail, keine
             Blackbox.
           </p>

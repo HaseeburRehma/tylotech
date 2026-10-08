@@ -59,10 +59,10 @@ const PROJECTS: Project[] = [
     client: "Fahrschule Abgefahrn",
     lead: "Die Fahrschule, die ganz Düsseldorf",
     accent: "zuerst sieht.",
-    result: "#1 bei Google — SEO & KI-Suche. Plus eine Social-Media-Präsenz, die die ganze Stadt erreicht.",
+    result: "#1 bei Google: SEO & KI-Suche. Plus eine Social-Media-Präsenz, die die ganze Stadt erreicht.",
     bullets: [
-      { icon: Trophy, label: "Platz 1, wo es zählt", desc: "Bei „Fahrschule Düsseldorf“ ganz oben — in der Google- und in der KI-Suche. Wer sucht, findet zuerst sie." },
-      { icon: Megaphone, label: "Social-Media-Macht", desc: "Ein Auftritt, der nicht nach Fahrschule aussieht, sondern nach Marke — mit Reichweite, die kein Wettbewerber hat." },
+      { icon: Trophy, label: "Platz 1, wo es zählt", desc: "Bei „Fahrschule Düsseldorf“ ganz oben, in der Google- und in der KI-Suche. Wer sucht, findet zuerst sie." },
+      { icon: Megaphone, label: "Social-Media-Macht", desc: "Ein Auftritt, der nicht nach Fahrschule aussieht, sondern nach Marke, mit Reichweite, die kein Wettbewerber hat." },
       { icon: Send, label: "Vom Profil zum Vertrag in einem Fluss", desc: "Anmeldung ohne Umweg, vom ersten Klick bis zur Unterschrift." },
     ],
     tiles: ["/referenzen/fahrschule-1.webp", "/referenzen/fahrschule-2.webp", "/referenzen/fahrschule-3.webp", "/referenzen/fahrschule-4.webp"],
@@ -71,23 +71,23 @@ const PROJECTS: Project[] = [
     client: "Rohr Cleaner",
     lead: "5 Anfragen am Tag.",
     accent: "Null Euro Werbung.",
-    result: "#1 bei Google & in der KI-Suche — täglich ~5 Anfragen, komplett ohne Werbebudget.",
+    result: "#1 bei Google & in der KI-Suche: täglich ~5 Anfragen, komplett ohne Werbebudget.",
     bullets: [
-      { icon: MapPin, label: "Gefunden, wo der Auftrag entsteht", desc: "Platz 1 bei Google und in der KI-Suche — ganz oben, ohne für jeden Klick zu zahlen." },
+      { icon: MapPin, label: "Gefunden, wo der Auftrag entsteht", desc: "Platz 1 bei Google und in der KI-Suche, ganz oben, ohne für jeden Klick zu zahlen." },
       { icon: Eye, label: "94.034 Impressionen in 90 Tagen", desc: "Sichtbarkeit, die rund um die Uhr Kunden bringt." },
-      { icon: PiggyBank, label: "5 Anfragen pro Tag, 0 € Werbebudget", desc: "Planbare Aufträge aus reiner Sichtbarkeit — der Unterschied zwischen hoffen und wissen." },
+      { icon: PiggyBank, label: "5 Anfragen pro Tag, 0 € Werbebudget", desc: "Planbare Aufträge aus reiner Sichtbarkeit. Der Unterschied zwischen hoffen und wissen." },
     ],
     tiles: ["/referenzen/rohr-1.webp", "/referenzen/rohr-2.webp", "/referenzen/rohr-3.webp", "/referenzen/rohr-4.webp"],
   },
   {
     client: "Light of Hope",
-    lead: "Ein sensibles Thema —",
+    lead: "Ein sensibles Thema",
     accent: "und tausend erreichte Menschen.",
     result: "1.000+ Leads generiert. Heute täglich 5 neue Anfragen durch Performance-Marketing.",
     bullets: [
-      { icon: Users, label: "Über 1.000 Menschen erreicht", desc: "Anfragen von Menschen, die Hilfe gesucht — und gefunden haben." },
+      { icon: Users, label: "Über 1.000 Menschen erreicht", desc: "Anfragen von Menschen, die Hilfe gesucht und gefunden haben." },
       { icon: TrendingUp, label: "Täglich 5 Anfragen durch Performance-Marketing", desc: "Planbare Reichweite bei einem Thema, bei dem Vertrauen alles ist." },
-      { icon: ShieldCheck, label: "Ton ohne Heilversprechen", desc: "Warm, klar, auf Augenhöhe — kein Marketing-Lärm, wo Fingerspitzengefühl zählt." },
+      { icon: ShieldCheck, label: "Ton ohne Heilversprechen", desc: "Warm, klar, auf Augenhöhe. Kein Marketing-Lärm, wo Fingerspitzengefühl zählt." },
     ],
     tiles: ["/referenzen/hope-1.webp", "/referenzen/hope-2.webp", "/referenzen/hope-3.webp", "/referenzen/hope-4.webp"],
   },
@@ -95,11 +95,11 @@ const PROJECTS: Project[] = [
     client: "Nouh-Wehres",
     lead: "Aus einem Meisterbetrieb wurde",
     accent: "eine Anfragen-Maschine.",
-    result: "Täglich 3–5 qualifizierte Anfragen — planbar, jeden Tag.",
+    result: "Täglich 3–5 qualifizierte Anfragen, planbar, jeden Tag.",
     bullets: [
-      { icon: Monitor, label: "Website für alle Gewerke", desc: "Heizung, Bad, Lüftung, Solar — jede Leistung mit eigener Seite, die Anfragen bringt." },
-      { icon: Inbox, label: "Jeden Tag neue Aufträge im Postfach", desc: "3 bis 5 Anfragen täglich — statt auf Empfehlungen zu hoffen." },
-      { icon: Target, label: "Kampagnen, die zum Betrieb führen", desc: "Keine Klicks um der Klicks willen — direkte Anfragen von Menschen, die kaufen wollen." },
+      { icon: Monitor, label: "Website für alle Gewerke", desc: "Heizung, Bad, Lüftung, Solar: jede Leistung mit eigener Seite, die Anfragen bringt." },
+      { icon: Inbox, label: "Jeden Tag neue Aufträge im Postfach", desc: "3 bis 5 Anfragen täglich, statt auf Empfehlungen zu hoffen." },
+      { icon: Target, label: "Kampagnen, die zum Betrieb führen", desc: "Keine Klicks um der Klicks willen, sondern direkte Anfragen von Menschen, die kaufen wollen." },
     ],
     tiles: ["/referenzen/nouh-1.webp", "/referenzen/nouh-2.webp", "/referenzen/nouh-3.webp", "/referenzen/nouh-4.webp"],
   },
@@ -127,41 +127,41 @@ const PROJECTS_EN: Record<string, ProjectText> = {
   "Fahrschule Abgefahrn": {
     lead: "The driving school all of Düsseldorf",
     accent: "sees first.",
-    result: "#1 on Google — SEO & AI search. Plus a social media presence that reaches the whole city.",
+    result: "#1 on Google: SEO & AI search. Plus a social media presence that reaches the whole city.",
     bullets: [
-      { label: "No. 1 where it counts", desc: "Right at the top for “Fahrschule Düsseldorf” — in Google and in AI search. Whoever searches finds them first." },
-      { label: "Social media muscle", desc: "A presence that looks less like a driving school and more like a brand — with reach no competitor can match." },
+      { label: "No. 1 where it counts", desc: "Right at the top for “Fahrschule Düsseldorf”, in Google and in AI search. Whoever searches finds them first." },
+      { label: "Social media muscle", desc: "A presence that looks less like a driving school and more like a brand, with reach no competitor can match." },
       { label: "From profile to contract in one flow", desc: "Sign-up without detours, from the first click to the signature." },
     ],
   },
   "Rohr Cleaner": {
     lead: "5 enquiries a day.",
     accent: "Zero euros on ads.",
-    result: "#1 on Google & in AI search — ~5 enquiries every day, without any ad budget.",
+    result: "#1 on Google & in AI search: ~5 enquiries every day, without any ad budget.",
     bullets: [
-      { label: "Found where the job begins", desc: "No. 1 on Google and in AI search — right at the top, without paying for every click." },
+      { label: "Found where the job begins", desc: "No. 1 on Google and in AI search, right at the top, without paying for every click." },
       { label: "94,034 impressions in 90 days", desc: "Visibility that brings in customers around the clock." },
-      { label: "5 enquiries a day, €0 ad budget", desc: "Predictable jobs from visibility alone — the difference between hoping and knowing." },
+      { label: "5 enquiries a day, €0 ad budget", desc: "Predictable jobs from visibility alone. The difference between hoping and knowing." },
     ],
   },
   "Light of Hope": {
-    lead: "A sensitive subject —",
+    lead: "A sensitive subject",
     accent: "and a thousand people reached.",
     result: "1,000+ leads generated. Now 5 new enquiries every day through performance marketing.",
     bullets: [
-      { label: "Over 1,000 people reached", desc: "Enquiries from people who were looking for help — and found it." },
+      { label: "Over 1,000 people reached", desc: "Enquiries from people who were looking for help and found it." },
       { label: "5 enquiries a day through performance marketing", desc: "Predictable reach on a subject where trust is everything." },
-      { label: "A tone without miracle promises", desc: "Warm, clear, on equal terms — no marketing noise where sensitivity matters." },
+      { label: "A tone without miracle promises", desc: "Warm, clear, on equal terms. No marketing noise where sensitivity matters." },
     ],
   },
   "Nouh-Wehres": {
     lead: "A master craftsman’s business turned into",
     accent: "an enquiry machine.",
-    result: "3–5 qualified enquiries a day — predictable, every single day.",
+    result: "3–5 qualified enquiries a day, predictable, every single day.",
     bullets: [
-      { label: "One website for every trade", desc: "Heating, bathrooms, ventilation, solar — every service with its own page that brings in enquiries." },
-      { label: "New jobs in the inbox every day", desc: "3 to 5 enquiries a day — instead of hoping for referrals." },
-      { label: "Campaigns that lead to the business", desc: "No clicks for clicks’ sake — direct enquiries from people who want to buy." },
+      { label: "One website for every trade", desc: "Heating, bathrooms, ventilation, solar: every service with its own page that brings in enquiries." },
+      { label: "New jobs in the inbox every day", desc: "3 to 5 enquiries a day, instead of hoping for referrals." },
+      { label: "Campaigns that lead to the business", desc: "No clicks for clicks’ sake, just direct enquiries from people who want to buy." },
     ],
   },
 };
@@ -364,18 +364,18 @@ export default function Referenzen() {
     <section id="referenzen" ref={root} className="overflow-x-clip bg-white py-14 sm:py-24 lg:overflow-hidden lg:py-0">
       <Container>
         <div className="ref-head max-w-[720px] lg:pt-24">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <FolderOpen className="size-3.5 text-accent" />
             {t("Ausgewählte Projekte", "Selected projects")}
           </p>
-          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+          <h2 className="t-h2 mt-5 text-ink">
             {t("Arbeiten, die", "Work that")}{" "}
-            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+            <span className="t-serif tracking-[-0.6px] text-[#a07d45]">
               {t("weiterlaufen", "keeps running")}
             </span>
             {t(", wenn wir nicht mehr im Raum sind.", " long after we’ve left the room.")}
           </h2>
-          <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+          <p className="t-body-l mt-4 max-w-[560px] text-[#5c5954]">
             {t(
               "Fünf Projekte aus der Zusammenarbeit mit Unternehmen, die du im Zweifel selbst anrufen kannst.",
               "Five projects with businesses you can simply call yourself if you have any doubts.",
@@ -402,9 +402,9 @@ export default function Referenzen() {
                   }}
                 >
                   <div className="ref-text flex flex-col gap-4 lg:mt-3 lg:min-w-0 lg:flex-1 lg:gap-[18px] xl:w-[400px] xl:flex-none">
-                    <h3 className="font-display text-[clamp(1.3rem,4.6vw,1.6rem)] font-semibold leading-[1.22] tracking-[-0.03em] text-[#1a1917] lg:text-[clamp(1.5rem,2.3vw,29px)] lg:leading-[36px] lg:tracking-[-0.8px]">
+                    <h3 className="font-display font-semibold text-[clamp(22px,calc(22px_+_7_*_(100vw_-_390px)_/_1050),29px)] leading-[clamp(28px,calc(28px_+_8_*_(100vw_-_390px)_/_1050),36px)] tracking-[clamp(-0.8px,calc(-0.6px_-_0.2_*_(100vw_-_390px)_/_1050),-0.6px)] text-[#1a1917]">
                       {p.lead}{" "}
-                      <span className="font-[family-name:var(--font-instrument)] text-[1.07em] font-normal italic tracking-[-0.5px]">
+                      <span className="t-serif tracking-[-0.5px]">
                         {p.accent}
                       </span>
                     </h3>
@@ -420,7 +420,7 @@ export default function Referenzen() {
                           <span className="flex size-[26px] shrink-0 items-center justify-center rounded-full border border-[#d1aa71] bg-[#fbf6ee]">
                             <b.icon className="size-3.5 text-[#b98f53]" strokeWidth={2} aria-hidden />
                           </span>
-                          <p className="text-[13px] leading-[1.5] tracking-[-0.1px] text-[#5c5954] lg:text-[14px] lg:leading-[22px]">
+                          <p className="text-[clamp(13px,calc(13px_+_1_*_(100vw_-_390px)_/_1050),14px)] leading-[clamp(20px,calc(20px_+_2_*_(100vw_-_390px)_/_1050),22px)] tracking-[clamp(-0.1px,calc(-0.05px_-_0.05_*_(100vw_-_390px)_/_1050),-0.05px)] text-[#5c5954]">
                             <span className="font-semibold text-[#1a1917]">{b.label}:</span> {b.desc}
                           </p>
                         </li>

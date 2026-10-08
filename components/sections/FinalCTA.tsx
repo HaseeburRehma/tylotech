@@ -59,23 +59,23 @@ export default function FinalCTA() {
           />
 
           <div className="cta-in relative mx-auto max-w-[720px] text-center">
-            <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-[13px] font-medium text-white/80 backdrop-blur">
+            <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-display text-[14px] font-medium leading-[18px] tracking-[-0.2px] text-white/80 backdrop-blur max-sm:text-[13px] max-sm:leading-[17px] max-sm:tracking-normal">
               <CalendarDays className="size-4 text-accent" />
               {t("Kostenloses Erstgespräch", "Free intro call")}
             </p>
 
-            <h2 className="mt-6 font-display text-[clamp(2rem,4.4vw,3.2rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
+            <h2 className="t-h1-l mt-6 text-white">
               {t("Bereit, dein Wachstum", "Ready to make your growth")}{" "}
-              <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#e5c48a]">
+              <span className="t-serif text-[1.074em] tracking-[inherit] text-[#e5c48a]">
                 {t("planbar", "predictable")}
               </span>
               {t(<>{" "}zu machen?</>, "?")}
             </h2>
 
-            <p className="mx-auto mt-5 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
+            <p className="t-body-l mx-auto mt-5 max-w-[600px] text-[#b3d6e2]">
               {t(
-                "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt — und ob wir zueinander passen.",
-                "No sales pitch. An honest assessment of where your biggest lever is — and whether we’re a good fit.",
+                "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt und ob wir zueinander passen.",
+                "No sales pitch. An honest assessment of where your biggest lever is and whether we’re a good fit.",
               )}
             </p>
 
@@ -87,17 +87,17 @@ export default function FinalCTA() {
                 <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#03202c] text-white">
                   <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />
                 </span>
-                <span className="text-[16px] text-[#1c1305]">
+                <span className="t-title text-[#1c1305] max-sm:tracking-normal">
                   {t(
                     <>
-                      <span className="font-[family-name:var(--font-instrument)] italic">
+                      <span className="t-serif tracking-[inherit]">
                         Erstgespräch
                       </span>{" "}
-                      <span className="font-semibold">sichern</span>
+                      <span>sichern</span>
                     </>,
                     <>
-                      <span className="font-semibold">Book your</span>{" "}
-                      <span className="font-[family-name:var(--font-instrument)] italic">
+                      <span>Book your</span>{" "}
+                      <span className="t-serif tracking-[inherit]">
                         intro call
                       </span>
                     </>,

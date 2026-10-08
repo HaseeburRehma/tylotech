@@ -32,32 +32,32 @@ export default function BrancheGeo() {
           <Eyebrow icon="sparkles" dark>
             {t("Unfairer Vorsprung", "Unfair advantage")}
           </Eyebrow>
-          <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-white">
+          <h2 className="t-h1 [--lh-d:57] [--ls-d:-1.7] text-white">
             {t("Auch", "Even")}{" "}
-            <span className="font-[family-name:var(--font-instrument)] text-[1.06em] font-normal italic tracking-[-0.02em] text-[#d8b682]">{t("die KI", "AI")}</span>{" "}
+            <span className="t-serif text-[#d8b682] md:tracking-[-0.02em]">{t("die KI", "AI")}</span>{" "}
             {t("empfiehlt dich.", "recommends you.")}
           </h2>
-          <p className="max-w-[628px] text-[clamp(16px,1.4vw,18px)] leading-[1.6] tracking-[-0.01em] text-[#cbc8c2]">
+          <p className="t-body-l max-w-[628px] text-[#cbc8c2]">
             {t(
               "Immer öfter fragen Kunden direkt eine KI wie ChatGPT oder Perplexity um Rat. Wer dort nicht auftaucht, existiert für diese Kunden nicht.",
               "More and more customers go straight to an AI like ChatGPT or Perplexity for advice. If you don’t show up there, you don’t exist for those customers.",
             )}
           </p>
-          <p className="text-[clamp(16px,1.4vw,18px)] leading-[1.6] tracking-[-0.01em] text-white">{t("Genau das haben wir für Rohr Cleaner erreicht: heute Platz 1.", "That’s exactly what we achieved for Rohr Cleaner: number 1 today.")}</p>
+          <p className="t-body-l text-white">{t("Genau das haben wir für Rohr Cleaner erreicht: heute Platz 1.", "That’s exactly what we achieved for Rohr Cleaner: number 1 today.")}</p>
         </div>
 
         <div className="bhg-visual relative pb-12 lg:pb-[36px] lg:pl-6">
           <div className="bhg-card flex flex-col gap-5 rounded-[24px] border border-[#43413d] bg-[#002230] p-5 shadow-[0_16px_44px_rgba(0,0,0,0.35)] sm:p-7">
-            <p className="flex items-center gap-2.5 font-display text-[14px] font-medium tracking-[-0.02em] text-[#cbc8c2]">
+            <p className="t-label-m flex items-center gap-2.5 text-[#cbc8c2]">
               <Icon name="sparkles" className="size-[18px] text-[#d8b682]" />
               {t("KI-Suche", "AI search")}
             </p>
             <div className="bhg-q flex justify-end">
-              <p className="max-w-[352px] rounded-[16px] bg-[#01475c] px-4 py-3 text-[15px] leading-[24px] tracking-[-0.01em] text-white sm:text-[16px] sm:leading-[26px]">
+              <p className="max-w-[352px] rounded-[16px] bg-[#01475c] px-4 py-3 t-body-m text-white">
                 {t("Welche Rohrreinigung in Düsseldorf ist empfehlenswert?", "Which drain cleaning service in Düsseldorf would you recommend?")}
               </p>
             </div>
-            <p className="bhg-a text-[15px] leading-[26px] tracking-[-0.01em] text-[#cbc8c2] sm:text-[16px]">
+            <p className="bhg-a t-body-m text-[#cbc8c2]">
               {t("Für Rohrreinigung in Düsseldorf wird ", "For drain cleaning in Düsseldorf, ")}
               <span className="text-[#d8b682]">Rohr Cleaner</span>
               {t(" empfohlen.", " is the recommended choice.")}
@@ -69,8 +69,8 @@ export default function BrancheGeo() {
                   style={{ WebkitMaskImage: "url(/partners/rohrcleaner.webp)", maskImage: "url(/partners/rohrcleaner.webp)", WebkitMaskSize: "contain", maskSize: "contain", WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat", WebkitMaskPosition: "center", maskPosition: "center" }}
                 />
               </span>
-              <span className="flex-1 font-display text-[16px] font-medium tracking-[-0.02em] text-white">Rohr Cleaner</span>
-              <span className="rounded-full bg-[#46351e] px-2.5 py-1 text-[12px] font-medium text-[#d8b682]">{t("Platz 1", "No. 1")}</span>
+              <span className="t-label-l flex-1 text-white">Rohr Cleaner</span>
+              <span className="rounded-full bg-[#46351e] px-2.5 py-1 text-[12px] font-medium leading-[17px] text-[#d8b682]">{t("Platz 1", "No. 1")}</span>
             </div>
             <span className="bhg-dots flex gap-[5px]">
               {[0, 1, 2].map((i) => (
@@ -82,7 +82,7 @@ export default function BrancheGeo() {
             <BrandLogo brand="google" size={24} />
             <span className="flex flex-col gap-1">
               <span className="font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#d8b682] sm:text-[12px]">{t("Google Suche", "Google Search")}</span>
-              <span className="whitespace-nowrap font-display text-[14px] font-medium tracking-[-0.02em] text-white">{t("Rohr Cleaner: Platz 1 bei Google", "Rohr Cleaner: No. 1 on Google")}</span>
+              <span className="whitespace-nowrap font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-white">{t("Rohr Cleaner: Platz 1 bei Google", "Rohr Cleaner: No. 1 on Google")}</span>
             </span>
           </div>
         </div>

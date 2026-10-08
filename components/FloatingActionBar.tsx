@@ -331,7 +331,7 @@ export default function FloatingActionBar() {
               </span>
             ))}
           </span>
-          <span className="hidden text-[14.5px] font-medium text-ink sm:inline">
+          <span className="hidden text-[14.5px] font-medium leading-5 text-ink sm:inline">
             {t("Erstgespräch buchen", "Book an intro call")}
           </span>
           <span className="grid size-8 place-items-center rounded-full bg-accent">

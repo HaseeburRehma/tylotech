@@ -12,7 +12,7 @@ const ROWS = [
   { c: "Berichte", a: "PDF am Quartalsende", b: "Echtzeit-Zahlen jederzeit in TyloHQ" },
   { c: "Empfehlungen", a: "Was gerade im Paket steckt", b: "Auch mal: „Das brauchen Sie nicht.“", hl: true },
   { c: "Nach dem Launch", a: "Support-Ticket ziehen und warten", b: "Derselbe Ansprechpartner bleibt" },
-  { c: "Konten und Daten", a: "Zugänge bleiben bei der Agentur", b: "Alle Zugänge gehören Ihnen — von Anfang an", hl: true },
+  { c: "Konten und Daten", a: "Zugänge bleiben bei der Agentur", b: "Alle Zugänge gehören Ihnen, von Anfang an", hl: true },
 ];
 
 export default function Vergleich() {
@@ -51,7 +51,7 @@ export default function Vergleich() {
           className="verg-head"
           eyebrow="Unterschied"
           title="Woran Sie merken, dass es anders läuft."
-          subtitle="Kein Angriff auf andere Agenturen — sondern die Punkte, an denen Kunden uns immer wieder sagen, dass es bei ihnen vorher anders war."
+          subtitle="Kein Angriff auf andere Agenturen, sondern die Punkte, an denen Kunden uns immer wieder sagen, dass es bei ihnen vorher anders war."
         />
 
         {/* Table — md and up */}

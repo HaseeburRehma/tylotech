@@ -38,7 +38,7 @@ export default function SectionHeading({
       {subtitle && (
         <p
           className={cn(
-            "mt-[18px] text-[18px] leading-[30px] tracking-[-0.1px]",
+            "t-body-l mt-[18px]",
             dark ? "text-[#b3d6e2]" : "text-[#5c5954]",
           )}
         >

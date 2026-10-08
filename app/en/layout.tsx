@@ -3,7 +3,7 @@ import RootDocument from "@/components/RootDocument";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.tylotech.de"),
-  title: "TyloTech — Marketing × Digitalisation",
+  title: "TyloTech | Marketing × Digitalisation",
   description:
     "Marketing, software, digitalisation and company building from a single source. Clear, direct, no compromises.",
   alternates: { canonical: "/en", languages: { de: "/", en: "/en", "x-default": "/" } },

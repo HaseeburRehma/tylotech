@@ -481,11 +481,11 @@ export default function Globe() {
                   <span className="size-[7px] rounded-[2px] bg-accent" />
                   {t("Reichweite", "Reach")}
                 </p>
-                <h2 className="font-display text-[clamp(1.7rem,2.3vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.02em] text-white">
+                <h2 className="t-h2-s text-white">
                   {t("Digitalisierung berührt alles.", "Digitalisation touches everything.")}
                 </h2>
-                <p className="mx-auto mt-3 max-w-[330px] text-[14px] leading-[22px] text-[#b3d6e2]">
-                  {t("Nicht nur das Marketing — jeder Bereich Ihres Unternehmens.", "Not just marketing — every part of your business.")}
+                <p className="t-body-s mx-auto mt-3 max-w-[330px] text-[#b3d6e2]">
+                  {t("Nicht nur das Marketing, sondern jeder Bereich Ihres Unternehmens.", "Not just marketing, but every part of your business.")}
                 </p>
               </div>
             </div>
@@ -497,7 +497,7 @@ export default function Globe() {
               return (
                 <span
                   key={l.t}
-                  className="glb-label absolute z-10 hidden whitespace-nowrap rounded-[8px] border border-white/15 bg-[#03202c]/80 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-white/85 backdrop-blur-sm lg:inline-block"
+                  className="glb-label absolute z-10 hidden whitespace-nowrap rounded-[8px] border border-white/15 bg-[#03202c]/80 px-3 py-1.5 eyebrow text-white/85 backdrop-blur-sm lg:inline-block"
                   style={{
                     left: `${leftPct}%`,
                     top: `${topPct}%`,
@@ -518,7 +518,7 @@ export default function Globe() {
             {LABELS.map((l) => (
               <span
                 key={l.t}
-                className="glb-label rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.1em] text-white/85"
+                className="glb-label rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 eyebrow text-white/85"
               >
                 {t(l.t, l.en)}
               </span>

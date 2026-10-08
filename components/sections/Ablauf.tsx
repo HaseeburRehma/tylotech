@@ -20,11 +20,11 @@ const STEPS = [
     icon: Send,
     step: "Schritt 01",
     title: "Anfrage",
-    body: "Du meldest dich — kurz, unkompliziert. Wir schauen, ob wir zueinander passen.",
+    body: "Du meldest dich, kurz und unkompliziert. Wir schauen, ob wir zueinander passen.",
     en: {
       step: "Step 01",
       title: "Enquiry",
-      body: "You get in touch — quick and easy. We see whether we're a good fit.",
+      body: "You get in touch, quick and easy. We see whether we're a good fit.",
     },
   },
   {
@@ -42,11 +42,11 @@ const STEPS = [
     icon: MessageCircle,
     step: "Schritt 03",
     title: "Erstgespräch",
-    body: "Ehrliche Einschätzung, klare Empfehlung — kein Verkaufsgespräch, sondern ein Plan.",
+    body: "Ehrliche Einschätzung, klare Empfehlung. Kein Verkaufsgespräch, sondern ein Plan.",
     en: {
       step: "Step 03",
       title: "Intro call",
-      body: "An honest assessment, a clear recommendation — not a sales pitch, a plan.",
+      body: "An honest assessment, a clear recommendation. Not a sales pitch, a plan.",
     },
   },
   {
@@ -115,17 +115,17 @@ export default function Ablauf() {
     <section id="ablauf" ref={root} data-nav-dark className="bg-[#001620] py-14 text-white sm:py-24">
       <Container>
         <div className="ablauf-head mx-auto max-w-[680px] text-center">
-          <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-white/70">
+          <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 eyebrow text-white/70">
             <Workflow className="size-3.5 text-accent" />
             {t("So arbeiten wir", "How we work")}
           </p>
-          <h2 className="mt-5 font-display text-[clamp(2rem,4.4vw,3.4rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">
-            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#d8b682]">
+          <h2 className="mt-5 t-display-s text-white">
+            <span className="t-serif tracking-[-0.6px] max-sm:tracking-[-0.5px] text-[#d8b682]">
               {t("Vier Schritte", "Four steps")}
             </span>{" "}
             {t("bis zur Zusammenarbeit.", "to working together.")}
           </h2>
-          <p className="mx-auto mt-5 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
+          <p className="mx-auto mt-5 max-w-[600px] t-body-l text-[#b3d6e2]">
             {t(
               <>
                 Kein Vertrieb, der dich durch einen Funnel schiebt. Nach dem dritten
@@ -147,11 +147,11 @@ export default function Ablauf() {
               )}
             >
               <Icon className="ablauf-icon size-6 text-accent" strokeWidth={1.6} />
-              <p className="eyebrow mt-6 text-[#7fbacd]">{t(step, en.step)}</p>
-              <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.015em] text-white">
+              <p className="mt-6 font-mono text-[11px] font-medium uppercase leading-[15px] tracking-[1.2px] text-[#7fbacd]">{t(step, en.step)}</p>
+              <h3 className="mt-2 t-h3 text-white">
                 {t(title, en.title)}
               </h3>
-              <p className="mt-2.5 max-w-[420px] text-[15px] leading-relaxed text-[#7fbacd]">
+              <p className="mt-2.5 max-w-[420px] t-body-ms text-[#7fbacd]">
                 {t(body, en.body)}
               </p>
             </div>
@@ -161,7 +161,7 @@ export default function Ablauf() {
         <div className="ablauf-cta mt-8 flex sm:mt-14 justify-center">
           <Link
             href={lp("/kontakt")}
-            className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] text-[16px] font-medium text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
+            className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] t-button text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
           >
             {t("Erstgespräch sichern", "Book your intro call")}
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />

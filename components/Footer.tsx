@@ -140,10 +140,10 @@ export default function Footer() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/tylotech-logo-dark.svg" alt="TyloTech" width={264} height={67} className="h-12 w-auto sm:h-[56px] lg:h-[66.7px]" />
             </Link>
-            <p className="font-display text-[20px] font-medium leading-7 tracking-[-0.4px] text-white/[0.92]">{t("Wir bauen. Du wächst.", "We build. You grow.")}</p>
+            <p className="font-display font-medium text-[clamp(18px,calc(18px_+_2_*_(100vw_-_390px)_/_1050),20px)] leading-[clamp(25px,calc(25px_+_3_*_(100vw_-_390px)_/_1050),28px)] tracking-[clamp(-0.4px,calc(-0.3px_-_0.1_*_(100vw_-_390px)_/_1050),-0.3px)] text-white/[0.92]">{t("Wir bauen. Du wächst.", "We build. You grow.")}</p>
             <ul className="flex flex-col gap-[9px]">
               {CONTACT.map((c) => (
-                <li key={c.text} className="flex items-center gap-2.5 text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.62]">
+                <li key={c.text} className="t-body-s flex items-center gap-2.5 text-white/[0.62]">
                   <c.icon className="size-[15px] shrink-0 text-[#d8b682]" strokeWidth={1.7} />
                   {c.href ? (
                     <a href={c.href} className="transition-colors hover:text-white">
@@ -157,7 +157,7 @@ export default function Footer() {
             </ul>
             <div className="flex flex-wrap gap-x-4 gap-y-2.5">
               {TRUST.map((tr_) => (
-                <span key={tr_.text} className="flex items-center gap-[7px] whitespace-nowrap text-[13px] leading-5 tracking-[-0.05px] text-white/50">
+                <span key={tr_.text} className="t-body-xs flex items-center gap-[7px] whitespace-nowrap text-white/50">
                   <tr_.icon className="size-3.5 text-[#d8b682]" strokeWidth={1.8} />
                   {t(tr_.text, tr_.en ?? tr_.text)}
                 </span>
@@ -167,14 +167,14 @@ export default function Footer() {
 
           <div className="footer-reveal flex flex-col items-start gap-7 lg:w-[290px] lg:shrink-0">
             <Quote className="size-[26px] fill-[#d8b682] text-[#d8b682]" strokeWidth={0} />
-            <p className="font-[family-name:var(--font-instrument)] text-[23px] italic leading-8 tracking-[-0.3px] text-white/90">{t("„Building unique brands with unique people.“", "“Building unique brands with unique people.”")}</p>
+            <p className="font-[family-name:var(--font-instrument)] font-normal italic text-[clamp(20px,calc(20px_+_3_*_(100vw_-_390px)_/_1050),23px)] leading-[clamp(28px,calc(28px_+_4_*_(100vw_-_390px)_/_1050),32px)] tracking-[clamp(-0.3px,calc(0px_-_0.3_*_(100vw_-_390px)_/_1050),0px)] text-white/90">{t("„Building unique brands with unique people.“", "“Building unique brands with unique people.”")}</p>
             <div className="flex flex-col gap-3.5">
               <div className="flex gap-2">
                 {FOOTER_PARTNERS.map((p) => (
                   <PartnerTile key={p.name} p={p} />
                 ))}
               </div>
-              <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.62]">{t("Über 100 Projekte umgesetzt", "Over 100 projects delivered")}</p>
+              <p className="t-body-s text-white/[0.62]">{t("Über 100 Projekte umgesetzt", "Over 100 projects delivered")}</p>
             </div>
           </div>
 
@@ -184,7 +184,7 @@ export default function Footer() {
               { title: "Mehr", items: MEHR.map((l) => ({ l, href: LEGAL[l] ?? "#" })) },
             ].map((col) => (
               <div key={col.title} className="flex flex-col gap-3.5">
-                <p className="font-[family-name:var(--font-instrument)] text-[19px] italic leading-6 text-[#d8b681]">{label(col.title)}</p>
+                <p className="font-[family-name:var(--font-instrument)] font-normal italic text-[clamp(18px,calc(18px_+_1_*_(100vw_-_390px)_/_1050),19px)] leading-[clamp(23px,calc(23px_+_1_*_(100vw_-_390px)_/_1050),24px)] text-[#d8b681]">{label(col.title)}</p>
                 {col.items.map(({ l, href }) =>
                   l === "Cookie-Einstellungen" ? (
                     // reopens the cookie banner (change or withdraw consent)
@@ -192,7 +192,7 @@ export default function Footer() {
                       key={l}
                       type="button"
                       onClick={openCookieSettings}
-                      className="w-fit text-left text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.66] transition-colors hover:text-white"
+                      className="t-body-s w-fit text-left text-white/[0.66] transition-colors hover:text-white"
                     >
                       {label(l)}
                     </button>
@@ -201,7 +201,7 @@ export default function Footer() {
                     key={l}
                     href={lp(href)}
                     {...(href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
-                    className="w-fit text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.66] transition-colors hover:text-white"
+                    className="t-body-s w-fit text-white/[0.66] transition-colors hover:text-white"
                   >
                     {label(l)}
                   </Link>
@@ -222,7 +222,7 @@ export default function Footer() {
               <Social key={s.label} label={s.label} path={s.path} />
             ))}
           </div>
-          <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-white/[0.56]">© 2026 TyloTech. Building unique brands with unique people.</p>
+          <p className="text-[clamp(13px,calc(13px_+_1_*_(100vw_-_390px)_/_1050),14px)] leading-[clamp(20px,calc(20px_+_2_*_(100vw_-_390px)_/_1050),22px)] tracking-[clamp(-0.1px,calc(-0.05px_-_0.05_*_(100vw_-_390px)_/_1050),-0.05px)] text-white/[0.56]">© 2026 TyloTech. Building unique brands with unique people.</p>
           <div className="sm:ml-auto">
             <LanguageSwitch dark />
           </div>

@@ -51,7 +51,7 @@ export default function BrancheFuerWen({ b }: { b: Branche }) {
                   <img src={t.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
                   <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,13,10,0)_0%,rgba(15,13,10,0.35)_50%,rgba(15,13,10,0.88)_100%)] transition-opacity duration-500 group-hover:opacity-90" />
                   <span className="relative flex items-center gap-3">
-                    <span className="flex-1 font-display text-[18px] font-semibold leading-[25px] tracking-[-0.02em] text-[#faf8f5]">{t.label}</span>
+                    <span className="flex-1 font-display text-[18px] font-semibold leading-[25px] tracking-[-0.4px] text-[#faf8f5]">{t.label}</span>
                     <span className="grid size-[34px] shrink-0 translate-y-1 place-items-center rounded-full bg-white/[0.14] text-white opacity-0 backdrop-blur transition-[opacity,translate] duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                       <ArrowUpRight className="size-4" strokeWidth={2} />
                     </span>

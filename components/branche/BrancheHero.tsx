@@ -35,16 +35,16 @@ export default function BrancheHero({ b }: { b: Branche }) {
       <Container className="relative grid grid-cols-1 items-center gap-10 pb-14 pt-8 sm:gap-12 sm:pb-20 sm:pt-14 lg:pb-24 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,500px)] xl:gap-16 xl:pt-[88px]">
         <div className="bhh-copy intro-stagger flex min-w-0 flex-col items-start gap-6 sm:gap-7">
           <Eyebrow icon={h.icon}>{h.eyebrow}</Eyebrow>
-          <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">
+          <h1 className="t-h1 [--lh-d:57] [--ls-d:-1.7] text-[#1a1917]">
             <Accent text={h.title} />
           </h1>
-          <p className="max-w-[716px] text-[clamp(17px,1.5vw,20px)] leading-[1.5] tracking-[-0.01em] text-[#5c5954]">{h.sub}</p>
+          <p className="t-body-xl max-w-[716px] text-[#5c5954]">{h.sub}</p>
           <div className="flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row">
             <GoldButton href="#kontakt">{h.cta}</GoldButton>
             <GlassButton href="#case">{t("Ergebnisse ansehen", "See the results")}</GlassButton>
           </div>
           <div className="h-px w-full max-w-[716px] bg-[#eeedea]" />
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[14px] leading-[22px] tracking-[-0.1px] text-[#7d7973]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 t-body-s text-[#7d7973]">
             <span>{t("100+ Projekte", "100+ projects")}</span>
             <span className="h-4 w-px bg-[#e2e0dc]" />
             <span className="flex items-center gap-3">
@@ -53,7 +53,7 @@ export default function BrancheHero({ b }: { b: Branche }) {
                   <Star key={i} className="size-[17px] fill-[#d1aa71] text-[#d1aa71]" strokeWidth={0} />
                 ))}
               </span>
-              <span className="font-display text-[16px] font-medium tracking-[-0.02em] text-[#1a1917]">{t("5,0", "5.0")}</span>
+              <span className="t-label-l text-[#1a1917]">{t("5,0", "5.0")}</span>
               <span>{t("Bewertung", "rating")}</span>
             </span>
             <span className="hidden h-4 w-px bg-[#e2e0dc] sm:block" />
@@ -72,8 +72,8 @@ export default function BrancheHero({ b }: { b: Branche }) {
           <LeadCard className="left-0 top-[15%] motion-safe:animate-[bhFloat_4.2s_ease-in-out_1.3s_infinite]" {...h.cards[0]} />
           <LeadCard className="right-0 top-[70.7%] motion-safe:animate-[bhFloat_4.8s_ease-in-out_2.4s_infinite]" {...h.cards[1]} />
           <div className="bhh-chip absolute left-[7.2%] top-[87.9%] motion-safe:animate-[bhFloatSm_5.4s_ease-in-out_1.9s_infinite] flex items-center gap-2.5 rounded-full bg-[#0f0e0d] py-2 pl-2 pr-[18px] shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05)]">
-            <span className="grid size-7 place-items-center rounded-full bg-[#d1aa71] font-display text-[14px] font-medium text-[#0f0e0d]">1</span>
-            <span className="whitespace-nowrap font-display text-[13px] font-medium tracking-[-0.02em] text-white sm:text-[14px]">{h.chip}</span>
+            <span className="grid size-7 place-items-center rounded-full bg-[#d1aa71] font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-[#0f0e0d]">1</span>
+            <span className="whitespace-nowrap font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-white max-sm:text-[13px] max-sm:leading-[17px]">{h.chip}</span>
           </div>
         </div>
       </Container>

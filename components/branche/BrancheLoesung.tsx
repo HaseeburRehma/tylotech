@@ -80,7 +80,7 @@ function Flow({ b }: { b: Branche }) {
             style={{ left: 0, top: KANAL_Y[i] }}
           >
             <KanalIcon k={k} />
-            <span className="whitespace-nowrap font-display text-[14px] font-medium leading-[18px] tracking-[-0.02em] text-white">{k.label}</span>
+            <span className="whitespace-nowrap font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-white">{k.label}</span>
           </div>
         ))}
 
@@ -91,7 +91,7 @@ function Flow({ b }: { b: Branche }) {
             style={{ left: 404, top: ERGEBNIS_Y[i] }}
           >
             <span className="whitespace-nowrap font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#d8b682]">{e.label}</span>
-            <span className="whitespace-nowrap font-display text-[14px] font-medium leading-[18px] tracking-[-0.02em] text-white">{e.value}</span>
+            <span className="whitespace-nowrap font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-white">{e.value}</span>
           </div>
         ))}
       </div>
@@ -121,8 +121,8 @@ function FlowStacked({ b }: { b: Branche }) {
       <div className="flex w-full flex-col gap-2.5">
         {b.loesung.ergebnisse.map((e, i) => (
           <div key={i} className="bhl-ergebnis flex flex-col gap-[5px] rounded-[14px] border border-[#43413d] bg-[#002e3d] px-4 py-3 shadow-[0_16px_44px_rgba(0,0,0,0.35)] transition-[border-color] duration-300 hover:border-[#d1aa71] motion-safe:hover:animate-[bhShake_0.7s_cubic-bezier(.36,.07,.19,.97)_both]">
-            <span className="font-mono text-[11px] font-medium uppercase tracking-[0.4px] text-[#d8b682]">{e.label}</span>
-            <span className="font-display text-[14px] font-medium tracking-[-0.02em] text-white">{e.value}</span>
+            <span className="font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#d8b682]">{e.label}</span>
+            <span className="font-display text-[14px] font-medium leading-[18px] tracking-[-0.28px] text-white">{e.value}</span>
           </div>
         ))}
       </div>
@@ -161,14 +161,14 @@ export default function BrancheLoesung({ b }: { b: Branche }) {
             <Eyebrow icon="layers" dark>
               {t("Unsere Lösung", "Our solution")}
             </Eyebrow>
-            <h2 className="font-display text-[clamp(2.1rem,4.2vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-white">
+            <h2 className="t-h1 [--lh-d:57] [--ls-d:-1.7] text-white">
               {t("Ein System,", "One system,")}
               <br />
-              <span className="font-[family-name:var(--font-instrument)] text-[1.06em] font-normal italic tracking-[-0.02em] text-[#d8b682]">
+              <span className="t-serif text-[#d8b682] md:tracking-[-0.02em]">
                 {t("ein Ansprechpartner.", "one point of contact.")}
               </span>
             </h2>
-            <p className="max-w-[502px] text-[clamp(16px,1.4vw,18px)] leading-[1.6] tracking-[-0.01em] text-[#cbc8c2]">{b.loesung.text}</p>
+            <p className="t-body-l max-w-[502px] text-[#cbc8c2]">{b.loesung.text}</p>
             <GoldButton href="#kontakt" size="md">
               {b.hero.cta}
             </GoldButton>
@@ -192,8 +192,8 @@ export default function BrancheLoesung({ b }: { b: Branche }) {
                 <span className="grid size-[50px] place-items-center rounded-[13px] bg-[#fbf6ee] text-[#c79a53]">
                   <Icon name={p.icon} className="size-[23px]" />
                 </span>
-                <h3 className="font-display text-[22px] font-semibold leading-[1.25] tracking-[-0.025em] text-[#1a1917] sm:text-[24px]">{p.title}</h3>
-                <p className="text-[16px] leading-[26px] tracking-[-0.01em] text-[#5c5954]">{p.text}</p>
+                <h3 className="t-h4 text-[#1a1917]">{p.title}</h3>
+                <p className="t-body-m text-[#5c5954]">{p.text}</p>
               </div>
             </article>
           ))}

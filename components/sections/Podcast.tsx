@@ -62,8 +62,8 @@ function PlatformButton({
     >
       {badge}
       <span className="flex flex-col">
-        <span className="whitespace-nowrap text-[9.5px] font-medium uppercase tracking-[0.9px] text-ink/45">{over}</span>
-        <span className="text-[15px] font-medium text-ink">{name}</span>
+        <span className="whitespace-nowrap font-mono text-[9.5px] font-medium uppercase leading-[13px] tracking-[0.9px] text-ink/45">{over}</span>
+        <span className="text-[15px] font-medium leading-[20px] text-ink">{name}</span>
       </span>
       <ArrowUpRight className="ml-auto size-4 shrink-0 text-ink/40 max-[399px]:hidden transition-transform duration-300 group-hover:rotate-45" />
     </a>
@@ -145,7 +145,7 @@ export default function Podcast() {
     <section id="podcast" ref={root} className="relative overflow-hidden border-t border-line bg-[#f3f5f6] py-14 text-ink sm:py-24">
       <Container className="relative grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14 xl:gap-16">
         <div>
-          <p className="podcast-eyebrow mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+          <p className="podcast-eyebrow mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <Headphones className="size-3.5 text-accent" />
             {t("Zum Mithören", "Listen in")}
           </p>
@@ -183,15 +183,15 @@ export default function Podcast() {
                 </>,
               )}
             </p>
-            <p className="max-w-[50ch] text-[clamp(16px,1.4vw,17.5px)] leading-[1.6] tracking-[-0.1px] text-[#5c5954]">
+            <p className="max-w-[50ch] t-body-xl text-[#5c5954]">
               {t(
                 <>
-                  Die meisten Unternehmen zwängen ihre Abläufe in Software, die nie für sie gebaut wurde. Wir drehen das um — und
+                  Die meisten Unternehmen zwängen ihre Abläufe in Software, die nie für sie gebaut wurde. Wir drehen das um und
                   bauen eine Lösung, die sich um <span className="font-semibold text-ink">dein</span> Unternehmen biegt, nicht
                   andersrum. Maßgeschneidert auf deine Prozesse, deine Branche, deine Regeln. So wie zuletzt für Priya.
                 </>,
                 <>
-                  Most businesses squeeze their workflows into software that was never built for them. We flip that — and
+                  Most businesses squeeze their workflows into software that was never built for them. We flip that and
                   build a solution that bends around <span className="font-semibold text-ink">your</span> business, not the
                   other way round. Tailored to your processes, your industry, your rules. Just like we recently did for Priya.
                 </>,
@@ -257,7 +257,7 @@ export default function Podcast() {
               <span className="absolute inset-x-5 top-5 flex items-center gap-2.5 sm:inset-x-6 sm:top-6">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img loading="lazy" decoding="async" src="/brand/tylotech-mark.svg" alt="" className="h-[30px] w-[30px] shrink-0 rounded-lg bg-[#001620] p-1" />
-                <span className="font-display text-[clamp(15px,1.5vw,19px)] font-semibold leading-tight text-white">{videoTitle}</span>
+                <span className="font-display text-[20px] font-medium leading-[26px] tracking-[-0.4px] text-white max-sm:text-[16px] max-sm:leading-[21px]">{videoTitle}</span>
                 {locale === "en" && <span className="shrink-0 rounded-full bg-white/15 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-white/85 backdrop-blur">In German</span>}
               </span>
 
@@ -272,8 +272,8 @@ export default function Podcast() {
               {/* caption */}
               <span className="pointer-events-none absolute inset-x-5 bottom-6 max-w-[440px] text-[clamp(13px,1.25vw,16px)] font-medium leading-snug text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.6)] sm:inset-x-6 sm:bottom-7 max-sm:hidden">
                 {t(
-                  "Warum Standard-Software dich ausbremst — und was die Alternative ist.",
-                  "Why off-the-shelf software holds you back — and what the alternative is.",
+                  "Warum Standard-Software dich ausbremst und was die Alternative ist.",
+                  "Why off-the-shelf software holds you back and what the alternative is.",
                 )}
               </span>
 

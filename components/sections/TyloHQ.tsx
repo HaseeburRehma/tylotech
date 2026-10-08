@@ -135,10 +135,10 @@ function Tile({
     >
       <header className="flex items-start gap-4 pb-2 pl-6 pr-5 pt-6 sm:pl-7 sm:pt-[26px]">
         <div className="min-w-0 flex-1">
-          <h3 className="font-display text-[19px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917] sm:text-[20px]">
+          <h3 className="font-display text-[20px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917]">
             {title}
           </h3>
-          <p className="mt-[3px] text-[14px] leading-[22px] tracking-[-0.1px] text-[#7d7973]">{desc}</p>
+          <p className="mt-[3px] t-body-s text-[#7d7973]">{desc}</p>
         </div>
         <OpenButton />
       </header>
@@ -189,7 +189,7 @@ function BarsTile({
               {en ? series.suffix?.trim().replace("€", "") : series.suffix}
             </p>
           </div>
-          <span className="inline-flex h-[22px] items-center gap-[5px] rounded-full bg-[#e7f4ed] px-2 text-[11px] font-medium text-[#0e5836]">
+          <span className="inline-flex h-[22px] items-center gap-[5px] rounded-full bg-[#e7f4ed] px-2 text-[11px] font-medium leading-[14px] text-[#0e5836]">
             <Icon className="size-3" strokeWidth={2.2} />
             {range} {t("Tage", "days")}
           </span>
@@ -318,20 +318,20 @@ export default function TyloHQ() {
       <Container>
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="hq-head max-w-[780px]">
-            <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md sm:text-[12px]">
+            <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 eyebrow text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md">
               <LayoutDashboard className="size-3.5 text-[#c79a53]" strokeWidth={1.8} />
               {t("Alles sichtbar · TyloTech HQ", "Full visibility · TyloTech HQ")}
             </p>
-            <h2 className="font-display text-[clamp(2rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-1.3px] text-[#1a1917]">
+            <h2 className="t-h2 text-[#1a1917]">
               {t("Bei uns läufst du", "With us, you’re never")}{" "}
-              <span className="font-[family-name:var(--font-instrument)] text-[1.05em] font-normal italic tracking-[-0.5px] text-[#94713f]">
+              <span className="t-serif tracking-[-1.3px] max-sm:tracking-[-1px] text-[#94713f]">
                 {t("nicht im Blindflug.", "flying blind.")}
               </span>
             </h2>
-            <p className="mt-[18px] max-w-[640px] text-[clamp(16px,1.4vw,18px)] leading-[28px] tracking-[-0.18px] text-[#5c5954]">
+            <p className="mt-[18px] max-w-[640px] t-body-l text-[#5c5954]">
               {t(
-                "Dein eigenes Portal zeigt dir jederzeit, was läuft — Zahlen, Fortschritt, nächste Schritte. Keine Reportings per Mail, keine Blackbox.",
-                "Your own portal shows you what’s happening at any time — numbers, progress, next steps. No reports by email, no black box.",
+                "Dein eigenes Portal zeigt dir jederzeit, was läuft: Zahlen, Fortschritt, nächste Schritte. Keine Reportings per Mail, keine Blackbox.",
+                "Your own portal shows you what’s happening at any time: numbers, progress, next steps. No reports by email, no black box.",
               )}
             </p>
           </div>
@@ -394,7 +394,7 @@ export default function TyloHQ() {
               className="hq-row2"
             >
               <div className="pb-2" onMouseLeave={() => setHoverCh(null)}>
-                {/* two rows of logos running continuously left → right */}
+                {/* two rows of logos running continuously in opposite directions */}
                 <div className="flex flex-col gap-3">
                   {[CHANNELS.slice(0, 4), CHANNELS.slice(4)].map((row, r) => {
                     // one copy (row ×2) is wider than the tile; the track holds two copies
@@ -406,7 +406,10 @@ export default function TyloHQ() {
                         className="hq-marquee group/mq relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]"
                       >
                         <div
-                          className="flex w-max gap-3 py-1.5 animate-[marqueeRight_26s_linear_infinite] group-hover/mq:[animation-play-state:paused] motion-reduce:animate-none"
+                          className={cn(
+                            "flex w-max gap-3 py-1.5 group-hover/mq:[animation-play-state:paused] motion-reduce:animate-none",
+                            r ? "animate-[marqueeRight_26s_linear_infinite]" : "animate-[marqueeLeft_26s_linear_infinite]",
+                          )}
                           style={{ animationDelay: r ? "-9s" : "0s" }}
                         >
                           {track.map((c, i) => {
@@ -469,10 +472,10 @@ export default function TyloHQ() {
             <article className="hq-tile group relative flex flex-col overflow-hidden rounded-[20px] border-[1.5px] border-[rgba(209,170,113,0.55)] bg-[#fbf6ee] shadow-[0_14px_34px_rgba(8,34,44,0.08),0_0_44px_rgba(209,170,113,0.22)] transition-[translate,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_22px_44px_-18px_rgba(8,34,44,0.22),0_0_60px_rgba(209,170,113,0.35)] ">
               <header className="flex items-start gap-4 pb-2 pl-6 pr-5 pt-6 sm:pl-7 sm:pt-[26px]">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-display text-[19px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917] sm:text-[20px]">
+                  <h3 className="font-display text-[20px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917]">
                     Skin in the Game
                   </h3>
-                  <p className="mt-[3px] text-[14px] leading-[22px] tracking-[-0.1px] text-[#7d7973]">
+                  <p className="mt-[3px] t-body-s text-[#7d7973]">
                     {t("wir steigen mit ein", "we invest alongside you")}
                   </p>
                 </div>
@@ -542,7 +545,7 @@ export default function TyloHQ() {
                     );
                   })}
                 </div>
-                <p className="text-center text-[14px] leading-[22px] tracking-[-0.1px] text-[#5c5954]">
+                <p className="text-center t-body-s text-[#5c5954]">
                   {t("Wir verdienen, wenn du wächst.", "We earn when you grow.")}
                 </p>
               </div>

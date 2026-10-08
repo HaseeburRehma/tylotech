@@ -6,7 +6,7 @@ import { languageAlternates } from "@/lib/i18n";
 import { IMPRESSUM } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Impressum — TyloTech",
+  title: "Impressum | TyloTech",
   description: "Impressum von TyloTech, Behrenstraße 4, 40233 Düsseldorf.",
   alternates: { canonical: "/impressum", languages: languageAlternates("/impressum") },
 };

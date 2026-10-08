@@ -68,7 +68,7 @@ function SystemMock() {
               className="size-[6px] rounded-[3px]"
               style={{ background: p.gold ? "#d1aa71" : "#b3aea6" }}
             />
-            <span className="text-[12px] font-medium text-ink">{t(p.t, p.en)}</span>
+            <span className="text-[12px] font-medium leading-[16px] text-ink">{t(p.t, p.en)}</span>
           </span>
         ))}
       </div>
@@ -78,7 +78,7 @@ function SystemMock() {
           className="size-[22px] text-[#c79a53] transition-transform duration-300 group-hover:scale-110"
           strokeWidth={1.7}
         />
-        <span className="text-[11.5px] font-medium text-[#94713f]">
+        <span className="text-[11.5px] font-medium leading-[16px] text-[#94713f]">
           {t("Eine Ebene", "One layer")}
         </span>
       </span>
@@ -105,13 +105,13 @@ function FlowMock() {
             }`}
           >
             <p
-              className={`text-[9px] font-medium uppercase tracking-[0.08em] ${
+              className={`font-mono text-[9px] font-medium uppercase leading-[12px] tracking-[0.8px] ${
                 r.hot ? "text-[#94713f]" : "text-ink/45"
               }`}
             >
               {t(r.label, r.en.label)}
             </p>
-            <p className="mt-0.5 text-[12.5px] font-medium text-ink">{t(r.text, r.en.text)}</p>
+            <p className="mt-0.5 text-[12.5px] font-medium leading-[17px] text-ink">{t(r.text, r.en.text)}</p>
           </div>
           {i < rows.length - 1 && <span className="my-1 h-3 w-px bg-line" />}
         </div>
@@ -121,7 +121,7 @@ function FlowMock() {
           <span className="absolute inline-flex size-full rounded-full bg-[#16a34a] opacity-70 group-hover:animate-ping" />
           <span className="relative size-1.5 rounded-full bg-[#16a34a]" />
         </span>
-        <span className="text-[11px] font-medium text-[#15803d]">
+        <span className="text-[11px] font-medium leading-[14px] text-[#15803d]">
           {t("läuft automatisch", "runs automatically")}
         </span>
       </div>
@@ -156,15 +156,15 @@ function ApprovalMock() {
           ) : (
             <CircleHelp className="size-[18px] shrink-0 text-ink/30" strokeWidth={2} />
           )}
-          <span className="flex-1 truncate text-[12.5px] font-medium text-ink">
+          <span className="flex-1 truncate text-[12.5px] font-medium leading-[17px] text-ink">
             {t(r.text, r.en)}
           </span>
           {r.done ? (
-            <span className="rounded-full bg-accent px-2 py-0.5 text-[10.5px] font-medium text-ink">
+            <span className="rounded-full bg-accent px-2 py-0.5 text-[10.5px] font-medium leading-[14px] text-ink">
               {t("freigegeben", "approved")}
             </span>
           ) : (
-            <span className="rounded-full bg-black/[0.06] px-2 py-0.5 text-[10.5px] font-medium text-ink/50">
+            <span className="rounded-full bg-black/[0.06] px-2 py-0.5 text-[10.5px] font-medium leading-[14px] text-ink/50">
               {t("offen", "open")}
             </span>
           )}
@@ -181,16 +181,16 @@ const CARDS = [
     body: "Website, Werbekonten und CRM hängen zusammen. Eine Anfrage landet nicht in drei Postfächern, sondern an einer Stelle.",
     en: {
       title: "One system, not a patchwork",
-      body: "Website, ad accounts and CRM are connected. An enquiry doesn't land in three inboxes — it lands in one place.",
+      body: "Website, ad accounts and CRM are connected. An enquiry doesn't land in three inboxes. It lands in one place.",
     },
   },
   {
     Mock: FlowMock,
     title: "Abläufe, die von selbst laufen",
-    body: "Auslöser, Verarbeitung, Aktion. Einmal sauber gebaut, übernimmt das System das Nachfassen — nicht deine Assistenz.",
+    body: "Auslöser, Verarbeitung, Aktion. Einmal sauber gebaut, übernimmt das System das Nachfassen, nicht deine Assistenz.",
     en: {
       title: "Workflows that run themselves",
-      body: "Trigger, process, action. Built properly once, the system handles the follow-up — not your assistant.",
+      body: "Trigger, process, action. Built properly once, the system handles the follow-up, not your assistant.",
     },
   },
   {
@@ -199,7 +199,7 @@ const CARDS = [
     body: "Was ansteht, siehst du auf einen Blick. Ein Klick genügt, und niemand muss den passenden Betreff suchen.",
     en: {
       title: "Approvals without the back-and-forth",
-      body: "See what's pending at a glance. One click is enough — and nobody has to dig for the right email thread.",
+      body: "See what's pending at a glance. One click is enough, and nobody has to dig for the right email thread.",
     },
   },
 ];
@@ -243,20 +243,27 @@ export default function Arbeitsweise() {
     >
       <Container className="relative">
         <div className="aw-head max-w-[680px]">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)] mb-[18px]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)] mb-[18px]">
             <Layers className="size-3.5 text-accent" />
             {t("Unsere Arbeitsweise", "How we work")}
           </p>
-          <h2 className="display-m text-ink">
-            {t("Drei Dinge, die wir anders machen.", "Three things we do differently.")}
-          </h2>
-          <p className="mt-[18px] text-[clamp(16px,1.6vw,18px)] leading-[1.6] tracking-[-0.1px] text-[#5c5954]">
+          <h2 className="t-h2 text-ink">
             {t(
               <>
-                Kein Geheimwissen — einfach das, was nach über hundert Projekten
+                Drei Dinge, die wir <span className="t-serif tracking-[-0.6px] max-sm:tracking-[-0.5px] text-[#94713f]">anders</span> machen.
+              </>,
+              <>
+                Three things we do <span className="t-serif tracking-[-0.6px] max-sm:tracking-[-0.5px] text-[#94713f]">differently</span>.
+              </>,
+            )}
+          </h2>
+          <p className="mt-[18px] t-body-l text-[#5c5954]">
+            {t(
+              <>
+                Kein Geheimwissen, einfach das, was nach über hundert Projekten
                 übrig geblieben ist.
               </>,
-              "No secret sauce — just what's left after more than a hundred projects.",
+              "No secret sauce, just what's left after more than a hundred projects.",
             )}
           </p>
         </div>
@@ -271,10 +278,10 @@ export default function Arbeitsweise() {
                 <Mock />
               </div>
               <div className="px-8 pb-[34px] pt-2">
-                <h3 className="font-display text-[24px] font-semibold leading-[30px] tracking-[-0.4px] text-ink">
+                <h3 className="t-h4 text-ink">
                   {t(title, en.title)}
                 </h3>
-                <p className="mt-3 text-[16px] leading-[26px] text-[#5c5954]">
+                <p className="mt-3 t-body-m text-[#5c5954]">
                   {t(body, en.body)}
                 </p>
               </div>

@@ -42,8 +42,8 @@ function RankRow({ r, i, on }: { r: (typeof RANKS)[number]; i: number; on: boole
       className="group/row -mx-2 flex items-center gap-2.5 rounded-lg border-t border-[#eeedea] px-2 py-[9px] transition-[background-color,translate,opacity] duration-500 hover:bg-[#fbf6ee]"
       style={{ opacity: on ? 1 : 0, translate: on ? "0 0" : "0 14px", transitionDelay: on ? `${i * 120}ms` : "0ms" }}
     >
-      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917] sm:text-[13px]">{t(r.term, r.en)}</p>
-      <span className={cn("grid h-6 w-[26px] place-items-center rounded-[7px] font-mono text-[12px] font-medium tabular-nums", pos === 1 ? "bg-[#fbf6ee] text-[#94713f]" : "bg-[#f6f5f3] text-[#5c5954]")}>
+      <p className="min-w-0 flex-1 truncate text-[12px] leading-[17px] text-[#1a1917]">{t(r.term, r.en)}</p>
+      <span className={cn("grid h-6 w-[26px] place-items-center rounded-[7px] font-mono text-[12px] font-medium leading-4 tabular-nums", pos === 1 ? "bg-[#fbf6ee] text-[#94713f]" : "bg-[#f6f5f3] text-[#5c5954]")}>
         {pos}
       </span>
       <span className="relative h-1.5 w-[52px] overflow-hidden rounded-[3px] bg-[#eeedea]">
@@ -203,11 +203,11 @@ export default function BranchePains({ b }: { b: Branche }) {
                 <Visual v={p.visual} />
               </div>
               <div className="flex flex-col gap-3.5 px-6 pb-9 pt-7 sm:px-8 sm:pt-8">
-                <p className="font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#7d7973]">{t("Schmerz", "Pain point")}</p>
-                <h3 className="font-display text-[clamp(1.3rem,2vw,1.5rem)] font-semibold leading-[1.25] tracking-[-0.025em] text-[#1a1917]">{p.title}</h3>
+                <p className="eyebrow text-[#7d7973]">{t("Schmerz", "Pain point")}</p>
+                <h3 className="t-h4 text-[#1a1917]">{p.title}</h3>
                 <div className="h-px w-full bg-[#eeedea]" />
-                <p className="font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#94713f]">{t("So lösen wir es", "How we solve it")}</p>
-                <p className="text-[16px] leading-[26px] tracking-[-0.01em] text-[#5c5954]">{p.text}</p>
+                <p className="eyebrow text-[#94713f]">{t("So lösen wir es", "How we solve it")}</p>
+                <p className="t-body-m text-[#5c5954]">{p.text}</p>
               </div>
             </article>
           ))}

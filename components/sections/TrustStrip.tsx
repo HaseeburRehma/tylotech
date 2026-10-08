@@ -41,10 +41,10 @@ export default function TrustStrip({ tone = "home" }: { tone?: "home" | "branche
       className={br ? "border-b border-line bg-white pb-12 pt-10 sm:pb-[72px] sm:pt-14" : "border-b border-line bg-page py-10 sm:py-14"}
     >
       <Container>
-        <p className={`${br ? "mb-8" : "mb-10"} text-center text-[15px] tracking-[-0.01em] text-ink/55`}>
+        <p className={`${br ? "mb-8" : "mb-10"} text-center t-body-s text-ink/55`}>
           {br
             ? t("Vertraut von über 100 Unternehmen, vom Handwerk bis zum Mittelstand", "Trusted by 100+ businesses, from trades to established SMEs")
-            : t("Vertraut von über 100 Unternehmen — vom Handwerksbetrieb bis zur Mehrfachgründung", "Trusted by 100+ businesses — from local trades to serial founders")}
+            : t("Vertraut von über 100 Unternehmen, vom Handwerksbetrieb bis zur Mehrfachgründung", "Trusted by 100+ businesses, from local trades to serial founders")}
         </p>
       </Container>
 

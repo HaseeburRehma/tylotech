@@ -114,18 +114,18 @@ export default function TyloHQDashboard() {
     <section id="tylohq-app" ref={root} className="overflow-hidden border-t border-line bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container>
         <div className="hqd-head mx-auto flex max-w-[800px] flex-col items-center text-center">
-          <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md sm:text-[12px]">
+          <p className="mb-[18px] inline-flex w-fit items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white/70 py-[7px] pl-2.5 pr-3.5 eyebrow text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)] backdrop-blur-md">
             <LayoutDashboard className="size-3.5 text-[#c79a53]" strokeWidth={1.8} />
             {t("Ergebnisse, keine Erzählungen", "Results, not stories")}
           </p>
-          <h2 className="font-display text-[clamp(2rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-1.3px] text-[#1a1917]">
+          <h2 className="t-h2 text-[#1a1917]">
             {t("Dein Projekt läuft und du siehst es", "Your project is running and you see it")}{" "}
-            <span className="font-[family-name:var(--font-instrument)] text-[1.05em] font-normal italic tracking-[-0.5px] text-[#b08547]">
+            <span className="t-serif text-[1em] tracking-[-1.3px] max-sm:tracking-[-1px] text-[#b08547]">
               {t("in Echtzeit", "in real time")}
             </span>
             .
           </h2>
-          <p className="mt-[18px] text-[clamp(16px,1.4vw,18px)] leading-[28px] tracking-[-0.18px] text-[#5c5954]">
+          <p className="mt-[18px] t-body-l text-[#5c5954]">
             {t(
               <>
                 Kein Ratespiel, kein monatliches PDF. In TyloTech HQ siehst du jederzeit, wo dein Projekt steht: Leads,
@@ -152,10 +152,10 @@ export default function TyloHQDashboard() {
                 <span className="grid size-[46px] place-items-center rounded-[13px] border border-[#e2e0dc] bg-white text-[#94713f] shadow-[0_1px_2px_rgba(8,34,44,0.04)] transition-[border-color,background-color] duration-300 group-hover:border-[#e3c79e] group-hover:bg-[#fbf6ee]">
                   <Icon className="size-[21px]" strokeWidth={1.6} />
                 </span>
-                <h3 className="mt-[14px] font-display text-[19px] font-medium leading-[26px] tracking-[-0.4px] text-[#1a1917] sm:text-[20px]">
+                <h3 className="mt-[14px] t-h5 text-[#1a1917]">
                   {t(f.title, f.en.title)}
                 </h3>
-                <p className="mt-3.5 text-[15px] leading-[26px] tracking-[-0.1px] text-[#5c5954] sm:text-[16px]">{t(f.body, f.en.body)}</p>
+                <p className="mt-3.5 t-body-ms text-[#5c5954]">{t(f.body, f.en.body)}</p>
               </div>
             );
           })}
@@ -169,7 +169,7 @@ export default function TyloHQDashboard() {
             href={TYLOHQ_URL}
             target="_blank"
             rel="noopener"
-            className="group inline-flex items-center gap-2 rounded-[10px] border border-[#e2e0dc] bg-white/60 px-7 py-4 text-[16px] font-medium leading-5 tracking-[-0.01em] text-[#1a1917] transition-colors hover:bg-white"
+            className="group inline-flex items-center gap-2 rounded-[10px] border border-[#e2e0dc] bg-white/60 px-7 py-4 t-button text-[#1a1917] transition-colors hover:bg-white"
           >
             {t("Kunden-Login", "Client login")}
             <ArrowUpRight className="size-[18px] text-[#7d7973] transition-[color,translate] duration-200 group-hover:-translate-y-px group-hover:translate-x-px group-hover:text-[#94713f]" strokeWidth={1.9} />

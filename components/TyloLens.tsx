@@ -477,7 +477,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                       <img loading="lazy" decoding="async" src="/team/ilias-el-aradi.jpg" alt="" className="size-9 shrink-0 rounded-full object-cover object-top ring-2 ring-[#D4A863]/60" />
                       <p className="text-[13px] leading-[18px] text-white/80">
                         <span className="font-semibold text-white">Ilias El Aradi</span>{" "}
-                        {t("& Team schauen persönlich drauf — kein Bot, keine Automatik.", "& team take a personal look — no bot, no automation.")}
+                        {t("& Team schauen persönlich drauf: kein Bot, keine Automatik.", "& team take a personal look: no bot, no automation.")}
                       </p>
                     </div>
                   </div>
@@ -755,11 +755,11 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                       I: Video,
                       when: t("Innerhalb von 48 Stunden", "Within 48 hours"),
                       text: t(
-                        `Dein persönliches Video mit 3 konkreten Hebeln — per E-Mail an ${v.email || "dich"}`,
-                        `Your personal video with 3 concrete levers — by email to ${v.email || "you"}`,
+                        `Dein persönliches Video mit 3 konkreten Hebeln, per E-Mail an ${v.email || "dich"}`,
+                        `Your personal video with 3 concrete levers, by email to ${v.email || "you"}`,
                       ),
                     },
-                    { I: MessageCircle, when: t("Danach", "Then"), text: t("Wenn du willst, ein kurzes Gespräch. Du entscheidest.", "If you like, a short call — entirely up to you.") },
+                    { I: MessageCircle, when: t("Danach", "Then"), text: t("Wenn du willst, ein kurzes Gespräch. Du entscheidest.", "If you like, a short call. Entirely up to you.") },
                   ].map(({ I, when, text, live }) => (
                     <li key={when} className="relative flex gap-3.5">
                       <span className={cn("relative grid size-9 shrink-0 place-items-center rounded-full border-[1.5px] bg-white", live ? "border-[#D4A863] text-[#A8863A]" : "border-[#DDE4E5] text-[#6C7A7E]")}>

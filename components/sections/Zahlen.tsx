@@ -101,32 +101,32 @@ export default function Zahlen() {
 
       <Container className="relative">
         <div className="zahlen-head mx-auto max-w-[640px] text-center">
-          <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+          <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <BarChart3 className="size-3.5 text-accent" />
             {t("Zahlen, die bleiben", "Numbers that hold up")}
           </p>
-          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.6vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+          <h2 className="t-h2 mt-5 text-ink">
             {t(
               <>
                 Was{" "}
-                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                <span className="t-serif tracking-[-0.6px] max-sm:tracking-[-0.5px] text-[#a07d45]">
                   nachprüfbar
                 </span>{" "}
                 ist.
               </>,
               <>
                 What you can{" "}
-                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                <span className="t-serif tracking-[-0.6px] max-sm:tracking-[-0.5px] text-[#a07d45]">
                   verify
                 </span>
                 .
               </>,
             )}
           </h2>
-          <p className="mx-auto mt-5 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+          <p className="t-body-l mx-auto mt-5 max-w-[560px] text-[#5c5954]">
             {t(
               "Hier steht nur, was du selbst überprüfen kannst, auf Google, bei unseren Partnern oder in einem Gespräch.",
-              "Only what you can check for yourself — on Google, with our partners or in a conversation.",
+              "Only what you can check for yourself: on Google, with our partners or in a conversation.",
             )}
           </p>
         </div>
@@ -137,17 +137,17 @@ export default function Zahlen() {
               key={s.label}
               className="zahlen-card rounded-[20px] border border-line bg-white px-7 py-8 transition-shadow duration-300 hover:shadow-[0_24px_50px_-30px_rgba(15,14,13,0.28)] sm:px-8 sm:py-9"
             >
-              <p className="zahlen-num font-display text-[clamp(2.6rem,4vw,3.25rem)] font-bold leading-none tracking-[-0.03em] text-ink">
+              <p className="zahlen-num t-stat text-ink">
                 {fmt(locale, 0, s.decimals) + s.suffix}
               </p>
-              <p className="mt-4 text-[15px] leading-snug text-[#5c5954]">
+              <p className="t-body-s mt-4 text-[#5c5954]">
                 {t(s.label, s.labelEn)}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="zahlen-tags mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[14px] text-[#5c5954] sm:mt-10">
+        <div className="zahlen-tags mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 t-body-s text-[#5c5954] sm:mt-10">
           {TAGS.map(({ de, en, icon: Icon }) => (
             <span key={de} className="zahlen-tag flex items-center gap-2">
               <Icon className="size-[17px] text-accent" strokeWidth={2} />

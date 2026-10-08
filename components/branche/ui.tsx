@@ -129,7 +129,7 @@ export function Accent({ text, dark = false }: { text: string; dark?: boolean })
           <span
             key={i}
             className={cn(
-              "font-[family-name:var(--font-instrument)] text-[1.06em] font-normal italic tracking-[-0.02em]",
+              "t-serif md:tracking-[-0.02em]",
               dark ? "text-[#d8b682]" : "text-[#94713f]",
             )}
           >
@@ -149,7 +149,7 @@ export function Eyebrow({ icon, children, dark = false, className }: { icon: Ico
   return (
     <p
       className={cn(
-        "inline-flex w-fit max-w-full items-center gap-[7px] rounded-full border py-[7px] pl-2.5 pr-3.5 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] backdrop-blur-md sm:text-[12px]",
+        "inline-flex w-fit max-w-full items-center gap-[7px] rounded-full border py-[7px] pl-2.5 pr-3.5 eyebrow backdrop-blur-md",
         dark
           ? "border-white/[0.18] bg-white/10 text-[#cbc8c2]"
           : "border-[rgba(8,34,44,0.08)] bg-white/[0.72] text-[#5c5954] shadow-[0_8px_24px_rgba(8,34,44,0.08)]",
@@ -169,8 +169,8 @@ export function GoldButton({ href, children, size = "lg", className }: { href: s
     <Link
       href={href}
       className={cn(
-        "group relative inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full font-medium tracking-[-0.1px] text-[#0f0e0d] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px",
-        size === "lg" ? "h-[58px] px-7 text-[16px]" : "h-12 px-[22px] text-[15px] sm:text-[16px]",
+        "group relative inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full t-button text-[#0f0e0d] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px",
+        size === "lg" ? "h-[58px] px-7" : "h-12 px-[22px]",
         "shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)]",
         "bg-[linear-gradient(180deg,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0.02)_55%,rgba(255,255,255,0)_100%),linear-gradient(90deg,#efdcbc_0%,#d8b681_45%,#b4894d_100%)]",
         className,
@@ -187,7 +187,7 @@ export function GlassButton({ href, children, className }: { href: string; child
     <Link
       href={href}
       className={cn(
-        "group inline-flex h-[58px] items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-[rgba(8,34,44,0.08)] bg-white/[0.72] px-7 text-[16px] font-medium tracking-[-0.1px] text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07),inset_0_1px_1px_rgba(255,255,255,0.7)] transition-colors duration-200 hover:bg-white",
+        "group inline-flex h-[58px] items-center justify-center gap-2.5 whitespace-nowrap rounded-full border border-[rgba(8,34,44,0.08)] bg-white/[0.72] px-7 t-button text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07),inset_0_1px_1px_rgba(255,255,255,0.7)] transition-colors duration-200 hover:bg-white",
         className,
       )}
     >
@@ -217,10 +217,10 @@ export function SectionHead({
   return (
     <div className={cn("bh-head flex flex-col gap-[18px]", center ? "mx-auto max-w-[780px] items-center text-center" : "max-w-[720px] items-start", className)}>
       <Eyebrow icon={icon}>{eyebrow}</Eyebrow>
-      <h2 className="font-display text-[clamp(1.9rem,3.4vw,2.625rem)] font-semibold leading-[1.12] tracking-[-0.03em] text-[#1a1917]">
+      <h2 className="t-h2 text-[#1a1917]">
         <Accent text={title} />
       </h2>
-      {sub && <p className="text-[clamp(16px,1.4vw,18px)] leading-[1.6] tracking-[-0.01em] text-[#5c5954]">{sub}</p>}
+      {sub && <p className="t-body-l text-[#5c5954]">{sub}</p>}
     </div>
   );
 }

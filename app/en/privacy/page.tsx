@@ -6,7 +6,7 @@ import { languageAlternates } from "@/lib/i18n";
 import { DATENSCHUTZ_EN } from "@/lib/legal.en";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — TyloTech",
+  title: "Privacy Policy | TyloTech",
   description: "How TyloTech processes personal data on tylotech.de and what rights you have.",
   alternates: { canonical: "/en/privacy", languages: languageAlternates("/datenschutz") },
 };

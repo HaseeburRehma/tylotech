@@ -129,7 +129,7 @@ export default function Nav() {
 
         <nav className="hidden items-center gap-0.5 lg:flex xl:gap-1">
           {LINKS.map((l) => {
-            const linkCls = `flex h-10 items-center gap-1.5 whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-medium tracking-[-0.1px] xl:px-3.5 xl:text-[15px] transition-colors duration-500 ${
+            const linkCls = `flex h-10 items-center gap-1.5 whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-medium leading-5 tracking-[-0.1px] xl:px-3.5 xl:text-[15px] transition-colors duration-500 ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#5c5954] hover:bg-ink/[0.04] hover:text-ink"
@@ -178,7 +178,7 @@ export default function Nav() {
                 key={l.de}
                 type="button"
                 onClick={openLens}
-                className={`flex h-10 items-center whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-extrabold tracking-[-0.2px] transition-colors duration-500 xl:px-3.5 xl:text-[15px] ${
+                className={`flex h-10 items-center whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-extrabold leading-5 tracking-[-0.2px] transition-colors duration-500 xl:px-3.5 xl:text-[15px] ${
                   dark ? "text-[#D4A863] hover:bg-white/[0.06] hover:text-[#e2bd80]" : "text-[#A8863A] hover:bg-[rgba(212,168,99,0.12)] hover:text-[#8f7130]"
                 }`}
               >
@@ -201,7 +201,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener"
             title={t("Zum Kundenportal TyloHQ", "To the TyloHQ client portal")}
-            className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 md:flex lg:hidden min-[1400px]:flex xl:px-[18px] xl:text-[16px] ${
+            className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium leading-5 tracking-[-0.1px] transition-colors duration-500 md:flex lg:hidden min-[1400px]:flex xl:px-[18px] xl:text-[16px] ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#43413d] hover:bg-ink/[0.04]"
@@ -212,7 +212,7 @@ export default function Nav() {
           </a>
           <Link
             href={lp("/kontakt")}
-            className={`group hidden h-12 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-[15px] font-medium tracking-[-0.1px] transition-colors duration-500 sm:inline-flex xl:px-[22px] xl:text-[16px] ${
+            className={`group hidden h-12 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-[15px] font-medium leading-5 tracking-[-0.1px] transition-colors duration-500 sm:inline-flex xl:px-[22px] xl:text-[16px] ${
               dark
                 ? "bg-accent text-[#001620] hover:bg-[#ddb97e]"
                 : "bg-[#002e3d] text-inverse hover:bg-[#013a4d]"

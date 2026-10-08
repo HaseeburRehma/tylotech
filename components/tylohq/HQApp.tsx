@@ -142,7 +142,7 @@ function PanelHead({
         <button
           type="button"
           onClick={onAction}
-          className="ml-auto flex shrink-0 items-center gap-1 rounded-[6.5px] py-[5px] pl-2 pr-1.5 font-display text-[10.2px] font-medium text-[#5c5954] transition-colors hover:bg-[#f6f5f3] hover:text-[#1a1917]"
+          className="ml-auto flex shrink-0 items-center gap-1 rounded-[6.5px] py-[5px] pl-2 pr-1.5 font-display text-[10.2px] font-medium leading-[13.1px] tracking-[-0.08px] text-[#5c5954] transition-colors hover:bg-[#f6f5f3] hover:text-[#1a1917]"
         >
           {action}
           <ChevronRight className="size-[11px]" strokeWidth={2} />
@@ -319,7 +319,7 @@ export default function HQApp({ live }: { live: boolean }) {
               onClick={() => setClientMenu((o) => !o)}
               className="flex w-full items-center gap-2 rounded-[11px] border border-[#eeedea] bg-[#f6f5f3] py-[6.5px] pl-[6.5px] pr-2 text-left transition-colors hover:border-[#e2e0dc]"
             >
-              <span className="grid size-[21px] shrink-0 place-items-center rounded-[7px] bg-gradient-to-b from-[#17485b] to-[#04161d] font-display text-[9px] font-semibold tracking-[0.2px] text-[#e3c79e]">
+              <span className="grid size-[21px] shrink-0 place-items-center rounded-[7px] bg-gradient-to-b from-[#17485b] to-[#04161d] font-display text-[9px] font-semibold leading-[11.47px] tracking-[0.2px] text-[#e3c79e]">
                 {c.init}
               </span>
               <span className="min-w-0 flex-1">
@@ -398,7 +398,7 @@ export default function HQApp({ live }: { live: boolean }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img loading="lazy" decoding="async" src="/team/ilias-el-aradi.jpg" alt="" className="size-[23px] rounded-full object-cover" />
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-display text-[11px] font-medium leading-[14.75px] text-[#1a1917]">Ilias El Aradi</span>
+                <span className="block truncate font-display text-[11px] font-medium leading-[14.75px] tracking-[-0.2px] text-[#1a1917]">Ilias El Aradi</span>
                 <span className="block text-[9.4px] leading-3 text-[#7d7973]">Super Admin</span>
               </span>
             </div>
@@ -435,7 +435,7 @@ export default function HQApp({ live }: { live: boolean }) {
                     key={it.id}
                     onClick={() => go(it.id)}
                     className={cn(
-                      "flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] font-medium transition-colors",
+                      "flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1.5 font-display text-[11.9px] font-medium leading-4 tracking-[-0.2px] transition-colors",
                       on ? "border-[#e3c79e] bg-[#fbf6ee] text-[#1a1917]" : "border-transparent text-[#5c5954]",
                     )}
                   >
@@ -545,7 +545,7 @@ function DashboardView({
           <button
             type="button"
             onClick={() => setMenu((m) => !m)}
-            className="flex items-center gap-[6.5px] rounded-[8px] border border-[#e2e0dc] bg-white py-[7px] pl-[10.6px] pr-[9px] font-display text-[10.65px] font-medium text-[#5c5954] transition-colors hover:border-[#cbc8c2] hover:text-[#1a1917]"
+            className="flex items-center gap-[6.5px] rounded-[8px] border border-[#e2e0dc] bg-white py-[7px] pl-[10.6px] pr-[9px] font-display text-[10.65px] font-medium leading-[14.75px] tracking-[-0.08px] text-[#5c5954] transition-colors hover:border-[#cbc8c2] hover:text-[#1a1917]"
           >
             <Calendar className="size-3" strokeWidth={1.8} />
             {monthLabel(month)}
@@ -684,7 +684,7 @@ function DashboardView({
                     disabled={ok || pending === id}
                     onClick={() => connect(id)}
                     className={cn(
-                      "flex shrink-0 items-center gap-1 rounded-[7.4px] border px-[9.8px] py-[5.7px] font-display text-[10.2px] font-medium transition-colors",
+                      "flex shrink-0 items-center gap-1 rounded-[7.4px] border px-[9.8px] py-[5.7px] font-display text-[10.2px] font-medium leading-[13.1px] tracking-[-0.08px] transition-colors",
                       ok
                         ? "border-[#cfe8db] bg-[#e7f4ed] text-[#0e5836]"
                         : "border-[#eeedea] bg-[#f6f5f3] text-[#1a1917] hover:border-[#d1aa71] hover:bg-[#fbf6ee]",
@@ -749,7 +749,7 @@ function DashboardView({
                     )}
                   </span>
                 </span>
-                <span className="shrink-0 text-[9.4px] text-[#7d7973]">{task.done ? t("erledigt", "done") : t(task.due, task.en.due)}</span>
+                <span className="shrink-0 text-[9.4px] leading-[13px] text-[#7d7973]">{task.done ? t("erledigt", "done") : t(task.due, task.en.due)}</span>
               </button>
             ))}
           </Panel>

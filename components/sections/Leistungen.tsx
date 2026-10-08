@@ -6,7 +6,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 
 const SERVICES = [
   { img: "/illustrations/digital.png", title: "Digitale Lösungen", desc: "Web, Apps und Individualsoftware" },
-  { img: "/illustrations/marketing.png", title: "Marketing & Performance", desc: "Ads, SEO und Social — an Umsatz gemessen" },
+  { img: "/illustrations/marketing.png", title: "Marketing & Performance", desc: "Ads, SEO und Social, an Umsatz gemessen" },
   { img: "/illustrations/aufbau.png", title: "Unternehmensaufbau", desc: "Gründung, Businessplan, Prozesse" },
   { img: "/illustrations/tech.png", title: "Neue Technologien", desc: "KI, Blockchain und XR, wo es sich rechnet" },
   { img: "/illustrations/cloud.png", title: "Cloud & Infrastruktur", desc: "Migration, DevOps und Sicherheit" },

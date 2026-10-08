@@ -12,10 +12,10 @@ type Item = Text & { en: Text; img: string; tint: string; pos?: string };
 const ITEMS: Item[] = [
   {
     t: "Prozesse, die ohne dich laufen",
-    b: "Anfragen, Angebote, Nachfassen — einmal sauber aufgesetzt, läuft es, ohne dass du hinterherräumen musst.",
+    b: "Anfragen, Angebote, Nachfassen: Einmal sauber aufgesetzt, läuft es, ohne dass du hinterherräumen musst.",
     en: {
       t: "Processes that run without you",
-      b: "Enquiries, quotes, follow-ups — set up properly once, it all runs without you having to tidy up after it.",
+      b: "Enquiries, quotes, follow-ups: set up properly once, it all runs without you having to tidy up after it.",
     },
     img: "/wechsel/01.jpg",
     tint: "from-[#e8ddcb] to-[#d6c3a3]",
@@ -42,12 +42,12 @@ const ITEMS: Item[] = [
   },
   {
     t: "Ein Partner, der das Ergebnis trägt",
-    b: "Keine Agentur, die abrechnet und weiterleitet. Sondern ein Team, das sich am Ergebnis messen lässt — und bei echtem Potenzial sogar mit einsteigt.",
+    b: "Keine Agentur, die abrechnet und weiterleitet. Sondern ein Team, das sich am Ergebnis messen lässt und bei echtem Potenzial sogar mit einsteigt.",
     img: "/wechsel/04-ilias.jpg",
     alt: "Ilias El Aradi, Gründer von TyloTech, vor dem Google-Campus in Mountain View",
     en: {
       t: "A partner who owns the result",
-      b: "Not an agency that bills and passes things on. A team that’s measured by results — and where there’s real potential, even takes a stake.",
+      b: "Not an agency that bills and passes things on. A team that’s measured by results and, where there’s real potential, even takes a stake.",
       alt: "Ilias El Aradi, founder of TyloTech, outside the Google campus in Mountain View",
     },
     pos: "50% 30%",
@@ -128,13 +128,13 @@ export default function Wechsel() {
         <Container className="w-full">
           {/* heading */}
           <div className="wx-head max-w-[760px]">
-            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)] mb-4">
+            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-display text-[14px] font-semibold uppercase leading-[18px] tracking-[0.6px] max-sm:text-[13px] max-sm:leading-[17px] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)] mb-4">
               <span className="size-[7px] rounded-[2px] bg-accent" />
               {t("Wo klemmt es wirklich?", "Where’s the real bottleneck?")}
             </p>
-            <h2 className="font-display text-[clamp(1.9rem,4.2vw,3rem)] font-bold leading-[1.08] tracking-[-0.03em] text-ink">
+            <h2 className="t-h1 text-ink">
               {t("Zwei Zustände.", "Two realities.")}{" "}
-              <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+              <span className="t-serif tracking-[-1.8px] max-sm:tracking-[-1.1px] text-[#a07d45]">
                 {t("Dazwischen liegt die Arbeit.", "The work lies in between.")}
               </span>
             </h2>
@@ -160,7 +160,7 @@ export default function Wechsel() {
                         className="flex w-full items-start gap-4 border-t border-line py-3.5 pl-4 pr-2 text-left lg:py-4"
                       >
                         <span
-                          className={`mt-1 font-mono text-[12px] transition-colors ${
+                          className={`eyebrow mt-1 transition-colors ${
                             on ? "text-[#a07d45]" : "text-ink/35"
                           }`}
                         >
@@ -168,8 +168,8 @@ export default function Wechsel() {
                         </span>
                         <span className="flex-1">
                           <span
-                            className={`block text-[clamp(15px,1.15vw,17px)] tracking-[-0.1px] transition-colors ${
-                              on ? "font-semibold text-ink" : "text-ink/65"
+                            className={`t-title block transition-colors ${
+                              on ? "text-ink" : "text-ink/65"
                             }`}
                           >
                             {t(it.t, it.en.t)}
@@ -182,7 +182,7 @@ export default function Wechsel() {
                             }`}
                           >
                             <span className="overflow-hidden">
-                              <span className="block max-w-[460px] text-[13.5px] leading-[1.55] text-ink/55">
+                              <span className="t-body-s block max-w-[460px] text-ink/55">
                                 {t(it.b, it.en.b)}
                               </span>
                             </span>
@@ -197,7 +197,7 @@ export default function Wechsel() {
 
               {/* progress */}
               <div className="mt-7 flex items-center gap-4">
-                <span className="font-mono text-[13px] tracking-[0.08em] text-ink/55">
+                <span className="eyebrow text-ink/55">
                   {pad(active + 1)}
                   <span className="text-ink/30"> / {pad(STEPS)}</span>
                 </span>

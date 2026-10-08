@@ -131,28 +131,28 @@ function SummaryCard() {
     <div className="flex h-full flex-col gap-4 p-7">
       <div className="flex items-center gap-2.5">
         <GoogleG size={22} />
-        <span className="text-[14px] font-medium text-ink/60">
+        <span className="text-[14px] font-medium leading-[20px] text-ink/60">
           {t("Google-Bewertungen", "Google reviews")}
         </span>
       </div>
       <div className="flex items-center gap-3">
-        <span className="font-display text-[48px] font-bold leading-none tracking-[-0.03em] text-ink">
+        <span className="font-display font-semibold text-[clamp(40px,calc(40px_+_12_*_(100vw_-_390px)_/_1050),52px)] leading-[clamp(44px,calc(44px_+_12_*_(100vw_-_390px)_/_1050),56px)] tracking-[clamp(-1.8px,calc(-1.4px_-_0.4_*_(100vw_-_390px)_/_1050),-1.4px)] text-ink">
           {t("5,0", "5.0")}
         </span>
         <span className="flex flex-col gap-1">
           <Stars />
-          <span className="text-[12px] text-ink/45">{t("aus 31 Bewertungen", "from 31 reviews")}</span>
+          <span className="text-[13px] leading-[18px] text-ink/45">{t("aus 31 Bewertungen", "from 31 reviews")}</span>
         </span>
       </div>
-      <p className="text-[13.5px] leading-[1.55] text-ink/55">
+      <p className="t-body-s text-ink/55">
         {t(
-          "Wir bitten nach jedem abgeschlossenen Projekt um eine ehrliche Bewertung — auch dann, wenn nicht alles glattgelaufen ist.",
-          "We ask for an honest review after every completed project — even when not everything went smoothly.",
+          "Wir bitten nach jedem abgeschlossenen Projekt um eine ehrliche Bewertung. Auch dann, wenn nicht alles glattgelaufen ist.",
+          "We ask for an honest review after every completed project, even when not everything went smoothly.",
         )}
       </p>
       <a
         href="#"
-        className="group mt-auto inline-flex h-11 w-fit items-center gap-2 rounded-full border border-line bg-white px-5 text-[14px] font-medium text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
+        className="group mt-auto inline-flex h-11 w-fit items-center gap-2 rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
       >
         {t("Alle Bewertungen ansehen", "See all reviews")}
         <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -165,16 +165,16 @@ function ClientCard({ c }: { c: Client }) {
   return (
     <div className="flex h-full flex-col gap-4 p-7">
       <Quote className="size-6 fill-[#c79a53] text-[#c79a53]" strokeWidth={0} />
-      <p className="text-[15.5px] leading-[1.5] tracking-[-0.1px] text-ink">
+      <p className="text-[18px] leading-[28px] tracking-[-0.18px] text-ink">
         {c.quote}
       </p>
       <div className="mt-auto flex items-center gap-3 pt-2">
         <Avatar initials={c.initials} />
         <span>
-          <span className="block text-[14px] font-semibold tracking-[-0.1px] text-ink">
+          <span className="t-label-l block text-ink">
             {c.name}
           </span>
-          <span className="block text-[13px] text-ink/50">{c.firma}</span>
+          <span className="t-body-s block text-ink/50">{c.firma}</span>
         </span>
       </div>
     </div>
@@ -189,16 +189,16 @@ function ReviewCard({ r }: { r: Review }) {
         <Stars />
         <GoogleG size={20} />
       </div>
-      <p className="text-[14.5px] leading-[1.6] text-ink/70">{r.text}</p>
+      <p className="t-body-m text-ink/70">{r.text}</p>
       <div className="mt-auto flex items-center gap-3 pt-2">
         <span className="grid size-10 shrink-0 place-items-center rounded-full border border-line bg-white">
           <GoogleG size={17} />
         </span>
         <span>
-          <span className="block text-[14px] font-semibold text-ink">
+          <span className="t-label-m block text-ink">
             {t("Google-Rezension", "Google review")}
           </span>
-          <span className="block text-[13px] text-ink/50">{r.meta}</span>
+          <span className="t-body-xs block text-ink/50">{r.meta}</span>
         </span>
       </div>
     </div>
@@ -274,21 +274,21 @@ export default function Stimmen() {
     >
       <Container>
         <div className="stimmen-head max-w-[720px]">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <Star className="size-3.5 fill-accent text-accent" strokeWidth={0} />
             {t("Was Kunden sagen", "What clients say")}
           </p>
-          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+          <h2 className="t-h2 mt-5 text-ink">
             {t("Was Kunden", "What clients")}{" "}
-            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+            <span className="t-serif tracking-[inherit] text-[#a07d45]">
               {t("sagen", "say")}
             </span>
             .
           </h2>
-          <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+          <p className="t-body-l mt-4 max-w-[560px] text-[#5c5954]">
             {t(
               "Nachlesbar bei Google, wir verlinken die Bewertungen direkt, statt sie hier nur abzuschreiben.",
-              "All on Google for you to read — we link straight to the reviews instead of just copying them here. Quotes translated from German.",
+              "All on Google for you to read: we link straight to the reviews instead of just copying them here. Quotes translated from German.",
             )}
           </p>
         </div>

@@ -137,7 +137,7 @@ export default function TrendChart({
               x={left - 8}
               y={gridYs[k] + 3}
               textAnchor="end"
-              className="fill-[#7d7973] font-mono text-[8.6px]"
+              className="fill-[#7d7973] font-mono text-[8.6px] font-medium leading-[11.47px] tracking-[0.16px]"
             >
               {t}
             </text>
@@ -210,7 +210,7 @@ export default function TrendChart({
                 y={base + 22}
                 textAnchor="middle"
                 className={cn(
-                  "font-mono text-[8.6px] transition-colors",
+                  "font-mono text-[8.6px] font-medium leading-[11.47px] tracking-[0.16px] transition-colors",
                   hover === i ? "fill-[#1a1917]" : "fill-[#7d7973]",
                 )}
               >

@@ -11,33 +11,33 @@ const SERVICES = [
     icon: RotateCw,
     de: {
       title: "All-in-One Marketing",
-      body: "Sichtbarkeit, Ads, Content, Funnels, Websites — die ganze Bandbreite, aufeinander abgestimmt statt aus fünf Händen. Ein Plan, ein Look, ein Ergebnis.",
+      body: "Sichtbarkeit, Ads, Content, Funnels, Websites: die ganze Bandbreite, aufeinander abgestimmt statt aus fünf Händen. Ein Plan, ein Look, ein Ergebnis.",
     },
     en: {
       title: "All-in-One Marketing",
-      body: "Visibility, ads, content, funnels, websites — the full range, working as one instead of coming from five different hands. One plan, one look, one result.",
+      body: "Visibility, ads, content, funnels, websites: the full range, working as one instead of coming from five different hands. One plan, one look, one result.",
     },
   },
   {
     icon: Users,
     de: {
       title: "Leadgenerierung",
-      body: "Wir bauen Systeme, die planbar Anfragen bringen — über Google, Social und KI-Suche. Kein Zufall, kein Empfehlungsglück, sondern eine Maschine, die läuft.",
+      body: "Wir bauen Systeme, die planbar Anfragen bringen, über Google, Social und KI-Suche. Kein Zufall, kein Empfehlungsglück, sondern eine Maschine, die läuft.",
     },
     en: {
       title: "Lead generation",
-      body: "We build systems that bring in enquiries predictably — via Google, social and AI search. No luck, no hoping for referrals, just a machine that runs.",
+      body: "We build systems that bring in enquiries predictably, via Google, social and AI search. No luck, no hoping for referrals, just a machine that runs.",
     },
   },
   {
     icon: TrendingUp,
     de: {
       title: "Shared Deals",
-      body: "Bei den Unternehmen, an die wir glauben, steigen wir mit ein. Wir bauen mit, tragen das Risiko mit und wachsen mit dir — Skin in the Game statt nur Honorar.",
+      body: "Bei den Unternehmen, an die wir glauben, steigen wir mit ein. Wir bauen mit, tragen das Risiko mit und wachsen mit dir. Skin in the Game statt nur Honorar.",
     },
     en: {
       title: "Shared Deals",
-      body: "In businesses we believe in, we take a stake. We build with you, share the risk and grow with you — skin in the game, not just fees.",
+      body: "In businesses we believe in, we take a stake. We build with you, share the risk and grow with you. Skin in the game, not just fees.",
     },
   },
 ];
@@ -106,32 +106,32 @@ export default function Warum() {
     <section id="warum" ref={root} className="bg-page pb-14 pt-8 sm:pb-24">
       <Container>
         <div className="warum-head max-w-[760px]">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <Wrench className="size-3.5 text-accent" />
             {t("Der Werkzeugkasten", "The toolbox")}
           </p>
-          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+          <h2 className="t-h2 mt-5 text-ink">
             {t(
               <>
                 Woran wir bei dir{" "}
-                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                <span className="t-serif text-[#a07d45]">
                   zuerst
                 </span>{" "}
                 drehen.
               </>,
               <>
                 The levers we pull{" "}
-                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                <span className="t-serif text-[#a07d45]">
                   first
                 </span>
                 .
               </>,
             )}
           </h2>
-          <p className="mt-4 max-w-[600px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+          <p className="mt-4 max-w-[600px] t-body-l text-[#5c5954]">
             {t(
-              "Kanäle sind für uns keine Produkte, sondern Werkzeuge. Wir kommen rein, finden den echten Engpass — und setzen genau das ein, was dein Unternehmen gerade weiterbringt.",
-              "To us, channels aren’t products — they’re tools. We come in, find the real bottleneck, and use exactly what moves your business forward right now.",
+              "Kanäle sind für uns keine Produkte, sondern Werkzeuge. Wir kommen rein, finden den echten Engpass und setzen genau das ein, was dein Unternehmen gerade weiterbringt.",
+              "To us, channels aren’t products, they’re tools. We come in, find the real bottleneck, and use exactly what moves your business forward right now.",
             )}
           </p>
         </div>
@@ -150,10 +150,10 @@ export default function Warum() {
                 <Icon className="size-5" strokeWidth={1.6} />
               </span>
 
-              <h3 className="mt-6 text-[19px] font-semibold leading-snug tracking-[-0.01em] text-ink sm:mt-14">
+              <h3 className="t-h4 mt-6 text-ink sm:mt-14">
                 {title}
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-ink/55">
+              <p className="t-body-m mt-3 text-ink/55">
                 {body}
               </p>
             </article>
@@ -162,13 +162,13 @@ export default function Warum() {
         </div>
 
         <div className="warum-extras mt-8 flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-accent/40 bg-[rgba(209,170,113,0.1)] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.1em] text-[#94713f]">
+          <span className="rounded-full border border-accent/40 bg-[rgba(209,170,113,0.1)] px-3 py-1 eyebrow text-[#94713f]">
             {t("Ergänzend", "Plus")}
           </span>
           {EXTRAS.map((e) => (
             <span
               key={e.de}
-              className="warum-extra rounded-full border border-line bg-white px-3.5 py-1.5 text-[13px] font-medium text-ink/60"
+              className="warum-extra rounded-full border border-line bg-white px-3.5 py-1.5 t-body-s text-ink/60"
             >
               {t(e.de, e.en)}
             </span>

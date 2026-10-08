@@ -43,19 +43,19 @@ export default function BrancheCTA({ b }: { b: Branche }) {
           <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.14)]" />
 
           <div className="bhc-in relative mx-auto flex max-w-[860px] flex-col items-center gap-[26px] text-center">
-            <p className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/[0.22] bg-white/[0.12] py-2 pl-2.5 pr-4 text-[13px] font-medium leading-[18px] tracking-[-0.2px] text-white/[0.92] backdrop-blur-md sm:text-[14px]">
+            <p className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/[0.22] bg-white/[0.12] py-2 pl-2.5 pr-4 font-display text-[14px] font-medium leading-[18px] tracking-[-0.2px] text-white/[0.92] backdrop-blur-md max-sm:text-[13px] max-sm:leading-[17px]">
               <Calendar className="size-[15px] shrink-0 text-[#d8b682]" strokeWidth={1.8} />
               <span className="min-w-0">{b.ctaEyebrow}</span>
             </p>
-            <h2 className="font-display text-[clamp(2.1rem,4.6vw,3.375rem)] font-semibold leading-[1.11] tracking-[-0.033em] text-white">
+            <h2 className="t-h1-l text-white">
               {t("Bereit, dein Wachstum", "Ready to make your growth")}{" "}
-              <span className="font-[family-name:var(--font-instrument)] text-[1.07em] font-normal italic tracking-[-0.01em]">{t("planbar", "predictable")}</span>
+              <span className="t-serif text-[1.074em] md:tracking-[-0.031em]">{t("planbar", "predictable")}</span>
               {t(" zu machen?", "?")}
             </h2>
-            <p className="max-w-[720px] text-[clamp(16px,1.5vw,18px)] leading-[1.56] tracking-[-0.01em] text-white/[0.94]">
+            <p className="t-body-l max-w-[720px] text-white/[0.94]">
               {t(
-                "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt — und ob wir zueinander passen.",
-                "No sales pitch. An honest take on where your biggest lever is — and whether we’re a good fit.",
+                "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt und ob wir zueinander passen.",
+                "No sales pitch. An honest take on where your biggest lever is and whether we’re a good fit.",
               )}
             </p>
             <Link
@@ -66,9 +66,9 @@ export default function BrancheCTA({ b }: { b: Branche }) {
               <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[linear-gradient(180deg,#17485b,#04161d)] text-white">
                 <ArrowRight className="size-[19px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
               </span>
-              <span className="whitespace-nowrap text-[18px] font-medium leading-6 tracking-[-0.3px] text-[#04161d]">
+              <span className="whitespace-nowrap font-display text-[18px] font-medium leading-6 tracking-[-0.3px] text-[#04161d] max-sm:text-[16px] max-sm:leading-[21px]">
                 {t(null, "Book your ")}
-                <span className="font-[family-name:var(--font-instrument)] text-[19px] font-normal italic">{t("Erstgespräch", "intro call")}</span>
+                <span className="font-[family-name:var(--font-instrument)] text-[19px] font-normal italic max-sm:text-[17px]">{t("Erstgespräch", "intro call")}</span>
                 {t(" sichern", null)}
               </span>
             </Link>

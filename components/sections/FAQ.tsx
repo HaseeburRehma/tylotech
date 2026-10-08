@@ -10,19 +10,19 @@ import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 const ITEMS_DE = [
   {
     q: "Seid ihr eine Agentur?",
-    a: "Nein. Wir sind eine Unternehmensberatung, die baut — Marketing, Software und Vertrieb aus einer Hand, mit voller Verantwortung fürs Ergebnis.",
+    a: "Nein. Wir sind eine Unternehmensberatung, die baut: Marketing, Software und Vertrieb aus einer Hand, mit voller Verantwortung fürs Ergebnis.",
   },
   {
     q: "Was heißt „Shared Deals“?",
-    a: "Bei passenden Projekten arbeiten wir nicht nur gegen Honorar, sondern beteiligen uns am Erfolg. Wir steigen mit ein, wenn wir an das Potenzial glauben — und tragen das Risiko mit.",
+    a: "Bei passenden Projekten arbeiten wir nicht nur gegen Honorar, sondern beteiligen uns am Erfolg. Wir steigen mit ein, wenn wir an das Potenzial glauben, und tragen das Risiko mit.",
   },
   {
     q: "Für wen lohnt sich das?",
-    a: "Für Unternehmen mit einem funktionierenden Angebot, die wachsen wollen, aber kein System dafür haben. Die Größe ist zweitrangig — die Bereitschaft, mitzuziehen, zählt.",
+    a: "Für Unternehmen mit einem funktionierenden Angebot, die wachsen wollen, aber kein System dafür haben. Die Größe ist zweitrangig. Was zählt, ist die Bereitschaft, mitzuziehen.",
   },
   {
     q: "Was kostet die Zusammenarbeit?",
-    a: "Das hängt vom Umfang ab, und wir nennen die Zahl im Erstgespräch, nicht erst im Angebot. Laufende Betreuung über monatliche Pakete, Projekte über Festpreise — keine Stundenzettel mit Überraschung am Monatsende.",
+    a: "Das hängt vom Umfang ab, und wir nennen die Zahl im Erstgespräch, nicht erst im Angebot. Laufende Betreuung über monatliche Pakete, Projekte über Festpreise. Keine Stundenzettel mit Überraschung am Monatsende.",
   },
   {
     q: "Wie schnell seht ihr Ergebnisse?",
@@ -33,19 +33,19 @@ const ITEMS_DE = [
 const ITEMS_EN = [
   {
     q: "Are you an agency?",
-    a: "No. We’re a consultancy that builds — marketing, software and sales from a single source, with full responsibility for the result.",
+    a: "No. We’re a consultancy that builds: marketing, software and sales from a single source, with full responsibility for the result.",
   },
   {
     q: "What does “shared deals” mean?",
-    a: "On the right projects, we don’t just work for a fee — we take a share in the success. We buy in when we believe in the potential, and we share the risk.",
+    a: "On the right projects, we don’t just work for a fee. We take a share in the success. We buy in when we believe in the potential, and we share the risk.",
   },
   {
     q: "Who is this worth it for?",
-    a: "For businesses with an offer that works, that want to grow but have no system for it. Size is secondary — what counts is the willingness to pull your weight.",
+    a: "For businesses with an offer that works, that want to grow but have no system for it. Size is secondary. What counts is the willingness to pull your weight.",
   },
   {
     q: "What does working together cost?",
-    a: "That depends on the scope, and we give you the number in the intro call, not only in the proposal. Ongoing support runs on monthly packages, projects on fixed prices — no timesheets with a surprise at the end of the month.",
+    a: "That depends on the scope, and we give you the number in the intro call, not only in the proposal. Ongoing support runs on monthly packages, projects on fixed prices. No timesheets with a surprise at the end of the month.",
   },
   {
     q: "How quickly will I see results?",
@@ -93,22 +93,22 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
     >
       <Container className={br ? "grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,400px)_1fr] lg:gap-14 xl:gap-20" : "grid grid-cols-1 gap-10 lg:grid-cols-[380px_1fr] lg:gap-14"}>
         <div className="faq-left">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <HelpCircle className="size-3.5 text-accent" />
             {t("Häufige Fragen", "Common questions")}
           </p>
-          <h2 className="mt-5 font-display text-[clamp(1.9rem,3.6vw,2.6rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+          <h2 className="t-h2 mt-5 text-ink">
             {t("Fragen, die uns", "Questions")}{" "}
-            <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+            <span className="t-serif tracking-[inherit] text-[#a07d45] max-sm:tracking-[-0.5px]">
               {t("fast jeder stellt.", "almost everyone asks.")}
             </span>
           </h2>
 
           <div className="mt-8 rounded-[18px] border border-line bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,14,13,0.2)]">
-            <p className="text-[16px] font-semibold text-ink">
+            <p className="font-display text-[17px] font-medium leading-[24px] tracking-[-0.3px] text-ink max-sm:font-semibold max-sm:tracking-normal">
               {t("Deine Frage steht nicht dabei?", "Your question isn’t here?")}
             </p>
-            <p className="mt-2 text-[14px] leading-[1.6] text-[#5c5954]">
+            <p className="t-body-s mt-2 text-[#5c5954]">
               {t("Ruf einfach an:", "Just give us a call:")}{" "}
               <a href="tel:+4921115847097" className="whitespace-nowrap font-medium text-ink underline-offset-2 hover:underline">
                 {t("0211 15847097", "+49 211 15847097")}
@@ -120,7 +120,7 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
             </p>
             <Link
               href={lp("/kontakt")}
-              className="group mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-5 text-[14px] font-medium text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
+              className="group mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
             >
               {t("Erstgespräch sichern", "Book your intro call")}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -152,8 +152,8 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
                   <span
                     className={
                       br
-                        ? "flex-1 font-display text-[clamp(17px,1.5vw,20px)] font-medium leading-[1.3] tracking-[-0.02em] text-[#1a1917]"
-                        : "flex-1 font-display text-[clamp(16px,1.4vw,19px)] font-semibold leading-snug tracking-[-0.01em] text-ink"
+                        ? "t-h5 flex-1 text-[#1a1917]"
+                        : "t-h5 flex-1 text-ink"
                     }
                   >
                     {item.q}
@@ -180,8 +180,8 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
                     <p
                       className={
                         br
-                          ? "pb-6 pl-6 pr-6 text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954] sm:pb-[26px] sm:pl-8 sm:pr-[92px]"
-                          : "pb-6 pl-7 pr-[68px] text-[15px] leading-[1.65] text-[#5c5954]"
+                          ? "t-body-m pb-6 pl-6 pr-6 text-[#5c5954] sm:pb-[26px] sm:pl-8 sm:pr-[92px]"
+                          : "t-body-m pb-6 pl-7 pr-[68px] text-[#5c5954]"
                       }
                     >
                       {item.a}

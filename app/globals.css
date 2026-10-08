@@ -58,41 +58,207 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* ------------------------------------------------------------------ *
- * Typography helpers — matched to Figma text styles
- * ------------------------------------------------------------------ */
-.eyebrow {
-  font-family: var(--font-mono), monospace;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.117em; /* 1.4 on 12 */
-  text-transform: uppercase;
-}
+/* Scale lives in the components layer, so a deliberate Tailwind utility
+   (e.g. `t-body-s font-medium`) can still refine it. */
+@layer components {
+  /* ------------------------------------------------------------------ *
+   * Typography — the Figma type scale (Main File, desktop 1440 + mobile 390).
+   * Each style is exact at 390px and at 1440px and scales linearly in between:
+   * value = m + (d - m) * (100vw - 390px) / 1050, clamped to [min(m,d), max(m,d)].
+   * ------------------------------------------------------------------ */
+  .t-display,
+  .t-display-s,
+  .t-h1,
+  .t-h1-l,
+  .t-stat,
+  .t-h2,
+  .t-h2-s,
+  .t-h3,
+  .t-h3-s,
+  .t-h3-fixed,
+  .t-h4,
+  .t-h5,
+  .t-h6,
+  .t-title,
+  .t-title-s,
+  .t-label-l,
+  .t-label-m,
+  .t-body-xl,
+  .t-body-l,
+  .t-body-m,
+  .t-body-ms,
+  .t-body-s,
+  .t-body-xs,
+  .t-button,
+  .display-l,
+  .display-m,
+  .body-xl {
+    font-size: clamp(
+      calc(min(var(--fs-m), var(--fs-d)) * 1px),
+      calc(var(--fs-m) * 1px + (var(--fs-d) - var(--fs-m)) * (100vw - 390px) / 1050),
+      calc(max(var(--fs-m), var(--fs-d)) * 1px)
+    );
+    line-height: clamp(
+      calc(min(var(--lh-m), var(--lh-d)) * 1px),
+      calc(var(--lh-m) * 1px + (var(--lh-d) - var(--lh-m)) * (100vw - 390px) / 1050),
+      calc(max(var(--lh-m), var(--lh-d)) * 1px)
+    );
+    letter-spacing: clamp(
+      calc(min(var(--ls-m), var(--ls-d)) * 1px),
+      calc(var(--ls-m) * 1px + (var(--ls-d) - var(--ls-m)) * (100vw - 390px) / 1050),
+      calc(max(var(--ls-m), var(--ls-d)) * 1px)
+    );
+  }
 
-.display-l {
-  font-family: var(--font-display), sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.75rem, 4.17vw, 3.75rem); /* 60px @1440 */
-  line-height: 1.067; /* 64 on 60 */
-  letter-spacing: -0.037em; /* -2.2 on 60 */
-}
+  .t-display {
+    --fs-m: 40; --fs-d: 60; --lh-m: 43; --lh-d: 64; --ls-m: -1.5; --ls-d: -2;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-display-s {
+    --fs-m: 34; --fs-d: 60; --lh-m: 38; --lh-d: 64; --ls-m: -1.2; --ls-d: -2;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h1 {
+    --fs-m: 32; --fs-d: 52; --lh-m: 38; --lh-d: 60; --ls-m: -1.1; --ls-d: -1.8;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h1-l {
+    --fs-m: 32; --fs-d: 54; --lh-m: 37; --lh-d: 60; --ls-m: -1.1; --ls-d: -1.8;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-stat {
+    --fs-m: 48; --fs-d: 48; --lh-m: 52; --lh-d: 52; --ls-m: -1.8; --ls-d: -1.8;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h2 {
+    --fs-m: 28; --fs-d: 42; --lh-m: 33; --lh-d: 47; --ls-m: -1; --ls-d: -1.3;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h2-s {
+    --fs-m: 26; --fs-d: 36; --lh-m: 32; --lh-d: 42; --ls-m: -0.8; --ls-d: -1.2;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h3 {
+    --fs-m: 22; --fs-d: 32; --lh-m: 28; --lh-d: 38; --ls-m: -0.7; --ls-d: -0.9;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h3-s {
+    --fs-m: 22; --fs-d: 30; --lh-m: 28; --lh-d: 36; --ls-m: -0.6; --ls-d: -0.9;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h3-fixed {
+    --fs-m: 30; --fs-d: 30; --lh-m: 34; --lh-d: 34; --ls-m: -0.8; --ls-d: -0.8;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h4 {
+    --fs-m: 24; --fs-d: 24; --lh-m: 30; --lh-d: 30; --ls-m: -0.6; --ls-d: -0.6;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+  }
+  .t-h5 {
+    --fs-m: 19; --fs-d: 20; --lh-m: 25; --lh-d: 26; --ls-m: -0.4; --ls-d: -0.4;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 500;
+  }
+  .t-h6 {
+    --fs-m: 17; --fs-d: 19; --lh-m: 23; --lh-d: 24; --ls-m: -0.3; --ls-d: -0.3;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 500;
+  }
+  .t-title {
+    --fs-m: 16; --fs-d: 18; --lh-m: 22; --lh-d: 24; --ls-m: -0.3; --ls-d: -0.3;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 500;
+  }
+  .t-title-s {
+    --fs-m: 16; --fs-d: 16; --lh-m: 22; --lh-d: 22; --ls-m: -0.3; --ls-d: -0.3;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 500;
+  }
+  .t-label-l {
+    --fs-m: 16; --fs-d: 16; --lh-m: 20; --lh-d: 20; --ls-m: -0.32; --ls-d: -0.32;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 500;
+  }
+  .t-label-m {
+    --fs-m: 14; --fs-d: 14; --lh-m: 18; --lh-d: 18; --ls-m: -0.28; --ls-d: -0.28;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 500;
+  }
+  .t-body-xl {
+    --fs-m: 16; --fs-d: 20; --lh-m: 25; --lh-d: 30; --ls-m: -0.16; --ls-d: -0.2;
+    font-family: var(--font-sans), sans-serif;
+    font-weight: 400;
+  }
+  .t-body-l {
+    --fs-m: 16; --fs-d: 18; --lh-m: 25; --lh-d: 28; --ls-m: -0.16; --ls-d: -0.18;
+    font-family: var(--font-sans), sans-serif;
+    font-weight: 400;
+  }
+  .t-body-m {
+    --fs-m: 16; --fs-d: 16; --lh-m: 26; --lh-d: 26; --ls-m: -0.16; --ls-d: -0.16;
+    font-family: var(--font-sans), sans-serif;
+    font-weight: 400;
+  }
+  .t-body-ms {
+    --fs-m: 14; --fs-d: 16; --lh-m: 22; --lh-d: 26; --ls-m: -0.1; --ls-d: -0.16;
+    font-family: var(--font-sans), sans-serif;
+    font-weight: 400;
+  }
+  .t-body-s {
+    --fs-m: 14; --fs-d: 14; --lh-m: 22; --lh-d: 22; --ls-m: -0.1; --ls-d: -0.1;
+    font-family: var(--font-sans), sans-serif;
+    font-weight: 400;
+  }
+  .t-body-xs {
+    --fs-m: 13; --fs-d: 13; --lh-m: 20; --lh-d: 20; --ls-m: -0.05; --ls-d: -0.05;
+    font-family: var(--font-sans), sans-serif;
+    font-weight: 400;
+  }
+  .t-button {
+    --fs-m: 16; --fs-d: 16; --lh-m: 20; --lh-d: 20; --ls-m: -0.1; --ls-d: -0.1;
+    font-family: var(--font-sans), sans-serif;
+    font-weight: 500;
+  }
 
-.display-m {
-  /* Heading/H2 — Bricolage SemiBold 42/48, -1.3 */
-  font-family: var(--font-display), sans-serif;
-  font-weight: 600;
-  font-size: clamp(2.125rem, 2.92vw, 2.625rem); /* 42px @1440 */
-  line-height: 1.143;
-  letter-spacing: -0.031em;
-}
+  /* Instrument Serif italic accent inside a headline (Figma: ~1.05x the headline size) */
+  .t-serif {
+    font-family: var(--font-instrument), serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.05em;
+    letter-spacing: -0.035em; /* Figma mobile: -1.5 on 42, -1 on 29 */
+  }
+  @media (min-width: 768px) {
+    .t-serif {
+      letter-spacing: -0.025em; /* Figma desktop: -1.3 on 44–63 */
+    }
+  }
 
-.body-xl {
-  font-family: var(--font-sans), sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 32px;
-  letter-spacing: -0.005em;
+  /* Mono/Eyebrow — Geist Mono Medium 12/14, +0.4, uppercase */
+  .eyebrow {
+    font-family: var(--font-mono), monospace;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  /* legacy helpers mapped onto the Figma scale */
+  .display-l { --fs-m: 40; --fs-d: 60; --lh-m: 43; --lh-d: 64; --ls-m: -1.5; --ls-d: -2; font-family: var(--font-display), sans-serif; font-weight: 600; }
+  .display-m { --fs-m: 28; --fs-d: 42; --lh-m: 33; --lh-d: 47; --ls-m: -1; --ls-d: -1.3; font-family: var(--font-display), sans-serif; font-weight: 600; }
+  .body-xl { --fs-m: 16; --fs-d: 20; --lh-m: 25; --lh-d: 30; --ls-m: -0.16; --ls-d: -0.2; font-family: var(--font-sans), sans-serif; font-weight: 400; }
 }
 
 /* Reveal helpers (GSAP toggles these) */

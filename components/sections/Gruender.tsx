@@ -71,14 +71,14 @@ export default function Gruender() {
 
             {/* content */}
             <div className="gr-body">
-              <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+              <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
                 <UserRound className="size-3.5 text-accent" />
                 {t("Der Gründer", "The founder")}
               </p>
 
-              <h2 className="mt-5 font-display text-[clamp(1.9rem,3.4vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+              <h2 className="mt-5 t-h2 text-ink">
                 {t("Warum es", "Why")}{" "}
-                <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                <span className="t-serif tracking-[-0.6px] max-sm:tracking-[-0.5px] text-[#a07d45]">
                   TyloTech
                 </span>{" "}
                 {t("gibt.", "exists.")}
@@ -90,15 +90,15 @@ export default function Gruender() {
                   className="mt-1 size-6 shrink-0 fill-[#c79a53] text-[#c79a53]"
                   strokeWidth={0}
                 />
-                <p className="font-[family-name:var(--font-instrument)] text-[clamp(16px,1.6vw,19px)] italic leading-[1.55] text-ink/85">
+                <p className="font-[family-name:var(--font-instrument)] text-[clamp(18px,calc(18px+3*(100vw-390px)/1050),21px)] font-normal italic leading-[clamp(26px,calc(26px+4*(100vw-390px)/1050),30px)] tracking-[clamp(-0.18px,calc(-0.16px-0.02*(100vw-390px)/1050),-0.16px)] text-ink/85">
                   {t(
                     <>
-                      „Ich habe jeden dieser Prozesse selbst durchlaufen — Marketing,
+                      „Ich habe jeden dieser Prozesse selbst durchlaufen: Marketing,
                       Code, Vertrieb, Aufbau. Deshalb sehen wir, was andere
                       übersehen. Und deshalb bauen wir mit, statt nur zu beraten.“
                     </>,
                     <>
-                      “I’ve been through every one of these processes myself — marketing,
+                      “I’ve been through every one of these processes myself: marketing,
                       code, sales, building a company. That’s why we see what others
                       miss. And that’s why we build with you instead of just advising.”
                     </>,
@@ -109,10 +109,10 @@ export default function Gruender() {
               {/* signature */}
               <div className="mt-8">
                 <span className="mb-4 block h-px w-9 bg-ink/25" />
-                <p className="font-display text-[18px] font-semibold tracking-[-0.01em] text-ink">
+                <p className="font-display text-[clamp(20px,calc(20px+2*(100vw-390px)/1050),22px)] font-medium leading-[clamp(26px,calc(26px+2*(100vw-390px)/1050),28px)] tracking-[-0.4px] text-ink">
                   Ilias El Aradi
                 </p>
-                <p className="mt-1 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/45">
+                <p className="mt-1 eyebrow text-ink/45">
                   {t("Gründer von TyloTech · Dein Wachstumspartner", "Founder of TyloTech · Your growth partner")}
                 </p>
               </div>

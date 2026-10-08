@@ -62,7 +62,7 @@ const VOICES: Voice[] = [
   },
   {
     cat: "Handwerk",
-    quote: "Der Kalender ist voll — das Postfach bleibt ruhig.",
+    quote: "Der Kalender ist voll, das Postfach bleibt ruhig.",
     name: "Sanierprofi Rhein-Ruhr",
     firma: "Handwerk · Essen",
     brand: "Sanierprofi",

@@ -40,14 +40,14 @@ export default function BrancheKennst({ b }: { b: Branche }) {
                 </span>
                 <span className="font-mono text-[13px] leading-4 text-[#7d7973]">{String(i + 1).padStart(2, "0")}</span>
               </div>
-              <p className="font-display text-[17px] font-medium leading-6 tracking-[-0.02em] text-[#1a1917]">{p.text}</p>
+              <p className="font-display text-[17px] font-medium leading-6 tracking-[-0.3px] text-[#1a1917]">{p.text}</p>
             </article>
           ))}
         </div>
 
         <div className="bhk-grund flex flex-col overflow-hidden rounded-[24px] border border-[#eeedea] bg-white shadow-[0_1px_2px_rgba(8,34,44,0.04),0_2px_6px_rgba(8,34,44,0.06)] md:min-h-[260px] md:flex-row">
           <div className="flex flex-1 items-center p-7 sm:p-10 lg:p-14">
-            <p className="font-display text-[clamp(1.25rem,2vw,1.5rem)] font-semibold leading-[1.3] tracking-[-0.025em] text-[#1a1917]">
+            <p className="t-h4 text-[#1a1917]">
               <Accent text={k.grund} />
             </p>
           </div>

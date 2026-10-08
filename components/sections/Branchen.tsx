@@ -46,7 +46,7 @@ const INDUSTRIES: Industry[] = [
     name: "Online-Dienstleistungen",
     lead: "Expertise sichtbar machen,",
     accent: "Kunden gewinnen.",
-    body: "Coaches, Berater, Software- und Online-Anbieter — wir schärfen deine Positionierung, bauen Autorität auf und verwandeln Besucher in zahlende Kunden. Mit einem System, das nicht nur an dir hängt.",
+    body: "Coaches, Berater, Software- und Online-Anbieter: Wir schärfen deine Positionierung, bauen Autorität auf und verwandeln Besucher in zahlende Kunden. Mit einem System, das nicht nur an dir hängt.",
     icon: Globe,
     img: "/branchen/online.jpg",
     tint: "from-[#e9dccb] to-[#c9a774]",
@@ -54,14 +54,14 @@ const INDUSTRIES: Industry[] = [
       name: "Online Services",
       lead: "Make your expertise visible,",
       accent: "win clients.",
-      body: "Coaches, consultants, software and online providers — we sharpen your positioning, build authority and turn visitors into paying clients. With a system that doesn’t depend on you alone.",
+      body: "Coaches, consultants, software and online providers: we sharpen your positioning, build authority and turn visitors into paying clients. With a system that doesn’t depend on you alone.",
     },
   },
   {
     name: "Handwerk",
     lead: "Sichtbarkeit, die",
     accent: "Aufträge bringt.",
-    body: "Sanierung, Elektro, Rohrreinigung — Betriebe, die nicht mehr Klicks brauchen, sondern volle Kalender. Wir bauen Auftritt, Anfragestrecke und Kampagnen, die funktionieren.",
+    body: "Sanierung, Elektro, Rohrreinigung: Betriebe, die nicht mehr Klicks brauchen, sondern volle Kalender. Wir bauen Auftritt, Anfragestrecke und Kampagnen, die funktionieren.",
     icon: Hammer,
     img: "/branchen/handwerk.jpg",
     tint: "from-[#e7d8c2] to-[#cba46f]",
@@ -69,14 +69,14 @@ const INDUSTRIES: Industry[] = [
       name: "Trades & Crafts",
       lead: "Visibility that",
       accent: "brings in jobs.",
-      body: "Renovation, electrical, drain cleaning — businesses that don’t need more clicks, they need full calendars. We build the presence, the enquiry funnel and the campaigns that work.",
+      body: "Renovation, electrical, drain cleaning: businesses that don’t need more clicks, they need full calendars. We build the presence, the enquiry funnel and the campaigns that work.",
     },
   },
   {
     name: "Lokale Dienstleister",
     lead: "Gefunden werden,",
     accent: "wo es zählt.",
-    body: "Reinigung, Pflege, Gastronomie, Fahrschulen — lokale Betriebe, die bei jeder Suche im Umkreis ganz oben stehen sollen. Wir sorgen für Sichtbarkeit und planbare Anfragen.",
+    body: "Reinigung, Pflege, Gastronomie, Fahrschulen: lokale Betriebe, die bei jeder Suche im Umkreis ganz oben stehen sollen. Wir sorgen für Sichtbarkeit und planbare Anfragen.",
     icon: MapPin,
     img: "/branchen/lokale-dienstleister.jpg",
     tint: "from-[#d7e2e6] to-[#a9c2ca]",
@@ -84,14 +84,14 @@ const INDUSTRIES: Industry[] = [
       name: "Local Services",
       lead: "Get found",
       accent: "where it counts.",
-      body: "Cleaning, care, restaurants, driving schools — local businesses that belong at the top of every nearby search. We deliver the visibility and a steady flow of enquiries.",
+      body: "Cleaning, care, restaurants, driving schools: local businesses that belong at the top of every nearby search. We deliver the visibility and a steady flow of enquiries.",
     },
   },
   {
     name: "E-Commerce",
     lead: "Mehr verkaufen,",
     accent: "nicht nur mehr Traffic.",
-    body: "Onlineshops, Marktplätze, D2C-Brands — wir optimieren Conversion, Bestellstrecke und Kampagnen so, dass aus Besuchern Käufer werden. Messbar, nicht nach Bauchgefühl.",
+    body: "Onlineshops, Marktplätze, D2C-Brands: Wir optimieren Conversion, Bestellstrecke und Kampagnen so, dass aus Besuchern Käufer werden. Messbar, nicht nach Bauchgefühl.",
     icon: ShoppingCart,
     img: "/branchen/ecommerce.jpg",
     tint: "from-[#ebd9c0] to-[#d9a86a]",
@@ -99,14 +99,14 @@ const INDUSTRIES: Industry[] = [
       name: "E-Commerce",
       lead: "Sell more,",
       accent: "not just get more traffic.",
-      body: "Online shops, marketplaces, D2C brands — we optimise conversion, checkout and campaigns so visitors become buyers. Measurably, not by gut feeling.",
+      body: "Online shops, marketplaces, D2C brands: we optimise conversion, checkout and campaigns so visitors become buyers. Measurably, not by gut feeling.",
     },
   },
   {
     name: "B2B-Dienstleistung",
     lead: "Leads generieren,",
     accent: "die wirklich kaufen.",
-    body: "Agenturen, Beratungen, IT-Dienstleister — wir bauen Funnels und Systeme, die qualifizierte Anfragen liefern, statt nur Reichweite ohne Ergebnis.",
+    body: "Agenturen, Beratungen, IT-Dienstleister: Wir bauen Funnels und Systeme, die qualifizierte Anfragen liefern, statt nur Reichweite ohne Ergebnis.",
     icon: Building2,
     img: "/branchen/b2b.jpg",
     tint: "from-[#dbe0d9] to-[#b3c0ab]",
@@ -114,14 +114,14 @@ const INDUSTRIES: Industry[] = [
       name: "B2B Services",
       lead: "Generate leads",
       accent: "that actually buy.",
-      body: "Agencies, consultancies, IT service providers — we build funnels and systems that deliver qualified enquiries, not just reach without results.",
+      body: "Agencies, consultancies, IT service providers: we build funnels and systems that deliver qualified enquiries, not just reach without results.",
     },
   },
   {
     name: "Finanz & Investment",
     lead: "Vertrauen aufbauen,",
     accent: "digital skalieren.",
-    body: "Finanzberater, Vermögensverwaltung, Investment — wir schaffen den digitalen Auftritt, der Kompetenz zeigt und Vertrauen aufbaut, bevor das erste Gespräch stattfindet.",
+    body: "Finanzberater, Vermögensverwaltung, Investment: Wir schaffen den digitalen Auftritt, der Kompetenz zeigt und Vertrauen aufbaut, bevor das erste Gespräch stattfindet.",
     icon: TrendingUp,
     img: "/branchen/finanz.jpg",
     tint: "from-[#e6dcc9] to-[#c9b389]",
@@ -129,7 +129,7 @@ const INDUSTRIES: Industry[] = [
       name: "Finance & Investment",
       lead: "Build trust,",
       accent: "scale digitally.",
-      body: "Financial advisers, wealth management, investment — we create the digital presence that shows expertise and builds trust before the first conversation even happens.",
+      body: "Financial advisers, wealth management, investment: we create the digital presence that shows expertise and builds trust before the first conversation even happens.",
     },
   },
 ];
@@ -204,21 +204,21 @@ export default function Branchen() {
       <div className="py-14 sm:py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0">
         <Container className="w-full">
           <div className="br-head max-w-[720px]">
-            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
+            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
               <Briefcase className="size-3.5 text-accent" />
               {t("Erprobt, nicht theoretisch", "Proven, not theoretical")}
             </p>
-            <h2 className="mt-5 font-display text-[clamp(1.9rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+            <h2 className="t-h2 mt-5 text-ink">
               {t("Wo wir uns", "Industries we")}{" "}
-              <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+              <span className="t-serif tracking-[inherit] text-[#a07d45] max-sm:tracking-[-0.5px]">
                 {t("auskennen", "know inside out")}
               </span>
               .
             </h2>
-            <p className="mt-4 max-w-[560px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#5c5954]">
+            <p className="t-body-l mt-4 max-w-[560px] text-[#5c5954]">
               {t(
-                "Vom Handwerksbetrieb bis zum Mittelständer — wir haben in vielen Branchen gebaut und wissen, was funktioniert. Handwerk, Dienstleistung, lokale Betriebe, E-Commerce, spezialisierte Nischen.",
-                "From the local trades business to the established mid-sized company — we’ve built across many industries and know what works. Trades, services, local businesses, e-commerce, specialist niches.",
+                "Vom Handwerksbetrieb bis zum Mittelständer: Wir haben in vielen Branchen gebaut und wissen, was funktioniert. Handwerk, Dienstleistung, lokale Betriebe, E-Commerce, spezialisierte Nischen.",
+                "From the local trades business to the established mid-sized company: we’ve built across many industries and know what works. Trades, services, local businesses, e-commerce, specialist niches.",
               )}
             </p>
           </div>
@@ -243,14 +243,14 @@ export default function Branchen() {
                         }`}
                       >
                         <span
-                          className={`font-mono text-[10px] tracking-[0.12em] transition-colors ${
+                          className={`eyebrow transition-colors ${
                             on ? "text-[#d1aa71]" : "text-ink/35"
                           }`}
                         >
                           {pad(i + 1)}
                         </span>
                         <span
-                          className={`min-w-0 text-[13px] font-medium leading-snug tracking-[-0.01em] transition-colors sm:text-[13.5px] ${
+                          className={`t-title-s min-w-0 transition-colors ${
                             on ? "text-white" : "text-ink/65"
                           }`}
                         >
@@ -264,13 +264,13 @@ export default function Branchen() {
 
               {/* content */}
               <div className="order-2 flex flex-col justify-center px-1 lg:px-2">
-                <h3 className="font-display text-[clamp(1.4rem,2.1vw,2rem)] font-bold leading-[1.15] tracking-[-0.02em] text-ink">
+                <h3 className="font-display font-semibold text-[clamp(26px,calc(26px_+_8_*_(100vw_-_390px)_/_1050),34px)] leading-[clamp(32px,calc(32px_+_9_*_(100vw_-_390px)_/_1050),41px)] tracking-[clamp(-1px,calc(-0.8px_-_0.2_*_(100vw_-_390px)_/_1050),-0.8px)] text-ink">
                   {tx(it).lead}{" "}
-                  <span className="font-[family-name:var(--font-instrument)] font-normal italic text-[#a07d45]">
+                  <span className="t-serif text-[#a07d45]">
                     {tx(it).accent}
                   </span>
                 </h3>
-                <p className="mt-4 max-w-[400px] text-[14.5px] leading-[1.65] text-[#5c5954]">
+                <p className="t-body-m mt-4 max-w-[400px] text-[#5c5954]">
                   {tx(it).body}
                 </p>
                 <Link
@@ -280,7 +280,7 @@ export default function Branchen() {
                   {t("Zur Branchenseite", "View industry page")}
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
-                <p className="mt-6 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-ink/40">
+                <p className="eyebrow mt-6 text-ink/40">
                   {pad(active + 1)} {t("von", "of")} {pad(STEPS)}
                 </p>
               </div>

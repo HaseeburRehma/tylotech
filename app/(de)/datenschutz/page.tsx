@@ -6,7 +6,7 @@ import { languageAlternates } from "@/lib/i18n";
 import { DATENSCHUTZ } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Datenschutzerklärung — TyloTech",
+  title: "Datenschutzerklärung | TyloTech",
   description: "Wie TyloTech personenbezogene Daten auf tylotech.de verarbeitet und welche Rechte du hast.",
   alternates: { canonical: "/datenschutz", languages: languageAlternates("/datenschutz") },
 };
