@@ -268,27 +268,168 @@ html.lenis body {
 
 /* Uniform card hover-lift across sections.
    Uses CSS `translate` (not `transform`) so GSAP can own `transform` without conflict. */
-.praxis-card,
-.warum-card,
-.hebel-card {
+.praxis-card {
   transition:
     translate 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.35s ease,
     border-color 0.35s ease;
 }
-.praxis-card:hover,
-.warum-card:hover,
-.hebel-card:hover {
+.praxis-card:hover {
   translate: 0 -4px;
   border-color: #d6d2cb;
   box-shadow: 0 18px 40px -20px rgba(15, 14, 13, 0.18);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .praxis-card:hover,
-  .warum-card:hover,
-  .hebel-card:hover {
+  .praxis-card:hover {
     translate: none;
+  }
+}
+
+/* Pillar cards (Werkzeugkasten, Fundament, Ergänzend): lift, cursor-following
+   gold glow, a light sweep across the top line and a lively icon.
+   `translate` (not `transform`) so GSAP keeps owning `transform`. */
+.pillar-card {
+  --mx: 50%;
+  --my: 0%;
+  isolation: isolate;
+  transition:
+    translate 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease,
+    background-color 0.4s ease;
+}
+/* cursor spotlight */
+.pillar-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(380px circle at var(--mx) var(--my), rgba(209, 170, 113, 0.16), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+/* light sweep over the gold top line */
+.pillar-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
+  translate: -120% 0;
+  pointer-events: none;
+}
+.pillar-icon svg {
+  transition:
+    rotate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    scale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pillar-icon {
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease,
+    color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+.pillar-card h3 {
+  transition: color 0.4s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pillar-card:hover {
+    translate: 0 -6px;
+    border-color: rgba(209, 170, 113, 0.55);
+    box-shadow:
+      0 28px 56px -30px rgba(148, 113, 63, 0.42),
+      0 2px 6px rgba(15, 14, 13, 0.04);
+  }
+  .pillar-card:hover::before {
+    opacity: 1;
+  }
+  .pillar-card:hover::after {
+    translate: 320% 0;
+    transition: translate 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pillar-card:hover .pillar-icon {
+    background-color: #fbf6ee;
+    border-color: rgba(209, 170, 113, 0.55);
+    color: #94713f;
+    box-shadow: 0 8px 18px -10px rgba(148, 113, 63, 0.55);
+  }
+  .pillar-card:hover .pillar-icon svg {
+    rotate: -8deg;
+    scale: 1.12;
+  }
+}
+.pillar-card:focus-visible {
+  outline: 2px solid #d1aa71;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pillar-card,
+  .pillar-icon svg {
+    transition-duration: 0.01ms;
+  }
+  .pillar-card:hover {
+    translate: none;
+  }
+  .pillar-card:hover .pillar-icon svg {
+    rotate: none;
+    scale: none;
+  }
+  .pillar-card::after {
+    display: none;
+  }
+}
+
+/* "Ergänzend" panel: height animates via grid rows */
+.extras-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
+}
+.extras-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.extras-panel > div {
+  min-height: 0;
+  overflow: hidden;
+}
+.extras-panel .pillar-card {
+  opacity: 0;
+  translate: 0 18px;
+  transition:
+    opacity 0.5s ease,
+    translate 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease,
+    background-color 0.4s ease;
+}
+.extras-panel[data-open="true"] .pillar-card {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: calc(var(--i, 0) * 80ms + 120ms), calc(var(--i, 0) * 80ms + 120ms), 0s, 0s, 0s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .extras-panel[data-open="true"] .pillar-card:hover {
+    translate: 0 -6px;
+    transition-delay: 0s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .extras-panel,
+  .extras-panel .pillar-card {
+    transition-duration: 0.01ms;
+    transition-delay: 0s;
   }
 }
 

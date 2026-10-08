@@ -5,6 +5,7 @@ import { RotateCw, Users, TrendingUp, Layers } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
+import { trackSpotlight } from "@/lib/spotlight";
 
 const LEVERS = [
   {
@@ -128,11 +129,12 @@ export default function Wachstum() {
             return (
             <article
               key={de.title}
-              className="hebel-card group relative overflow-hidden rounded-[20px] border border-line bg-white p-7"
+              onPointerMove={trackSpotlight}
+              className="hebel-card pillar-card group relative overflow-hidden rounded-[20px] border border-line bg-white p-7"
             >
               <span className="hebel-accent absolute inset-x-0 top-0 h-[3px] origin-left bg-accent" />
 
-              <span className="hebel-icon grid size-11 place-items-center rounded-xl bg-[rgba(209,170,113,0.14)] text-[#6b6863] transition-colors group-hover:text-[#94713f]">
+              <span className="hebel-icon pillar-icon grid size-11 place-items-center rounded-xl border border-transparent bg-[rgba(209,170,113,0.14)] text-[#6b6863]">
                 <Icon className="size-5" strokeWidth={1.7} />
               </span>
 
