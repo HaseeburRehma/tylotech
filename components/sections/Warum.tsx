@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { RotateCw, Users, TrendingUp, Wrench, AppWindow, Network, Workflow, ChevronDown } from "lucide-react";
+import { RotateCw, Users, TrendingUp, Wrench, AppWindow, Network, Workflow, ArrowUpRight, X } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
@@ -171,32 +171,50 @@ export default function Warum() {
           </p>
         </div>
 
-        <div className="warum-grid mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
-          {SERVICES.map(({ icon: Icon, de, en }) => {
+        {/* three cards: the core levers, or (when a tab below is active) the three add-ons */}
+        <div
+          id={panelId}
+          className="warum-grid mt-8 grid grid-cols-1 gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2"
+        >
+          {(extra === null ? SERVICES : EXTRAS).map(({ icon: Icon, de, en }, i) => {
             const { title, body } = t(de, en);
+            const on = extra === i;
             return (
-            <article
-              key={de.title}
-              onPointerMove={trackSpotlight}
-              className="warum-card pillar-card group relative overflow-hidden rounded-[20px] border border-line bg-white p-7"
-            >
-              <span className="warum-accent absolute inset-x-0 top-0 h-[3px] origin-center bg-gradient-to-r from-transparent via-accent to-transparent opacity-80" />
-
-              <span className="warum-icon pillar-icon grid size-11 place-items-center rounded-xl border border-line bg-page text-ink/70">
-                <Icon className="size-5" strokeWidth={1.6} />
-              </span>
-
-              <h3 className="t-h4 mt-6 text-ink sm:mt-14">
-                {title}
-              </h3>
-              <p className="t-body-m mt-3 text-ink/55">
-                {body}
-              </p>
-            </article>
+              <article
+                key={i}
+                onPointerMove={trackSpotlight}
+                onClick={extra === null ? undefined : () => setExtra(i)}
+                className={cn(
+                  "warum-card pillar-card group relative overflow-hidden rounded-[20px] border p-7",
+                  extra !== null && "cursor-pointer",
+                  on ? "border-[#d1aa71] bg-[#fffdf9] shadow-[0_22px_48px_-30px_rgba(148,113,63,0.5)]" : "border-line bg-white",
+                )}
+              >
+                <span
+                  className={cn(
+                    "warum-accent absolute inset-x-0 top-0 h-[3px] origin-center bg-gradient-to-r from-transparent via-accent to-transparent transition-opacity duration-500",
+                    on ? "opacity-100" : "opacity-80",
+                  )}
+                />
+                {/* re-keyed on every switch so the content fades in fresh */}
+                <div key={`${extra === null ? "core" : "plus"}-${i}`} className="pillar-swap" style={{ "--i": i } as React.CSSProperties}>
+                  <span
+                    className={cn(
+                      "warum-icon pillar-icon grid size-11 place-items-center rounded-xl border",
+                      on ? "border-[#d1aa71]/60 bg-[#fbf6ee] text-[#94713f]" : "border-line bg-page text-ink/70",
+                    )}
+                  >
+                    <Icon className="size-5" strokeWidth={1.6} />
+                  </span>
+                  <h3 className="t-h4 mt-6 text-ink sm:mt-14">{title}</h3>
+                  <p className="t-body-m mt-3 text-ink/55">{body}</p>
+                </div>
+              </article>
             );
           })}
         </div>
 
+        {/* tabs: each add-on switches the cards above to the three add-ons; the active tab switches back */}
         <div className="warum-extras mt-8 flex flex-wrap items-center gap-3">
           <span className="rounded-full border border-accent/40 bg-[rgba(209,170,113,0.1)] px-3 py-1 eyebrow text-[#94713f]">
             {t("Ergänzend", "Plus")}
@@ -207,7 +225,7 @@ export default function Warum() {
               <button
                 key={e.de.title}
                 type="button"
-                aria-expanded={on}
+                aria-pressed={on}
                 aria-controls={panelId}
                 onClick={() => setExtra(on ? null : i)}
                 className={cn(
@@ -218,56 +236,23 @@ export default function Warum() {
                 )}
               >
                 {t(e.de.title, e.en.title)}
-                <ChevronDown
-                  aria-hidden
-                  className={cn("size-3.5 transition-transform duration-300", on ? "rotate-180 text-[#94713f]" : "text-ink/35 group-hover/chip:text-[#94713f]")}
-                  strokeWidth={2}
-                />
+                {on ? (
+                  <X aria-hidden className="size-3.5 text-[#94713f]" strokeWidth={2} />
+                ) : (
+                  <ArrowUpRight aria-hidden className="size-3.5 text-ink/35 transition-colors group-hover/chip:text-[#94713f]" strokeWidth={2} />
+                )}
               </button>
             );
           })}
-        </div>
-
-        {/* "Ergänzend": three more cards, opened from the chips above */}
-        <div id={panelId} className="extras-panel data-[open=true]:-mb-10" data-open={extra !== null} aria-hidden={extra === null}>
-          {/* side/bottom room so the cards' lift and shadow aren't clipped */}
-          <div className="-mx-4 px-4">
-            <div className="grid grid-cols-1 gap-4 pb-10 pt-5 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 md:max-lg:[&>*:last-child:nth-child(odd)]:col-span-2">
-              {EXTRAS.map(({ icon: Icon, de, en }, i) => {
-                const { title, body } = t(de, en);
-                const on = extra === i;
-                return (
-                  <article
-                    key={de.title}
-                    style={{ "--i": i } as React.CSSProperties}
-                    onPointerMove={trackSpotlight}
-                    onClick={() => setExtra(i)}
-                    className={cn(
-                      "pillar-card group relative cursor-pointer overflow-hidden rounded-[20px] border p-7",
-                      on ? "border-[#d1aa71] bg-[#fffdf9] shadow-[0_22px_48px_-30px_rgba(148,113,63,0.5)]" : "border-line bg-white",
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent transition-opacity duration-500",
-                        on ? "opacity-100" : "opacity-50",
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "pillar-icon grid size-11 place-items-center rounded-xl border",
-                        on ? "border-[#d1aa71]/60 bg-[#fbf6ee] text-[#94713f]" : "border-line bg-page text-ink/70",
-                      )}
-                    >
-                      <Icon className="size-5" strokeWidth={1.6} />
-                    </span>
-                    <h3 className="t-h4 mt-6 text-ink sm:mt-10">{title}</h3>
-                    <p className="t-body-m mt-3 text-ink/55">{body}</p>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
+          {extra !== null && (
+            <button
+              type="button"
+              onClick={() => setExtra(null)}
+              className="t-body-s ml-1 text-ink/45 underline decoration-ink/20 underline-offset-4 transition-colors hover:text-ink"
+            >
+              {t("Zurück zu den Kernleistungen", "Back to the core levers")}
+            </button>
+          )}
         </div>
       </Container>
     </section>

@@ -153,16 +153,18 @@ export default function Podcast() {
           <h2 className="sr-only">{videoTitle}</h2>
 
           {/* dialogue as chat bubbles */}
-          <div className="podcast-chat flex max-w-[520px] flex-col gap-3 sm:gap-3.5" aria-label={t("Dialog", "Dialogue")}>
+          <div className="podcast-chat flex max-w-[400px] flex-col gap-2" aria-label={t("Dialog", "Dialogue")}>
             {dialog.map((d, i) => {
               const last = i === dialog.length - 1;
               return (
                 <div key={i} className={cn("flex", d.who === "us" ? "justify-end" : "justify-start")}>
                   <p
                     className={cn(
-                      "podcast-bubble max-w-[82%] rounded-[22px] px-5 py-3.5 font-display text-[clamp(18px,1.9vw,24px)] font-semibold leading-[1.25] tracking-[-0.01em] sm:px-[22px] sm:py-4",
-                      d.who === "them" ? "rounded-bl-md bg-[#e8e5dd] text-[#6a6557]" : "rounded-br-md bg-[#001620] text-white",
-                      last && "shadow-[0_14px_30px_-12px_rgba(0,22,32,0.55)]",
+                      "podcast-bubble max-w-[78%] rounded-[18px] px-4 py-2.5 font-display text-[15px] font-medium leading-[21px] tracking-[-0.2px] sm:text-[16px] sm:leading-[22px]",
+                      d.who === "them"
+                        ? "rounded-bl-[6px] border border-[#e6e2d9] bg-[#f3f1ec] text-[#5c5954]"
+                        : "rounded-br-[6px] bg-[#001620] text-white shadow-[0_8px_18px_-12px_rgba(0,22,32,0.5)]",
+                      last && "shadow-[0_12px_26px_-14px_rgba(0,22,32,0.6)]",
                     )}
                   >
                     {d.text}

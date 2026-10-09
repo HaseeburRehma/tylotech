@@ -12,6 +12,8 @@ import { LANG_COOKIE, LANG_COOKIE_MAX_AGE, isBot, preferredLocale } from "@/lib/
  * stay indexable), and nothing but page routes passes through here. */
 export function proxy(request: NextRequest) {
   if (request.method !== "GET" && request.method !== "HEAD") return;
+  // files that share the /branchen/ prefix (e.g. /branchen/handwerk.jpg) are assets, not pages
+  if (/\.[a-z0-9]+$/i.test(request.nextUrl.pathname)) return;
   // client-side navigation/prefetch requests: the switch and in-site links decide
   if (request.headers.get("next-router-prefetch") || request.headers.get("rsc")) return;
   if (request.nextUrl.searchParams.has("lang")) return;
@@ -34,5 +36,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   // the German page routes only (no assets, API, English pages, sitemap …)
-  matcher: ["/", "/kontakt", "/impressum", "/datenschutz", "/branchen/:slug"],
+  // (slugs never contain a dot, so "/branchen/:slug" skips files like /branchen/handwerk.jpg)
+  matcher: ["/", "/kontakt", "/impressum", "/datenschutz", "/branchen/:slug([^./]+)"],
 };

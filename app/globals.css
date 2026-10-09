@@ -387,49 +387,24 @@ html.lenis body {
   }
 }
 
-/* "Ergänzend" panel: height animates via grid rows */
-.extras-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  opacity: 0;
-  transition:
-    grid-template-rows 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.4s ease;
+/* Werkzeugkasten tabs: card content fades in when the cards switch */
+.pillar-swap {
+  animation: pillarSwap 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
 }
-.extras-panel[data-open="true"] {
-  grid-template-rows: 1fr;
-  opacity: 1;
-}
-.extras-panel > div {
-  min-height: 0;
-  overflow: hidden;
-}
-.extras-panel .pillar-card {
-  opacity: 0;
-  translate: 0 18px;
-  transition:
-    opacity 0.5s ease,
-    translate 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.4s ease,
-    background-color 0.4s ease;
-}
-.extras-panel[data-open="true"] .pillar-card {
-  opacity: 1;
-  translate: 0 0;
-  transition-delay: calc(var(--i, 0) * 80ms + 120ms), calc(var(--i, 0) * 80ms + 120ms), 0s, 0s, 0s;
-}
-@media (hover: hover) and (pointer: fine) {
-  .extras-panel[data-open="true"] .pillar-card:hover {
-    translate: 0 -6px;
-    transition-delay: 0s;
+@keyframes pillarSwap {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .extras-panel,
-  .extras-panel .pillar-card {
-    transition-duration: 0.01ms;
-    transition-delay: 0s;
+  .pillar-swap {
+    animation: none;
   }
 }
 
