@@ -59,7 +59,7 @@ export default function FinalCTA() {
           />
 
           <div className="cta-in relative mx-auto max-w-[720px] text-center">
-            <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-display text-[14px] font-medium leading-[18px] tracking-[-0.2px] text-white/80 backdrop-blur max-sm:text-[13px] max-sm:leading-[17px] max-sm:tracking-normal">
+            <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 font-display text-[14px] font-medium leading-[18px] tracking-[-0.2px] text-white/[0.92] backdrop-blur max-sm:text-[13px] max-sm:leading-[17px] max-sm:tracking-normal">
               <CalendarDays className="size-4 text-accent" />
               {t("Kostenloses Erstgespräch", "Free intro call")}
             </p>
@@ -72,7 +72,7 @@ export default function FinalCTA() {
               {t(<>{" "}zu machen?</>, "?")}
             </h2>
 
-            <p className="t-body-l mx-auto mt-5 max-w-[600px] text-[#b3d6e2]">
+            <p className="t-body-l mx-auto mt-5 max-w-[600px] text-white/[0.94]">
               {t(
                 "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt und ob wir zueinander passen.",
                 "No sales pitch. An honest assessment of where your biggest lever is and whether we’re a good fit.",

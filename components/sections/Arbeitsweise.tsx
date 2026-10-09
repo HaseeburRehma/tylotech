@@ -24,7 +24,9 @@ function SystemMock() {
         aria-hidden
       >
         <defs>
-          <linearGradient id="awconn" x1="0" y1="0" x2="1" y2="0">
+          {/* userSpaceOnUse: an objectBoundingBox gradient is not painted on the
+              perfectly straight middle line (its bounding box has zero height) */}
+          <linearGradient id="awconn" gradientUnits="userSpaceOnUse" x1="150" y1="0" x2="262" y2="0">
             <stop offset="0%" stopColor="#c9c2b4" />
             <stop offset="100%" stopColor="#d1aa71" />
           </linearGradient>

@@ -39,7 +39,7 @@ export default function SectionHeading({
         <p
           className={cn(
             "t-body-l mt-[18px]",
-            dark ? "text-[#b3d6e2]" : "text-[#5c5954]",
+            dark ? "text-[#cbc8c2]" : "text-[#5c5954]",
           )}
         >
           {subtitle}

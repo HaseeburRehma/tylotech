@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { RotateCw, Users, TrendingUp, Wrench, AppWindow, Network, Workflow, ArrowUpRight, X } from "lucide-react";
+import { RotateCw, Users, TrendingUp, Wrench, AppWindow, Network, Workflow } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
@@ -138,7 +138,7 @@ export default function Warum() {
   );
 
   return (
-    <section id="warum" ref={root} className="bg-page pb-14 pt-8 sm:pb-24">
+    <section id="warum" ref={root} className="bg-page py-14 lg:py-[112px]">
       <Container>
         <div className="warum-head max-w-[760px]">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
@@ -184,30 +184,26 @@ export default function Warum() {
                 key={i}
                 onPointerMove={trackSpotlight}
                 onClick={extra === null ? undefined : () => setExtra(i)}
+                data-active={on || undefined}
                 className={cn(
-                  "warum-card pillar-card group relative overflow-hidden rounded-[20px] border p-7",
+                  "warum-card pillar-card group relative flex flex-col overflow-hidden rounded-[20px] border bg-white",
                   extra !== null && "cursor-pointer",
-                  on ? "border-[#d1aa71] bg-[#fffdf9] shadow-[0_22px_48px_-30px_rgba(148,113,63,0.5)]" : "border-line bg-white",
+                  on ? "pillar-card-on" : "border-[#e2e0dc]",
                 )}
               >
-                <span
-                  className={cn(
-                    "warum-accent absolute inset-x-0 top-0 h-[3px] origin-center bg-gradient-to-r from-transparent via-accent to-transparent transition-opacity duration-500",
-                    on ? "opacity-100" : "opacity-80",
-                  )}
-                />
+                {/* Figma "Accent Bar": 4px, full width */}
+                <span className="warum-accent block h-1 w-full shrink-0 origin-left bg-accent" />
                 {/* re-keyed on every switch so the content fades in fresh */}
-                <div key={`${extra === null ? "core" : "plus"}-${i}`} className="pillar-swap" style={{ "--i": i } as React.CSSProperties}>
-                  <span
-                    className={cn(
-                      "warum-icon pillar-icon grid size-11 place-items-center rounded-xl border",
-                      on ? "border-[#d1aa71]/60 bg-[#fbf6ee] text-[#94713f]" : "border-line bg-page text-ink/70",
-                    )}
-                  >
-                    <Icon className="size-5" strokeWidth={1.6} />
+                <div
+                  key={`${extra === null ? "core" : "plus"}-${i}`}
+                  className="pillar-swap flex flex-col items-start gap-[18px] p-7 sm:p-8"
+                  style={{ "--i": i } as React.CSSProperties}
+                >
+                  <span className="warum-icon pillar-icon grid size-[50px] place-items-center rounded-[13px] bg-[#fbf6ee] text-[#b98f53]">
+                    <Icon className="size-[23px]" strokeWidth={1.6} />
                   </span>
-                  <h3 className="t-h4 mt-6 text-ink sm:mt-14">{title}</h3>
-                  <p className="t-body-m mt-3 text-ink/55">{body}</p>
+                  <h3 className="t-h4 text-[#1a1917]">{title}</h3>
+                  <p className="t-body-m -mt-[6px] text-[#5c5954]">{body}</p>
                 </div>
               </article>
             );
@@ -215,10 +211,8 @@ export default function Warum() {
         </div>
 
         {/* tabs: each add-on switches the cards above to the three add-ons; the active tab switches back */}
-        <div className="warum-extras mt-8 flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-accent/40 bg-[rgba(209,170,113,0.1)] px-3 py-1 eyebrow text-[#94713f]">
-            {t("Ergänzend", "Plus")}
-          </span>
+        <div className="warum-extras mt-10 flex flex-wrap items-center justify-center gap-[14px] pt-2.5 sm:mt-14">
+          <span className="eyebrow text-[#7d7973]">{t("Ergänzend", "Plus")}</span>
           {EXTRAS.map((e, i) => {
             const on = extra === i;
             return (
@@ -229,31 +223,28 @@ export default function Warum() {
                 aria-controls={panelId}
                 onClick={() => setExtra(on ? null : i)}
                 className={cn(
-                  "warum-extra group/chip inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 t-body-s transition-[background-color,border-color,color,box-shadow,translate] duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+                  "warum-extra rounded-full border px-[15px] py-[7px] t-body-s transition-[background-color,border-color,color,box-shadow,translate] duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
                   on
-                    ? "border-[#d1aa71] bg-[#fbf6ee] text-[#7a5c30] shadow-[0_8px_18px_-12px_rgba(148,113,63,0.6)]"
-                    : "border-line bg-white text-ink/60 hover:border-[#d1aa71]/60 hover:text-ink",
+                    ? "border-[rgba(209,170,113,0.55)] bg-[#fbf6ee] text-[#7a5c30] shadow-[0_0_24px_rgba(209,170,113,0.25)]"
+                    : "border-[#eeedea] bg-white text-[#5c5954] hover:border-[rgba(209,170,113,0.55)] hover:text-[#1a1917]",
                 )}
               >
                 {t(e.de.title, e.en.title)}
-                {on ? (
-                  <X aria-hidden className="size-3.5 text-[#94713f]" strokeWidth={2} />
-                ) : (
-                  <ArrowUpRight aria-hidden className="size-3.5 text-ink/35 transition-colors group-hover/chip:text-[#94713f]" strokeWidth={2} />
-                )}
               </button>
             );
           })}
-          {extra !== null && (
+        </div>
+        {extra !== null && (
+          <p className="mt-4 text-center">
             <button
               type="button"
               onClick={() => setExtra(null)}
-              className="t-body-s ml-1 text-ink/45 underline decoration-ink/20 underline-offset-4 transition-colors hover:text-ink"
+              className="t-body-s text-[#7d7973] underline decoration-[#d1aa71]/50 underline-offset-4 transition-colors hover:text-[#1a1917]"
             >
               {t("Zurück zu den Kernleistungen", "Back to the core levers")}
             </button>
-          )}
-        </div>
+          </p>
+        )}
       </Container>
     </section>
   );

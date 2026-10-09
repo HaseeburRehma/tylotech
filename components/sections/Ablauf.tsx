@@ -63,10 +63,10 @@ const STEPS = [
 ];
 
 const CELL_BORDERS = [
-  "border-b md:border-r border-[#0a4a5f]",
-  "border-b border-[#0a4a5f]",
-  "border-b md:border-b-0 md:border-r border-[#0a4a5f]",
-  "border-[#0a4a5f]",
+  "border-b md:border-r border-[#43413d]",
+  "border-b border-[#43413d]",
+  "border-b md:border-b-0 md:border-r border-[#43413d]",
+  "border-[#43413d]",
 ];
 
 export default function Ablauf() {
@@ -112,20 +112,20 @@ export default function Ablauf() {
   );
 
   return (
-    <section id="ablauf" ref={root} data-nav-dark className="bg-[#001620] py-14 text-white sm:py-24">
+    <section id="ablauf" ref={root} data-nav-dark className="bg-[#001620] py-14 text-white sm:py-24 lg:pb-[160px] lg:pt-[120px]">
       <Container>
         <div className="ablauf-head mx-auto max-w-[680px] text-center">
-          <p className="mx-auto inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 eyebrow text-white/70">
+          <p className="mx-auto inline-flex w-fit items-center gap-[7px] rounded-full border border-white/[0.18] bg-white/10 py-[7px] pl-2.5 pr-3.5 eyebrow text-[#cbc8c2] backdrop-blur-[12px]">
             <Workflow className="size-3.5 text-accent" />
             {t("So arbeiten wir", "How we work")}
           </p>
-          <h2 className="mt-5 t-display-s text-white">
+          <h2 className="mt-6 t-display-s text-white">
             <span className="t-serif tracking-[-0.6px] max-sm:tracking-[-0.5px] text-[#d8b682]">
               {t("Vier Schritte", "Four steps")}
             </span>{" "}
             {t("bis zur Zusammenarbeit.", "to working together.")}
           </h2>
-          <p className="mx-auto mt-5 max-w-[600px] t-body-l text-[#b3d6e2]">
+          <p className="mx-auto mt-6 max-w-[600px] t-body-l text-[#cbc8c2]">
             {t(
               <>
                 Kein Vertrieb, der dich durch einen Funnel schiebt. Nach dem dritten
@@ -136,32 +136,33 @@ export default function Ablauf() {
           </p>
         </div>
 
-        <div className="ablauf-grid mx-auto mt-6 grid sm:mt-14 max-w-[1040px] grid-cols-1 md:grid-cols-2">
+        <div className="ablauf-grid mx-auto mt-8 grid max-w-[1280px] grid-cols-1 sm:mt-16 md:grid-cols-2">
           {STEPS.map(({ icon: Icon, step, title, body, en }, i) => (
             <div
               key={title}
               className={cn(
-                "ablauf-step py-7 sm:py-9",
+                "ablauf-step py-7 sm:pb-[52px] sm:pt-12",
                 i % 2 === 0 ? "md:pr-12" : "md:pl-12",
                 CELL_BORDERS[i],
               )}
             >
-              <Icon className="ablauf-icon size-6 text-accent" strokeWidth={1.6} />
-              <p className="mt-6 font-mono text-[11px] font-medium uppercase leading-[15px] tracking-[1.2px] text-[#7fbacd]">{t(step, en.step)}</p>
-              <h3 className="mt-2 t-h3 text-white">
+              <Icon className="ablauf-icon size-[30px] text-[#d8b682]" strokeWidth={1.5} />
+              <p className="mt-[18px] font-mono text-[11px] font-medium uppercase leading-[15px] tracking-[1.2px] text-[#d8b682]">{t(step, en.step)}</p>
+              <h3 className="mt-[18px] t-h3 text-white">
                 {t(title, en.title)}
               </h3>
-              <p className="mt-2.5 max-w-[420px] t-body-ms text-[#7fbacd]">
+              <p className="mt-[18px] max-w-[460px] t-body-ms text-[#cbc8c2]">
                 {t(body, en.body)}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="ablauf-cta mt-8 flex sm:mt-14 justify-center">
+        <div className="ablauf-cta mt-8 flex justify-center sm:mt-16">
           <Link
             href={lp("/kontakt")}
-            className="group inline-flex h-[58px] items-center justify-center gap-2 rounded-[14px] bg-gradient-to-b from-[#ecd3a4] to-[#cfa268] px-[30px] t-button text-ink shadow-[0_16px_40px_-14px_rgba(209,170,113,0.9)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
+            style={{ backgroundImage: "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.02) 55%, rgba(255,255,255,0) 100%), linear-gradient(90deg, #efdcbc 0%, #d8b681 45%, #b4894d 100%)" }}
+            className="group inline-flex h-[58px] items-center justify-center gap-2.5 rounded-full px-7 t-button text-[#0f0e0d] shadow-[inset_0_-1.5px_1.5px_rgba(109,83,48,0.25),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),0_10px_14px_rgba(168,127,69,0.2),0_4px_7px_rgba(168,127,69,0.32)] transition-[filter,transform] duration-200 hover:-translate-y-0.5 hover:brightness-[1.04]"
           >
             {t("Erstgespräch sichern", "Book your intro call")}
             <ArrowRight className="size-5 transition-transform group-hover:translate-x-0.5" />

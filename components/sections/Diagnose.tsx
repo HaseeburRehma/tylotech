@@ -113,7 +113,7 @@ function Tags({ tags }: { tags: string[] }) {
       {tags.map((t) => (
         <span
           key={t}
-          className="rounded-full border border-white/15 bg-white/[0.05] px-3 py-1 font-sans text-[14px] font-normal leading-[22px] tracking-[-0.1px] max-sm:text-[13px] max-sm:leading-[20px] max-sm:tracking-[-0.05px] text-white/75"
+          className="rounded-full border border-[rgba(209,170,113,0.38)] bg-[rgba(209,170,113,0.12)] px-3 py-1 font-sans text-[14px] font-normal leading-[22px] tracking-[-0.1px] max-sm:text-[13px] max-sm:leading-[20px] max-sm:tracking-[-0.05px] text-[#e3c79e]"
         >
           {t}
         </span>
@@ -126,7 +126,7 @@ function StatRow({ c }: { c: Case }) {
   return (
     <div className="flex items-center gap-4 min-[1280px]:gap-5">
       <div>
-        <p className="t-h3-s text-white/40">
+        <p className="t-h3-s text-white/[0.52]">
           {c.from.v}
         </p>
         <p className="t-body-xs mt-0.5 text-white/35">{c.from.l}</p>
@@ -145,7 +145,7 @@ function StatRow({ c }: { c: Case }) {
 function MetaLine({ c }: { c: Case }) {
   return (
     <p className="t-body-s flex flex-wrap items-center gap-2">
-      <span className="text-white/45">{c.eyebrow}</span>
+      <span className="text-white/[0.52]">{c.eyebrow}</span>
       <span className="text-white/25">•</span>
       <span className="text-[#d8b682]">{c.finding}</span>
     </p>
@@ -189,7 +189,7 @@ export default function Diagnose() {
     >
       <Container>
         <div className="dg-head max-w-[900px]">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-1.5 eyebrow text-white/70">
+          <p className="inline-flex w-fit items-center gap-2 rounded-full border border-white/[0.18] bg-white/10 py-[7px] pl-2.5 pr-3.5 eyebrow text-[#cbc8c2] backdrop-blur-[12px]">
             <AlertCircle className="size-3.5 text-accent" />
             {t("Der Denkfehler", "The misconception")}
           </p>
@@ -200,7 +200,7 @@ export default function Diagnose() {
             </span>
             .
           </h2>
-          <p className="t-body-l mt-5 max-w-[820px] text-white/60">
+          <p className="t-body-l mt-5 max-w-[820px] text-[#cbc8c2]">
             {t(
               "Sie scheitert daran, dass fünf Dienstleister nebeneinander arbeiten und keiner das Ganze sieht. Einer macht Ads, einer die Website, einer die Software und niemand trägt das Ergebnis. Wir machen es anders: ein Team, ein Plan, eine Verantwortung.",
               "It fails because five providers work side by side and nobody sees the whole. One runs the ads, one the website, one the software and no one owns the result. We do it differently: one team, one plan, one owner.",
@@ -241,7 +241,7 @@ export default function Diagnose() {
                       className="absolute inset-0 h-full w-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#08222d]/60" />
-                    <span className="eyebrow absolute left-6 top-5 text-white/40">
+                    <span className="eyebrow absolute left-6 top-5 text-white/[0.38]">
                       {c.idx}
                     </span>
                   </div>
@@ -253,7 +253,7 @@ export default function Diagnose() {
                     <div className="mt-3">
                       <MetaLine c={c} />
                     </div>
-                    <p className="t-body-l mt-4 max-w-[440px] text-white/65">
+                    <p className="t-body-l mt-4 max-w-[440px] text-white/70">
                       {c.body}
                     </p>
                     <div className="mt-5">
@@ -274,13 +274,13 @@ export default function Diagnose() {
                     on ? "pointer-events-none opacity-0" : "opacity-100"
                   }`}
                 >
-                  <span className="eyebrow text-white/35">
+                  <span className="eyebrow text-white/[0.38]">
                     {c.idx}
                   </span>
                   <span className="flex flex-1 items-center justify-center">
                     <span
                       style={{ writingMode: "vertical-rl" }}
-                      className="t-h6 rotate-180 whitespace-nowrap text-white/80"
+                      className="t-h6 rotate-180 whitespace-nowrap text-white/[0.72]"
                     >
                       {c.title}
                     </span>
@@ -316,7 +316,7 @@ export default function Diagnose() {
                     <Icon className="size-5" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="eyebrow block text-white/35">
+                    <span className="eyebrow block text-white/[0.38]">
                       {c.idx}
                     </span>
                     <span className={`${on ? "t-h2-s" : "t-h6"} mt-0.5 block text-white`}>
@@ -348,7 +348,7 @@ export default function Diagnose() {
                         />
                       </div>
                       <MetaLine c={c} />
-                      <p className="t-body-l mt-3 text-white/65">
+                      <p className="t-body-l mt-3 text-white/70">
                         {c.body}
                       </p>
                       <div className="mt-4">

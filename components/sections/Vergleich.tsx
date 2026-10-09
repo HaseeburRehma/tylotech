@@ -59,8 +59,8 @@ export default function Vergleich() {
           <div className="min-w-[760px] overflow-hidden rounded-[20px] border border-[#0a4a5f] bg-[#04283a]/60">
             {/* header */}
             <div className="flex items-center gap-6 border-b border-[#0a4a5f] bg-white/[0.04] px-7 py-[18px] font-mono text-[11px] font-medium uppercase tracking-[0.9px]">
-              <span className="flex-1 text-[#7fbacd]" />
-              <span className="w-[280px] shrink-0 text-[#7fbacd]">Üblich am Markt</span>
+              <span className="flex-1 text-[#cbc8c2]" />
+              <span className="w-[280px] shrink-0 text-[#cbc8c2]">Üblich am Markt</span>
               <span className="w-[300px] shrink-0 text-[#d8b682]">Bei TyloTech</span>
             </div>
             {ROWS.map((r) => (
@@ -75,7 +75,7 @@ export default function Vergleich() {
                 </span>
                 <span className="flex w-[280px] shrink-0 items-center gap-2.5">
                   <X className="size-[18px] shrink-0 text-white/30" strokeWidth={2} />
-                  <span className="text-[14px] leading-[22px] text-[#7fbacd]">{r.a}</span>
+                  <span className="text-[14px] leading-[22px] text-[#cbc8c2]">{r.a}</span>
                 </span>
                 <span className="flex w-[300px] shrink-0 items-center gap-2.5">
                   <Check className="size-[18px] shrink-0 text-[#d8b682]" strokeWidth={2.4} />
@@ -102,7 +102,7 @@ export default function Vergleich() {
                   <span className="block font-mono text-[10px] font-medium uppercase tracking-[0.9px] text-[#5f8ea0]">
                     Üblich am Markt
                   </span>
-                  <span className="mt-0.5 block text-[14px] leading-[21px] text-[#7fbacd]">
+                  <span className="mt-0.5 block text-[14px] leading-[21px] text-[#cbc8c2]">
                     {r.a}
                   </span>
                 </span>

@@ -75,11 +75,10 @@ type Lenisish = { stop: () => void; start: () => void };
 const lenis = () => (window as unknown as { __lenis?: Lenisish }).__lenis;
 
 const field =
-  "h-11 w-full rounded-[12px] border-[1.5px] bg-white px-3.5 text-[15px] text-[#17252B] outline-none transition-[border-color,box-shadow,background-color] duration-150 placeholder:text-[#9aa7ab] hover:border-[#c9d3d5] focus:border-[#D4A863] focus:shadow-[0_0_0_4px_rgba(212,168,99,0.18)]";
-const GOLD_BTN =
-  "bg-[linear-gradient(180deg,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0.02)_55%,rgba(255,255,255,0)_100%),linear-gradient(90deg,#efdcbc_0%,#d8b681_45%,#b4894d_100%)] shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)]";
-const HEAD_BG =
-  "radial-gradient(70% 90% at 100% 0%, rgba(209,170,113,0.30), rgba(209,170,113,0.06) 55%, transparent 75%), radial-gradient(60% 70% at 0% 100%, rgba(29,115,145,0.30), transparent 70%), linear-gradient(155deg, #0a4157 0%, #002e3d 48%, #001b26 100%)";
+  "h-12 w-full rounded-[12px] border bg-white px-3.5 text-[15px] text-[#1a1917] outline-none transition-[border-color,box-shadow,background-color] duration-150 placeholder:text-[#a8a49d] hover:border-[#cbc8c2] focus:border-[#d1aa71] focus:shadow-[0_0_0_4px_rgba(209,170,113,0.18)]";
+/* Figma "Bevel/Dark CTA" */
+const DARK_BTN =
+  "bg-[linear-gradient(180deg,#0e3a4a_0%,#001620_100%)] text-white shadow-[inset_0_1.5px_1.5px_rgba(255,255,255,0.16),inset_0_-1.5px_1.5px_rgba(0,0,0,0.3),0_6px_18px_rgba(4,22,29,0.22)]";
 
 const EMPTY = { website: "", branche: "", ziel: "", budget: "", name: "", email: "", company: "" };
 const STEP1 = ["website", "branche", "ziel", "budget"] as const;
@@ -356,8 +355,8 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
     close();
   };
 
-  const headTitle = "mt-4 font-display text-[clamp(1.45rem,4.6vw,1.9rem)] font-semibold leading-[1.13] tracking-[-0.03em] text-white";
-  const accent = "font-[family-name:var(--font-instrument)] text-[1.08em] font-normal italic tracking-[-0.01em] text-[#D4A863]";
+  const headTitle = "mt-5 font-display text-[clamp(1.5rem,4.6vw,1.75rem)] font-semibold leading-[1.18] tracking-[-0.7px] text-[#1a1917]";
+  const accent = "font-[family-name:var(--font-instrument)] text-[1.08em] font-normal italic tracking-[-0.02em] text-[#94713f]";
   const stepIn = "animate-[tlStepIn_.35s_cubic-bezier(.2,.8,.2,1)_both]";
 
   return (
@@ -400,26 +399,25 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
           aria-labelledby="tl-title"
           data-lenis-prevent
           className={cn(
-            "max-h-[96dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white shadow-[0_12px_32px_rgba(8,34,44,0.1),0_40px_60px_rgba(8,34,44,0.06),0_80px_90px_rgba(8,34,44,0.04)] transition-[transform,opacity] duration-[420ms] ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none sm:max-w-[560px] sm:rounded-[24px]",
+            "max-h-[96dvh] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-white shadow-[0_12px_32px_rgba(8,34,44,0.1),0_40px_60px_rgba(8,34,44,0.06),0_80px_90px_rgba(8,34,44,0.04)] transition-[transform,opacity] duration-[420ms] ease-[cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none sm:max-w-[488px] sm:rounded-[24px]",
             open ? "translate-y-0 scale-100 opacity-100" : "translate-y-full opacity-100 sm:translate-y-3 sm:scale-[0.96] sm:opacity-0",
           )}
         >
           {status !== "sent" ? (
             <>
               {/* header */}
-              <div className="relative overflow-hidden px-5 pb-5 pt-3 sm:px-8 sm:pb-6 sm:pt-6" style={{ backgroundImage: HEAD_BG }}>
-                <span aria-hidden className="mx-auto mb-3 block h-1 w-10 rounded-full bg-white/25 sm:hidden" />
+              <div className="relative px-6 pt-3 sm:px-9 sm:pt-8">
+                <span aria-hidden className="mx-auto mb-3 block h-1 w-10 rounded-full bg-[#e2e0dc] sm:hidden" />
                 <div className="flex items-start justify-between gap-4">
-                  <span className="inline-flex items-center gap-[7px] rounded-full border border-white/[0.18] bg-white/10 py-[6px] pl-2.5 pr-3 font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#cbc8c2] backdrop-blur-md sm:text-[11.5px]">
-                    <ScanSearch className="size-3.5 text-[#D4A863]" strokeWidth={2} />
+                  <span className="inline-flex items-center gap-[7px] rounded-full border border-[rgba(8,34,44,0.08)] bg-white py-[7px] pl-2.5 pr-3.5 eyebrow text-[#5c5954] shadow-[0_8px_12px_rgba(8,34,44,0.08)]">
+                    <ScanSearch className="size-3.5 text-[#c79a53]" strokeWidth={2} />
                     TyloLens
-                    <span className="ml-1 rounded-full bg-[#D4A863] px-1.5 py-px text-[9.5px] font-semibold tracking-[0.3px] text-[#002E3D]">{t("Gratis", "Free")}</span>
                   </span>
                   <button
                     type="button"
                     onClick={close}
                     aria-label={t("Schließen", "Close")}
-                    className="-mr-1 -mt-0.5 grid size-9 shrink-0 place-items-center rounded-full border border-white/[0.22] bg-[rgba(0,22,32,0.62)] text-white/80 transition-colors hover:bg-[rgba(0,22,32,0.85)] hover:text-white focus-visible:outline-2 focus-visible:outline-[#D4A863] sm:size-10"
+                    className="-mr-1 -mt-0.5 grid size-9 shrink-0 place-items-center rounded-full border border-[#eeedea] bg-[#f6f5f3] text-[#5c5954] transition-colors hover:border-[#e2e0dc] hover:bg-white hover:text-[#1a1917] focus-visible:outline-2 focus-visible:outline-[#d1aa71]"
                   >
                     <X className="size-[18px]" strokeWidth={2} />
                   </button>
@@ -437,28 +435,12 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                         </>,
                       )}
                     </h3>
-                    <p className="mt-2 hidden text-[14.5px] leading-[22px] tracking-[-0.1px] text-[#cbc8c2] sm:block">
+                    <p className="mt-2 text-[14.5px] leading-[22px] tracking-[-0.1px] text-[#5c5954]">
                       {t(
-                        "Unser Team schaut sich dein Marketing persönlich an und zeigt dir 3 konkrete Hebel.",
-                        "Our team personally reviews your marketing and shows you 3 concrete levers.",
+                        "Unser Team schaut sich dein Marketing an und zeigt dir 3 konkrete Hebel.",
+                        "Our team looks at your marketing and shows you 3 concrete levers.",
                       )}
                     </p>
-                    <p className="mt-2 flex items-center gap-1.5 text-[12.5px] font-medium text-white/85 sm:hidden">
-                      <Video className="size-3.5 text-[#D4A863]" strokeWidth={2} />
-                      {t("3 Hebel als persönliches Video · in 48 h", "3 levers in a personal video · within 48 h")}
-                    </p>
-                    <ul className="mt-4 hidden flex-wrap gap-2 sm:flex">
-                      {[
-                        { I: Target, label: t("3 konkrete Hebel", "3 concrete levers") },
-                        { I: Video, label: t("Persönliches Video", "Personal video") },
-                        { I: Clock, label: t("In 48 Stunden", "Within 48 hours") },
-                      ].map(({ I, label }) => (
-                        <li key={label} className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[12.5px] font-medium text-white/90">
-                          <I className="size-3.5 text-[#D4A863]" strokeWidth={2} />
-                          {label}
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 ) : (
                   <div key="h2" className={stepIn}>
@@ -474,25 +456,24 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                     </h3>
                     <div className="mt-3 flex items-center gap-3">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img loading="lazy" decoding="async" src="/team/ilias-el-aradi.jpg" alt="" className="size-9 shrink-0 rounded-full object-cover object-top ring-2 ring-[#D4A863]/60" />
-                      <p className="text-[13px] leading-[18px] text-white/80">
-                        <span className="font-semibold text-white">Ilias El Aradi</span>{" "}
+                      <img loading="lazy" decoding="async" src="/team/ilias-el-aradi.jpg" alt="" className="size-9 shrink-0 rounded-full object-cover object-top ring-2 ring-[#d1aa71]/60" />
+                      <p className="text-[13px] leading-[18px] text-[#5c5954]">
+                        <span className="font-semibold text-[#1a1917]">Ilias El Aradi</span>{" "}
                         {t("& Team schauen persönlich drauf: kein Bot, keine Automatik.", "& team take a personal look: no bot, no automation.")}
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* progress */}
-                <div className="mt-4 flex items-center gap-3 sm:mt-5" aria-label={t(`Schritt ${step} von 2`, `Step ${step} of 2`)}>
-                  <div className="grid flex-1 grid-cols-2 gap-1.5">
-                    {[1, 2].map((n) => (
-                      <span key={n} className="h-1 overflow-hidden rounded-full bg-white/15">
-                        <span className={cn("block h-full rounded-full bg-[#D4A863] transition-transform duration-500 ease-[cubic-bezier(.2,.8,.2,1)]", step >= n ? "translate-x-0" : "-translate-x-full")} />
-                      </span>
-                    ))}
-                  </div>
-                  <span className="font-mono text-[11px] font-medium uppercase tracking-[0.4px] text-white/60">{t("Schritt", "Step")} {step} / 2</span>
+                {/* progress (Figma: thin track, gold fill, "SCHRITT 1 / 2") */}
+                <div className="mt-5 flex items-center gap-3" aria-label={t(`Schritt ${step} von 2`, `Step ${step} of 2`)}>
+                  <span className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-[#eeedea]">
+                    <span
+                      className="absolute inset-y-0 left-0 rounded-full bg-[#d1aa71] transition-[width] duration-500 ease-[cubic-bezier(.2,.8,.2,1)]"
+                      style={{ width: step === 1 ? "50%" : "100%" }}
+                    />
+                  </span>
+                  <span className="eyebrow text-[#7d7973]">{t("Schritt", "Step")} {step} / 2</span>
                 </div>
               </div>
 
@@ -503,7 +484,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
               </div>
 
               {step === 1 ? (
-                <form key="s1" onSubmit={next} noValidate className={cn(stepIn, "px-5 pb-4 pt-4 sm:px-8 sm:pb-6 sm:pt-5")}>
+                <form key="s1" onSubmit={next} noValidate className={cn(stepIn, "px-6 pb-5 pt-5 sm:px-9 sm:pb-8 sm:pt-6")}>
                   <Field id="website" label={t("Deine Website", "Your website")} error={err("website")}>
                     <Iconed icon={Globe}>
                       <input
@@ -518,7 +499,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                         onBlur={blur("website")}
                         aria-invalid={!!err("website")}
                         aria-describedby={err("website") ? "tl-website-err" : undefined}
-                        className={cn(field, "pl-10", err("website") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
+                        className={cn(field, "pl-10", err("website") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
                       />
                     </Iconed>
                   </Field>
@@ -534,9 +515,8 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
 
                   {/* budget — the lead qualifier, as selectable cards (radio group) */}
                   <fieldset className="mb-3.5 sm:mb-4">
-                    <legend className="mb-1.5 flex w-full items-baseline justify-between gap-3 text-[13px] font-semibold text-[#17252B]">
-                      {t("Marketing-Budget / Monat", "Marketing budget / month")}
-                      <span className="hidden text-[11.5px] font-normal text-[#6C7A7E] sm:inline">{t("zeigt uns deinen größten Hebel", "shows us your biggest lever")}</span>
+                    <legend className="mb-1.5 flex w-full items-baseline justify-between gap-3 text-[13px] font-medium text-[#1a1917]">
+                      {t("Marketing-Budget pro Monat", "Marketing budget per month")}
                     </legend>
                     <div id="tl-budget" tabIndex={-1} role="radiogroup" aria-invalid={!!err("budget")} aria-describedby={err("budget") ? "tl-budget-err" : undefined} className="grid grid-cols-2 gap-2 outline-none">
                       {TL_BUDGETS.map((b) => {
@@ -545,19 +525,19 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                           <label
                             key={b.value}
                             className={cn(
-                              "relative flex h-11 cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-[12px] border-[1.5px] px-3 text-[13px] font-semibold tracking-[-0.1px] transition-[border-color,background-color,color,box-shadow] duration-150 has-[:focus-visible]:shadow-[0_0_0_4px_rgba(212,168,99,0.25)] sm:px-3.5 sm:text-[14px]",
+                              "relative flex h-11 cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-[12px] border px-3 text-[13px] font-normal tracking-[-0.1px] transition-[border-color,background-color,color,box-shadow] duration-150 has-[:focus-visible]:shadow-[0_0_0_4px_rgba(209,170,113,0.25)] sm:px-3.5 sm:text-[14px]",
                               on
-                                ? "border-[#D4A863] bg-[#fbf6ee] text-[#7a5b30] shadow-[0_6px_16px_-10px_rgba(168,127,69,0.6)]"
+                                ? "border-[#d1aa71] bg-[#fbf6ee] text-[#7a5b30] shadow-[0_6px_16px_-10px_rgba(168,127,69,0.6)]"
                                 : err("budget")
-                                  ? "border-[#e5a29b] bg-white text-[#17252B]"
-                                  : "border-[#DDE4E5] bg-white text-[#17252B] hover:border-[#c9d3d5]",
+                                  ? "border-[#e5a29b] bg-white text-[#1a1917]"
+                                  : "border-[#e2e0dc] bg-white text-[#1a1917] hover:border-[#cbc8c2]",
                             )}
                           >
                             <input type="radio" name="tl-budget" value={b.value} checked={on} onChange={() => setValue("budget", b.value)} className="sr-only" />
-                            {t(b.label, b.labelEn)}
-                            <span className={cn("grid size-[18px] shrink-0 place-items-center rounded-full border-[1.5px] transition-colors", on ? "border-[#D4A863] bg-[#D4A863] text-white" : "border-[#cfd8da]")}>
-                              {on && <Check className="size-3" strokeWidth={3} />}
+                            <span className={cn("grid size-[16px] shrink-0 place-items-center rounded-full border transition-colors", on ? "border-[#d1aa71] bg-white" : "border-[#cbc8c2] bg-white")}>
+                              {on && <span className="size-2 rounded-full bg-[#d1aa71]" />}
                             </span>
+                            {t(b.label, b.labelEn)}
                           </label>
                         );
                       })}
@@ -568,38 +548,38 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                   <button
                     type="submit"
                     className={cn(
-                      "group flex h-[52px] w-full items-center justify-center gap-2.5 rounded-full text-[16px] font-semibold tracking-[-0.1px] text-[#002E3D] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#002E3D]",
-                      GOLD_BTN,
+                      "group flex h-[52px] w-full items-center justify-center gap-2.5 rounded-full t-button transition-[filter,translate] duration-200 hover:brightness-125 active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d1aa71]",
+                      DARK_BTN,
                     )}
                   >
                     {t("Weiter", "Next")}
                     <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
                   </button>
-                  <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[12px] leading-[18px] text-[#6C7A7E]">
+                  <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[12px] leading-[18px] text-[#7d7973]">
                     <span className="inline-flex items-center gap-1.5">
                       <Clock className="size-3 shrink-0" strokeWidth={2} />
                       {t("Dauert 30 Sekunden", "Takes 30 seconds")}
                     </span>
-                    <span aria-hidden className="text-[#cfd8da]">·</span>
-                    <button type="button" onClick={never} className="text-[#9aa7ab] underline-offset-2 hover:text-[#6C7A7E] hover:underline">
+                    <span aria-hidden className="text-[#cbc8c2]">·</span>
+                    <button type="button" onClick={never} className="text-[#a8a49d] underline-offset-2 hover:text-[#7d7973] hover:underline">
                       {t("Nicht mehr anzeigen", "Don't show again")}
                     </button>
                   </div>
                 </form>
               ) : (
-                <form key="s2" onSubmit={submit} noValidate className={cn(stepIn, "px-5 pb-5 pt-5 sm:px-8 sm:pb-6")}>
+                <form key="s2" onSubmit={submit} noValidate className={cn(stepIn, "px-6 pb-5 pt-5 sm:px-9 sm:pb-8 sm:pt-6")}>
                   {/* what we'll analyse */}
-                  <div className="mb-4 flex items-center gap-3 rounded-[14px] border border-[#DDE4E5] bg-[#EEF3F4]/70 p-3.5">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white text-[#A8863A] shadow-[0_1px_2px_rgba(8,34,44,0.06)]">
+                  <div className="mb-4 flex items-center gap-3 rounded-[14px] border border-[#e2e0dc] bg-[#f6f5f3]/70 p-3.5">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white text-[#94713f] shadow-[0_1px_2px_rgba(8,34,44,0.06)]">
                       <ScanSearch className="size-[18px]" strokeWidth={2} />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[14.5px] font-semibold text-[#17252B]">{site}</p>
-                      <p className="mt-0.5 truncate text-[12.5px] text-[#6C7A7E]">
+                      <p className="truncate text-[14.5px] font-semibold text-[#1a1917]">{site}</p>
+                      <p className="mt-0.5 truncate text-[12.5px] text-[#7d7973]">
                         {brancheLabel(v.branche)} · {zielLabel(v.ziel)} · {budgetLabel}
                       </p>
                     </div>
-                    <button type="button" onClick={() => setStep(1)} className="shrink-0 text-[12.5px] font-semibold text-[#A8863A] underline-offset-2 hover:underline">
+                    <button type="button" onClick={() => setStep(1)} className="shrink-0 text-[12.5px] font-semibold text-[#94713f] underline-offset-2 hover:underline">
                       {t("Ändern", "Change")}
                     </button>
                   </div>
@@ -619,7 +599,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                           onBlur={blur("name")}
                           aria-invalid={!!err("name")}
                           aria-describedby={err("name") ? "tl-name-err" : undefined}
-                          className={cn(field, "pl-10", err("name") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
+                          className={cn(field, "pl-10", err("name") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
                         />
                       </Iconed>
                     </Field>
@@ -637,7 +617,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                           onBlur={blur("email")}
                           aria-invalid={!!err("email")}
                           aria-describedby={err("email") ? "tl-email-err" : undefined}
-                          className={cn(field, "pl-10", err("email") ? "border-[#e5a29b]" : "border-[#DDE4E5]")}
+                          className={cn(field, "pl-10", err("email") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
                         />
                       </Iconed>
                     </Field>
@@ -668,7 +648,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                       type="button"
                       onClick={() => setStep(1)}
                       aria-label={t("Zurück zu Schritt 1", "Back to step 1")}
-                      className="grid size-[52px] shrink-0 place-items-center rounded-full border-[1.5px] border-[#DDE4E5] bg-white text-[#17252B] transition-colors hover:border-[#c9d3d5] hover:bg-[#f6f8f8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A863]"
+                      className="grid size-[52px] shrink-0 place-items-center rounded-full border-[1.5px] border-[#e2e0dc] bg-white text-[#1a1917] transition-colors hover:border-[#cbc8c2] hover:bg-[#f6f5f3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d1aa71]"
                     >
                       <ArrowLeft className="size-[18px]" strokeWidth={2} />
                     </button>
@@ -676,8 +656,8 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                       type="submit"
                       disabled={status === "sending"}
                       className={cn(
-                        "group flex h-[52px] flex-1 items-center justify-center gap-2.5 rounded-full text-[15.5px] font-semibold tracking-[-0.1px] text-[#002E3D] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px disabled:cursor-wait disabled:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#002E3D] sm:text-[16px]",
-                        GOLD_BTN,
+                        "group flex h-[52px] flex-1 items-center justify-center gap-2.5 rounded-full t-button transition-[filter,translate] duration-200 hover:brightness-125 active:translate-y-px disabled:cursor-wait disabled:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d1aa71]",
+                        DARK_BTN,
                       )}
                     >
                       {status === "sending" ? (
@@ -692,12 +672,12 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                       )}
                     </button>
                   </div>
-                  <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[12px] leading-[18px] text-[#6C7A7E]">
+                  <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[12px] leading-[18px] text-[#7d7973]">
                     <span className="inline-flex items-center gap-1.5">
                       <Lock className="size-3 shrink-0" strokeWidth={2} />
                       {t("Kein Newsletter, kein Spam.", "No newsletter, no spam.")}
                     </span>
-                    <Link href={lp("/datenschutz")} target="_blank" className="underline underline-offset-2 hover:text-[#17252B]">
+                    <Link href={lp("/datenschutz")} target="_blank" className="underline underline-offset-2 hover:text-[#1a1917]">
                       {t("Datenschutz", "Privacy")}
                     </Link>
                   </div>
@@ -706,21 +686,21 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
             </>
           ) : (
             <div role="status" aria-live="polite">
-              <div className="relative overflow-hidden px-6 pb-7 pt-4 text-center sm:px-8 sm:pt-8" style={{ backgroundImage: HEAD_BG }}>
-                <span aria-hidden className="mx-auto mb-4 block h-1 w-10 rounded-full bg-white/25 sm:hidden" />
+              <div className="relative overflow-hidden border-b border-[#eeedea] px-6 pb-7 pt-4 text-center sm:px-9 sm:pt-9">
+                <span aria-hidden className="mx-auto mb-4 block h-1 w-10 rounded-full bg-[#e2e0dc] sm:hidden" />
                 <button
                   type="button"
                   onClick={close}
                   aria-label={t("Schließen", "Close")}
-                  className="absolute right-4 top-4 grid size-10 place-items-center rounded-full border border-white/[0.22] bg-[rgba(0,22,32,0.62)] text-white/80 transition-colors hover:bg-[rgba(0,22,32,0.85)] hover:text-white focus-visible:outline-2 focus-visible:outline-[#D4A863] sm:right-5 sm:top-5"
+                  className="absolute right-4 top-4 grid size-9 place-items-center rounded-full border border-[#eeedea] bg-[#f6f5f3] text-[#5c5954] transition-colors hover:bg-white hover:text-[#1a1917] focus-visible:outline-2 focus-visible:outline-[#d1aa71] sm:right-6 sm:top-6"
                 >
                   <X className="size-[18px]" strokeWidth={2} />
                 </button>
                 <svg viewBox="0 0 72 72" className="mx-auto size-[72px]" aria-hidden>
-                  <circle cx="36" cy="36" r="33" fill="rgba(212,168,99,0.12)" stroke="#D4A863" strokeWidth="2" pathLength={1} strokeDasharray="1" className="animate-[ktDraw_0.7s_ease-out_both]" />
-                  <path d="M23 37.5 32 46.5 50 27" fill="none" stroke="#D4A863" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" className="animate-[ktDraw_0.45s_0.5s_ease-out_both]" />
+                  <circle cx="36" cy="36" r="33" fill="rgba(209,170,113,0.12)" stroke="#d1aa71" strokeWidth="2" pathLength={1} strokeDasharray="1" className="animate-[ktDraw_0.7s_ease-out_both]" />
+                  <path d="M23 37.5 32 46.5 50 27" fill="none" stroke="#d1aa71" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" className="animate-[ktDraw_0.45s_0.5s_ease-out_both]" />
                 </svg>
-                <h3 id="tl-title" className="mt-4 font-display text-[clamp(1.5rem,4.4vw,1.8rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-white">
+                <h3 id="tl-title" className="mt-4 font-display text-[clamp(1.5rem,4.4vw,1.8rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-[#1a1917]">
                   {t("Danke", "Thank you")}
                   {first ? (
                     <>
@@ -729,21 +709,21 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                   ) : null}
                   !
                 </h3>
-                <p className="mx-auto mt-2.5 max-w-[36ch] text-[15px] leading-[24px] text-[#cbc8c2]">
+                <p className="mx-auto mt-2.5 max-w-[36ch] text-[15px] leading-[24px] text-[#5c5954]">
                   {t(
                     <>
-                      Unser Team schaut sich <span className="font-semibold text-white">{site || "deine Website"}</span> jetzt persönlich an.
+                      Unser Team schaut sich <span className="font-semibold text-[#1a1917]">{site || "deine Website"}</span> jetzt persönlich an.
                     </>,
                     <>
-                      Our team is now taking a personal look at <span className="font-semibold text-white">{site || "your website"}</span>.
+                      Our team is now taking a personal look at <span className="font-semibold text-[#1a1917]">{site || "your website"}</span>.
                     </>,
                   )}
                 </p>
               </div>
               <div className="px-6 pb-7 pt-6 sm:px-8">
-                <p className="mb-4 font-mono text-[11.5px] font-medium uppercase tracking-[0.4px] text-[#6C7A7E]">{t("So geht es weiter", "What happens next")}</p>
+                <p className="mb-4 font-mono text-[11.5px] font-medium uppercase tracking-[0.4px] text-[#7d7973]">{t("So geht es weiter", "What happens next")}</p>
                 <ol className="relative flex flex-col gap-5">
-                  <span aria-hidden className="absolute bottom-4 left-[17px] top-4 w-px bg-[linear-gradient(180deg,#D4A863,rgba(212,168,99,0.15))]" />
+                  <span aria-hidden className="absolute bottom-4 left-[17px] top-4 w-px bg-[linear-gradient(180deg,#d1aa71,rgba(209,170,113,0.15))]" />
                   {[
                     {
                       I: ScanSearch,
@@ -762,13 +742,13 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                     { I: MessageCircle, when: t("Danach", "Then"), text: t("Wenn du willst, ein kurzes Gespräch. Du entscheidest.", "If you like, a short call. Entirely up to you.") },
                   ].map(({ I, when, text, live }) => (
                     <li key={when} className="relative flex gap-3.5">
-                      <span className={cn("relative grid size-9 shrink-0 place-items-center rounded-full border-[1.5px] bg-white", live ? "border-[#D4A863] text-[#A8863A]" : "border-[#DDE4E5] text-[#6C7A7E]")}>
+                      <span className={cn("relative grid size-9 shrink-0 place-items-center rounded-full border-[1.5px] bg-white", live ? "border-[#d1aa71] text-[#94713f]" : "border-[#e2e0dc] text-[#7d7973]")}>
                         <I className="size-4" strokeWidth={2} />
                         {live && <span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full border-2 border-white bg-[#1E7A52] motion-safe:animate-pulse" />}
                       </span>
                       <span className="flex min-w-0 flex-col pt-0.5">
-                        <span className="text-[12px] font-semibold uppercase tracking-[0.3px] text-[#A8863A]">{when}</span>
-                        <span className="break-words text-[14.5px] leading-[21px] text-[#17252B]">{text}</span>
+                        <span className="text-[12px] font-semibold uppercase tracking-[0.3px] text-[#94713f]">{when}</span>
+                        <span className="break-words text-[14.5px] leading-[21px] text-[#1a1917]">{text}</span>
                       </span>
                     </li>
                   ))}
@@ -776,7 +756,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                 <button
                   type="button"
                   onClick={close}
-                  className="mt-7 flex h-12 w-full items-center justify-center rounded-full bg-[#002E3D] text-[15px] font-semibold text-white transition-colors hover:bg-[#013a4d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4A863]"
+                  className={cn("mt-7 flex h-12 w-full items-center justify-center rounded-full t-button transition-[filter] hover:brightness-125 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d1aa71]", DARK_BTN)}
                 >
                   {t("Alles klar", "Got it")}
                 </button>
@@ -794,7 +774,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
 function Iconed({ icon: I, children }: { icon: LucideIcon; children: React.ReactNode }) {
   return (
     <div className="relative">
-      <I className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#9aa7ab]" strokeWidth={1.9} />
+      <I className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#a8a49d]" strokeWidth={1.9} />
       {children}
     </div>
   );
@@ -812,7 +792,7 @@ function ErrLine({ id, msg }: { id: string; msg: string }) {
 function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: React.ReactNode }) {
   return (
     <div className="mb-3 sm:mb-3.5">
-      <label htmlFor={`tl-${id}`} className="mb-1.5 block text-[13px] font-semibold text-[#17252B]">
+      <label htmlFor={`tl-${id}`} className="mb-1.5 block text-[13px] font-medium text-[#1a1917]">
         {label}
       </label>
       {children}
@@ -971,13 +951,13 @@ function LensSelect({
         className={cn(
           field,
           "relative flex items-center gap-2.5 pl-3 pr-9 text-left",
-          open && "border-[#D4A863] shadow-[0_0_0_4px_rgba(212,168,99,0.18)]",
-          invalid ? "border-[#e5a29b]" : !open && "border-[#DDE4E5]",
+          open && "border-[#d1aa71] shadow-[0_0_0_4px_rgba(212,168,99,0.18)]",
+          invalid ? "border-[#e5a29b]" : !open && "border-[#e2e0dc]",
         )}
       >
-        <CurIcon className={cn("size-4 shrink-0", current ? "text-[#A8863A]" : "text-[#9aa7ab]")} strokeWidth={1.9} />
-        <span className={cn("min-w-0 flex-1 truncate text-[14px] sm:text-[15px]", !current && "text-[#9aa7ab]")}>{current?.label ?? placeholder}</span>
-        <ChevronDown className={cn("pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#6C7A7E] transition-transform duration-200", open && "rotate-180")} strokeWidth={1.8} />
+        <CurIcon className={cn("size-4 shrink-0", current ? "text-[#94713f]" : "text-[#a8a49d]")} strokeWidth={1.9} />
+        <span className={cn("min-w-0 flex-1 truncate text-[14px] sm:text-[15px]", !current && "text-[#a8a49d]")}>{current?.label ?? placeholder}</span>
+        <ChevronDown className={cn("pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#7d7973] transition-transform duration-200", open && "rotate-180")} strokeWidth={1.8} />
       </button>
 
       {open &&
@@ -991,7 +971,7 @@ function LensSelect({
             data-lenis-prevent
             style={{ left: pos.left, top: pos.top, width: pos.width, maxHeight: pos.maxH }}
             className={cn(
-              "fixed z-[120] overflow-y-auto overscroll-contain rounded-[14px] border border-[#DDE4E5] bg-white p-1.5 shadow-[0_18px_40px_-12px_rgba(0,20,28,0.35),0_4px_12px_rgba(0,20,28,0.08)] animate-[tlDrop_.16s_cubic-bezier(.2,.8,.2,1)_both]",
+              "fixed z-[120] overflow-y-auto overscroll-contain rounded-[14px] border border-[#e2e0dc] bg-white p-1.5 shadow-[0_18px_40px_-12px_rgba(0,20,28,0.35),0_4px_12px_rgba(0,20,28,0.08)] animate-[tlDrop_.16s_cubic-bezier(.2,.8,.2,1)_both]",
               pos.up ? "origin-bottom" : "origin-top",
             )}
           >
@@ -1010,14 +990,14 @@ function LensSelect({
                   className={cn(
                     "flex h-10 cursor-pointer items-center gap-2.5 rounded-[10px] px-2.5 text-[14px] transition-colors",
                     i === active && "bg-[#f4f1ea]",
-                    isSel ? "font-semibold text-[#7a5b30]" : "text-[#17252B]",
+                    isSel ? "font-semibold text-[#7a5b30]" : "text-[#1a1917]",
                   )}
                 >
-                  <span className={cn("grid size-7 shrink-0 place-items-center rounded-[8px]", isSel ? "bg-[#D4A863] text-white" : "bg-[#EEF3F4] text-[#5b6b70]")}>
+                  <span className={cn("grid size-7 shrink-0 place-items-center rounded-[8px]", isSel ? "bg-[#d1aa71] text-white" : "bg-[#f6f5f3] text-[#5b6b70]")}>
                     <Ico className="size-[15px]" strokeWidth={2} />
                   </span>
                   <span className="min-w-0 flex-1 truncate">{o.label}</span>
-                  {isSel && <Check className="size-4 shrink-0 text-[#A8863A]" strokeWidth={2.4} />}
+                  {isSel && <Check className="size-4 shrink-0 text-[#94713f]" strokeWidth={2.4} />}
                 </li>
               );
             })}

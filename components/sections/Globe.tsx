@@ -484,7 +484,7 @@ export default function Globe() {
                 <h2 className="t-h2-s text-white">
                   {t("Digitalisierung berührt alles.", "Digitalisation touches everything.")}
                 </h2>
-                <p className="t-body-s mx-auto mt-3 max-w-[330px] text-[#b3d6e2]">
+                <p className="t-body-s mx-auto mt-3 max-w-[330px] text-[#cbc8c2]">
                   {t("Nicht nur das Marketing, sondern jeder Bereich Ihres Unternehmens.", "Not just marketing, but every part of your business.")}
                 </p>
               </div>

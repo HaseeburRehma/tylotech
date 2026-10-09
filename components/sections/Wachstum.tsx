@@ -130,20 +130,16 @@ export default function Wachstum() {
             <article
               key={de.title}
               onPointerMove={trackSpotlight}
-              className="hebel-card pillar-card group relative overflow-hidden rounded-[20px] border border-line bg-white p-7"
+              className="hebel-card pillar-card group relative flex flex-col overflow-hidden rounded-[20px] border border-[#e2e0dc] bg-white"
             >
-              <span className="hebel-accent absolute inset-x-0 top-0 h-[3px] origin-left bg-accent" />
-
-              <span className="hebel-icon pillar-icon grid size-11 place-items-center rounded-xl border border-transparent bg-[rgba(209,170,113,0.14)] text-[#6b6863]">
-                <Icon className="size-5" strokeWidth={1.7} />
-              </span>
-
-              <h3 className="t-h4 mt-6 text-ink sm:mt-14">
-                {title}
-              </h3>
-              <p className="t-body-m mt-3 text-ink/55">
-                {body}
-              </p>
+              <span className="hebel-accent block h-1 w-full shrink-0 origin-left bg-accent" />
+              <div className="flex flex-col items-start gap-[18px] p-7 sm:p-8">
+                <span className="hebel-icon pillar-icon grid size-[50px] place-items-center rounded-[13px] bg-[#fbf6ee] text-[#b98f53]">
+                  <Icon className="size-[23px]" strokeWidth={1.6} />
+                </span>
+                <h3 className="t-h4 text-[#1a1917]">{title}</h3>
+                <p className="t-body-m -mt-[6px] text-[#5c5954]">{body}</p>
+              </div>
             </article>
             );
           })}

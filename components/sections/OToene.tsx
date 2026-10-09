@@ -227,7 +227,7 @@ export default function OToene() {
             </span>
             .
           </h2>
-          <p className="mt-4 max-w-[640px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#b3d6e2]">
+          <p className="mt-4 max-w-[640px] text-[clamp(15px,1.5vw,18px)] leading-[1.6] text-[#cbc8c2]">
             Kein Skript, kein Schönreden. Unternehmerinnen und Unternehmer, mit
             denen wir arbeiten, erzählen selbst, was sich verändert hat.
           </p>

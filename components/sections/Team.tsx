@@ -116,7 +116,7 @@ export default function Team() {
             Kein Callcenter
           </p>
           <h2 className="font-display text-[clamp(1.9rem,4.4vw,3.1rem)] font-bold leading-[1.08] tracking-[-0.03em] text-white">Die Menschen, mit denen du arbeitest.</h2>
-          <p className="mx-auto mt-6 max-w-[620px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#b3d6e2]">
+          <p className="mx-auto mt-6 max-w-[620px] text-[18px] leading-[30px] tracking-[-0.1px] text-[#cbc8c2]">
             Kein Account-Manager, der weiterleitet. Du sprichst direkt mit den
             Leuten, die an deinem Projekt bauen.
           </p>
