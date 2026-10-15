@@ -62,6 +62,7 @@ export default function KontaktStandort() {
               src="/kontakt/karte-duesseldorf-dunkel.webp"
               alt={t(`Karte: TyloTech, ${CONTACT.street}, ${CONTACT.city}`, `Map: TyloTech, ${CONTACT.street}, ${CONTACT.city}`)}
               fill
+              unoptimized // already a compressed 1280px WebP; skips the image optimiser
               sizes="(min-width: 1440px) 1280px, 100vw"
               className="object-cover"
             />
