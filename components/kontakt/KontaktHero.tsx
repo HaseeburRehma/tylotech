@@ -1,137 +1,131 @@
 "use client";
 
 import { useRef } from "react";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Phone, Star } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { CONTACT, mapsRouteUrl } from "@/lib/contact";
 import { Accent, Eyebrow } from "../branche/ui";
 import KontaktForm from "./KontaktForm";
-import { useT } from "../i18n/LocaleProvider";
+import { useLocale, useT } from "../i18n/LocaleProvider";
 
-/* `id` keeps React keys stable across languages */
+/* Figma "Kontaktzeile": icon tile, mono label, value */
 const CHANNELS = [
-  { id: "call", icon: Phone, label: { de: "Anrufen", en: "Call" }, value: { de: CONTACT.phone, en: CONTACT.phoneIntl }, href: CONTACT.phoneHref, external: false },
-  { id: "write", icon: Mail, label: { de: "Schreiben", en: "Write" }, value: { de: CONTACT.email, en: CONTACT.email }, href: `mailto:${CONTACT.email}`, external: false },
+  { id: "phone", icon: Phone, label: { de: "Telefon", en: "Phone" }, value: { de: CONTACT.phone, en: CONTACT.phoneIntl }, href: CONTACT.phoneHref, external: false },
+  { id: "mail", icon: Mail, label: { de: "E-Mail", en: "Email" }, value: { de: CONTACT.email, en: CONTACT.email }, href: `mailto:${CONTACT.email}`, external: false },
   {
-    id: "visit",
+    id: "address",
     icon: MapPin,
-    label: { de: "Besuchen", en: "Visit" },
-    value: { de: `${CONTACT.street}, ${CONTACT.city}`, en: `${CONTACT.street}, ${CONTACT.city}, Germany` },
+    label: { de: "Adresse", en: "Address" },
+    value: { de: `${CONTACT.street}, ${CONTACT.city}`, en: `${CONTACT.street}, ${CONTACT.city}` },
     href: mapsRouteUrl,
     external: true,
   },
 ];
 
-const STEPS = [
-  {
-    id: "send",
-    t: { de: "Anfrage senden", en: "Send your enquiry" },
-    d: { de: "Ein paar Sätze reichen. Wo stehst du, wo willst du hin?", en: "A few sentences are enough. Where are you now, and where do you want to go?" },
-  },
-  {
-    id: "reply",
-    t: { de: "Wir melden uns persönlich", en: "We get back to you personally" },
-    d: { de: "Kein Callcenter und kein Bot: du sprichst mit jemandem, der antworten kann.", en: "No call centre and no bot: you talk to someone who can actually answer." },
-  },
-  {
-    id: "call",
-    t: { de: "Kostenloses Erstgespräch", en: "Free initial consultation" },
-    d: { de: "Eine ehrliche Einschätzung, wo dein größter Hebel liegt.", en: "An honest assessment of where your biggest lever lies." },
-  },
-];
-
-export default function KontaktHero({ initialBranche }: { initialBranche?: string }) {
+export default function KontaktHero({
+  initialBranche,
+  rating,
+}: {
+  initialBranche?: string;
+  rating: { value: number; count: number; url: string };
+}) {
   const root = useRef<HTMLElement>(null);
   const t = useT();
+  const locale = useLocale();
 
   useGSAP(
     () => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       // heading copy and the form card enter via CSS (intro-stagger / intro-up)
       // so the page's first content never waits on JS (FCP/LCP)
-      tl.from(".kh-card .kf-row", { y: 16, opacity: 0, duration: 0.6, stagger: 0.06, clearProps: "transform,opacity" }, 0.45)
-        .from(".kh-channel", { x: -18, opacity: 0, duration: 0.6, stagger: 0.08, clearProps: "transform,opacity" }, 0.5)
-        .from(".kh-step", { y: 14, opacity: 0, duration: 0.6, stagger: 0.1, clearProps: "transform,opacity" }, 0.8);
+      gsap.from(".kh-direct > *", { y: 18, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.08, delay: 0.3, clearProps: "transform,opacity" });
     },
     { scope: root },
   );
 
+  const value = rating.value.toLocaleString(locale === "en" ? "en-GB" : "de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
   return (
     <section id="top" ref={root} className="relative overflow-hidden bg-page">
+      {/* Figma "Warmes Licht" */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 left-[38%] h-[760px] w-[1180px] rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.2),rgba(209,170,113,0.05)_60%,transparent)]"
+        className="pointer-events-none absolute left-[32%] top-[-260px] h-[760px] w-[1180px] max-w-none rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.3),rgba(209,170,113,0.12)_45%,rgba(209,170,113,0)_100%)] max-md:left-[-20%] max-md:top-[-200px] max-md:h-[480px] max-md:w-[700px]"
       />
-      {/* phones: headline → form → channels; desktop: copy + channels left, form right */}
-      <Container className="relative grid grid-cols-1 items-start gap-10 pb-14 pt-8 sm:pb-20 sm:pt-14 lg:pb-28 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,600px)] xl:grid-rows-[auto_1fr] xl:gap-x-16 xl:gap-y-10 xl:pt-[88px] 2xl:gap-x-20">
-        <div className="kh-copy intro-stagger flex min-w-0 flex-col items-start gap-6 sm:gap-7">
+      <Container className="relative flex flex-col gap-7 pb-14 pt-10 sm:pb-20 sm:pt-14 lg:gap-14 lg:pb-28 lg:pt-24">
+        <div className="intro-stagger flex max-w-[720px] flex-col items-start gap-[18px]">
           <Eyebrow icon="message-circle">{t("Kontakt", "Contact")}</Eyebrow>
-          <h1 className="font-display text-[clamp(2.3rem,4.6vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.035em] text-[#1a1917]">
-            <Accent text={t("Lass uns über dein\n_Wachstum_ sprechen.", "Let's talk about\nyour _growth_.")} />
+          <h1 className="t-h1 text-[#1a1917]">
+            <Accent text={t("Sag uns, wo es _klemmt._", "Tell us where it's _stuck._")} />
           </h1>
-          <p className="max-w-[560px] text-[clamp(17px,1.5vw,19px)] leading-[1.55] tracking-[-0.01em] text-[#5c5954]">
+          <p className="t-body-l text-[#5c5954]">
             {t(
-              "Erzähl uns kurz, wo du stehst. Wir melden uns persönlich bei dir: ehrlich, direkt und ohne Verkaufsdruck.",
-              "Tell us briefly where you stand. We'll get back to you personally: honest, direct and with no sales pressure.",
+              "Kein Formular ins Leere. Was du hier schreibst, lesen wir selbst und melden uns persönlich bei dir.",
+              "No form into the void. We read what you write here ourselves and get back to you personally.",
             )}
           </p>
         </div>
 
-        <div className="order-3 flex min-w-0 flex-col gap-10 xl:order-none xl:col-start-1 xl:row-start-2">
-          <ul className="flex w-full max-w-[560px] flex-col gap-3">
-            {CHANNELS.map(({ id, icon: I, label, value, href, external }) => (
-              <li key={id} className="kh-channel">
-                <a
-                  href={href}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="group flex items-center gap-4 rounded-[18px] border border-[#eeedea] bg-white/80 p-3.5 pr-5 shadow-[0_1px_2px_rgba(8,34,44,0.04)] backdrop-blur transition-[border-color,box-shadow,translate] duration-300 hover:-translate-y-0.5 hover:border-[#e2d2b4] hover:shadow-[0_18px_36px_-24px_rgba(8,34,44,0.35)]"
-                >
-                  <span className="grid size-12 shrink-0 place-items-center rounded-[14px] bg-[#fbf6ee] text-[#b4894d] transition-colors duration-300 group-hover:bg-[#d1aa71] group-hover:text-white">
-                    <I className="size-[21px]" strokeWidth={1.7} />
-                  </span>
-                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <span className="font-mono text-[11px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#94713f]">{t(label.de, label.en)}</span>
-                    <span className="font-display text-[16px] font-medium leading-[22px] tracking-[-0.02em] text-[#1a1917] sm:text-[17px]">{t(value.de, value.en)}</span>
-                  </span>
-                  <ArrowUpRight className="size-[18px] shrink-0 text-[#a8a49d] transition-[color,translate] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#94713f]" strokeWidth={1.8} />
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <div className="w-full max-w-[560px]">
-            <p className="mb-4 font-mono text-[12px] font-medium uppercase leading-[14px] tracking-[0.4px] text-[#7d7973]">{t("So geht es weiter", "What happens next")}</p>
-            <ol className="relative flex flex-col gap-5">
-              <span aria-hidden className="absolute bottom-3 left-[15px] top-3 w-px bg-[linear-gradient(180deg,#d1aa71,rgba(209,170,113,0.15))]" />
-              {STEPS.map((s, i) => (
-                <li key={s.id} className="kh-step relative flex gap-4">
-                  <span className="relative grid size-8 shrink-0 place-items-center rounded-full border border-[#d1aa71] bg-white font-mono text-[12px] font-medium text-[#94713f]">
-                    {i + 1}
-                  </span>
-                  <span className="flex flex-col gap-0.5 pt-1">
-                    <span className="font-display text-[16px] font-medium leading-[22px] tracking-[-0.02em] text-[#1a1917]">{t(s.t.de, s.t.en)}</span>
-                    <span className="text-[14px] leading-[22px] text-[#7d7973]">{t(s.d.de, s.d.en)}</span>
-                  </span>
-                </li>
-              ))}
-            </ol>
+        {/* phones: call card → form → channels; desktop: form left, direct contact right */}
+        <div className="flex flex-col gap-7 lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
+          <div
+            id="formular"
+            className="intro-up order-2 min-w-0 flex-1 scroll-mt-28 rounded-[24px] border border-[#eeedea] bg-white p-6 shadow-[0_1px_2px_rgba(8,34,44,0.04),0_2px_6px_rgba(8,34,44,0.06)] [animation-delay:150ms] sm:p-8 lg:order-1 lg:p-10"
+          >
+            <KontaktForm initialBranche={initialBranche} />
           </div>
-        </div>
 
-        <div className="kh-card intro-up [animation-delay:150ms] relative rounded-[24px] w-full max-w-[760px] xl:col-start-2 xl:row-span-2 xl:row-start-1 xl:max-w-none border border-[#eeedea] bg-white p-5 shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05),0_51px_49px_rgba(8,34,44,0.03)] sm:rounded-[28px] sm:p-8 lg:p-10">
-          <div className="mb-7 flex flex-col gap-1.5 border-b border-[#eeedea] pb-6">
-            <h2 className="font-display text-[clamp(1.4rem,2.2vw,1.625rem)] font-semibold leading-[1.2] tracking-[-0.025em] text-[#1a1917]">
-              {t("Erstgespräch", "Request a")}{" "}
-              <span className="font-[family-name:var(--font-instrument)] text-[1.08em] font-normal italic tracking-[-0.01em] text-[#94713f]">{t("anfragen", "consultation")}</span>
-            </h2>
-            <p className="text-[14px] leading-[22px] text-[#7d7973]">
-              {t("Felder mit ", "Fields marked ")}
-              <span className="text-[#b4894d]">*</span>
-              {t(" sind Pflichtfelder.", " are required.")}
-            </p>
+          <div className="kh-direct contents lg:order-2 lg:flex lg:w-[400px] lg:shrink-0 lg:flex-col lg:gap-8 xl:w-[464px]">
+            <div className="order-1 flex flex-col items-start gap-4 rounded-[20px] border border-[#d1aa71] bg-[#fbf6ee] p-6 sm:rounded-[24px] sm:p-8">
+              {/* Figma Mobile/Heading/H4 (19/25 medium) → Heading/H4 (24/30 semibold) */}
+              <p className="font-display text-[19px] font-medium leading-[25px] tracking-[-0.4px] text-[#1a1917] sm:text-[24px] sm:font-semibold sm:leading-[30px] sm:tracking-[-0.6px]">{t("Lieber direkt sprechen?", "Rather talk directly?")}</p>
+              <p className="text-[14px] leading-[22px] tracking-[-0.1px] text-[#5c5954] sm:text-[16px] sm:leading-[26px] sm:tracking-[-0.16px]">
+                {t(
+                  "Im kostenlosen Erstgespräch schauen wir gemeinsam, wo dein größter Hebel liegt und ob wir zueinander passen.",
+                  "In a free intro call we look together at where your biggest lever lies and whether we're a good fit.",
+                )}
+              </p>
+              <a
+                href={CONTACT.phoneHref}
+                className="group mt-[6px] inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(180deg,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0.02)_55%,rgba(255,255,255,0)_100%),linear-gradient(90deg,#efdcbc_0%,#d8b681_45%,#b4894d_100%)] px-[22px] t-button text-[#0f0e0d] shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 hover:brightness-105 active:translate-y-px sm:w-auto"
+              >
+                {t("Erstgespräch sichern", "Book your intro call")}
+                <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={1.8} />
+              </a>
+            </div>
+
+            <div className="order-3 flex flex-col gap-8">
+              <ul className="flex flex-col lg:pl-2">
+                {CHANNELS.map(({ id, icon: I, label, value, href, external }, i) => (
+                  <li key={id} className={i ? "border-t border-[#eeedea]" : ""}>
+                    <a
+                      href={href}
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      className="group flex items-center gap-4 py-4 sm:py-[18px]"
+                    >
+                      <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#fbf6ee] text-[#1a1917] transition-colors duration-300 group-hover:bg-[#d1aa71] group-hover:text-white">
+                        <I className="size-5" strokeWidth={1.6} />
+                      </span>
+                      <span className="flex min-w-0 flex-col gap-1">
+                        <span className="eyebrow text-[#7d7973]">{t(label.de, label.en)}</span>
+                        <span className="t-label-l text-[#1a1917] transition-colors group-hover:text-[#94713f]">{t(value.de, value.en)}</span>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              <a href={rating.url} target="_blank" rel="noopener noreferrer" className="flex flex-wrap items-center gap-3 lg:pl-2" aria-label={t(`${value} von 5 Sternen aus ${rating.count} Google-Bewertungen`, `${value} out of 5 stars from ${rating.count} Google reviews`)}>
+                <span className="flex gap-[3px]" aria-hidden>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star key={i} className="size-[17px] fill-[#d1aa71] text-[#d1aa71]" strokeWidth={1} />
+                  ))}
+                </span>
+                <span className="t-label-l text-[#1a1917]">{value}</span>
+                <span className="t-body-s text-[#5c5954]">{t(`aus ${rating.count} Google-Bewertungen`, `from ${rating.count} Google reviews`)}</span>
+              </a>
+            </div>
           </div>
-          <KontaktForm initialBranche={initialBranche} />
         </div>
       </Container>
     </section>

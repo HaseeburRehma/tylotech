@@ -8,7 +8,7 @@ export type IconName =
   | "chart-line" | "git-branch" | "search" | "users" | "message-circle" | "clock"
   | "star" | "monitor" | "layers" | "eye" | "user" | "circle-help" | "megaphone"
   | "refresh-cw" | "chart-column" | "gauge" | "circle-alert" | "workflow"
-  | "trending-up" | "award" | "target" | "mail" | "file-text" | "sparkles";
+  | "trending-up" | "award" | "target" | "mail" | "file-text" | "sparkles" | "send";
 
 export type Brand =
   | "google" | "google-ads" | "google-analytics" | "meta" | "linkedin"

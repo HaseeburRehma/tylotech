@@ -2,25 +2,22 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronDown, CircleAlert, LoaderCircle, Lock, Mail, RotateCcw } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, CircleAlert, LoaderCircle, Mail, Phone, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, topicLabel, validate, type FieldErrors } from "@/lib/contact";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 
 type Status = "idle" | "sending" | "sent" | "fallback" | "rate-limited";
 
+/* Figma "Input Field" (Large · 56): white, border/default, radius 12, 18px inset */
 const field =
-  "w-full rounded-[14px] border bg-[#fbfaf9] px-4 text-[15px] leading-[22px] tracking-[-0.1px] text-[#1a1917] outline-none transition-[border-color,background-color,box-shadow] duration-200 placeholder:text-[#a8a49d] hover:border-[#d6d3ce] focus:border-[#d1aa71] focus:bg-white focus:shadow-[0_0_0_4px_rgba(209,170,113,0.18)]";
+  "w-full rounded-[12px] border bg-white px-[18px] text-[16px] leading-[24px] text-[#1a1917] outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-[#a6a29b] hover:border-[#cbc8c2] focus:border-[#d1aa71] focus:shadow-[0_0_0_4px_rgba(209,170,113,0.18)]";
+const fieldBorder = (err?: string) => (err ? "border-[#e5a29b]" : "border-[#e2e0dc]");
 
-function Label({ htmlFor, children, optional }: { htmlFor: string; children: React.ReactNode; optional?: boolean }) {
-  const t = useT();
+function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
   return (
-    <label htmlFor={htmlFor} className="mb-2 flex items-baseline justify-between text-[13.5px] font-medium tracking-[-0.1px] text-[#1a1917]">
-      <span>
-        {children}
-        {!optional && <span className="text-[#b4894d]"> *</span>}
-      </span>
-      {optional && <span className="text-[12px] font-normal text-[#a8a49d]">{t("optional", "optional")}</span>}
+    <label htmlFor={htmlFor} className="mb-2 block text-[14px] font-medium leading-[20px] text-[#1a1917]">
+      {children}
     </label>
   );
 }
@@ -40,8 +37,8 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
   const t = useT();
   const lp = useLocalePath();
   const opened = useRef(0);
-  const [v, setV] = useState({ name: "", company: "", email: "", phone: "", branche: initialBranche, message: "", website: "" });
-  const [topics, setTopics] = useState<string[]>([]);
+  // `branche` is not a visible field: it carries the industry page the visitor came from (?branche=…)
+  const [v, setV] = useState({ name: "", company: "", email: "", phone: "", topic: "", branche: initialBranche, message: "", website: "" });
   const [consent, setConsent] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -52,11 +49,14 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
     opened.current = Date.now();
   }, []);
 
-  const fields = () => ({ ...v, topics, consent });
+  const fields = (next = v, c = consent) => {
+    const { topic, ...rest } = next;
+    return { ...rest, topics: topic ? [topic] : [], consent: c };
+  };
   const set = (k: keyof typeof v) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const next = { ...v, [k]: e.target.value };
     setV(next);
-    if (touched[k]) setErrors(validate({ ...next, topics, consent }, locale));
+    if (touched[k]) setErrors(validate(fields(next), locale));
   };
   // Only check a field on blur once something was typed — an error appearing for an empty
   // field would shift the layout under the pointer and swallow the click that caused the blur.
@@ -65,7 +65,6 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
     setTouched((t) => ({ ...t, [k]: true }));
     setErrors(validate(fields(), locale));
   };
-  const toggleTopic = (topic: string) => setTopics((ts) => (ts.includes(topic) ? ts.filter((x) => x !== topic) : [...ts, topic]));
   const show = (k: keyof FieldErrors) => (touched[k] ? errors[k] : undefined);
 
   const mailto = () => {
@@ -75,7 +74,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
       v.company && `${t("Unternehmen", "Company")}: ${v.company}`,
       v.phone && `${t("Telefon", "Phone")}: ${v.phone}`,
       v.branche && `${t("Branche", "Industry")}: ${t(branche?.label, branche?.labelEn)}`,
-      topics.length > 0 && `${t("Anliegen", "Topics")}: ${topics.map((x) => topicLabel(x, locale)).join(", ")}`,
+      v.topic && `${t("Anliegen", "Topic")}: ${topicLabel(v.topic, locale)}`,
     ]
       .filter(Boolean)
       .concat("", v.message)
@@ -117,8 +116,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
   }
 
   const reset = () => {
-    setV({ name: "", company: "", email: "", phone: "", branche: "", message: "", website: "" });
-    setTopics([]);
+    setV({ name: "", company: "", email: "", phone: "", topic: "", branche: "", message: "", website: "" });
     setConsent(false);
     setErrors({});
     setTouched({});
@@ -133,11 +131,11 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           <circle cx="44" cy="44" r="40" fill="#fbf6ee" stroke="#d1aa71" strokeWidth="2" pathLength={1} strokeDasharray="1" className="animate-[ktDraw_0.8s_ease-out_both]" />
           <path d="M28 45.5 39.5 57 61 33" fill="none" stroke="#94713f" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" className="animate-[ktDraw_0.5s_0.55s_ease-out_both]" />
         </svg>
-        <h3 className="font-display text-[clamp(1.6rem,2.6vw,2rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-[#1a1917]">
+        <h3 className="t-h3 text-[#1a1917]">
           {t("Danke", "Thank you")}, {v.name.trim().split(/\s+/)[0]}!
         </h3>
-        <p className="max-w-[400px] text-[16px] leading-[26px] tracking-[-0.16px] text-[#5c5954]">
-          {t("Deine Anfrage ist bei uns angekommen. Wir melden uns persönlich bei dir unter ", "Your enquiry has reached us. We'll get back to you personally at ")}
+        <p className="t-body-m max-w-[400px] text-[#5c5954]">
+          {t("Deine Nachricht ist bei uns angekommen. Wir melden uns persönlich bei dir unter ", "Your message has reached us. We'll get back to you personally at ")}
           <span className="font-medium text-[#1a1917]">{v.email}</span>.
         </p>
         <button
@@ -146,7 +144,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           className="mt-2 inline-flex h-11 items-center gap-2 rounded-full border border-[rgba(8,34,44,0.08)] bg-white px-5 text-[14px] font-medium text-[#1a1917] shadow-[0_1px_2px_rgba(8,34,44,0.05),0_4px_12px_rgba(8,34,44,0.07)] transition-colors hover:bg-[#fbfaf9]"
         >
           <RotateCcw className="size-4" strokeWidth={1.8} />
-          {t("Weitere Anfrage senden", "Send another enquiry")}
+          {t("Weitere Nachricht senden", "Send another message")}
         </button>
       </div>
     );
@@ -155,44 +153,14 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
   const sending = status === "sending";
 
   return (
-    <form onSubmit={submit} noValidate className="flex flex-col gap-6" aria-busy={sending}>
+    <form onSubmit={submit} noValidate className="flex flex-col gap-5" aria-busy={sending}>
       {/* honeypot — invisible to people, tempting for bots */}
       <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="kf-website">Website</label>
         <input id="kf-website" tabIndex={-1} autoComplete="off" value={v.website} onChange={set("website")} />
       </div>
 
-      <fieldset className="kf-row">
-        <legend className="mb-3 text-[13.5px] font-medium tracking-[-0.1px] text-[#1a1917]">
-          {t("Worum geht es?", "What's it about?")} <span className="font-normal text-[#a8a49d]">{t("Mehrfachauswahl möglich", "Select all that apply")}</span>
-        </legend>
-        <div className="flex flex-wrap gap-2">
-          {TOPICS.map((topic) => {
-            const on = topics.includes(topic);
-            return (
-              <button
-                key={topic}
-                type="button"
-                aria-pressed={on}
-                onClick={() => toggleTopic(topic)}
-                className={cn(
-                  "inline-flex h-10 items-center gap-1.5 rounded-full border px-4 text-[13.5px] font-medium tracking-[-0.1px] transition-[background-color,border-color,color,box-shadow] duration-200 active:scale-[0.98]",
-                  on
-                    ? "border-[#d1aa71] bg-[#fbf6ee] text-[#7a5b30] shadow-[0_4px_14px_-6px_rgba(168,127,69,0.45)]"
-                    : "border-[#e2e0dc] bg-white text-[#5c5954] hover:border-[#d6d3ce] hover:text-[#1a1917]",
-                )}
-              >
-                <span className={cn("grid place-items-center overflow-hidden transition-[width,opacity] duration-200", on ? "w-3.5 opacity-100" : "w-0 opacity-0")}>
-                  <Check className="size-3.5 shrink-0" strokeWidth={2.4} />
-                </span>
-                {topicLabel(topic, locale)}
-              </button>
-            );
-          })}
-        </div>
-      </fieldset>
-
-      <div className="kf-row grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div className="kf-row grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4">
         <div>
           <Label htmlFor="kf-name">Name</Label>
           <input
@@ -205,110 +173,108 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             aria-invalid={!!show("name")}
             aria-describedby={show("name") ? "kf-name-err" : undefined}
             placeholder={t("Vor- und Nachname", "First and last name")}
-            className={cn(field, "h-[52px]", show("name") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
+            className={cn(field, "h-14", fieldBorder(show("name")))}
           />
           <Err id="kf-name-err" msg={show("name")} />
         </div>
         <div>
-          <Label htmlFor="kf-company" optional>
-            {t("Unternehmen", "Company")}
-          </Label>
+          <Label htmlFor="kf-company">{t("Unternehmen", "Company")}</Label>
           <input
             id="kf-company"
             autoComplete="organization"
             maxLength={LIMITS.company}
             value={v.company}
             onChange={set("company")}
-            placeholder={t("Firmenname", "Company name")}
-            className={cn(field, "h-[52px] border-[#e2e0dc]")}
+            placeholder={t("Firma oder Betrieb", "Company or business")}
+            className={cn(field, "h-14", fieldBorder())}
           />
         </div>
+      </div>
+
+      <div className="kf-row grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4">
         <div>
           <Label htmlFor="kf-email">{t("E-Mail", "Email")}</Label>
-          <input
-            id="kf-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            maxLength={LIMITS.email}
-            value={v.email}
-            onChange={set("email")}
-            onBlur={blur("email")}
-            aria-invalid={!!show("email")}
-            aria-describedby={show("email") ? "kf-email-err" : undefined}
-            placeholder={t("du@firma.de", "you@company.com")}
-            className={cn(field, "h-[52px]", show("email") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
-          />
+          <div className="relative">
+            <Mail aria-hidden className="pointer-events-none absolute left-[18px] top-1/2 size-5 -translate-y-1/2 text-[#5c5954]" strokeWidth={1.6} />
+            <input
+              id="kf-email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              maxLength={LIMITS.email}
+              value={v.email}
+              onChange={set("email")}
+              onBlur={blur("email")}
+              aria-invalid={!!show("email")}
+              aria-describedby={show("email") ? "kf-email-err" : undefined}
+              placeholder={t("name@unternehmen.de", "name@company.com")}
+              className={cn(field, "h-14 pl-12", fieldBorder(show("email")))}
+            />
+          </div>
           <Err id="kf-email-err" msg={show("email")} />
         </div>
         <div>
-          <Label htmlFor="kf-phone" optional>
-            {t("Telefon", "Phone")}
-          </Label>
-          <input
-            id="kf-phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            maxLength={LIMITS.phone}
-            value={v.phone}
-            onChange={set("phone")}
-            onBlur={blur("phone")}
-            aria-invalid={!!show("phone")}
-            aria-describedby={show("phone") ? "kf-phone-err" : undefined}
-            placeholder={t("Für einen schnellen Rückruf", "For a quick call back")}
-            className={cn(field, "h-[52px]", show("phone") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
-          />
+          <Label htmlFor="kf-phone">{t("Telefon (optional)", "Phone (optional)")}</Label>
+          <div className="relative">
+            <Phone aria-hidden className="pointer-events-none absolute left-[18px] top-1/2 size-5 -translate-y-1/2 text-[#5c5954]" strokeWidth={1.6} />
+            <input
+              id="kf-phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              maxLength={LIMITS.phone}
+              value={v.phone}
+              onChange={set("phone")}
+              onBlur={blur("phone")}
+              aria-invalid={!!show("phone")}
+              aria-describedby={show("phone") ? "kf-phone-err" : undefined}
+              placeholder={t("0211 1234567", "+49 211 1234567")}
+              className={cn(field, "h-14 pl-12", fieldBorder(show("phone")))}
+            />
+          </div>
           <Err id="kf-phone-err" msg={show("phone")} />
         </div>
       </div>
 
       <div className="kf-row">
-        <Label htmlFor="kf-branche" optional>
-          {t("Branche", "Industry")}
-        </Label>
+        <Label htmlFor="kf-topic">{t("Worum geht es?", "What's it about?")}</Label>
         <div className="relative">
           <select
-            id="kf-branche"
-            value={v.branche}
-            onChange={set("branche")}
-            className={cn(field, "h-[52px] cursor-pointer appearance-none border-[#e2e0dc] pr-11", !v.branche && "text-[#a8a49d]")}
+            id="kf-topic"
+            value={v.topic}
+            onChange={set("topic")}
+            className={cn(field, "h-14 cursor-pointer appearance-none pr-12", fieldBorder(), !v.topic && "text-[#a6a29b]")}
           >
-            <option value="">{t("Bitte auswählen", "Please select")}</option>
-            {BRANCHE_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value} className="text-[#1a1917]">
-                {t(o.label, o.labelEn)}
+            <option value="">{t("Auswählen", "Select")}</option>
+            {TOPICS.map((topic) => (
+              <option key={topic} value={topic} className="text-[#1a1917]">
+                {topicLabel(topic, locale)}
               </option>
             ))}
           </select>
-          <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-[18px] -translate-y-1/2 text-[#7d7973]" strokeWidth={1.8} />
+          <ChevronDown aria-hidden className="pointer-events-none absolute right-[18px] top-1/2 size-5 -translate-y-1/2 text-[#5c5954]" strokeWidth={1.6} />
         </div>
       </div>
 
       <div className="kf-row">
-        <Label htmlFor="kf-message">{t("Nachricht", "Message")}</Label>
+        <Label htmlFor="kf-message">{t("Deine Nachricht", "Your message")}</Label>
         <textarea
           id="kf-message"
-          rows={5}
+          rows={4}
           maxLength={LIMITS.message}
           value={v.message}
           onChange={set("message")}
           onBlur={blur("message")}
           aria-invalid={!!show("message")}
-          aria-describedby={show("message") ? "kf-message-err" : "kf-message-hint"}
-          placeholder={t("Wo stehst du gerade, und was soll sich ändern?", "Where are you right now, and what should change?")}
-          className={cn(field, "min-h-[140px] resize-y py-3.5", show("message") ? "border-[#e5a29b]" : "border-[#e2e0dc]")}
+          aria-describedby={show("message") ? "kf-message-err" : undefined}
+          placeholder={t("Erzähl uns kurz, wo du stehst und was du erreichen willst.", "Tell us briefly where you stand and what you want to achieve.")}
+          className={cn(field, "block h-[148px] resize-none py-4", fieldBorder(show("message")))}
         />
-        <div className="flex items-start justify-between gap-3">
-          <Err id="kf-message-err" msg={show("message")} />
-          <span id="kf-message-hint" className="ml-auto mt-1.5 shrink-0 font-mono text-[11px] tabular-nums text-[#a8a49d]">
-            {v.message.length}/{LIMITS.message}
-          </span>
-        </div>
+        <Err id="kf-message-err" msg={show("message")} />
       </div>
 
       <div className="kf-row">
-        <label htmlFor="kf-consent" className="group flex cursor-pointer items-start gap-3">
+        <label htmlFor="kf-consent" className="group flex cursor-pointer items-start gap-2.5">
           <input
             id="kf-consent"
             type="checkbox"
@@ -316,7 +282,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
             onChange={(e) => {
               setConsent(e.target.checked);
               setTouched((t) => ({ ...t, consent: true }));
-              setErrors(validate({ ...fields(), consent: e.target.checked }, locale));
+              setErrors(validate(fields(v, e.target.checked), locale));
             }}
             aria-invalid={!!show("consent")}
             aria-describedby={show("consent") ? "kf-consent-err" : undefined}
@@ -324,28 +290,18 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
           />
           <span
             className={cn(
-              "mt-0.5 grid size-5 shrink-0 place-items-center rounded-[6px] border transition-colors duration-200 peer-focus-visible:shadow-[0_0_0_4px_rgba(209,170,113,0.25)]",
-              consent ? "border-[#b4894d] bg-[#d1aa71] text-white" : show("consent") ? "border-[#e5a29b] bg-white" : "border-[#d6d3ce] bg-white group-hover:border-[#b4894d]",
+              "mt-px grid size-5 shrink-0 place-items-center rounded-[5px] border transition-colors duration-200 peer-focus-visible:shadow-[0_0_0_4px_rgba(209,170,113,0.25)]",
+              consent ? "border-[#b4894d] bg-[#d1aa71] text-white" : show("consent") ? "border-[#e5a29b] bg-white" : "border-[#cbc8c2] bg-white group-hover:border-[#b4894d]",
             )}
           >
             <Check className={cn("size-3.5 transition-transform duration-200", consent ? "scale-100" : "scale-0")} strokeWidth={3} />
           </span>
-          <span className="text-[13.5px] leading-[21px] text-[#5c5954]">
-            {locale === "en" ? (
-              <>
-                I agree that TyloTech may process my details in order to handle my enquiry. I can withdraw my consent at any time by emailing{" "}
-                {CONTACT.email}. More in the{" "}
-              </>
-            ) : (
-              <>
-                Ich bin einverstanden, dass TyloTech meine Angaben zur Bearbeitung meiner Anfrage verarbeitet. Die Einwilligung kann ich jederzeit per
-                E-Mail an {CONTACT.email} widerrufen. Mehr in der{" "}
-              </>
-            )}
-            <Link href={lp("/datenschutz")} target="_blank" className="font-medium text-[#94713f] underline decoration-[#d1aa71]/50 underline-offset-2 hover:text-[#6d5330]">
+          <span className="t-body-s text-[#5c5954]">
+            {t("Ich habe die ", "I have read the ")}
+            <Link href={lp("/datenschutz")} target="_blank" className="underline decoration-[#cbc8c2] underline-offset-2 transition-colors hover:text-[#1a1917] hover:decoration-[#d1aa71]">
               {t("Datenschutzerklärung", "privacy policy")}
             </Link>
-            .<span className="text-[#b4894d]"> *</span>
+            {t(" gelesen und bin einverstanden.", " and agree.")}
           </span>
         </label>
         <Err id="kf-consent-err" msg={show("consent")} />
@@ -381,28 +337,26 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
         </p>
       )}
 
-      <div className="kf-row flex flex-col gap-3">
+      <div className="kf-row flex flex-col gap-5">
+        {/* Figma "Button" Primary · Large (dark petrol, Bevel/Dark CTA) */}
         <button
           type="submit"
           disabled={sending}
-          className="group relative inline-flex h-[58px] w-full items-center justify-center gap-2.5 rounded-full bg-[linear-gradient(180deg,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0.02)_55%,rgba(255,255,255,0)_100%),linear-gradient(90deg,#efdcbc_0%,#d8b681_45%,#b4894d_100%)] text-[16px] font-medium tracking-[-0.1px] text-[#0f0e0d] shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate,opacity] duration-200 hover:brightness-105 active:translate-y-px disabled:cursor-wait disabled:opacity-80"
+          className="group relative inline-flex h-[58px] w-full items-center justify-center gap-2.5 rounded-full bg-[linear-gradient(180deg,rgba(255,255,255,0.16)_0%,rgba(255,255,255,0.02)_55%,rgba(0,0,0,0.18)_100%),linear-gradient(180deg,#17485b_0%,#04161d_100%)] px-7 t-button text-white shadow-[0_6px_18px_rgba(4,22,29,0.22),inset_0_1.5px_1.5px_rgba(255,255,255,0.16),inset_0_-1.5px_1.5px_rgba(0,0,0,0.3)] transition-[filter,translate,opacity] duration-200 hover:brightness-125 active:translate-y-px disabled:cursor-wait disabled:opacity-80"
         >
           {sending ? (
             <>
-              <LoaderCircle className="size-[18px] animate-spin" strokeWidth={2} />
+              <LoaderCircle className="size-5 animate-spin" strokeWidth={2} />
               {t("Wird gesendet …", "Sending …")}
             </>
           ) : (
             <>
-              {t("Anfrage senden", "Send enquiry")}
-              <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
+              {t("Nachricht senden", "Send message")}
+              <ArrowRight className="size-5 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={1.8} />
             </>
           )}
         </button>
-        <p className="flex items-center justify-center gap-1.5 text-[12.5px] text-[#7d7973]">
-          <Lock className="size-3.5" strokeWidth={1.8} />
-          {t("Verschlüsselte Übertragung · kein Newsletter, kein Spam", "Encrypted transmission · no newsletter, no spam")}
-        </p>
+        <p className="t-body-xs text-center text-[#7d7973]">{t("Kein Newsletter, keine Weitergabe deiner Daten.", "No newsletter, your data is never passed on.")}</p>
       </div>
     </form>
   );

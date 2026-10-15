@@ -27,6 +27,7 @@ import {
   Search,
   ShieldCheck,
   Sparkles,
+  Send,
   Star,
   Store,
   Target,
@@ -72,6 +73,7 @@ const ICONS: Record<IconName, LucideIcon> = {
   mail: Mail,
   "file-text": FileText,
   sparkles: Sparkles,
+  send: Send,
 };
 
 export function Icon({ name, className, strokeWidth = 1.7 }: { name: IconName; className?: string; strokeWidth?: number }) {

@@ -65,7 +65,7 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
 
   useGSAP(
     () => {
-      gsap.from(".faq-left > *", {
+      gsap.from(".faq-left > *, .faq-hint", {
         y: 24,
         opacity: 0,
         duration: 0.8,
@@ -91,8 +91,8 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
       ref={root}
       className={br ? "scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-28" : "border-t border-line bg-[#f3f5f6] py-14 sm:py-24"}
     >
-      <Container className={br ? "grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,400px)_1fr] lg:gap-14 xl:gap-20" : "grid grid-cols-1 gap-10 lg:grid-cols-[380px_1fr] lg:gap-14"}>
-        <div className="faq-left">
+      <Container className={br ? "grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[minmax(0,400px)_1fr] lg:grid-rows-[auto_1fr] lg:gap-x-14 lg:gap-y-8 xl:gap-x-20" : "grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[380px_1fr] lg:grid-rows-[auto_1fr] lg:gap-x-14 lg:gap-y-8"}>
+        <div className="faq-left lg:col-start-1 lg:row-start-1">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <HelpCircle className="size-3.5 text-accent" />
             {t("Häufige Fragen", "Common questions")}
@@ -103,32 +103,9 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
               {t("fast jeder stellt.", "almost everyone asks.")}
             </span>
           </h2>
-
-          <div className="mt-8 rounded-[18px] border border-line bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,14,13,0.2)]">
-            <p className="font-display text-[17px] font-medium leading-[24px] tracking-[-0.3px] text-ink max-sm:font-semibold max-sm:tracking-normal">
-              {t("Deine Frage steht nicht dabei?", "Your question isn’t here?")}
-            </p>
-            <p className="t-body-s mt-2 text-[#5c5954]">
-              {t("Ruf einfach an:", "Just give us a call:")}{" "}
-              <a href="tel:+4921115847097" className="whitespace-nowrap font-medium text-ink underline-offset-2 hover:underline">
-                {t("0211 15847097", "+49 211 15847097")}
-              </a>
-              {t(
-                ". Du sprichst direkt mit jemandem, der antworten kann.",
-                ". You’ll speak directly to someone who can actually answer.",
-              )}
-            </p>
-            <Link
-              href={lp("/kontakt")}
-              className="group mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
-            >
-              {t("Erstgespräch sichern", "Book your intro call")}
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </div>
         </div>
 
-        <div className="faq-list flex flex-col gap-3">
+        <div className="faq-list flex flex-col gap-3 lg:col-start-2 lg:row-span-2 lg:row-start-1">
           {items.map((item, i) => {
             const on = open === i;
             return (
@@ -191,6 +168,28 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
               </div>
             );
           })}
+        </div>
+        <div className="faq-hint self-start rounded-[18px] lg:col-start-1 lg:row-start-2 border border-line bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,14,13,0.2)]">
+          <p className="font-display text-[17px] font-medium leading-[24px] tracking-[-0.3px] text-ink max-sm:font-semibold max-sm:tracking-normal">
+            {t("Deine Frage steht nicht dabei?", "Your question isn’t here?")}
+          </p>
+          <p className="t-body-s mt-2 text-[#5c5954]">
+            {t("Ruf einfach an:", "Just give us a call:")}{" "}
+            <a href="tel:+4921115847097" className="whitespace-nowrap font-medium text-ink underline-offset-2 hover:underline">
+              {t("0211 15847097", "+49 211 15847097")}
+            </a>
+            {t(
+              ". Du sprichst direkt mit jemandem, der antworten kann.",
+              ". You’ll speak directly to someone who can actually answer.",
+            )}
+          </p>
+          <Link
+            href={`${lp("/kontakt")}#formular`}
+            className="group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 sm:w-auto sm:justify-start rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
+          >
+            {t("Erstgespräch sichern", "Book your intro call")}
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </div>
       </Container>
     </section>

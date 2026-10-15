@@ -624,7 +624,7 @@ html.lenis body {
   }
 }
 
-/* Kontakt · success check draw, map pin pulse, review progress */
+/* Kontakt · success check draw, map pin pulse */
 @keyframes ktDraw {
   from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
@@ -632,10 +632,6 @@ html.lenis body {
 @keyframes ktPin {
   0% { transform: scale(0.6); opacity: 0.7; }
   100% { transform: scale(2.6); opacity: 0; }
-}
-@keyframes ktProgress {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
 }
 
 /* Branchen hero · lead cards float gently (uses `translate`, independent of GSAP transforms) */

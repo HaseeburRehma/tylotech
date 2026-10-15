@@ -3,7 +3,9 @@ import Footer from "@/components/Footer";
 import FloatingActionBar from "@/components/FloatingActionBar";
 import KontaktHero from "@/components/kontakt/KontaktHero";
 import KontaktStandort from "@/components/kontakt/KontaktStandort";
-import KontaktBewertungen from "@/components/kontakt/KontaktBewertungen";
+import KontaktWege from "@/components/kontakt/KontaktWege";
+import TrustStrip from "@/components/sections/TrustStrip";
+import FAQ from "@/components/sections/FAQ";
 import { getGoogleReviews } from "@/lib/reviews";
 import { BRANCHE_OPTIONS } from "@/lib/contact";
 import { BRANCHE_SLUG_EN } from "@/lib/i18n";
@@ -20,9 +22,12 @@ export default async function KontaktPage({ branche }: { branche?: string | stri
     <>
       <Nav />
       <main>
-        <KontaktHero initialBranche={initialBranche} />
+        {/* Figma "TyloTech - Kontakt": Kontakt · Partner · Wege · Standort · FAQ */}
+        <KontaktHero initialBranche={initialBranche} rating={{ value: reviews.rating, count: reviews.count, url: reviews.url }} />
+        <TrustStrip tone="branche" />
+        <KontaktWege />
         <KontaktStandort />
-        <KontaktBewertungen data={reviews} />
+        <FAQ tone="branche" />
       </main>
       <Footer />
       <FloatingActionBar />
