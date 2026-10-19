@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import type { Branche, Kanal } from "@/lib/branchen";
 import { BrandLogo, Eyebrow, GoldButton, Icon } from "./ui";
 import { useT } from "../i18n/LocaleProvider";
@@ -134,7 +134,7 @@ export default function BrancheLoesung({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = (trigger: string, start = "top 80%") => ({ trigger, start, toggleActions: "play none none none" });
       gsap.from(".bhl-panel", { y: 40, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: st(".bhl-panel", "top 85%") });

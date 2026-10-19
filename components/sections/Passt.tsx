@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { Target, CircleCheck, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 
 type Item = { normal: string; bold: string };
@@ -20,7 +20,7 @@ export default function Passt() {
   const root = useRef<HTMLDivElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".passt-head > *", {
         y: 24,

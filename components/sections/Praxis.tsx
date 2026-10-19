@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ArrowRight, TrendingUp } from "lucide-react";
 import Container from "../ui/Container";
 import BrandIcon from "../icons/BrandIcon";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useLazyGSAP } from "@/lib/gsap";
 
 /* ------------------------------------------------------------------ */
 /* Card shell                                                          */
@@ -534,7 +534,7 @@ function ReachCard() {
 export default function Praxis() {
   const root = useRef<HTMLDivElement>(null);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".praxis-head > *", {
         y: 24,

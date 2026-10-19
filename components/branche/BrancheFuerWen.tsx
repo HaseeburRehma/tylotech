@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import type { Branche } from "@/lib/branchen";
 import { SectionHead } from "./ui";
@@ -17,7 +17,7 @@ export default function BrancheFuerWen({ b }: { b: Branche }) {
   const f = b.fuerWen;
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = (trigger: string, start = "top 82%") => ({ trigger, start, toggleActions: "play none none none" });
       gsap.from(".bh-head > *", { y: 24, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.1, scrollTrigger: st(".bh-head") });

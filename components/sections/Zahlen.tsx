@@ -9,7 +9,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { formatNumber, type Locale } from "@/lib/i18n";
 import { useLocale, useT } from "../i18n/LocaleProvider";
 
@@ -37,7 +37,7 @@ export default function Zahlen() {
   const locale = useLocale();
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".zahlen-head > *", {
         y: 24,

@@ -14,7 +14,7 @@ import {
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useLazyGSAP } from "@/lib/gsap";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 
 type IndustryText = {
@@ -163,7 +163,7 @@ export default function Branchen() {
     setActive(i);
   };
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".br-head > *", {
         y: 24,

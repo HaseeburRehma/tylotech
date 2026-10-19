@@ -3,14 +3,14 @@
 import { useRef } from "react";
 import { UserRound, Quote } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 
 export default function Gruender() {
   const root = useRef<HTMLDivElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".gr-card", {
         y: 40,

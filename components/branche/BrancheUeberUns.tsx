@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Quote } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { Eyebrow } from "./ui";
 import { useT } from "../i18n/LocaleProvider";
 
@@ -13,7 +13,7 @@ export default function BrancheUeberUns() {
   const root = useRef<HTMLElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = { trigger: ".bhu-card", start: "top 80%", toggleActions: "play none none none" };
       gsap.from(".bhu-card", { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: st });

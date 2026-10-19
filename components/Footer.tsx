@@ -8,7 +8,7 @@ import { MapPin, Mail, Phone, ShieldCheck, Server, Quote } from "lucide-react";
 import Container from "./ui/Container";
 import PartnerLogo from "./PartnerLogo";
 import { PARTNERS } from "@/lib/partners";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useLocalePath, useT } from "./i18n/LocaleProvider";
 import LanguageSwitch from "./i18n/LanguageSwitch";
 
@@ -110,7 +110,7 @@ export default function Footer() {
   const lp = useLocalePath();
   const label = (de: string) => t(de, LABEL_EN[de] ?? de);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".footer-reveal", {
         y: 26,

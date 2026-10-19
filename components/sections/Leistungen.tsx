@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 
 const SERVICES = [
   { img: "/illustrations/digital.png", title: "Digitale Lösungen", desc: "Web, Apps und Individualsoftware" },
@@ -16,7 +16,7 @@ const SERVICES = [
 export default function Leistungen() {
   const root = useRef<HTMLDivElement>(null);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".leist-head > *", {
         y: 24,

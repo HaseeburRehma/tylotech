@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Play, Music, ArrowUpRight, Headphones, Volume2 } from "lucide-react";
 import { useYouTubePlaying } from "@/lib/useYouTubePlaying";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import { pick } from "@/lib/i18n";
 import { useLocale, useT } from "../i18n/LocaleProvider";
@@ -104,7 +104,7 @@ export default function Podcast() {
     return () => io.disconnect();
   }, []);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = { trigger: ".podcast-chat", start: "top 80%", toggleActions: "play none none none" };
       gsap.from(".podcast-eyebrow", { y: 18, opacity: 0, duration: 0.6, ease: "power3.out", scrollTrigger: st });

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { RotateCw, Users, TrendingUp, Layers } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 import { trackSpotlight } from "@/lib/spotlight";
 
@@ -47,7 +47,7 @@ export default function Wachstum() {
   const root = useRef<HTMLDivElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".hebel-head > *", {
         y: 24,

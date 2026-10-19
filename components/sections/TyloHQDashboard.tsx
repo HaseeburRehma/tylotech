@@ -19,7 +19,7 @@ function HQAppPlaceholder() {
   );
 }
 import { TYLOHQ_URL } from "@/lib/site";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useLazyGSAP } from "@/lib/gsap";
 import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 const FEATURES = [
@@ -72,7 +72,7 @@ export default function TyloHQDashboard() {
   const t = useT();
   const lp = useLocalePath();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".hqd-head > *", {
         y: 24,

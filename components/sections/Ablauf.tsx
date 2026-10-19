@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Container from "../ui/Container";
 import { cn } from "@/lib/cn";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 const STEPS = [
@@ -74,7 +74,7 @@ export default function Ablauf() {
   const t = useT();
   const lp = useLocalePath();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".ablauf-head > *", {
         y: 24,

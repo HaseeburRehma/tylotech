@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Container from "../ui/Container";
 import PartnerLogo from "../PartnerLogo";
 import { PARTNERS } from "@/lib/partners";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 
 /** `tone="branche"`: industry-page Figma frame (white, 56/72 padding, own caption) */
@@ -13,7 +13,7 @@ export default function TrustStrip({ tone = "home" }: { tone?: "home" | "branche
   const track = useRef<HTMLDivElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       if (!track.current) return;
       const loop = gsap.to(track.current, {

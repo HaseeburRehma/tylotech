@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { BrandLogo, Eyebrow, Icon } from "./ui";
 import { useT } from "../i18n/LocaleProvider";
 
@@ -10,7 +10,7 @@ export default function BrancheGeo() {
   const root = useRef<HTMLElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = { trigger: ".bhg-visual", start: "top 78%", toggleActions: "play none none none" };
       gsap.from(".bhg-text > *", { y: 24, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.1, scrollTrigger: { ...st, trigger: ".bhg-text", start: "top 82%" } });

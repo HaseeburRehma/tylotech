@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Layers, CircleCheck, CircleHelp } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 
 /* ---- mini flow visuals (light theme) ----------------------------- */
@@ -210,7 +210,7 @@ export default function Arbeitsweise() {
   const root = useRef<HTMLDivElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".aw-head > *", {
         y: 24,

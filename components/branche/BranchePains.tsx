@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import type { Branche, Brand, PainVisual } from "@/lib/branchen";
 import { BrandLogo, SectionHead, useInView } from "./ui";
@@ -178,7 +178,7 @@ export default function BranchePains({ b }: { b: Branche }) {
   const root = useRef<HTMLElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = (trigger: string | HTMLElement, start = "top 82%") => ({ trigger, start, toggleActions: "play none none none" });
       gsap.from(".bh-head > *", { y: 24, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.1, scrollTrigger: st(".bh-head") });

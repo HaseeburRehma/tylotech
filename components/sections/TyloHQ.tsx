@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, LayoutDashboard, TrendingDown, TrendingUp } from "lucide-react";
 import Container from "../ui/Container";
 import { cn } from "@/lib/cn";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useLazyGSAP } from "@/lib/gsap";
 import { formatNumber } from "@/lib/i18n";
 import { useLocale, useT } from "../i18n/LocaleProvider";
 
@@ -258,7 +258,7 @@ export default function TyloHQ() {
   const [skinHover, setSkinHover] = useState<number | null>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".hq-head > *", {
         y: 24,

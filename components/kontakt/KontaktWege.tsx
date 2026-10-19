@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { ArrowRight, LayoutDashboard, Rocket, Users } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { CONTACT } from "@/lib/contact";
 import { TYLOHQ_URL } from "@/lib/site";
 import { SectionHead } from "../branche/ui";
@@ -50,7 +50,7 @@ export default function KontaktWege() {
   const root = useRef<HTMLElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".bh-head > *", { y: 22, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.08, scrollTrigger: { trigger: ".bh-head", start: "top 85%", toggleActions: "play none none none" } });
       gsap.from(".kw-card", { y: 28, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.1, clearProps: "transform,opacity", scrollTrigger: { trigger: ".kw-grid", start: "top 85%", toggleActions: "play none none none" } });

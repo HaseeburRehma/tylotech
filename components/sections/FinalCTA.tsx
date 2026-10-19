@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { CalendarDays, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
 export default function FinalCTA() {
@@ -12,7 +12,7 @@ export default function FinalCTA() {
   const t = useT();
   const lp = useLocalePath();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".cta-panel", {
         y: 40,

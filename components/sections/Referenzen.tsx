@@ -287,6 +287,8 @@ export default function Referenzen() {
     };
   }, []);
 
+  // eager (not useLazyGSAP): the pin adds ~5 screens of scroll distance, which
+  // must exist from the start so anchor jumps past this section stay stable
   useGSAP(
     () => {
       gsap.from(".ref-head > *", {

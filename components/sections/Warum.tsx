@@ -3,7 +3,7 @@
 import { useId, useRef, useState } from "react";
 import { RotateCw, Users, TrendingUp, Wrench, AppWindow, Network, Workflow } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 import { cn } from "@/lib/cn";
 import { trackSpotlight } from "@/lib/spotlight";
@@ -87,7 +87,7 @@ export default function Warum() {
   // which "Ergänzend" chip is open (null = panel closed)
   const [extra, setExtra] = useState<number | null>(null);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".warum-head > *", {
         y: 24,

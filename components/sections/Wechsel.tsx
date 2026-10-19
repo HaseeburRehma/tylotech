@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { Monitor } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 
 type Text = { t: string; b: string; alt?: string };
@@ -80,7 +80,7 @@ export default function Wechsel() {
     setActive(i);
   };
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".wx-head > *", {
         y: 24,

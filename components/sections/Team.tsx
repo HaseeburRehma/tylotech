@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 
 const MEMBERS = [
   { name: "Lena Brandt", role: "Geschäftsführung", img: "/team/lena-brandt.png" },
@@ -73,7 +73,7 @@ export default function Team() {
     };
   }, []);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".team-head > *", {
         y: 24,

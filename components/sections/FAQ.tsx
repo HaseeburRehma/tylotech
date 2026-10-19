@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { Plus, Minus, HelpCircle, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 
 const ITEMS_DE = [
@@ -63,7 +63,7 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
   const root = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(0);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".faq-left > *, .faq-hint", {
         y: 24,

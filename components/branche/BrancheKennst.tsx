@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import type { Branche } from "@/lib/branchen";
 import { Accent, Icon, SectionHead } from "./ui";
 import { useT } from "../i18n/LocaleProvider";
@@ -12,7 +12,7 @@ export default function BrancheKennst({ b }: { b: Branche }) {
   const k = b.kennst;
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = (trigger: string, start = "top 82%") => ({ trigger, start, toggleActions: "play none none none" });
       gsap.from(".bh-head > *", { y: 24, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.1, scrollTrigger: st(".bh-head") });

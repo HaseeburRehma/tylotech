@@ -4,7 +4,7 @@ import { enableSnap, useLazySnap } from "@/lib/useLazySnap";
 import { useEffect, useRef } from "react";
 import { Star, Quote, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { pick } from "@/lib/i18n";
 import { useLocale, useT } from "../i18n/LocaleProvider";
 
@@ -214,7 +214,7 @@ export default function Stimmen() {
   useLazySnap(scroller);
   const paused = useRef(false);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".stimmen-head > *", {
         y: 24,

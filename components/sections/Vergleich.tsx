@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { X, Check } from "lucide-react";
 import Container from "../ui/Container";
 import SectionHeading from "../ui/SectionHeading";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 
 const ROWS = [
   { c: "Ansprechpartner", a: "Wechselndes Ticket-Team", b: "Ein fester Ansprechpartner mit Namen" },
@@ -18,7 +18,7 @@ const ROWS = [
 export default function Vergleich() {
   const root = useRef<HTMLDivElement>(null);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".verg-head > *", {
         y: 24,

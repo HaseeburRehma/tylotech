@@ -11,7 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 
 type CaseText = {
@@ -159,7 +159,7 @@ export default function Diagnose() {
   const t = useT();
   const cases: Case[] = CASES.map(({ de, en, ...base }) => ({ ...base, ...t(de, en) }));
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".dg-head > *", {
         y: 24,

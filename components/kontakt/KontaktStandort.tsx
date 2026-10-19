@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { CONTACT, mapsRouteUrl } from "@/lib/contact";
 import { SectionHead } from "../branche/ui";
 import { useT } from "../i18n/LocaleProvider";
@@ -35,7 +35,7 @@ export default function KontaktStandort() {
   const root = useRef<HTMLElement>(null);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".bh-head > *", { y: 22, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.08, scrollTrigger: { trigger: ".bh-head", start: "top 85%", toggleActions: "play none none none" } });
       gsap.from(".ks-card", { y: 24, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.15, clearProps: "transform,opacity", scrollTrigger: { trigger: ".ks-map", start: "top 80%", toggleActions: "play none none none" } });

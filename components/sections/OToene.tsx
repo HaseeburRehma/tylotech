@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Play, Plus, Quote, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 
 const YT = "vSIs3xcjzG4";
 
@@ -159,7 +159,7 @@ export default function OToene() {
   const paused = useRef(false);
   const [playing, setPlaying] = useState<number | null>(null);
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       gsap.from(".oton-head > *", {
         y: 24,

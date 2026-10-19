@@ -6,8 +6,8 @@ import { useT } from "../i18n/LocaleProvider";
 
 /* The poster is the hero's largest element, so it is served from our own
    domain (public/hero, WebP) at high priority. The YouTube player (~2 MB of
-   script and video) mounts on the first interaction or 3.5 s after load —
-   it no longer competes with the first paint. */
+   script and video) mounts on the first interaction (or 3.5 s after load on
+   desktop) — it no longer competes with the first paint. */
 export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const t = useT();
@@ -19,8 +19,11 @@ export default function HeroVideoCard({ videoId }: { videoId: string }) {
     const EVENTS = ["scroll", "pointermove", "pointerdown", "touchstart", "keydown"] as const;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const go = () => setMountVideo(true);
+    // phones: only on interaction (touch/scroll). The player costs ~2 MB of data and
+    // a busy main thread right when the page should become responsive.
+    const touch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
     const afterLoad = () => {
-      timer = setTimeout(go, 3500);
+      if (!touch) timer = setTimeout(go, 3500);
     };
     EVENTS.forEach((ev) => window.addEventListener(ev, go, { once: true, passive: true }));
     if (document.readyState === "complete") afterLoad();

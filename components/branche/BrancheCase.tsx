@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { CircleCheck, X } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 import type { Branche } from "@/lib/branchen";
 import { Accent, Eyebrow } from "./ui";
@@ -24,7 +24,7 @@ export default function BrancheCase({ b }: { b: Branche }) {
   const c = b.case;
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = { trigger: ".bhc-card", start: "top 80%", toggleActions: "play none none none" };
       gsap.from(".bhc-card", { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: st });

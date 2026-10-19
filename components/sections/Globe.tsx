@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Container from "../ui/Container";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useLazyGSAP } from "@/lib/gsap";
 import { useT } from "../i18n/LocaleProvider";
 
 /* ------------------------------------------------------------------ */
@@ -279,7 +279,7 @@ export default function Globe() {
   const progress = useRef(0);
   const t = useT();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       // one master trigger drives the whole fill: dots colour-fill, lines draw,
       // nodes fill — all in sync as the sphere scrolls up through the viewport.

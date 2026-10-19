@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
 import type { Branche } from "@/lib/branchen";
 import { useLocalePath, useT } from "../i18n/LocaleProvider";
 
@@ -14,7 +14,7 @@ export default function BrancheCTA({ b }: { b: Branche }) {
   const t = useT();
   const lp = useLocalePath();
 
-  useGSAP(
+  useLazyGSAP(
     () => {
       const st = { trigger: ".bhc-panel", start: "top 85%", toggleActions: "play none none none" };
       gsap.from(".bhc-panel", { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: st });
