@@ -6,6 +6,7 @@ import {
   Eye,
   FileText,
   FolderOpen,
+  Handshake,
   HeartPulse,
   Inbox,
   LayoutDashboard,
@@ -14,6 +15,7 @@ import {
   Monitor,
   PiggyBank,
   Send,
+  Store,
   ShieldCheck,
   Target,
   TrendingUp,
@@ -42,7 +44,7 @@ type Project = {
   tiles: [Tile, Tile, Tile, Tile];
 };
 
-// Copy and images from Figma "15 · Referenzen" (Referenz-Stapel, 5 cards).
+// Copy and images from Figma "15 · Referenzen" (Referenz-Stapel, 6 cards).
 const PROJECTS: Project[] = [
   {
     client: "Priya's Cleaning Service",
@@ -53,7 +55,7 @@ const PROJECTS: Project[] = [
       { icon: FileText, label: "Rechnungen im selben System", desc: "offene Posten und Kundenkonten ohne zweite Liste." },
       { icon: HeartPulse, label: "Alltagshilfe mit Nachweis", desc: "Leistungsnachweise und Pflegegrad für die Abrechnung mit den Kassen." },
     ],
-    tiles: ["/referenzen/priya-1.webp", "/referenzen/priya-2.webp", "/referenzen/priya-3.webp", "/referenzen/priya-4.webp"],
+    tiles: ["/referenzen/priya-1-v2.webp", "/referenzen/priya-2-v2.webp", "/referenzen/priya-3.webp", "/referenzen/priya-4-v2.webp"],
   },
   {
     client: "Fahrschule Abgefahrn",
@@ -65,7 +67,7 @@ const PROJECTS: Project[] = [
       { icon: Megaphone, label: "Social-Media-Macht", desc: "Ein Auftritt, der nicht nach Fahrschule aussieht, sondern nach Marke, mit Reichweite, die kein Wettbewerber hat." },
       { icon: Send, label: "Vom Profil zum Vertrag in einem Fluss", desc: "Anmeldung ohne Umweg, vom ersten Klick bis zur Unterschrift." },
     ],
-    tiles: ["/referenzen/fahrschule-1.webp", "/referenzen/fahrschule-2.webp", "/referenzen/fahrschule-3.webp", "/referenzen/fahrschule-4.webp"],
+    tiles: ["/referenzen/fahrschule-1-v2.webp", "/referenzen/fahrschule-2-v2.webp", "/referenzen/fahrschule-3.webp", "/referenzen/fahrschule-4-v2.webp"],
   },
   {
     client: "Rohr Cleaner",
@@ -77,7 +79,7 @@ const PROJECTS: Project[] = [
       { icon: Eye, label: "94.034 Impressionen in 90 Tagen", desc: "Sichtbarkeit, die rund um die Uhr Kunden bringt." },
       { icon: PiggyBank, label: "5 Anfragen pro Tag, 0 € Werbebudget", desc: "Planbare Aufträge aus reiner Sichtbarkeit. Der Unterschied zwischen hoffen und wissen." },
     ],
-    tiles: ["/referenzen/rohr-1.webp", "/referenzen/rohr-2.webp", "/referenzen/rohr-3.webp", "/referenzen/rohr-4.webp"],
+    tiles: ["/referenzen/rohr-1-v2.webp", "/referenzen/rohr-2.webp", "/referenzen/rohr-3.webp", "/referenzen/rohr-4-v2.webp"],
   },
   {
     client: "Light of Hope",
@@ -89,7 +91,7 @@ const PROJECTS: Project[] = [
       { icon: TrendingUp, label: "Täglich 5 Anfragen durch Performance-Marketing", desc: "Planbare Reichweite bei einem Thema, bei dem Vertrauen alles ist." },
       { icon: ShieldCheck, label: "Ton ohne Heilversprechen", desc: "Warm, klar, auf Augenhöhe. Kein Marketing-Lärm, wo Fingerspitzengefühl zählt." },
     ],
-    tiles: ["/referenzen/hope-1.webp", "/referenzen/hope-2.webp", "/referenzen/hope-3.webp", "/referenzen/hope-4.webp"],
+    tiles: ["/referenzen/hope-1-v2.webp", "/referenzen/hope-2-v2.webp", "/referenzen/hope-3-v2.webp", "/referenzen/hope-4-v2.webp"],
   },
   {
     client: "Nouh-Wehres",
@@ -101,7 +103,18 @@ const PROJECTS: Project[] = [
       { icon: Inbox, label: "Jeden Tag neue Aufträge im Postfach", desc: "3 bis 5 Anfragen täglich, statt auf Empfehlungen zu hoffen." },
       { icon: Target, label: "Kampagnen, die zum Betrieb führen", desc: "Keine Klicks um der Klicks willen, sondern direkte Anfragen von Menschen, die kaufen wollen." },
     ],
-    tiles: ["/referenzen/nouh-1.webp", "/referenzen/nouh-2.webp", "/referenzen/nouh-3.webp", "/referenzen/nouh-4.webp"],
+    tiles: ["/referenzen/nouh-1-v2.webp", "/referenzen/nouh-2-v2.webp", "/referenzen/nouh-3-v2.webp", "/referenzen/nouh-4-v2.webp"],
+  },
+  {
+    client: "Oh My Açaí",
+    lead: "Zwei Städte, eine Bowl,",
+    accent: "ein Auftritt, der Appetit macht.",
+    bullets: [
+      { icon: Store, label: "Bestellen ohne Umweg", desc: "Uber Eats, Wolt und Lieferando direkt aus der Seite heraus." },
+      { icon: MapPin, label: "Standorte, die man findet", desc: "Düsseldorf und Köln mit Öffnungszeiten und Karte." },
+      { icon: Handshake, label: "Großhandel und Franchise", desc: "ein Weg für Bars, Cafés und künftige Partner." },
+    ],
+    tiles: ["/referenzen/acai-1-v2.webp", "/referenzen/acai-2-v2.webp", "/referenzen/acai-3-v2.webp", "/referenzen/acai-4-v2.webp"],
   },
 ];
 
@@ -164,6 +177,15 @@ const PROJECTS_EN: Record<string, ProjectText> = {
       { label: "Campaigns that lead to the business", desc: "No clicks for clicks’ sake, just direct enquiries from people who want to buy." },
     ],
   },
+  "Oh My Açaí": {
+    lead: "Two cities, one bowl,",
+    accent: "a brand that makes you hungry.",
+    bullets: [
+      { label: "Ordering without detours", desc: "Uber Eats, Wolt and Lieferando straight from the site." },
+      { label: "Locations people can find", desc: "Düsseldorf and Cologne with opening hours and a map." },
+      { label: "Wholesale and franchise", desc: "one route for bars, cafés and future partners." },
+    ],
+  },
 };
 
 function localize(p: Project): Project {
@@ -191,6 +213,7 @@ function BentoTile({ src, wide, client, n }: { src: Tile; wide: boolean; client:
           src={src}
           alt={t(`${client}, Einblick ${n}`, `${client}, snapshot ${n}`)}
           fill
+          unoptimized // 2× WebP exports from Figma (800×364 / 536×364), already small
           sizes={wide ? "(min-width: 1280px) 400px, (min-width: 1024px) 34vw, 55vw" : "(min-width: 1280px) 268px, (min-width: 1024px) 23vw, 37vw"}
           className="object-cover"
         />
@@ -233,7 +256,7 @@ function Bento({ p }: { p: Project }) {
 
 // Small horizontal offsets keep the stack readable as a deck (Figma staggers
 // the cards 10px each).
-const OFFSETS = [0, 10, -8, 6, -4];
+const OFFSETS = [0, 10, -8, 6, -4, 8];
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
@@ -308,7 +331,7 @@ export default function Referenzen() {
           });
 
           // REST: card alone on top · TRANS: next card rises. Each unit maps to
-          // SCROLL_PER_UNIT viewports of scroll (5 cards ≈ 4.4 screens).
+          // SCROLL_PER_UNIT viewports of scroll (6 cards ≈ 5.4 screens).
           const REST = 0.7;
           const TRANS = 1.6;
           const SCROLL_PER_UNIT = 0.45;
@@ -377,8 +400,8 @@ export default function Referenzen() {
           </h2>
           <p className="t-body-l mt-4 max-w-[560px] text-[#5c5954]">
             {t(
-              "Fünf Projekte aus der Zusammenarbeit mit Unternehmen, die du im Zweifel selbst anrufen kannst.",
-              "Five projects with businesses you can simply call yourself if you have any doubts.",
+              "Sechs Projekte aus der Zusammenarbeit mit Unternehmen, die du im Zweifel selbst anrufen kannst.",
+              "Six projects with businesses you can simply call yourself if you have any doubts.",
             )}
           </p>
         </div>
