@@ -714,3 +714,6 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .intro-stagger > * { animation: none; }
 }
+
+/* cookie banner is server-rendered; hidden before first paint once a choice exists */
+[data-consent] .cookie-banner { display: none; }

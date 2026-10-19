@@ -43,7 +43,10 @@ function Toggle({
 export default function CookieBanner() {
   const t = useT();
   const lp = useLocalePath();
-  const [visible, setVisible] = useState(false);
+  // Rendered on the server so it paints with the page; returning visitors never
+  // see it because the inline boot script (RootDocument) sets data-consent on
+  // <html> before the first paint and CSS hides it.
+  const [visible, setVisible] = useState(true);
   const [functional, setFunctional] = useState(false);
   const [statistics, setStatistics] = useState(false);
   const [marketing, setMarketing] = useState(false);
@@ -58,24 +61,22 @@ export default function CookieBanner() {
     // footer "Cookie settings": reopen with the current choice
     const open = () => {
       prefill();
+      document.documentElement.removeAttribute("data-consent");
       setVisible(true);
     };
     window.addEventListener(OPEN_SETTINGS_EVENT, open);
 
-    // no choice yet, or one made before the "statistics" category existed
+    // a current choice exists: keep the banner hidden (the boot script already set
+    // this; re-applied here because dev Strict Mode resets <html> attributes).
+    // No choice yet, or one from before "statistics": it simply stays visible.
     const c = readConsent();
-    let timer: number | undefined;
-    if (!c || c.v < CONSENT_VERSION) {
-      timer = window.setTimeout(open, 700);
-    }
-    return () => {
-      window.removeEventListener(OPEN_SETTINGS_EVENT, open);
-      window.clearTimeout(timer);
-    };
+    if (c && c.v >= CONSENT_VERSION) document.documentElement.setAttribute("data-consent", "");
+    return () => window.removeEventListener(OPEN_SETTINGS_EVENT, open);
   }, []);
 
   const persist = (c: { functional: boolean; statistics: boolean; marketing: boolean }) => {
     writeConsent(c);
+    document.documentElement.setAttribute("data-consent", "");
     setVisible(false);
   };
 
@@ -85,7 +86,7 @@ export default function CookieBanner() {
     <div
       role="dialog"
       aria-label={t("Cookie-Einstellungen", "Cookie settings")}
-      className="fixed inset-x-4 bottom-24 z-[70] sm:inset-x-auto sm:bottom-[96px] sm:right-6 sm:w-[400px]"
+      className="cookie-banner fixed inset-x-4 bottom-24 z-[70] sm:inset-x-auto sm:bottom-[96px] sm:right-6 sm:w-[400px]"
     >
       <div className="rounded-[18px] border border-line bg-white p-6 shadow-[0_24px_60px_-20px_rgba(15,14,13,0.28)]">
         <p className="text-[17px] font-semibold tracking-[-0.01em] text-ink">
