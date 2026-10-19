@@ -23,5 +23,4 @@ export const PARTNERS: Partner[] = [
   { name: "Sanierungslotse", src: "/partners/sanierungslotse.webp", w: 141, h: 40 },
   { name: "Crusty Slices", src: "/partners/crusty-slices.webp", w: 157, h: 26 },
   { name: "FixDone", src: "/partners/fixdone.webp", w: 112, h: 28 },
-  { name: "Oh My Acai", src: "/partners/ohmyacai.webp", w: 49, h: 50 },
 ];
