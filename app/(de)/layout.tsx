@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     "Marketing, Software, Digitalisierung und Unternehmensaufbau aus einer Hand. Klar, direkt, ohne Kompromisse.",
   alternates: { canonical: "/", languages: { de: "/", en: "/en", "x-default": "/" } },
   openGraph: { locale: "de_DE", siteName: "TyloTech" },
+  verification: { google: "EdOQvXPS8AEhZzNnqUwHj7BWGjrSVB8bz5knzZVsxvA" },
 };
 
 export default function GermanRootLayout({ children }: { children: React.ReactNode }) {

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     "Marketing, software, digitalisation and company building from a single source. Clear, direct, no compromises.",
   alternates: { canonical: "/en", languages: { de: "/", en: "/en", "x-default": "/" } },
   openGraph: { locale: "en_GB", siteName: "TyloTech" },
+  verification: { google: "EdOQvXPS8AEhZzNnqUwHj7BWGjrSVB8bz5knzZVsxvA" },
 };
 
 export default function EnglishRootLayout({ children }: { children: React.ReactNode }) {
