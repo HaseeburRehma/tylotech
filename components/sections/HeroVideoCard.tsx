@@ -1,43 +1,30 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { preconnect } from "react-dom";
 import { useYouTubePlaying } from "@/lib/useYouTubePlaying";
 import { useT } from "../i18n/LocaleProvider";
 
 /* The poster is the hero's largest element, so it is served from our own
-   domain (public/hero, WebP) at high priority. The muted YouTube player mounts
-   just after the load event, so it autoplays without competing with the
-   first paint. */
+   domain (public/hero, WebP) at high priority. The muted YouTube iframe is in
+   the server HTML, so it loads in parallel with the page and starts playing
+   as soon as YouTube is ready. */
 export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const t = useT();
-  const [mountVideo, setMountVideo] = useState(false);
-  const playing = useYouTubePlaying(frame, mountVideo);
-
-  useEffect(() => {
-    // autoplay (muted) right after load on every device; an earlier interaction starts it sooner
-    const EVENTS = ["scroll", "pointermove", "pointerdown", "touchstart", "keydown"] as const;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const go = () => setMountVideo(true);
-    const afterLoad = () => {
-      timer = setTimeout(go, 300);
-    };
-    EVENTS.forEach((ev) => window.addEventListener(ev, go, { once: true, passive: true }));
-    if (document.readyState === "complete") afterLoad();
-    else window.addEventListener("load", afterLoad, { once: true });
-    return () => {
-      EVENTS.forEach((ev) => window.removeEventListener(ev, go));
-      window.removeEventListener("load", afterLoad);
-      clearTimeout(timer);
-    };
-  }, []);
+  // open the connections to YouTube while the page is still rendering
+  preconnect("https://www.youtube-nocookie.com");
+  preconnect("https://www.youtube.com");
+  preconnect("https://i.ytimg.com");
+  preconnect("https://www.google.com");
+  const playing = useYouTubePlaying(frame);
 
   // poster stays until the player really plays (autoplay can be blocked),
-  // plus a beat so YouTube's start-up title bar is gone
+  // plus a short beat to cover YouTube's start-up title bar
   const [posterVisible, setPosterVisible] = useState(true);
   useEffect(() => {
     if (!playing) return;
-    const id = setTimeout(() => setPosterVisible(false), 2600);
+    const id = setTimeout(() => setPosterVisible(false), 250);
     return () => clearTimeout(id);
   }, [playing]);
 
@@ -51,15 +38,13 @@ export default function HeroVideoCard({ videoId }: { videoId: string }) {
         className="pointer-events-none absolute -inset-6 -z-10 rounded-[44px] bg-[radial-gradient(60%_58%_at_62%_55%,rgba(209,170,113,0.30),transparent_70%)] blur-2xl"
       />
       <div className="relative aspect-[7/5] overflow-hidden rounded-[24px] border border-black/5 bg-ink shadow-[0_44px_90px_-38px_rgba(15,14,13,0.55)]">
-        {mountVideo && (
-          <iframe
-            className="pointer-events-none absolute inset-0 h-full w-full origin-center scale-[1.35]"
-            src={src}
-            title={t("Imagefilm", "Brand film")}
-            allow="autoplay; encrypted-media; picture-in-picture"
-            ref={frame}
-          />
-        )}
+        <iframe
+          className="pointer-events-none absolute inset-0 h-full w-full origin-center scale-[1.35]"
+          src={src}
+          title={t("Imagefilm", "Brand film")}
+          allow="autoplay; encrypted-media; picture-in-picture"
+          ref={frame}
+        />
 
         {/* Poster overlay — fades out once the video really plays */}
         <div

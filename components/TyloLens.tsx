@@ -504,7 +504,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                     </Iconed>
                   </Field>
 
-                  <div className="grid grid-cols-2 gap-x-2.5 sm:gap-x-3">
+                  <div className="grid grid-cols-1 gap-x-2.5 min-[360px]:grid-cols-2 sm:gap-x-3">
                     <Field id="branche" label={t("Branche", "Industry")} error={err("branche")}>
                       <LensSelect id="branche" value={v.branche} onChange={(x) => setValue("branche", x)} invalid={!!err("branche")} icon={Building2} placeholder={t("Auswählen…", "Select…")} options={TL_BRANCHEN.map((b) => ({ value: b, label: brancheLabel(b), icon: BRANCHE_ICON[b] }))} />
                     </Field>
@@ -518,7 +518,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
                     <legend className="mb-1.5 flex w-full items-baseline justify-between gap-3 text-[13px] font-medium text-[#1a1917]">
                       {t("Marketing-Budget pro Monat", "Marketing budget per month")}
                     </legend>
-                    <div id="tl-budget" tabIndex={-1} role="radiogroup" aria-invalid={!!err("budget")} aria-describedby={err("budget") ? "tl-budget-err" : undefined} className="grid grid-cols-2 gap-2 outline-none">
+                    <div id="tl-budget" tabIndex={-1} role="radiogroup" aria-invalid={!!err("budget")} aria-describedby={err("budget") ? "tl-budget-err" : undefined} className="grid grid-cols-1 gap-2 outline-none min-[380px]:grid-cols-2">
                       {TL_BUDGETS.map((b) => {
                         const on = v.budget === b.value;
                         return (

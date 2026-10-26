@@ -250,7 +250,7 @@ export default function Branchen() {
                           {pad(i + 1)}
                         </span>
                         <span
-                          className={`t-title-s min-w-0 transition-colors ${
+                          className={`t-title-s min-w-0 hyphens-auto break-words transition-colors ${
                             on ? "text-white" : "text-ink/65"
                           }`}
                         >

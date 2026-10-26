@@ -132,8 +132,8 @@ function StatRow({ c }: { c: Case }) {
         <p className="t-body-xs mt-0.5 text-white/35">{c.from.l}</p>
       </div>
       <ArrowRight className="size-5 shrink-0 text-white/30" />
-      <div>
-        <p className="t-h3-s text-[#d8b682]">
+      <div className="min-w-0">
+        <p className="t-h3-s hyphens-auto break-words text-[#d8b682]">
           {c.to.v}
         </p>
         <p className="t-body-xs mt-0.5 text-white/45">{c.to.l}</p>

@@ -6,6 +6,7 @@ import { Star, Quote, ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { pick } from "@/lib/i18n";
+import { mapsSearchUrl } from "@/lib/contact";
 import { useLocale, useT } from "../i18n/LocaleProvider";
 
 function Stars({ size = 15 }: { size?: number }) {
@@ -151,8 +152,10 @@ function SummaryCard() {
         )}
       </p>
       <a
-        href="#"
-        className="group mt-auto inline-flex h-11 w-fit items-center gap-2 rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
+        href={mapsSearchUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group mt-auto inline-flex h-11 w-fit items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
       >
         {t("Alle Bewertungen ansehen", "See all reviews")}
         <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
