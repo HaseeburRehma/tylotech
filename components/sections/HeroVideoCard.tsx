@@ -5,9 +5,9 @@ import { useYouTubePlaying } from "@/lib/useYouTubePlaying";
 import { useT } from "../i18n/LocaleProvider";
 
 /* The poster is the hero's largest element, so it is served from our own
-   domain (public/hero, WebP) at high priority. The YouTube player (~2 MB of
-   script and video) mounts on the first interaction (or 3.5 s after load on
-   desktop) — it no longer competes with the first paint. */
+   domain (public/hero, WebP) at high priority. The muted YouTube player mounts
+   just after the load event, so it autoplays without competing with the
+   first paint. */
 export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const t = useT();
@@ -15,15 +15,12 @@ export default function HeroVideoCard({ videoId }: { videoId: string }) {
   const playing = useYouTubePlaying(frame, mountVideo);
 
   useEffect(() => {
-    // start the player on the first interaction, or 3.5 s after load at the latest
+    // autoplay (muted) right after load on every device; an earlier interaction starts it sooner
     const EVENTS = ["scroll", "pointermove", "pointerdown", "touchstart", "keydown"] as const;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const go = () => setMountVideo(true);
-    // phones: only on interaction (touch/scroll). The player costs ~2 MB of data and
-    // a busy main thread right when the page should become responsive.
-    const touch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
     const afterLoad = () => {
-      if (!touch) timer = setTimeout(go, 3500);
+      timer = setTimeout(go, 300);
     };
     EVENTS.forEach((ev) => window.addEventListener(ev, go, { once: true, passive: true }));
     if (document.readyState === "complete") afterLoad();
