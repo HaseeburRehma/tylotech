@@ -153,6 +153,9 @@ export default function SoftwareBewerbung() {
       });
       const data: { ok?: boolean; reason?: string; errors?: BwErrors } = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
+        // GA4 recommended lead event for GTM (only option values, no personal data)
+        const w = window as Window & { dataLayer?: unknown[] };
+        (w.dataLayer ??= []).push({ event: "generate_lead", lead_source: "software_application", language: locale, mitarbeiter: v.mitarbeiter || "none", budget: v.budget || "none" });
         moved.current = true;
         setStatus("idle");
         setDone(true);
