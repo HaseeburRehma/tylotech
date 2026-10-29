@@ -396,3 +396,153 @@ function lensConfirmationEn(l: LensLead, origin: string): Mail {
     text,
   };
 }
+
+/* ---- App-Bauplan application (software landing page) ---------------------- */
+
+export type Application = {
+  branche: string;
+  mitarbeiter: string; // label
+  problem: string;
+  tools: string[]; // labels
+  budget: string; // label
+  start: string; // label
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+};
+
+export function applicationTeamNotification(a: Application, origin: string, source: string, locale: Locale = "de"): Mail {
+  const tel = a.phone ? `tel:${a.phone.replace(/[^\d+]/g, "")}` : "";
+  const rows: [string, string][] = [
+    ["Name", esc(a.name)],
+    ["Betrieb", esc(a.company)],
+    ["E-Mail", `<a href="mailto:${esc(a.email)}" style="color:${C.goldText};text-decoration:underline">${esc(a.email)}</a>`],
+    ["Telefon", a.phone ? `<a href="${esc(tel)}" style="color:${C.goldText};text-decoration:underline">${esc(a.phone)}</a>` : "-"],
+    ["Branche", esc(a.branche)],
+    ["Mitarbeiter", esc(a.mitarbeiter)],
+    ["Budget", `<b>${esc(a.budget)}</b>`],
+    ["Start", esc(a.start)],
+    ...(locale === "en" ? ([["Sprache", LANG_EN]] as [string, string][]) : []),
+  ];
+  const reply = `mailto:${a.email}?subject=${encodeURIComponent(locale === "en" ? "Your App Blueprint application at TyloTech" : "Deine Bewerbung für den App-Bauplan")}`;
+
+  const body = `
+    ${label("Neue Bewerbung · App-Bauplan")}
+    ${h1(`${esc(a.name)} möchte eine ${accent("eigene Software")}.`)}
+    ${p(`${esc(a.company)} · ${esc(a.branche)} · ${esc(a.mitarbeiter)} Mitarbeiter`, "margin-bottom:20px")}
+    ${a.tools.length ? `<div style="margin:0 0 22px">${label("Arbeitet aktuell mit")}${chips(a.tools)}</div>` : ""}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px;border-top:1px solid ${C.line}">
+      ${rows
+        .map(
+          ([k, v]) =>
+            `<tr><td style="padding:11px 0;border-bottom:1px solid ${C.line};width:130px;font:500 13px/20px ${SANS};color:${C.faint};vertical-align:top">${k}</td><td style="padding:11px 0;border-bottom:1px solid ${C.line};font:400 15px/20px ${SANS};color:${C.ink}">${v}</td></tr>`,
+        )
+        .join("")}
+    </table>
+    ${label("Welches Problem soll die Software lösen?")}
+    <div style="margin:0 0 28px;padding:16px 20px;background:${C.cream};border-left:3px solid ${C.gold};border-radius:4px 12px 12px 4px;font:400 15px/24px ${SANS};color:${C.ink};white-space:pre-wrap">${esc(a.problem)}</div>
+    <div style="margin:0 0 26px;padding:14px 18px;background:${C.page};border-radius:12px;font:400 14px/22px ${SANS};color:${C.muted}">
+      Zugesagt: Rückmeldung <b style="color:${C.ink}">innerhalb von 24 Stunden</b>.
+    </div>
+    <div>${button(reply, "Direkt antworten")}${a.phone ? button(tel, "Anrufen", false) : ""}</div>`;
+
+  const footer = `Eingegangen am ${when()} über ${esc(source)}.<br>„Antworten“ geht direkt an ${esc(a.email)}.`;
+
+  const text = [
+    "Neue Bewerbung · App-Bauplan",
+    "",
+    `Name: ${a.name}`,
+    `Betrieb: ${a.company}`,
+    `E-Mail: ${a.email}`,
+    `Telefon: ${a.phone || "-"}`,
+    `Branche: ${a.branche}`,
+    `Mitarbeiter: ${a.mitarbeiter}`,
+    `Arbeitet aktuell mit: ${a.tools.join(", ")}`,
+    `Budget: ${a.budget}`,
+    `Start: ${a.start}`,
+    ...(locale === "en" ? [`Sprache: ${LANG_EN}`] : []),
+    "",
+    "Problem:",
+    a.problem,
+    "",
+    `Eingegangen am ${when()} über ${source}.`,
+  ].join("\n");
+
+  return {
+    subject: `Bewerbung App-Bauplan [${a.budget}]: ${a.company} · ${a.name}`,
+    html: layout({ preheader: `${a.company} (${a.branche}): ${a.problem.slice(0, 90)}`, badge: "Bewerbung", body, footer, origin }),
+    text,
+  };
+}
+
+export function applicationConfirmation(a: Application, origin: string, locale: Locale = "de"): Mail {
+  const en = locale === "en";
+  const first = firstName(a.name);
+  const strong = (t: string) => `<b style="color:${C.ink}">${t}</b>`;
+  const body = en
+    ? `
+    ${h1(first ? `Thank you, ${accent(esc(first))}!` : `Thank you for your ${accent("application")}!`)}
+    ${p(`We’ve received your application for a free ${strong("App Blueprint")} and will review it personally.`)}
+    ${p(`You’ll hear from us ${strong("within 24 hours")}. If your project is a fit, we’ll build your blueprint next: click prototype, feature list, fixed price and timeline.`)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 28px;background:${C.cream};border:1px solid ${C.creamLine};border-radius:14px">
+      <tr><td style="padding:16px 20px;font:400 14px/22px ${SANS};color:${C.muted}">
+        ${strong("Your application:")} ${esc(a.company)} · ${esc(a.branche)} · ${esc(a.start)}
+      </td></tr>
+    </table>
+    <p style="margin:0;font:400 15px/24px ${SANS};color:${C.muted}">Speak soon<br><span style="font-family:${SERIF};font-style:italic;font-size:19px;color:${C.ink}">The TyloTech team</span></p>`
+    : `
+    ${h1(first ? `Danke, ${accent(esc(first))}!` : `Danke für deine ${accent("Bewerbung")}!`)}
+    ${p(`Deine Bewerbung für den kostenlosen ${strong("App-Bauplan")} ist bei uns eingegangen. Wir prüfen sie persönlich.`)}
+    ${p(`Du hörst ${strong("innerhalb von 24 Stunden")} von uns. Passt dein Projekt, bauen wir als Nächstes deinen Bauplan: Klick-Prototyp, Feature-Liste, Festpreis und Zeitplan.`)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 28px;background:${C.cream};border:1px solid ${C.creamLine};border-radius:14px">
+      <tr><td style="padding:16px 20px;font:400 14px/22px ${SANS};color:${C.muted}">
+        ${strong("Deine Bewerbung:")} ${esc(a.company)} · ${esc(a.branche)} · Start ${esc(a.start)}
+      </td></tr>
+    </table>
+    <p style="margin:0;font:400 15px/24px ${SANS};color:${C.muted}">Bis gleich<br><span style="font-family:${SERIF};font-style:italic;font-size:19px;color:${C.ink}">Dein TyloTech-Team</span></p>`;
+  const footer = en
+    ? `TyloTech · ${CONTACT.street} · ${CONTACT.city} · Germany<br>
+    <a href="${esc(origin)}/en/imprint" style="color:${C.faint}">Legal notice</a> · <a href="${esc(origin)}/en/privacy" style="color:${C.faint}">Privacy policy</a><br>
+    You’re receiving this email because you applied for an App Blueprint on our website.`
+    : `TyloTech · ${CONTACT.street} · ${CONTACT.city}<br>
+    <a href="${esc(origin)}/impressum" style="color:${C.faint}">Impressum</a> · <a href="${esc(origin)}/datenschutz" style="color:${C.faint}">Datenschutz</a><br>
+    Du erhältst diese E-Mail, weil du dich auf unserer Website für einen App-Bauplan beworben hast.`;
+  const text = (
+    en
+      ? [
+          first ? `Thank you, ${first}!` : "Thank you for your application!",
+          "",
+          "We’ve received your application for a free App Blueprint and will review it personally.",
+          "You’ll hear from us within 24 hours. If your project is a fit, we’ll build your blueprint next: click prototype, feature list, fixed price and timeline.",
+          "",
+          `Your application: ${a.company} · ${a.branche} · ${a.start}`,
+          "",
+          "Speak soon",
+          "The TyloTech team",
+        ]
+      : [
+          first ? `Danke, ${first}!` : "Danke für deine Bewerbung!",
+          "",
+          "Deine Bewerbung für den kostenlosen App-Bauplan ist bei uns eingegangen. Wir prüfen sie persönlich.",
+          "Du hörst innerhalb von 24 Stunden von uns. Passt dein Projekt, bauen wir als Nächstes deinen Bauplan: Klick-Prototyp, Feature-Liste, Festpreis und Zeitplan.",
+          "",
+          `Deine Bewerbung: ${a.company} · ${a.branche} · Start ${a.start}`,
+          "",
+          "Bis gleich",
+          "Dein TyloTech-Team",
+        ]
+  ).join("\n");
+  return {
+    subject: en ? "Your App Blueprint application has arrived" : "Deine Bewerbung für den App-Bauplan ist eingegangen",
+    html: layout({
+      preheader: en ? "We’ll get back to you within 24 hours." : "Wir melden uns innerhalb von 24 Stunden.",
+      badge: en ? "Application" : "Bewerbung",
+      body,
+      footer,
+      origin,
+      lang: en ? "en" : "de",
+    }),
+    text,
+  };
+}

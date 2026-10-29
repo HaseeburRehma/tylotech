@@ -61,6 +61,14 @@ export default function SmoothScroll({
     }
 
     // Smooth anchor scrolling with or without Lenis (72px = sticky header).
+    // A refresh (fonts, load, the late safety net) re-measures the page and stops
+    // a native smooth scroll midway, so a jump still in flight is issued again.
+    let jump: { go: () => void; until: number } | null = null;
+    const onRefresh = () => {
+      if (jump && performance.now() < jump.until) jump.go();
+    };
+    ScrollTrigger.addEventListener("refresh", onRefresh);
+
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
       if (!anchor) return;
@@ -73,15 +81,17 @@ export default function SmoothScroll({
         if (lenis) lenis.scrollTo(el, { offset: -72, duration: 1.2 });
         else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: reduce ? "auto" : "smooth" });
       };
+      jump = { go, until: performance.now() + 1800 };
       // a link in the open mobile menu: the panel collapses first (300 ms) and
       // shifts the page — measure the target only after that
-      if (anchor.closest("header") && window.innerWidth < 1024) window.setTimeout(go, 320);
+      if (anchor.closest("header") && window.innerWidth < 1180) window.setTimeout(go, 320);
       else go();
     };
     document.addEventListener("click", onClick);
 
     return () => {
       document.removeEventListener("click", onClick);
+      ScrollTrigger.removeEventListener("refresh", onRefresh);
       window.removeEventListener("load", refresh);
       window.clearTimeout(late);
       cancelAnimationFrame(pending);

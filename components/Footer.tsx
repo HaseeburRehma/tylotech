@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { TYLOHQ_URL } from "@/lib/site";
+import { CONTACT as SITE_CONTACT } from "@/lib/contact";
 import { openCookieSettings } from "@/lib/consent";
 import { MapPin, Mail, Phone, ShieldCheck, Server, Quote } from "lucide-react";
 import Container from "./ui/Container";
@@ -49,7 +50,19 @@ const MEHR = [
   "Karriere",
 ];
 
-const LEGAL: Record<string, string> = { "TyloTech HQ Login": TYLOHQ_URL, Impressum: "/impressum", Datenschutz: "/datenschutz" };
+const NAV_HREF: Record<string, string> = {
+  Konzept: "/#wechsel",
+  Leistungen: "/#warum",
+  Ergebnisse: "/case-studies",
+  "Über uns": "/#gruender",
+  Kontakt: "/kontakt",
+};
+const LEGAL: Record<string, string> = {
+  "TyloTech HQ Login": TYLOHQ_URL,
+  Impressum: "/impressum",
+  Datenschutz: "/datenschutz",
+  Karriere: `mailto:${SITE_CONTACT.email}?subject=${encodeURIComponent("Bewerbung bei TyloTech")}`,
+};
 
 // footer row: the four partners chosen for the footer, rendered like the logo strip (alpha masks)
 const FOOTER_PARTNERS = ["Priya's Reinigungsservice", "LokShift", "Crusty Slices", "Rohrcleaner"]
@@ -180,7 +193,7 @@ export default function Footer() {
 
           <div className="footer-reveal grid grid-cols-2 gap-x-8 gap-y-10 sm:gap-12 md:col-span-2 lg:flex-1">
             {[
-              { title: "Navigation", items: NAV.map((l) => ({ l, href: l === "Kontakt" ? "/kontakt" : "#" })) },
+              { title: "Navigation", items: NAV.map((l) => ({ l, href: NAV_HREF[l] })) },
               { title: "Mehr", items: MEHR.map((l) => ({ l, href: LEGAL[l] ?? "#" })) },
             ].map((col) => (
               <div key={col.title} className="flex flex-col gap-3.5">

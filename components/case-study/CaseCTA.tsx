@@ -1,0 +1,79 @@
+"use client";
+
+import { useRef } from "react";
+import Link from "next/link";
+import { ArrowRight, Calendar } from "lucide-react";
+import Container from "../ui/Container";
+import { gsap, useLazyGSAP } from "@/lib/gsap";
+import { useLocalePath, useT } from "../i18n/LocaleProvider";
+
+/* Figma "14 · CTA" — same dark teal panel as the industry pages' CTA. */
+export default function CaseCTA() {
+  const root = useRef<HTMLElement>(null);
+  const t = useT();
+  const lp = useLocalePath();
+
+  useLazyGSAP(
+    () => {
+      const st = { trigger: ".csc-panel", start: "top 85%", toggleActions: "play none none none" };
+      gsap.from(".csc-panel", { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: st });
+      gsap.from(".csc-in > *", { y: 22, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.1, delay: 0.15, scrollTrigger: st });
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+        gsap.to(".csc-glow", { opacity: 0.55, scale: 1.08, duration: 3.4, ease: "sine.inOut", repeat: -1, yoyo: true });
+    },
+    { scope: root },
+  );
+
+  return (
+    <section id="kontakt" ref={root} className="scroll-mt-20 bg-white py-12 sm:py-20 lg:py-[100px]">
+      <Container>
+        <div
+          className="csc-panel relative overflow-hidden rounded-[28px] border border-[rgba(209,170,113,0.28)] px-6 py-14 shadow-[0_28px_70px_rgba(4,22,29,0.3)] sm:rounded-[36px] sm:px-12 sm:py-[76px] lg:px-20"
+          style={{
+            backgroundImage:
+              "radial-gradient(58% 46% at 14% 18%, rgba(29,115,145,0.28), rgba(29,115,145,0.05) 60%, transparent), linear-gradient(151deg, #0a4157 12%, #012e3e 43%, #00151e 80%)",
+          }}
+        >
+          <div
+            aria-hidden
+            className="csc-glow pointer-events-none absolute left-[59%] top-[64%] h-[75%] w-[95%] -translate-x-1/2 -translate-y-1/2 opacity-90"
+            style={{ background: "radial-gradient(closest-side, rgba(209,170,113,0.42), rgba(209,170,113,0.1) 50%, transparent)" }}
+          />
+          <div aria-hidden className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.14)]" />
+
+          <div className="csc-in relative mx-auto flex max-w-[860px] flex-col items-center gap-[26px] text-center">
+            <p className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/[0.22] bg-white/[0.12] py-2 pl-2.5 pr-4 font-display text-[14px] font-medium leading-[18px] tracking-[-0.2px] text-white/[0.92] backdrop-blur-md max-sm:text-[13px] max-sm:leading-[17px]">
+              <Calendar className="size-[15px] shrink-0 text-[#d8b682]" strokeWidth={1.8} />
+              <span className="min-w-0">{t("Kostenloses Erstgespräch", "Free intro call")}</span>
+            </p>
+            <h2 className="t-h1-l text-white">
+              {t("Bereit, dein Wachstum", "Ready to make your growth")}{" "}
+              <span className="t-serif text-[1.074em] md:tracking-[-0.031em]">{t("planbar", "predictable")}</span>
+              {t(" zu machen?", "?")}
+            </h2>
+            <p className="t-body-l max-w-[720px] text-white/[0.94]">
+              {t(
+                "Kein Verkaufsgespräch. Eine ehrliche Einschätzung, wo dein größter Hebel liegt und ob wir zueinander passen.",
+                "No sales pitch. An honest take on where your biggest lever is and whether we’re a good fit.",
+              )}
+            </p>
+            <Link
+              href={lp("/kontakt")}
+              className="group relative inline-flex items-center gap-3.5 rounded-full py-2 pl-2 pr-[30px] shadow-[0_4px_14px_rgba(168,127,69,0.32),0_10px_28px_rgba(168,127,69,0.2),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 hover:-translate-y-0.5 hover:brightness-105"
+              style={{ backgroundImage: "linear-gradient(90deg, #efdcbc 0%, #d8b681 45%, #b4894d 100%)" }}
+            >
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[linear-gradient(180deg,#17485b,#04161d)] text-white">
+                <ArrowRight className="size-[19px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2} />
+              </span>
+              <span className="whitespace-nowrap font-display text-[18px] font-medium leading-6 tracking-[-0.3px] text-[#04161d] max-sm:text-[16px] max-sm:leading-[21px]">
+                {t(null, "Book your ")}
+                <span className="font-[family-name:var(--font-instrument)] text-[19px] font-normal italic max-sm:text-[17px]">{t("Erstgespräch", "intro call")}</span>
+                {t(" sichern", null)}
+              </span>
+            </Link>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}

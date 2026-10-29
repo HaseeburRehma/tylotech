@@ -1,0 +1,112 @@
+/* Motion for the software landing page (globals.css stays untouched). */
+
+/* breathing ring behind the video play button */
+.pulse {
+  animation: pulse 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* gentle idle float of the phone mockup */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* form step enter (direction set via data-dir) */
+.step {
+  animation: stepIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.step[data-dir="back"] {
+  animation-name: stepInBack;
+}
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes stepInBack {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* success seal: ring spins in, tick draws */
+.seal {
+  animation: sealIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes sealIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-40deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tick path {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: draw 0.6s 0.35s ease-out forwards;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* field shake on a failed "Weiter" */
+.shake {
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+@keyframes shake {
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse,
+  .float,
+  .step,
+  .seal,
+  .shake {
+    animation: none;
+  }
+  .tick path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

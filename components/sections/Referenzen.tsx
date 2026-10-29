@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Eye,
   FileText,
@@ -21,11 +22,12 @@ import {
   TrendingUp,
   Trophy,
   Users,
+  ArrowRight,
   type LucideIcon,
 } from "lucide-react";
 import Container from "../ui/Container";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { useLocale, useT } from "../i18n/LocaleProvider";
+import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 
 type Bullet = { icon: LucideIcon; label: string; desc: string };
 
@@ -42,6 +44,8 @@ type Project = {
   bullets: Bullet[];
   /** Bild 1–4 in Figma order: row 1 = wide, narrow · row 2 = narrow, wide */
   tiles: [Tile, Tile, Tile, Tile];
+  /** slug of the detail page under /case-studies, when there is one */
+  caseStudy?: string;
 };
 
 // Copy and images from Figma "15 · Referenzen" (Referenz-Stapel, 6 cards).
@@ -68,6 +72,7 @@ const PROJECTS: Project[] = [
       { icon: Send, label: "Vom Profil zum Vertrag in einem Fluss", desc: "Anmeldung ohne Umweg, vom ersten Klick bis zur Unterschrift." },
     ],
     tiles: ["/referenzen/fahrschule-1-v2.webp", "/referenzen/fahrschule-2-v2.webp", "/referenzen/fahrschule-3.webp", "/referenzen/fahrschule-4-v2.webp"],
+    caseStudy: "fahrschule-abgefahrn",
   },
   {
     client: "Rohr Cleaner",
@@ -263,6 +268,7 @@ export default function Referenzen() {
   const pinRef = useRef<HTMLDivElement>(null);
   const locale = useLocale();
   const t = useT();
+  const lp = useLocalePath();
   const projects = locale === "en" ? PROJECTS.map(localize) : PROJECTS;
 
   // Below lg the cards stack with CSS sticky. A card taller than the space
@@ -451,6 +457,15 @@ export default function Referenzen() {
                         </li>
                       ))}
                     </ul>
+                    {p.caseStudy && (
+                      <Link
+                        href={lp(`/case-studies/${p.caseStudy}`)}
+                        className="group inline-flex h-10 w-fit items-center gap-2 rounded-full border border-line bg-white px-4 text-[14px] font-medium text-ink transition-colors hover:border-[#d1aa71] hover:bg-[#fbf6ee]"
+                      >
+                        {t("Case Study lesen", "Read the case study")}
+                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                      </Link>
+                    )}
                   </div>
 
                   <div className="mt-auto w-full lg:mt-0 lg:w-[50%] lg:shrink-0 xl:w-[min(680px,60%)]">

@@ -50,7 +50,8 @@ const SS_AUTO = "tylolens-auto-shown";
 const SS_DISMISSED = "tylolens-dismissed";
 const LS_SENT = "tylolens-submitted";
 const LS_NEVER = "tylolens-never"; // "Nicht mehr anzeigen"
-const NO_AUTO = ["/kontakt", "/impressum", "/datenschutz", "/en/contact", "/en/imprint", "/en/privacy"];
+// no auto-open where the page has its own form (contact, software application) or is legal text
+const NO_AUTO = ["/kontakt", "/impressum", "/datenschutz", "/software", "/en/contact", "/en/imprint", "/en/privacy", "/en/software"];
 
 const store = {
   get: (s: Storage | undefined, k: string) => {

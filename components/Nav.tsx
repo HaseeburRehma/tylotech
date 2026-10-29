@@ -32,10 +32,12 @@ const INDUSTRIES = [
 
 const LINKS = [
   { de: "Branchen", en: "Industries", href: "#branchen", dropdown: true },
-  { de: "Portfolio", en: "Portfolio", href: "#referenzen" },
+  { de: "Software", en: "Software", href: "/software" },
+  { de: "Case Studies", en: "Case studies", href: "/case-studies" },
   { de: "TyloHQ", en: "TyloHQ", href: "#tylohq-app" },
   { de: "TyloLens", en: "TyloLens", href: "#tylolens", lens: true },
-  { de: "Über uns", en: "About us", href: "#gruender", everywhere: true },
+  // only in the desktop bar from 1400 px; it stays in the mobile menu and the footer
+  { de: "Über uns", en: "About us", href: "#gruender", everywhere: true, wide: true },
   { de: "Kontakt", en: "Contact", href: "/kontakt", everywhere: true },
 ];
 
@@ -47,6 +49,11 @@ export default function Nav() {
   const t = useT();
   const lp = useLocalePath();
   const home = pathname === "/" || pathname === "/en";
+  // the software landing page asks for an application instead of an enquiry
+  const software = pathname === "/software" || pathname === "/en/software";
+  const cta = software
+    ? { href: "#bewerbung", label: t("Jetzt bewerben", "Apply now") }
+    : { href: lp("/kontakt"), label: t("Jetzt anfragen", "Get in touch") };
   // anchors that only exist on the home page need the home path prefix elsewhere
   const to = (l: { href: string; everywhere?: boolean }) =>
     l.href.startsWith("/") ? lp(l.href) : home || l.everywhere ? l.href : `${lp("/")}${l.href}`;
@@ -85,7 +92,7 @@ export default function Nav() {
   useEffect(() => {
     if (!open) return;
     const onResize = () => {
-      if (window.innerWidth >= 1024) setOpen(false);
+      if (window.innerWidth >= 1180) setOpen(false);
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
@@ -127,7 +134,7 @@ export default function Nav() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-0.5 lg:flex xl:gap-1">
+        <nav className="hidden items-center gap-0.5 min-[73.75rem]:flex xl:gap-1">
           {LINKS.map((l) => {
             const linkCls = `flex h-10 items-center gap-1.5 whitespace-nowrap rounded-[10px] px-2.5 text-[14px] font-medium leading-5 tracking-[-0.1px] xl:px-3.5 xl:text-[15px] transition-colors duration-500 ${
               dark
@@ -185,7 +192,7 @@ export default function Nav() {
                 {t(l.de, l.en)}
               </button>
             ) : (
-              <Link key={l.de} href={to(l)} className={linkCls}>
+              <Link key={l.de} href={to(l)} className={"wide" in l ? linkCls.replace(/^flex /, "hidden min-[1400px]:flex ") : linkCls}>
                 {t(l.de, l.en)}
               </Link>
             );
@@ -201,7 +208,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener"
             title={t("Zum Kundenportal TyloHQ", "To the TyloHQ client portal")}
-            className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium leading-5 tracking-[-0.1px] transition-colors duration-500 md:flex lg:hidden min-[1400px]:flex xl:px-[18px] xl:text-[16px] ${
+            className={`group hidden h-12 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-[15px] font-medium leading-5 tracking-[-0.1px] transition-colors duration-500 md:flex min-[73.75rem]:hidden min-[1400px]:flex xl:px-[18px] xl:text-[16px] ${
               dark
                 ? "text-white/70 hover:bg-white/[0.06] hover:text-white"
                 : "text-[#43413d] hover:bg-ink/[0.04]"
@@ -211,14 +218,14 @@ export default function Nav() {
             <ArrowUpRight className="size-4 opacity-50 transition-[opacity,translate] duration-200 group-hover:-translate-y-px group-hover:translate-x-px group-hover:opacity-100" strokeWidth={1.9} />
           </a>
           <Link
-            href={lp("/kontakt")}
+            href={cta.href}
             className={`group hidden h-12 items-center gap-2 whitespace-nowrap rounded-xl px-4 text-[15px] font-medium leading-5 tracking-[-0.1px] transition-colors duration-500 sm:inline-flex xl:px-[22px] xl:text-[16px] ${
               dark
                 ? "bg-accent text-[#001620] hover:bg-[#ddb97e]"
                 : "bg-[#002e3d] text-inverse hover:bg-[#013a4d]"
             }`}
           >
-            {t("Jetzt anfragen", "Get in touch")}
+            {cta.label}
             <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-0.5" />
           </Link>
 
@@ -228,7 +235,7 @@ export default function Nav() {
             aria-label={open ? t("Menü schließen", "Close menu") : t("Menü öffnen", "Open menu")}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className={`grid size-11 place-items-center rounded-xl border transition-colors duration-500 lg:hidden ${
+            className={`grid size-11 place-items-center rounded-xl border transition-colors duration-500 min-[73.75rem]:hidden ${
               dark
                 ? "border-white/15 text-white hover:bg-white/[0.06]"
                 : "border-line text-ink hover:bg-ink/[0.04]"
@@ -241,7 +248,7 @@ export default function Nav() {
 
       {/* Mobile menu panel */}
       <div
-        className={`overflow-hidden border-t transition-[max-height,opacity,background-color,border-color] duration-300 lg:hidden ${
+        className={`overflow-hidden border-t transition-[max-height,opacity,background-color,border-color] duration-300 min-[73.75rem]:hidden ${
           dark ? "border-white/10 bg-[#001620]" : "border-line bg-page"
         } ${open ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}`}
       >
@@ -322,11 +329,11 @@ export default function Nav() {
               <ArrowUpRight className="size-4 opacity-60" strokeWidth={1.9} />
             </a>
             <Link
-              href={lp("/kontakt")}
+              href={cta.href}
               onClick={() => setOpen(false)}
               className="flex h-12 items-center justify-center gap-2 rounded-xl bg-[#002e3d] text-[16px] font-medium text-inverse transition-colors hover:bg-[#013a4d]"
             >
-              {t("Jetzt anfragen", "Get in touch")}
+              {cta.label}
               <ArrowRight className="size-[18px]" />
             </Link>
           </div>
