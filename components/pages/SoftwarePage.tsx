@@ -14,7 +14,7 @@ import SoftwareCTA from "@/components/software/SoftwareCTA";
 import { LandingFooter, LandingHeader } from "@/components/software/LandingChrome";
 
 /* Figma "Software · Landing Page" (desktop 5014:2, mobile 5024:689).
-   `landing` (ads URL /software/app-bauplan): no menu, footer or action bar with
+   `landing` (/software and the ads URL /software/app-bauplan): no menu, footer or action bar with
    links to other pages, just a sticky header with the apply button. */
 export default function SoftwarePage({ landing = false }: { landing?: boolean }) {
   return (
