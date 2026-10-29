@@ -4,15 +4,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import { openCookieSettings } from "@/lib/consent";
-import { useLocalePath, useT } from "@/components/i18n/LocaleProvider";
+import { useLocale, useLocalePath, useT } from "@/components/i18n/LocaleProvider";
+import { CONTACT } from "@/lib/contact";
 import { cn } from "@/lib/cn";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import { APPLY, BTN, BTN_BASE } from "./ui";
 
 /* Header and footer for the ads URL (/software/app-bauplan): no links to other
    pages, so the only way forward is the application. The header stays on screen
-   with the apply button; the footer keeps only the legal links (they open in a
-   new tab so the visitor doesn't lose the form). */
+   with the apply button; the footer has the logo, contact details and the legal
+   links (they open in a new tab so the visitor doesn't lose the form). */
 
 export function LandingHeader() {
   const t = useT();
@@ -53,22 +54,56 @@ export function LandingHeader() {
 export function LandingFooter() {
   const t = useT();
   const lp = useLocalePath();
+  const locale = useLocale();
   const link = "transition-colors hover:text-white";
+  const contact = "flex items-center gap-3 text-[15px] leading-6 text-white/80 transition-colors hover:text-white";
   return (
-    <footer className="border-t border-white/10 bg-[#001620] py-8 text-white">
-      <Container className="flex flex-col gap-4 text-[13px] leading-5 text-white/60 sm:flex-row sm:items-center sm:justify-between">
-        <p>© 2026 TyloTech</p>
-        <nav aria-label={t("Rechtliches", "Legal")} className="flex flex-wrap gap-x-6 gap-y-2">
-          <Link href={lp("/impressum")} target="_blank" rel="noopener" className={link}>
-            {t("Impressum", "Imprint")}
-          </Link>
-          <Link href={lp("/datenschutz")} target="_blank" rel="noopener" className={link}>
-            {t("Datenschutz", "Privacy policy")}
-          </Link>
-          <button type="button" onClick={openCookieSettings} className={cn("text-left", link)}>
-            {t("Cookie-Einstellungen", "Cookie settings")}
-          </button>
-        </nav>
+    <footer className="border-t border-white/10 bg-[#001620] pb-8 pt-12 text-white sm:pt-14">
+      <Container className="flex flex-col items-center gap-10 text-center">
+        <div className="flex flex-col items-center gap-5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/tylotech-logo-dark.svg" alt="TyloTech" width={264} height={67} className="h-12 w-auto sm:h-14" />
+          <blockquote className="max-w-[520px]">
+            <p className="font-[family-name:var(--font-instrument)] text-[26px] italic leading-[32px] text-[#d8b681] sm:text-[30px] sm:leading-[36px]">
+              {t("„Wir bauen. Du wächst.“", "“We build. You grow.”")}
+            </p>
+            <p className="t-body-s mt-2 text-white/[0.55]">
+              {t("Eigene Firmen-Software zum Festpreis. Erste Version in 6 Wochen live.", "Your own company software at a fixed price. First version live in 6 weeks.")}
+            </p>
+          </blockquote>
+        </div>
+
+        <address className="flex flex-col items-center gap-3 not-italic sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-8">
+          <a href={CONTACT.phoneHref} className={contact}>
+            <Phone className="size-[18px] shrink-0 text-[#d8b681]" strokeWidth={1.8} aria-hidden />
+            {locale === "en" ? CONTACT.phoneIntl : CONTACT.phone}
+          </a>
+          <a href={`mailto:${CONTACT.email}`} className={contact}>
+            <Mail className="size-[18px] shrink-0 text-[#d8b681]" strokeWidth={1.8} aria-hidden />
+            {CONTACT.email}
+          </a>
+          <p className="flex items-center gap-3 text-[15px] leading-6 text-white/80">
+            <MapPin className="size-[18px] shrink-0 text-[#d8b681]" strokeWidth={1.8} aria-hidden />
+            {CONTACT.street}, {CONTACT.city}
+          </p>
+        </address>
+
+        <div aria-hidden className="h-px w-full bg-[linear-gradient(90deg,rgba(209,170,113,0)_0%,rgba(209,170,113,0.35)_50%,rgba(209,170,113,0)_100%)]" />
+
+        <div className="flex w-full flex-col items-center gap-3 text-[13px] leading-5 text-white/60">
+          <p>© 2026 TyloTech</p>
+          <nav aria-label={t("Rechtliches", "Legal")} className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <Link href={lp("/impressum")} target="_blank" rel="noopener" className={link}>
+              {t("Impressum", "Imprint")}
+            </Link>
+            <Link href={lp("/datenschutz")} target="_blank" rel="noopener" className={link}>
+              {t("Datenschutz", "Privacy policy")}
+            </Link>
+            <button type="button" onClick={openCookieSettings} className={cn("text-left", link)}>
+              {t("Cookie-Einstellungen", "Cookie settings")}
+            </button>
+          </nav>
+        </div>
       </Container>
     </footer>
   );
