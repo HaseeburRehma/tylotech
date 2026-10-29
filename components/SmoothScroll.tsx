@@ -61,13 +61,39 @@ export default function SmoothScroll({
     }
 
     // Smooth anchor scrolling with or without Lenis (72px = sticky header).
-    // A refresh (fonts, load, the late safety net) re-measures the page and stops
-    // a native smooth scroll midway, so a jump still in flight is issued again.
-    let jump: { go: () => void; until: number } | null = null;
+    // A refresh (fonts, load, the late safety net) re-measures the page — pin
+    // spacers can push the target down — and stops a native smooth scroll midway,
+    // so a jump from the last few seconds is issued again after every refresh.
+    const JUMP_MS = 4000;
+    let jump: { go: (again?: boolean) => void; until: number } | null = null;
+    // the refresh restores its own scroll position in the same frame, which would
+    // cancel a scroll started here, so re-issue once it has finished
     const onRefresh = () => {
-      if (jump && performance.now() < jump.until) jump.go();
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (jump && performance.now() < jump.until) jump.go(true);
+        }),
+      );
     };
     ScrollTrigger.addEventListener("refresh", onRefresh);
+    // the visitor scrolls on their own: never pull them back to the old target
+    const cancelJump = () => {
+      jump = null;
+    };
+    window.addEventListener("wheel", cancelJump, { passive: true });
+    window.addEventListener("touchmove", cancelJump, { passive: true });
+
+    // tapped before hydration (or deep-linked): the browser already jumped to the
+    // hash, but the layout is still settling — keep that target in place too
+    if (window.location.hash.length > 1) {
+      const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+      if (target) {
+        jump = {
+          go: () => window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 72, behavior: "auto" }),
+          until: performance.now() + JUMP_MS,
+        };
+      }
+    }
 
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
@@ -77,14 +103,15 @@ export default function SmoothScroll({
       const el = document.querySelector<HTMLElement>(hash);
       if (!el) return;
       e.preventDefault();
-      const go = () => {
-        if (lenis) lenis.scrollTo(el, { offset: -72, duration: 1.2 });
-        else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: reduce ? "auto" : "smooth" });
+      // a re-issue after a refresh lands directly: the visitor already saw the jump start
+      const go = (again = false) => {
+        if (lenis) lenis.scrollTo(el, again ? { offset: -72, immediate: true, force: true } : { offset: -72, duration: 1.2 });
+        else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 72, behavior: reduce || again ? "auto" : "smooth" });
       };
-      jump = { go, until: performance.now() + 1800 };
+      jump = { go, until: performance.now() + JUMP_MS };
       // a link in the open mobile menu: the panel collapses first (300 ms) and
       // shifts the page — measure the target only after that
-      if (anchor.closest("header") && window.innerWidth < 1180) window.setTimeout(go, 320);
+      if (anchor.closest("header") && window.innerWidth < 1180) window.setTimeout(() => go(), 320);
       else go();
     };
     document.addEventListener("click", onClick);
@@ -92,6 +119,8 @@ export default function SmoothScroll({
     return () => {
       document.removeEventListener("click", onClick);
       ScrollTrigger.removeEventListener("refresh", onRefresh);
+      window.removeEventListener("wheel", cancelJump);
+      window.removeEventListener("touchmove", cancelJump);
       window.removeEventListener("load", refresh);
       window.clearTimeout(late);
       cancelAnimationFrame(pending);

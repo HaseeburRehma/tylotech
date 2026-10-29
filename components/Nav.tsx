@@ -54,9 +54,11 @@ export default function Nav() {
   const cta = software
     ? { href: "#bewerbung", label: t("Jetzt bewerben", "Apply now") }
     : { href: lp("/kontakt"), label: t("Jetzt anfragen", "Get in touch") };
+  // "everywhere" anchors (#gruender) exist on the home and industry pages only
+  const hasAbout = home || pathname.startsWith("/branchen/") || pathname.startsWith("/en/industries/");
   // anchors that only exist on the home page need the home path prefix elsewhere
   const to = (l: { href: string; everywhere?: boolean }) =>
-    l.href.startsWith("/") ? lp(l.href) : home || l.everywhere ? l.href : `${lp("/")}${l.href}`;
+    l.href.startsWith("/") ? lp(l.href) : home || (l.everywhere && hasAbout) ? l.href : `${lp("/")}${l.href}`;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);

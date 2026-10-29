@@ -50,8 +50,12 @@ const SS_AUTO = "tylolens-auto-shown";
 const SS_DISMISSED = "tylolens-dismissed";
 const LS_SENT = "tylolens-submitted";
 const LS_NEVER = "tylolens-never"; // "Nicht mehr anzeigen"
-// no auto-open where the page has its own form (contact, software application) or is legal text
-const NO_AUTO = ["/kontakt", "/impressum", "/datenschutz", "/software", "/en/contact", "/en/imprint", "/en/privacy", "/en/software"];
+// no auto-open where the page has its own form (contact, software application), is legal
+// text, or is the short case-study overview (55 % depth lands right on the cards)
+const NO_AUTO = [
+  "/kontakt", "/impressum", "/datenschutz", "/software", "/case-studies",
+  "/en/contact", "/en/imprint", "/en/privacy", "/en/software", "/en/case-studies",
+];
 
 const store = {
   get: (s: Storage | undefined, k: string) => {
