@@ -97,7 +97,7 @@ export default function CookieBanner() {
             "Wir verwenden Cookies, um die Seite zu betreiben, zu verstehen, wie sie genutzt wird, und sie zu verbessern. Sie entscheiden, was an ist. Mehr in unserer",
             "We use cookies to run this site, understand how it’s used and improve it. You decide what’s switched on. More in our",
           )}{" "}
-          <Link href={lp("/datenschutz")} className="text-ink underline underline-offset-2 hover:text-accent">
+          <Link href={lp("/datenschutz")} target="_blank" rel="noopener" className="text-ink underline underline-offset-2 hover:text-accent">
             {t("Datenschutzerklärung", "privacy policy")}
           </Link>
           .

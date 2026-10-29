@@ -15,5 +15,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <SoftwarePage />;
+  return <SoftwarePage landing />;
 }

@@ -2,13 +2,18 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const TyloLens = dynamic(() => import("./TyloLens"), { ssr: false });
 
 /* TyloLens is a large modal that only matters once someone scrolls or clicks,
    so its code loads on the first interaction — or immediately if the menu asks
    for it first (the pending open is handed over on mount). */
+// ads landing page: the application is the only call to action there
+const OFF = /^\/(en\/)?software\/app-bauplan$/;
+
 export default function TyloLensLazy() {
+  const pathname = usePathname();
   const [load, setLoad] = useState<false | { openOnMount?: "menu" | "fab" }>(false);
 
   useEffect(() => {
@@ -30,5 +35,5 @@ export default function TyloLensLazy() {
     };
   }, []);
 
-  return load ? <TyloLens openOnMount={load.openOnMount} /> : null;
+  return load && !OFF.test(pathname) ? <TyloLens openOnMount={load.openOnMount} /> : null;
 }
