@@ -9,6 +9,7 @@ import { CASE_STUDIES } from "@/lib/caseStudies";
 import { Accent } from "../branche/ui";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 import { BrowserBar, CsEyebrow, useCaseReveal } from "./ui";
+import { AutoSlider, CountUp } from "./motion";
 
 /* Case-studies overview (no Figma frame): hero in the case-study hero style,
    then one large card per project, alternating sides on desktop. */
@@ -63,24 +64,25 @@ export function CasesList() {
               <Link href={href} tabIndex={-1} aria-hidden className={cn("block p-4 sm:p-6 lg:p-8", i % 2 === 1 && "lg:order-2")}>
                 <div className="overflow-hidden rounded-2xl border border-[#e2e0dc] bg-white shadow-[0_8px_24px_rgba(26,23,20,0.06)]">
                   <BrowserBar domain={c.domain} />
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={c.hero.slides[0].src}
-                      width={c.hero.slides[0].w}
-                      height={c.hero.slides[0].h}
-                      alt={c.hero.slides[0].alt[locale]}
-                      srcSet={`${c.hero.slideSmall} 760w, ${c.hero.slides[0].src} ${c.hero.slides[0].w}w`}
-                      sizes="(min-width: 1024px) 680px, (min-width: 640px) calc(100vw - 128px), calc(100vw - 80px)"
-                      loading={i === 0 ? "eager" : "lazy"}
-                      fetchPriority={i === 0 ? "high" : "auto"}
-                      decoding="async"
-                      className="h-full w-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                    />
-                  </div>
+                  <AutoSlider
+                    className="aspect-[16/10]"
+                    priority={i === 0}
+                    sizes="(min-width: 1024px) 680px, (min-width: 640px) calc(100vw - 128px), calc(100vw - 80px)"
+                    zoomClassName="group-hover:scale-[1.03]"
+                    slides={c.hero.slides.map((sl, n) => ({
+                      src: sl.src,
+                      w: sl.w,
+                      h: sl.h,
+                      alt: sl.alt[locale],
+                      srcSet: n === 0 ? `${c.hero.slideSmall} 760w, ${sl.src} ${sl.w}w` : undefined,
+                    }))}
+                  />
                 </div>
               </Link>
-              <div className="flex flex-col justify-center gap-6 px-6 pb-8 sm:px-10 sm:pb-10 lg:py-12 lg:pl-6 lg:pr-12">
+              <div
+                {...(i === 0 ? {} : { "data-rv-group": "" })}
+                className={cn("flex flex-col justify-center gap-6 px-6 pb-8 sm:px-10 sm:pb-10 lg:py-12 lg:pl-6 lg:pr-12", i === 0 && "intro-stagger")}
+              >
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-[13px] text-[#94713f]">{String(i + 1).padStart(2, "0")}</span>
                   <ul className="flex flex-wrap gap-2">
@@ -101,7 +103,9 @@ export function CasesList() {
                   {c.card.metrics.map((m) => (
                     <div key={m.label.de} className="flex flex-col gap-1">
                       <dt className="order-2 t-body-s text-[#5c5954]">{m.label[locale]}</dt>
-                      <dd className="font-display text-[28px] font-semibold leading-[34px] tracking-[-0.8px] text-[#1a1917] sm:text-[32px] sm:leading-[38px]">{m.value[locale]}</dd>
+                      <dd className="font-display text-[28px] font-semibold leading-[34px] tracking-[-0.8px] text-[#1a1917] sm:text-[32px] sm:leading-[38px]">
+                        <CountUp value={m.value[locale]} locale={locale} />
+                      </dd>
                     </div>
                   ))}
                 </dl>

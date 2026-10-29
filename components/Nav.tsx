@@ -32,7 +32,6 @@ const INDUSTRIES = [
 
 const LINKS = [
   { de: "Branchen", en: "Industries", href: "#branchen", dropdown: true },
-  { de: "Software", en: "Software", href: "/software" },
   { de: "Case Studies", en: "Case studies", href: "/case-studies" },
   { de: "TyloHQ", en: "TyloHQ", href: "#tylohq-app" },
   { de: "TyloLens", en: "TyloLens", href: "#tylolens", lens: true },

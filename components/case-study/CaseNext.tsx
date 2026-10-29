@@ -7,6 +7,7 @@ import Container from "../ui/Container";
 import { CASE_STUDIES, plainTitle, type CaseStudy } from "@/lib/caseStudies";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 import { CsEyebrow, useCaseReveal } from "./ui";
+import { AutoSlider } from "./motion";
 
 /* Figma "Case Study Card" — media, tags, title, one-liner. The whole card links. */
 export function CaseCard({ c }: { c: CaseStudy }) {
@@ -17,16 +18,12 @@ export function CaseCard({ c }: { c: CaseStudy }) {
       href={lp(`/case-studies/${c.slug}`)}
       className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-[#e2e0dc] bg-white transition-[translate,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-[#e3c79e] hover:shadow-[0_22px_44px_-26px_rgba(8,34,44,0.35)]"
     >
-      <div className="relative h-[200px] overflow-hidden bg-[#eeedea] sm:h-[230px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={c.card.image}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
-        />
-      </div>
+      <AutoSlider
+        className="h-[200px] bg-[#eeedea] sm:h-[230px]"
+        sizes="(min-width: 768px) 50vw, 100vw"
+        zoomClassName="group-hover:scale-[1.04]"
+        slides={c.card.gallery.map((g) => ({ src: g.src, w: g.w, h: g.h, alt: g.alt[locale], pos: g.pos }))}
+      />
       <div className="flex flex-1 flex-col gap-4 px-6 py-6 sm:px-7 sm:py-[26px]">
         <ul className="flex flex-wrap gap-2">
           {c.card.tags[locale].map((tag) => (

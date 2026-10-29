@@ -30,6 +30,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
+import Select from "../ui/Select";
 import { useLocale, useT } from "../i18n/LocaleProvider";
 import TrendChart, { type ChartSeries } from "./TrendChart";
 import {
@@ -412,18 +413,19 @@ export default function HQApp({ live }: { live: boolean }) {
             <div className="flex items-center justify-between">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/tylotech-logo.svg" alt="TyloTech" className="h-[22px] w-auto" />
-              <select
-                aria-label={t("Kunde", "Client")}
-                value={client}
-                onChange={(e) => setClient(e.target.value as ClientId)}
-                className="max-w-[150px] truncate rounded-[8px] border border-[#eeedea] bg-[#f6f5f3] px-2 py-1 text-[11px] font-medium text-[#1a1917] outline-none"
-              >
-                {CLIENTS.map((x) => (
-                  <option key={x.id} value={x.id}>
-                    {x.name}
-                  </option>
-                ))}
-              </select>
+              <div className="w-[150px]">
+                <Select
+                  id="hq-client"
+                  ariaLabel={t("Kunde", "Client")}
+                  value={client}
+                  onChange={(c) => setClient(c as ClientId)}
+                  placeholder={t("Kunde", "Client")}
+                  options={CLIENTS.map((x) => ({ value: x.id, label: x.name }))}
+                  className="h-7 gap-1.5 rounded-[8px] border border-[#eeedea] bg-[#f6f5f3] pl-2 pr-7 [&>svg:last-child]:right-1.5 [&>svg:last-child]:size-3.5"
+                  openClassName="border-[#d1aa71]"
+                  textClassName="text-[11px] font-medium text-[#1a1917]"
+                />
+              </div>
             </div>
             <div data-lenis-prevent className="hq-noscrollbar -mx-3 flex gap-1 overflow-x-auto px-3">
               {NAV.flatMap((g) => g.items).map((it) => {

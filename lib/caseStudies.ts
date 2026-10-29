@@ -11,7 +11,8 @@ import type { Locale } from "./i18n";
 export type L<T = string> = { de: T; en: T };
 
 /** A website screenshot shown in a browser frame. */
-export type Shot = { src: string; w: number; h: number; alt: L };
+/** `pos`: crop anchor in fixed-ratio frames (screenshots stay top-aligned, photos centred) */
+export type Shot = { src: string; w: number; h: number; alt: L; pos?: "top" | "center" };
 
 export type Channel = "organic" | "tiktok" | "meta";
 
@@ -58,7 +59,14 @@ export type CaseStudy = {
     slideSmall: string;
   };
   /** summary used by the overview page and "Weitere Case Studies" */
-  card: { image: string; tags: L<string[]>; text: L; metrics: { value: L; label: L }[] };
+  card: {
+    image: string;
+    /** auto-sliding images on the "Weitere Case Studies" card: web, print, campaign */
+    gallery: Shot[];
+    tags: L<string[]>;
+    text: L;
+    metrics: { value: L; label: L }[];
+  };
   results: { wide: Metric; compact: [Metric, Metric]; testimonial: Testimonial };
   overview: { situation: L; tasks: L<string[]> };
   challenges: { intro: L; items: Card[] };
@@ -123,6 +131,13 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     card: {
       image: `${CS}/card.webp`,
+      gallery: [
+        shot(`${CS}/web-home.webp`, 860, 535, "Startseite von crusty-slices.com", "crusty-slices.com home page"),
+        { ...shot(`${CS}/offline-card.webp`, 960, 640, "Großleinwand mit dem Dubai-Special", "Large screen with the Dubai special"), pos: "center" },
+        shot(`${CS}/web-saeulen.webp`, 860, 534, "Die sechs Säulen des Konzepts", "The six pillars of the concept"),
+        shot(`${CS}/web-menu.webp`, 862, 535, "Speisekarte mit Preisen", "Menu with prices"),
+        shot(`${CS}/web-franchise.webp`, 862, 534, "Franchise-Seite für Partner", "Franchise page for partners"),
+      ],
       tags: { de: ["Gastronomie", "Website", "Social Media"], en: ["Food service", "Website", "Social media"] },
       text: {
         de: "Crusty Slices, Köln: Website mit Bestellstrecke, Social Media und Kampagnen.",
@@ -343,6 +358,13 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     card: {
       image: `${FA}/card.webp`,
+      gallery: [
+        shot(`${FA}/card.webp`, 1280, 644, "Startseite von fahrschule-abgefahrn.de", "fahrschule-abgefahrn.de home page"),
+        { ...shot(`${FA}/offline-card.webp`, 960, 640, "Plakatwand mit der Winteraktion", "Billboard with the winter promotion"), pos: "center" },
+        shot(`${FA}/web-anmeldung.webp`, 1600, 805, "Online-Anmeldung", "Online sign-up"),
+        { ...shot(`${FA}/print-1.webp`, 1200, 900, "Give-away im Einkaufskorb", "Giveaway in a shopping basket"), pos: "center" },
+        shot(`${FA}/web-klassen.webp`, 1600, 805, "Führerscheinklassen auf einen Blick", "Licence classes at a glance"),
+      ],
       tags: { de: ["Fahrschule", "Website", "Social Media"], en: ["Driving school", "Website", "Social media"] },
       text: {
         de: "Fahrschule Abgefahrn, Düsseldorf: Website, Theorieplan, Anmeldung und Social Media.",

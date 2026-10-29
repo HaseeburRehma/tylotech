@@ -9,7 +9,6 @@ const BASE = "https://www.tylotech.de";
 export default function sitemap(): MetadataRoute.Sitemap {
   const dePaths = [
     "/",
-    "/software",
     "/case-studies",
     "/kontakt",
     "/impressum",
@@ -21,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return dePaths.flatMap((de) => {
     const en = localizePath(de, "en");
     const languages = { de: `${BASE}${de}`, en: `${BASE}${en}` };
-    const priority = de === "/" ? 1 : de.startsWith("/branchen/") || de === "/kontakt" || de === "/software" || de.startsWith("/case-studies") ? 0.8 : 0.3;
+    const priority = de === "/" ? 1 : de.startsWith("/branchen/") || de === "/kontakt" || de.startsWith("/case-studies") ? 0.8 : 0.3;
     return [
       { url: `${BASE}${de}`, lastModified: now, priority, alternates: { languages } },
       { url: `${BASE}${en}`, lastModified: now, priority, alternates: { languages } },

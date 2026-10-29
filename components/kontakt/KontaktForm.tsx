@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, ChevronDown, CircleAlert, LoaderCircle, Mail, Phone, RotateCcw } from "lucide-react";
+import { ArrowRight, Building2, Check, CircleAlert, Ellipsis, LoaderCircle, Mail, Monitor, Phone, RotateCcw, Search, TrendingUp, Workflow, type LucideIcon } from "lucide-react";
+import Select from "../ui/Select";
 import { cn } from "@/lib/cn";
 import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, topicLabel, validate, type FieldErrors } from "@/lib/contact";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
@@ -13,6 +14,15 @@ type Status = "idle" | "sending" | "sent" | "fallback" | "rate-limited";
 const field =
   "w-full rounded-[12px] border bg-white px-[18px] text-[16px] leading-[24px] text-[#1a1917] outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-[#a6a29b] hover:border-[#cbc8c2] focus:border-[#d1aa71] focus:shadow-[0_0_0_4px_rgba(209,170,113,0.18)]";
 const fieldBorder = (err?: string) => (err ? "border-[#e5a29b]" : "border-[#e2e0dc]");
+
+const TOPIC_ICON: Record<(typeof TOPICS)[number], LucideIcon> = {
+  "Marketing & Performance": TrendingUp,
+  "Website & Software": Monitor,
+  "SEO & KI-Sichtbarkeit": Search,
+  Unternehmensaufbau: Building2,
+  Digitalisierung: Workflow,
+  "Etwas anderes": Ellipsis,
+};
 
 function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
   return (
@@ -238,22 +248,16 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
 
       <div className="kf-row">
         <Label htmlFor="kf-topic">{t("Worum geht es?", "What's it about?")}</Label>
-        <div className="relative">
-          <select
-            id="kf-topic"
-            value={v.topic}
-            onChange={set("topic")}
-            className={cn(field, "h-14 cursor-pointer appearance-none pr-12", fieldBorder(), !v.topic && "text-[#a6a29b]")}
-          >
-            <option value="">{t("Auswählen", "Select")}</option>
-            {TOPICS.map((topic) => (
-              <option key={topic} value={topic} className="text-[#1a1917]">
-                {topicLabel(topic, locale)}
-              </option>
-            ))}
-          </select>
-          <ChevronDown aria-hidden className="pointer-events-none absolute right-[18px] top-1/2 size-5 -translate-y-1/2 text-[#5c5954]" strokeWidth={1.6} />
-        </div>
+        <Select
+          id="kf-topic"
+          value={v.topic}
+          onChange={(topic) => setV({ ...v, topic })}
+          placeholder={t("Auswählen", "Select")}
+          options={TOPICS.map((topic) => ({ value: topic, label: topicLabel(topic, locale), icon: TOPIC_ICON[topic] }))}
+          className={cn(field, "h-14", fieldBorder())}
+          textClassName="text-[16px]"
+          placeholderClassName="text-[#a6a29b]"
+        />
       </div>
 
       <div className="kf-row">

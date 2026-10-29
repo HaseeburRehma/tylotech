@@ -2,7 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, ChevronDown, FileText, Loader2, Mail, Phone } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, FileText, Loader2, Mail, Phone, Users } from "lucide-react";
+import Select from "../ui/Select";
 import Container from "../ui/Container";
 import { cn } from "@/lib/cn";
 import { gsap, useLazyGSAP } from "@/lib/gsap";
@@ -242,25 +243,20 @@ export default function SoftwareBewerbung() {
           </div>
           <div>
             <Label htmlFor={id("mitarbeiter")}>{t("Mitarbeiter", "Employees")}</Label>
-            <div className={cn(FIELD, fieldBorder(err("mitarbeiter")), "relative")}>
-              <select
-                id={id("mitarbeiter")}
-                value={v.mitarbeiter}
-                onChange={(e) => set("mitarbeiter", e.target.value as Bewerbung["mitarbeiter"])}
-                className={cn(INPUT, "h-full cursor-pointer appearance-none pr-8", !v.mitarbeiter && "text-[#7d7973]")}
-                {...described("mitarbeiter")}
-              >
-                <option value="" disabled>
-                  {t("Bitte wählen", "Please choose")}
-                </option>
-                {MITARBEITER.map((o) => (
-                  <option key={o.value} value={o.value} className="text-[#1a1917]">
-                    {locale === "en" ? o.en : o.de}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-[18px] size-5 text-[#7d7973]" strokeWidth={1.7} aria-hidden />
-            </div>
+            <Select
+              id={id("mitarbeiter")}
+              value={v.mitarbeiter}
+              onChange={(val) => set("mitarbeiter", val as Bewerbung["mitarbeiter"])}
+              placeholder={t("Bitte wählen", "Please choose")}
+              options={MITARBEITER.map((o) => ({ value: o.value, label: locale === "en" ? o.en : o.de }))}
+              invalid={!!err("mitarbeiter")}
+              describedBy={err("mitarbeiter") ? id("mitarbeiter-err") : undefined}
+              icon={Users}
+              className={cn(FIELD, fieldBorder(err("mitarbeiter")), "focus-visible:border-[#d1aa71] focus-visible:shadow-[0_0_0_4px_rgba(209,170,113,0.25)]")}
+              openClassName="border-[#d1aa71] shadow-[0_0_0_4px_rgba(209,170,113,0.25)]"
+              textClassName="text-[16px] leading-6 text-[#1a1917]"
+              placeholderClassName="text-[#7d7973]"
+            />
             <ErrLine id={id("mitarbeiter-err")} msg={err("mitarbeiter")} />
           </div>
         </div>
