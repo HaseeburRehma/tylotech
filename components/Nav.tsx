@@ -49,7 +49,7 @@ export default function Nav() {
   const lp = useLocalePath();
   const home = pathname === "/" || pathname === "/en";
   // the software landing page asks for an application instead of an enquiry
-  const software = pathname === "/software" || pathname === "/en/software";
+  const software = /^\/(en\/)?software(\/app-bauplan)?$/.test(pathname);
   const cta = software
     ? { href: "#bewerbung", label: t("Jetzt bewerben", "Apply now") }
     : { href: lp("/kontakt"), label: t("Jetzt anfragen", "Get in touch") };

@@ -4,6 +4,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import CookieBanner from "@/components/CookieBanner";
 import Clarity from "@/components/Clarity";
 import GoogleTagManager from "@/components/GoogleTagManager";
+import MetaPixel from "@/components/MetaPixel";
 import TyloLensLazy from "@/components/TyloLensLazy";
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { fontVariables } from "@/lib/fonts";
@@ -31,6 +32,7 @@ export default function RootDocument({ locale, children }: { locale: Locale; chi
           <CookieBanner />
           <Clarity />
           <GoogleTagManager />
+          <MetaPixel />
         </LocaleProvider>
       </body>
     </html>

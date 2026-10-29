@@ -38,6 +38,7 @@ import Select from "./ui/Select";
 import { CONTACT } from "@/lib/contact";
 import { TL_BRANCHEN, TL_BRANCHEN_EN, TL_BUDGETS, TL_ZIELE, TL_ZIELE_EN, normalizeWebsite, trackLens, validateLens, type TlErrors } from "@/lib/tylolens";
 import { useLocale, useLocalePath, useT } from "@/components/i18n/LocaleProvider";
+import { trackMetaLead } from "@/lib/metaPixel";
 
 /* TyloLens (dev brief + TyloLens_Tool.html): scroll-triggered lead modal, two steps.
    - opens automatically at ~55 % scroll depth, once per session, never after a manual close
@@ -51,8 +52,8 @@ const LS_NEVER = "tylolens-never"; // "Nicht mehr anzeigen"
 // no auto-open where the page has its own form (contact, software application), is legal
 // text, or is the short case-study overview (55 % depth lands right on the cards)
 const NO_AUTO = [
-  "/kontakt", "/impressum", "/datenschutz", "/software", "/case-studies",
-  "/en/contact", "/en/imprint", "/en/privacy", "/en/software", "/en/case-studies",
+  "/kontakt", "/impressum", "/datenschutz", "/software", "/software/app-bauplan", "/case-studies",
+  "/en/contact", "/en/imprint", "/en/privacy", "/en/software", "/en/software/app-bauplan", "/en/case-studies",
 ];
 
 const store = {
@@ -316,6 +317,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
         trackLens("tylolens_submitted", { budget: v.budget, branche: v.branche, ziel: v.ziel });
         // GA4 recommended lead event for GTM (no personal data)
         ((window as Window & { dataLayer?: unknown[] }).dataLayer ??= []).push({ event: "generate_lead", lead_source: "tylolens", language: locale, budget: v.budget });
+        trackMetaLead("tylolens", { email: v.email, name: v.name }, { budget: v.budget });
         window.setTimeout(() => dialog.current?.querySelector<HTMLElement>("button")?.focus(), 50);
         return;
       }

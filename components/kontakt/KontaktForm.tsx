@@ -7,6 +7,7 @@ import Select from "../ui/Select";
 import { cn } from "@/lib/cn";
 import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, topicLabel, validate, type FieldErrors } from "@/lib/contact";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
+import { trackMetaLead } from "@/lib/metaPixel";
 
 type Status = "idle" | "sending" | "sent" | "fallback" | "rate-limited";
 
@@ -110,6 +111,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
         // GA4 recommended lead event for GTM (no personal data)
         const w = window as Window & { dataLayer?: unknown[] };
         (w.dataLayer ??= []).push({ event: "generate_lead", lead_source: "contact_form", language: locale, branche: p.branche || "none" });
+        trackMetaLead("contact_form", { email: p.email, phone: p.phone, name: p.name });
         return setStatus("sent");
       }
       if (data.reason === "invalid" && data.errors) {

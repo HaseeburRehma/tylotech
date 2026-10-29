@@ -3,17 +3,18 @@ import type { NextConfig } from "next";
 /* Content-Security-Policy — what the site actually loads:
  * - Next.js inline bootstrap scripts (no nonces) → 'unsafe-inline'
  * - Google Tag Manager / GA4 (after consent); GTM tags may evaluate code → 'unsafe-eval'
+ * - Meta Pixel (after marketing consent): connect.facebook.net script, beacons to www.facebook.com
  * - Microsoft Clarity (after consent): www.clarity.ms + scripts.clarity.ms, beacons to *.clarity.ms / c.bing.com
- * - YouTube embeds (youtube-nocookie), Google Maps embed (contact page)
+ * - YouTube embeds (youtube-nocookie), Google Maps embed (contact page); GTM/GA4 video tracking loads www.youtube.com/iframe_api
  * - fonts are self-hosted via next/font; Resend + Google Places are called server-side only
  * - vercel.live: the Vercel toolbar on preview deployments */
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://vercel.live",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://connect.facebook.net https://www.youtube.com https://vercel.live",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com https://*.clarity.ms https://c.bing.com https://vercel.live wss://ws-us3.pusher.com",
+  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com https://*.clarity.ms https://c.bing.com https://www.facebook.com https://connect.facebook.net https://vercel.live wss://ws-us3.pusher.com",
   "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://www.google.com https://*.googletagmanager.com https://tagassistant.google.com https://vercel.live",
   "media-src 'self' blob: https:",
   "worker-src 'self' blob:",

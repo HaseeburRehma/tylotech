@@ -25,6 +25,7 @@ import {
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 import { BTN, BTN_BASE, BTN_SIZE, Eyebrow } from "./ui";
 import s from "./software.module.css";
+import { trackMetaLead } from "@/lib/metaPixel";
 
 const STEPS = 6;
 const EMPTY: Bewerbung = { branche: "", mitarbeiter: "", problem: "", tools: [], budget: "", start: "", name: "", company: "", email: "", phone: "", consent: false };
@@ -156,6 +157,7 @@ export default function SoftwareBewerbung() {
         // GA4 recommended lead event for GTM (only option values, no personal data)
         const w = window as Window & { dataLayer?: unknown[] };
         (w.dataLayer ??= []).push({ event: "generate_lead", lead_source: "software_application", language: locale, mitarbeiter: v.mitarbeiter || "none", budget: v.budget || "none" });
+        trackMetaLead("software_application", { email: v.email, phone: v.phone, name: v.name }, { mitarbeiter: v.mitarbeiter, budget: v.budget });
         moved.current = true;
         setStatus("idle");
         setDone(true);

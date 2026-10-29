@@ -252,6 +252,14 @@ export const DATENSCHUTZ_EN: LegalDoc = {
       ],
     },
     {
+      id: "meta-pixel",
+      title: "Meta Pixel and Conversions API",
+      blocks: [
+        { p: "We use the Meta Pixel and the Conversions API of Meta Platforms Ireland Limited, Merrion Road, Dublin 4, D04 X2K5, Ireland, to measure the success of our ads on Facebook and Instagram and to show these ads to people who may be interested in our services. Pages viewed and enquiries sent (without their content), device and browser information, your IP address and cookies (“_fbp”, “_fbc”, stored for up to 90 days) are transmitted to Meta. When you submit a form, we also transmit your email address, phone number and name, only in hashed (pseudonymised) form, so that Meta can attribute the enquiry to an ad. We and Meta are joint controllers for this processing (Art. 26 GDPR); the agreement is available at [facebook.com/legal/controller_addendum](https://www.facebook.com/legal/controller_addendum)." },
+        { p: "The Meta Pixel and Conversions API are only used once you consent to the “Marketing” category in our cookie settings. A transfer to the USA is possible; Meta is certified under the EU-US Data Privacy Framework. The legal basis is your consent pursuant to Art. 6(1)(a) GDPR and Section 25(1) TDDDG. You can withdraw your consent at any time with effect for the future via “Cookie settings” in the footer of the website; the Meta cookies are then deleted. Further information: [facebook.com/privacy/policy](https://www.facebook.com/privacy/policy)." },
+      ],
+    },
+    {
       id: "social-plugins",
       title: "Social network plugins (social plugins)",
       blocks: [
