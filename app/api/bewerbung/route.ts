@@ -16,6 +16,7 @@ import {
 } from "@/lib/bewerbung";
 import { MailError, sendMail, sender, transport } from "@/lib/mail/send";
 import { applicationConfirmation, applicationTeamNotification } from "@/lib/mail/templates";
+import { cleanAttribution, sendToTyloHQ, tylohqConfigured } from "@/lib/tylohq";
 
 /* App-Bauplan application (software landing page) → team e-mail (+ confirmation to the applicant).
  * Transport and credentials: see lib/mail/send.ts. Extra switches:
@@ -24,8 +25,10 @@ import { applicationConfirmation, applicationTeamNotification } from "@/lib/mail
  *   CONTACT_AUTOREPLY    "false" turns off the confirmation e-mail
  *   SITE_URL             public origin for logo/links in e-mails (defaults to the request origin)
  *
- * Without a transport the route answers 503 { reason: "not-configured" } and the form
- * offers a pre-filled mailto link instead, so no application is lost. */
+ * Every application also goes to TyloHQ as a lead (lib/tylohq.ts, TYLOHQ_LEADS_URL); it
+ * counts as delivered if the e-mail or TyloHQ got it. With neither, the route answers 503
+ * { reason: "not-configured" } and the form offers a pre-filled mailto link instead, so no
+ * application is lost. */
 
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
@@ -83,7 +86,7 @@ export async function POST(request: Request) {
   const errors = validateBewerbung(p, locale);
   if (Object.keys(errors).length) return Response.json({ ok: false, reason: "invalid", errors }, { status: 422 });
 
-  if (!transport()) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
+  if (!transport() && !tylohqConfigured()) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
 
   const origin = (process.env.SITE_URL || new URL(request.url).origin).replace(/\/$/, "");
   const source = `${new URL(origin).host}${locale === "en" ? "/en/software" : "/software"}`;
@@ -102,18 +105,43 @@ export async function POST(request: Request) {
   });
   const to = process.env.BEWERBUNG_TO || process.env.CONTACT_TO || CONTACT.email;
 
-  try {
-    const team = applicationTeamNotification(labels("de"), origin, source, locale);
-    await sendMail({ to, replyTo: p.email, ...team });
-  } catch (err) {
-    const code = err instanceof MailError ? err.code : "unknown";
-    console.error("bewerbung: send failed", code, err instanceof Error ? err.message : err, "from:", sender());
-    // only a short code (e.g. "EAUTH 535") — no message text, nothing secret
-    return Response.json({ ok: false, reason: "send-failed", code }, { status: 502 });
-  }
+  // Team e-mail and TyloHQ lead at the same time.
+  const de = labels("de");
+  let code: string | undefined;
+  const [mailed, stored] = await Promise.all([
+    transport()
+      ? sendMail({ to, replyTo: p.email, ...applicationTeamNotification(de, origin, source, locale) }).then(
+          () => true,
+          (err) => {
+            code = err instanceof MailError ? err.code : "unknown";
+            console.error("bewerbung: send failed", code, err instanceof Error ? err.message : err, "from:", sender());
+            return false;
+          },
+        )
+      : Promise.resolve(false),
+    sendToTyloHQ(
+      "App-Bauplan Bewerbung",
+      [
+        { label: "Name", value: de.name },
+        { label: "Firma", value: de.company },
+        { label: "E-Mail", value: de.email },
+        { label: "Telefon", value: de.phone },
+        { label: "Branche", value: de.branche },
+        { label: "Mitarbeiter", value: de.mitarbeiter },
+        { label: "Problem", value: de.problem },
+        { label: "Tools heute", value: de.tools.join(", ") },
+        { label: "Budget", value: de.budget },
+        { label: "Start", value: de.start },
+        { label: "Sprache", value: locale === "en" ? "Englisch" : "Deutsch" },
+      ],
+      cleanAttribution((body as { attribution?: unknown }).attribution),
+    ),
+  ]);
+  // only a short code (e.g. "EAUTH 535") — no message text, nothing secret
+  if (!mailed && !stored) return Response.json({ ok: false, reason: "send-failed", code }, { status: 502 });
 
   // confirmation to the applicant — best effort, never fails the request
-  if (process.env.CONTACT_AUTOREPLY !== "false") {
+  if (transport() && process.env.CONTACT_AUTOREPLY !== "false") {
     try {
       const mail = applicationConfirmation(labels(locale), origin, locale);
       await sendMail({ to: p.email, replyTo: to, ...mail });

@@ -2,6 +2,7 @@ import { CONTACT } from "@/lib/contact";
 import { MailError, sendMail, transport } from "@/lib/mail/send";
 import { lensConfirmation, lensTeamNotification, type LensLead } from "@/lib/mail/templates";
 import { TL_BUDGETS, TL_PRIORITY, normalizeWebsite, validateLens, type TlBudget, type TlPayload } from "@/lib/tylolens";
+import { cleanAttribution, sendToTyloHQ, tylohqConfigured } from "@/lib/tylohq";
 
 /* TyloLens lead → team notification (+ confirmation to the lead).
  *
@@ -11,7 +12,9 @@ import { TL_BUDGETS, TL_PRIORITY, normalizeWebsite, validateLens, type TlBudget,
  *                         Make, Slack incoming webhook — `text` is Slack-ready)
  *   TYLOLENS_AUTOREPLY    "false" turns off the confirmation e-mail
  *
- * A lead counts as delivered if the e-mail OR the webhook went through. */
+ *   TYLOHQ_LEADS_URL      every lead also goes to TyloHQ (lib/tylohq.ts)
+ *
+ * A lead counts as delivered if the e-mail, the webhook or TyloHQ got it. */
 
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
@@ -66,10 +69,26 @@ export async function POST(request: Request) {
   const origin = (process.env.SITE_URL || new URL(request.url).origin).replace(/\/$/, "");
 
   const webhook = process.env.TYLOLENS_WEBHOOK_URL;
-  if (!transport() && !webhook) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
+  if (!transport() && !webhook && !tylohqConfigured()) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
 
   let delivered = false;
   let code: string | undefined;
+
+  // TyloHQ in parallel with the e-mail and webhook below.
+  const stored = sendToTyloHQ(
+    "TyloLens Analyse",
+    [
+      { label: "Name", value: lead.name },
+      { label: "E-Mail", value: lead.email },
+      { label: "Website", value: lead.website },
+      { label: "Branche", value: lead.branche },
+      { label: "Ziel", value: lead.ziel },
+      { label: "Budget", value: lead.budgetLabel },
+      { label: "Priorität", value: lead.priority },
+      { label: "Sprache", value: locale === "en" ? "Englisch" : "Deutsch" },
+    ],
+    cleanAttribution((body as { attribution?: unknown }).attribution),
+  );
 
   if (transport()) {
     try {
@@ -100,6 +119,7 @@ export async function POST(request: Request) {
     }
   }
 
+  if (await stored) delivered = true;
   if (!delivered) return Response.json({ ok: false, reason: "send-failed", code }, { status: 502 });
 
   // confirmation to the lead — best effort, never fails the request

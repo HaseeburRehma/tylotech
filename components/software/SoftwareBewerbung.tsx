@@ -26,6 +26,7 @@ import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 import { BTN, BTN_BASE, BTN_SIZE, Eyebrow } from "./ui";
 import s from "./software.module.css";
 import { trackMetaLead } from "@/lib/metaPixel";
+import { formAttribution } from "@/lib/attribution";
 
 const STEPS = 6;
 const EMPTY: Bewerbung = { branche: "", mitarbeiter: "", problem: "", tools: [], budget: "", start: "", name: "", company: "", email: "", phone: "", consent: false };
@@ -150,7 +151,7 @@ export default function SoftwareBewerbung() {
       const res = await fetch("/api/bewerbung", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...v, website: honeypot, elapsed: Date.now() - opened.current, locale }),
+        body: JSON.stringify({ ...v, website: honeypot, elapsed: Date.now() - opened.current, locale, attribution: formAttribution() }),
       });
       const data: { ok?: boolean; reason?: string; errors?: BwErrors } = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {

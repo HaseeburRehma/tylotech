@@ -8,6 +8,7 @@ import { cn } from "@/lib/cn";
 import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, topicLabel, validate, type FieldErrors } from "@/lib/contact";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 import { trackMetaLead } from "@/lib/metaPixel";
+import { formAttribution } from "@/lib/attribution";
 
 type Status = "idle" | "sending" | "sent" | "fallback" | "rate-limited";
 
@@ -105,7 +106,7 @@ export default function KontaktForm({ initialBranche = "" }: { initialBranche?: 
     }
     setStatus("sending");
     try {
-      const res = await fetch("/api/kontakt", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) });
+      const res = await fetch("/api/kontakt", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...p, attribution: formAttribution() }) });
       const data: { ok: boolean; reason?: string; errors?: FieldErrors } = await res.json().catch(() => ({ ok: false }));
       if (data.ok) {
         // GA4 recommended lead event for GTM (no personal data)

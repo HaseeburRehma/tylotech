@@ -39,6 +39,7 @@ import { CONTACT } from "@/lib/contact";
 import { TL_BRANCHEN, TL_BRANCHEN_EN, TL_BUDGETS, TL_ZIELE, TL_ZIELE_EN, normalizeWebsite, trackLens, validateLens, type TlErrors } from "@/lib/tylolens";
 import { useLocale, useLocalePath, useT } from "@/components/i18n/LocaleProvider";
 import { trackMetaLead } from "@/lib/metaPixel";
+import { formAttribution } from "@/lib/attribution";
 
 /* TyloLens (dev brief + TyloLens_Tool.html): scroll-triggered lead modal, two steps.
    - opens automatically at ~55 % scroll depth, once per session, never after a manual close
@@ -308,7 +309,7 @@ export default function TyloLens({ openOnMount }: { openOnMount?: "menu" | "fab"
       const res = await fetch("/api/tylolens", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...v, elapsed: Date.now() - openedAt.current, locale }),
+        body: JSON.stringify({ ...v, elapsed: Date.now() - openedAt.current, locale, attribution: formAttribution() }),
       });
       const data: { ok?: boolean; reason?: string; errors?: TlErrors } = await res.json().catch(() => ({}));
       if (data.ok) {

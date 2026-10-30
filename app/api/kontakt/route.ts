@@ -1,6 +1,7 @@
 import { BRANCHE_OPTIONS, CONTACT, LIMITS, TOPICS, validate, type ContactPayload } from "@/lib/contact";
 import { MailError, sendMail, sender, transport } from "@/lib/mail/send";
 import { customerConfirmation, teamNotification } from "@/lib/mail/templates";
+import { cleanAttribution, sendToTyloHQ, tylohqConfigured } from "@/lib/tylohq";
 
 /* Contact form → branded e-mail to info@tylotech.de (+ confirmation to the sender).
  * Transport and credentials: see lib/mail/send.ts. Extra switches:
@@ -8,8 +9,10 @@ import { customerConfirmation, teamNotification } from "@/lib/mail/templates";
  *   CONTACT_AUTOREPLY  "false" turns off the confirmation e-mail to the sender
  *   SITE_URL           public origin for logo/links in e-mails (defaults to the request origin)
  *
- * Without a transport the route answers 503 { reason: "not-configured" } and the form
- * offers a pre-filled mailto link instead, so no enquiry is lost. */
+ * Every enquiry also goes to TyloHQ as a lead (lib/tylohq.ts, TYLOHQ_LEADS_URL); it counts
+ * as delivered if the e-mail or TyloHQ got it. With neither, the route answers 503
+ * { reason: "not-configured" } and the form offers a pre-filled mailto link instead,
+ * so no enquiry is lost. */
 
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
@@ -72,23 +75,44 @@ export async function POST(request: Request) {
   const errors = validate(p);
   if (Object.keys(errors).length) return Response.json({ ok: false, reason: "invalid", errors }, { status: 422 });
 
-  if (!transport()) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
+  if (!transport() && !tylohqConfigured()) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
 
   const origin = (process.env.SITE_URL || new URL(request.url).origin).replace(/\/$/, "");
   const source = `${new URL(origin).host}${locale === "en" ? "/en/contact" : "/kontakt"}${p.branche ? ` (Branche: ${p.branche})` : ""}`;
 
-  try {
-    const team = teamNotification(p, origin, source, locale);
-    await sendMail({ to: process.env.CONTACT_TO || CONTACT.email, replyTo: p.email, ...team });
-  } catch (err) {
-    const code = err instanceof MailError ? err.code : "unknown";
-    console.error("kontakt: send failed", code, err instanceof Error ? err.message : err, "from:", sender());
-    // only a short code (e.g. "EAUTH 535") — no message text, nothing secret
-    return Response.json({ ok: false, reason: "send-failed", code }, { status: 502 });
-  }
+  // Team e-mail and TyloHQ lead at the same time.
+  let code: string | undefined;
+  const [mailed, stored] = await Promise.all([
+    transport()
+      ? sendMail({ to: process.env.CONTACT_TO || CONTACT.email, replyTo: p.email, ...teamNotification(p, origin, source, locale) }).then(
+          () => true,
+          (err) => {
+            code = err instanceof MailError ? err.code : "unknown";
+            console.error("kontakt: send failed", code, err instanceof Error ? err.message : err, "from:", sender());
+            return false;
+          },
+        )
+      : Promise.resolve(false),
+    sendToTyloHQ(
+      "Kontaktformular",
+      [
+        { label: "Name", value: p.name },
+        { label: "Firma", value: p.company },
+        { label: "E-Mail", value: p.email },
+        { label: "Telefon", value: p.phone },
+        { label: "Branche", value: p.branche },
+        { label: "Themen", value: p.topics.join(", ") },
+        { label: "Nachricht", value: p.message },
+        { label: "Sprache", value: locale === "en" ? "Englisch" : "Deutsch" },
+      ],
+      cleanAttribution((body as { attribution?: unknown }).attribution),
+    ),
+  ]);
+  // only a short code (e.g. "EAUTH 535") — no message text, nothing secret
+  if (!mailed && !stored) return Response.json({ ok: false, reason: "send-failed", code }, { status: 502 });
 
   // confirmation to the sender — best effort, never fails the request
-  if (process.env.CONTACT_AUTOREPLY !== "false") {
+  if (transport() && process.env.CONTACT_AUTOREPLY !== "false") {
     try {
       const mail = customerConfirmation(p, origin, locale);
       await sendMail({ to: p.email, replyTo: process.env.CONTACT_TO || CONTACT.email, ...mail });
