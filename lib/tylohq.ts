@@ -1,8 +1,8 @@
 /* Every form submission → TyloHQ (www.tylohq.de), as a lead of the TyloTech partner.
  *
- *   TYLOHQ_LEADS_URL  the "Website / API" lead source URL from TyloHQ (Leads → Lead
- *                     sources). It carries the source's key, so it lives in the
- *                     environment only, never in the code.
+ *   TYLOHQ_LEADS_URL  the "Website / API" lead source URL from TyloHQ (Leads → Lead sources)
+ *   TYLOHQ_LEADS_KEY  that source's key, sent as the X-Lead-Key header (kept out of URLs and
+ *                     logs). Both live in the environment only, never in the code.
  *
  * Sent next to the team e-mail; a submission counts as delivered if either arrived.
  * Never throws: TyloHQ being slow or down must not cost a visitor their enquiry. */
@@ -70,7 +70,7 @@ export async function sendToTyloHQ(form: string, fields: Field[], attribution: A
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...(process.env.TYLOHQ_LEADS_KEY ? { "X-Lead-Key": process.env.TYLOHQ_LEADS_KEY } : {}) },
       body: JSON.stringify(tylohqPayload(form, fields, attribution, crypto.randomUUID())),
       signal: AbortSignal.timeout(8000),
     });

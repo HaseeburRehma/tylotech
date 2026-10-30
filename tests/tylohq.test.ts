@@ -4,6 +4,7 @@ import { cleanAttribution, sendToTyloHQ, tylohqPayload } from "../lib/tylohq.ts"
 
 afterEach(() => {
   delete process.env.TYLOHQ_LEADS_URL;
+  delete process.env.TYLOHQ_LEADS_KEY;
 });
 
 test("attribution: only known keys, short, printable; page must be a path", () => {
@@ -67,11 +68,13 @@ test("sending: off without an https URL; never throws; reports TyloHQ's answer",
 
   const realFetch = globalThis.fetch;
   try {
-    process.env.TYLOHQ_LEADS_URL = "https://www.tylohq.de/api/leads/hook/x?key=k";
-    let sent: { url: string; body: unknown } | null = null;
-    globalThis.fetch = (async (url: string, init: RequestInit) => ((sent = { url, body: JSON.parse(String(init.body)) }), new Response("{}", { status: 200 }))) as typeof fetch;
+    process.env.TYLOHQ_LEADS_URL = "https://www.tylohq.de/api/leads/hook/x";
+    process.env.TYLOHQ_LEADS_KEY = "k3y";
+    let sent: { url: string; body: unknown; key: string | null } | null = null;
+    globalThis.fetch = (async (url: string, init: RequestInit) => ((sent = { url, body: JSON.parse(String(init.body)), key: new Headers(init.headers).get("x-lead-key") }), new Response("{}", { status: 200 }))) as typeof fetch;
     assert.equal(await sendToTyloHQ("Kontaktformular", fields, cleanAttribution({ page: "/kontakt" })), true);
     assert.equal(sent!.url, process.env.TYLOHQ_LEADS_URL);
+    assert.equal(sent!.key, "k3y"); // the key travels in a header, not in the URL
     assert.equal((sent!.body as { form_name: string }).form_name, "Kontaktformular");
 
     globalThis.fetch = (async () => new Response("{}", { status: 401 })) as typeof fetch;
