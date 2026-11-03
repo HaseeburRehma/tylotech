@@ -333,8 +333,8 @@ export const CASE_STUDIES: CaseStudy[] = [
     seo: {
       title: { de: "Case Study Fahrschule Abgefahrn | TyloTech", en: "Case study Fahrschule Abgefahrn | TyloTech" },
       description: {
-        de: "Website, Theorieplan, Online-Anmeldung und Social Media für Fahrschule Abgefahrn in Düsseldorf: 4.500 organische Besuche im Monat, 5 Mio. Reichweite auf TikTok.",
-        en: "Website, theory schedule, online sign-up and social media for Fahrschule Abgefahrn in Düsseldorf: 4,500 organic visits a month and 5 million reach on TikTok.",
+        de: "Website, Theorieplan, Online-Anmeldung und Social Media für Fahrschule Abgefahrn in Düsseldorf: über 10.000 organische Besuche im Monat, 5 Mio. Reichweite auf TikTok.",
+        en: "Website, theory schedule, online sign-up and social media for Fahrschule Abgefahrn in Düsseldorf: 10,000+ organic visits a month and 5 million reach on TikTok.",
       },
     },
     hero: {
@@ -371,12 +371,12 @@ export const CASE_STUDIES: CaseStudy[] = [
         en: "Fahrschule Abgefahrn, Düsseldorf: website, theory schedule, sign-up and social media.",
       },
       metrics: [
-        { value: { de: "4.500", en: "4,500" }, label: { de: "organische Besuche / Monat", en: "organic visits / month" } },
+        { value: { de: "10.000+", en: "10,000+" }, label: { de: "organische Besuche / Monat", en: "organic visits / month" } },
         { value: { de: "5 Mio.", en: "5M" }, label: { de: "Reichweite auf TikTok", en: "reach on TikTok" } },
       ],
     },
     results: {
-      wide: { channel: "organic", label: { de: "Organische Besuche", en: "Organic visits" }, value: 4500, suffix: { de: " / Monat", en: " / month" }, chip: { de: "Letzte 12 Monate", en: "Last 12 months" } },
+      wide: { channel: "organic", label: { de: "Organische Besuche", en: "Organic visits" }, value: 10000, suffix: { de: "+ / Monat", en: "+ / month" }, chip: { de: "Letzte 12 Monate", en: "Last 12 months" } },
       compact: [
         { channel: "tiktok", label: { de: "TikTok Ads", en: "TikTok Ads" }, value: 5000000, chip: { de: "Reichweite", en: "Reach" } },
         { channel: "meta", label: { de: "Meta Ads", en: "Meta Ads" }, value: 400000, suffix: { de: " / Monat", en: " / month" }, chip: { de: "Reichweite", en: "Reach" } },
