@@ -55,6 +55,8 @@ export async function POST(request: Request) {
     site: line(body.site, AN_LIMITS.site),
     name: line(body.name, AN_LIMITS.name),
     phone: line(body.phone, AN_LIMITS.phone),
+    // keep line breaks, only trim and cap
+    message: typeof body.message === "string" ? body.message.trim().slice(0, AN_LIMITS.message) : "",
     consent: body.consent === true,
   };
   const errors = validateAnalyse(a);
@@ -86,6 +88,7 @@ export async function POST(request: Request) {
         { label: "Gewerk", value: a.gewerk },
         { label: "Stadt", value: a.stadt },
         { label: "Website", value: a.site },
+        { label: "Nachricht", value: a.message },
       ],
       cleanAttribution(body.attribution),
     ),

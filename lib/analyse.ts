@@ -20,7 +20,7 @@ export const GEWERKE = [
   "Anderes Gewerk",
 ] as const;
 
-export const AN_LIMITS = { stadt: 80, site: 200, name: 100, phone: 40 };
+export const AN_LIMITS = { stadt: 80, site: 200, name: 100, phone: 40, message: 1000 };
 
 export type Analyse = {
   gewerk: string;
@@ -28,6 +28,8 @@ export type Analyse = {
   site: string;
   name: string;
   phone: string;
+  /** optional free text */
+  message: string;
   consent: boolean;
 };
 

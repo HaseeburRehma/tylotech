@@ -12,7 +12,7 @@ import { cn } from "@/lib/cn";
 /* "Kostenlose Konkurrenz-Analyse" card in the hero (Figma 01 · Hero, right column).
  * Sends to /api/analyse (team e-mail + TyloHQ lead) and fires generate_lead + Meta Lead. */
 
-const EMPTY: Analyse = { gewerk: "", stadt: "", site: "", name: "", phone: "", consent: false };
+const EMPTY: Analyse = { gewerk: "", stadt: "", site: "", name: "", phone: "", message: "", consent: false };
 const OPTIONS = GEWERKE.map((g) => ({ value: g, label: g }));
 
 const field =
@@ -175,6 +175,21 @@ export default function AnalyseForm() {
           />
         </div>
         {err("phone")}
+      </div>
+
+      <div>
+        <label htmlFor="an-message" className="mb-2 block text-[14px] font-medium leading-5 text-[#1a1917]">
+          Nachricht (optional)
+        </label>
+        <textarea
+          id="an-message"
+          value={v.message}
+          onChange={(e) => set("message", e.target.value)}
+          maxLength={AN_LIMITS.message}
+          rows={3}
+          placeholder="z. B. Was soll die Analyse klären? Wann erreichen wir dich am besten?"
+          className={cn(field, ok, "h-auto min-h-[96px] resize-y py-3.5")}
+        />
       </div>
 
       {/* honeypot: hidden from people, bots fill it */}

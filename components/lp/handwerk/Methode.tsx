@@ -1,14 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import { LayoutGrid, Layers, Smartphone } from "lucide-react";
+import { Hand, LayoutGrid, Layers, MousePointerClick, Smartphone } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { GoldButton } from "@/components/branche/ui";
 import { gsap, useLazyGSAP } from "@/lib/gsap";
 import { RequestCard } from "./Cases";
-import { FORM, Pill } from "./ui";
+import { HQDashboard, HQPhone } from "./HQDemo";
+import { FORM, Pill, SnapSlider } from "./ui";
 
-/* 04 · Methode: dark section, TyloHQ dashboard with live request cards on top. */
+/* 04 · Methode: dark section, interactive TyloHQ dashboard (phone app below lg) with live request cards on top. */
 
 const FEATURES = [
   { icon: Layers, title: "Bewährte Methode", text: "Ein Mix aus Online-Marketing, den wir über Jahre in Handwerksbetrieben verfeinert haben. Kein Experiment, kein Baukasten." },
@@ -22,21 +23,30 @@ const FLOATING = [
   { r: { title: "Heizung, Oberkassel", meta: "heute, 08:40, M. Weber", status: "zugewiesen" as const }, float: "motion-safe:animate-[bhFloat_4.9s_ease-in-out_2.8s_infinite]" },
 ];
 
+/* Official-style store badges: black, white type, Apple logo, Google Play in its colours. */
 function StoreBadge({ store }: { store: "apple" | "google" }) {
+  const apple = store === "apple";
   return (
-    <span className="inline-flex h-[52px] items-center gap-2.5 rounded-[12px] border border-white/70 bg-white px-4 text-[#0f0e0d]">
-      {store === "apple" ? (
-        <svg viewBox="0 0 24 24" className="size-[22px]" aria-hidden>
-          <path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.4-1-2.4-3.8zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.2-.6 2.9-1.4z" />
+    <span
+      role="img"
+      aria-label={apple ? "Laden im App Store" : "Jetzt bei Google Play"}
+      className="inline-flex h-[50px] items-center gap-2 rounded-[11px] border border-[#a6a6a6] bg-black pl-3 pr-4 text-white sm:h-[54px] sm:gap-2.5 sm:rounded-[12px] sm:pl-3.5 sm:pr-5 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:-translate-y-0.5"
+    >
+      {apple ? (
+        <svg viewBox="0 0 384 512" className="h-[26px] w-[22px]" aria-hidden>
+          <path fill="#fff" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
         </svg>
       ) : (
-        <svg viewBox="0 0 24 24" className="size-[20px]" aria-hidden>
-          <path fill="currentColor" d="M3.6 1.8c-.3.3-.4.7-.4 1.3v17.8c0 .6.1 1 .4 1.3l.1.1L13.6 12v-.2L3.7 1.7l-.1.1zm13.3 13.5-3.3-3.3V11.8l3.3-3.3.1.1 3.9 2.2c1.1.6 1.1 1.7 0 2.3l-3.9 2.2h-.1zm.1 0L13.6 12 3.6 22c.4.4 1 .4 1.6.1L17 15.3m0-6.6L5.2 1.9c-.7-.4-1.2-.3-1.6.1l10 10L17 8.7z" />
+        <svg viewBox="0 0 512 512" className="size-[24px]" aria-hidden>
+          <path fill="#00d7fe" d="M48.4 18.3C40.6 26.5 36 39.2 36 55.7v400.6c0 16.5 4.6 29.2 12.4 37.4l1.9 1.8L274.7 271v-5.3L50.3 16.5z" />
+          <path fill="#ffce00" d="m349.5 345.9-74.8-74.8v-5.3l74.8-74.8 1.7 1 88.6 50.3c25.3 14.4 25.3 37.9 0 52.3l-88.6 50.3z" />
+          <path fill="#ff3a44" d="M351.2 344.9 274.7 268.4 48.4 494.7c8.4 8.9 22.2 10 37.8 1.2z" />
+          <path fill="#00f076" d="M351.2 192.1 86.2 41.4C70.6 32.6 56.8 33.7 48.4 42.6l226.3 225.9z" />
         </svg>
       )}
       <span className="flex flex-col leading-none">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.3px]">{store === "apple" ? "Laden im" : "Jetzt bei"}</span>
-        <span className="mt-0.5 font-display text-[17px] font-medium tracking-[-0.3px]">{store === "apple" ? "App Store" : "Google Play"}</span>
+        <span className="text-[10px] font-medium tracking-[0.2px]">{apple ? "Laden im" : "JETZT BEI"}</span>
+        <span className="mt-[3px] text-[17px] font-semibold tracking-[-0.4px] sm:text-[19px]">{apple ? "App Store" : "Google Play"}</span>
       </span>
     </span>
   );
@@ -73,44 +83,52 @@ export default function Methode() {
         </div>
 
         <div className="lpm-dash relative mx-auto mt-12 max-w-[1180px] sm:mt-14">
-          <div className="overflow-hidden rounded-[18px] border border-white/10 bg-white shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)] sm:rounded-[24px]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/lp/handwerk/dashboard.webp" alt="TyloHQ Dashboard mit neuen Anfragen, Terminen und Reaktionszeit" width={1180} height={498} loading="lazy" className="block h-auto w-full" />
-          </div>
-          {/* live cards over the dashboard, stacked so they never collide (from lg up; smaller screens show them below) */}
-          <div className="absolute right-[-3%] top-[27%] hidden flex-col items-end gap-3.5 lg:flex">
-            {FLOATING.map((f) => (
-              <div key={f.r.title} className="lpm-float">
-                <div className={f.float}>
-                  <RequestCard r={f.r} compact className="whitespace-nowrap" />
+          {/* laptop and up: the interactive dashboard with live cards on top */}
+          <div className="hidden lg:block">
+            <div className="rounded-[24px] border border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)]">
+              <HQDashboard />
+            </div>
+            <div className="pointer-events-none absolute right-[-3%] top-[27%] flex flex-col items-end gap-3.5">
+              {FLOATING.map((f) => (
+                <div key={f.r.title} className="lpm-float">
+                  <div className={f.float}>
+                    <RequestCard r={f.r} compact className="whitespace-nowrap" />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <p className="mt-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-white/60">
+              <MousePointerClick className="size-3.5 text-[#d8b682]" strokeWidth={1.8} aria-hidden />
+              Interaktive Demo: klick dich durch TyloHQ
+            </p>
           </div>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row lg:hidden [&>*]:flex-1">
-            {FLOATING.slice(0, 2).map((f) => (
-              <div key={f.r.title} className="lpm-float">
-                <RequestCard r={f.r} />
-              </div>
-            ))}
+          {/* phones and tablets: the TyloHQ app */}
+          <div className="lg:hidden">
+            <HQPhone />
+            <p className="mt-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-white/60">
+              <Hand className="size-3.5 text-[#d8b682]" strokeWidth={1.8} aria-hidden />
+              Tipp auf Anfragen und Tabs
+            </p>
           </div>
         </div>
 
-        <div className="lpm-features mt-12 grid grid-cols-1 gap-8 sm:mt-14 md:grid-cols-3 md:gap-6 lg:gap-10">
-          {FEATURES.map((f) => (
-            <div key={f.title} className="lpm-feature flex flex-col items-start gap-4">
-              <span className="grid size-[46px] place-items-center rounded-[12px] border border-white/15 bg-white/[0.06]">
-                <f.icon className="size-[21px] text-[#d8b682]" strokeWidth={1.7} aria-hidden />
-              </span>
-              <h3 className="t-h5 text-white">{f.title}</h3>
-              <p className="t-body-m text-white/70">{f.text}</p>
-            </div>
-          ))}
+        <div className="lpm-features mt-12 sm:mt-14 [&_button>span]:bg-white/30 [&_button[aria-current=true]>span]:bg-[#d8b682]">
+          <SnapSlider label="So funktioniert unser System" className="lg:grid-cols-3 lg:gap-10">
+            {FEATURES.map((f) => (
+              <div key={f.title} className="lpm-feature flex h-full flex-col items-start gap-4 rounded-[20px] border border-white/10 bg-white/[0.04] p-6 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0">
+                <span className="grid size-[46px] place-items-center rounded-[12px] border border-white/15 bg-white/[0.06]">
+                  <f.icon className="size-[21px] text-[#d8b682]" strokeWidth={1.7} aria-hidden />
+                </span>
+                <h3 className="t-h5 text-white">{f.title}</h3>
+                <p className="t-body-m text-white/70">{f.text}</p>
+              </div>
+            ))}
+          </SnapSlider>
         </div>
 
         <div className="lpm-end mt-12 flex flex-col items-center gap-4 sm:mt-14">
           <p className="eyebrow text-white/80">TyloHQ gibt es als App für iOS und Android</p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
             <StoreBadge store="apple" />
             <StoreBadge store="google" />
           </div>

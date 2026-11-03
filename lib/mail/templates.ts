@@ -549,7 +549,7 @@ export function applicationConfirmation(a: Application, origin: string, locale: 
 
 /* ---------- Free competitor analysis (Handwerk landing page) ---------- */
 
-export type AnalyseLead = { gewerk: string; stadt: string; site: string; name: string; phone: string };
+export type AnalyseLead = { gewerk: string; stadt: string; site: string; name: string; phone: string; message: string };
 
 export function analyseTeamNotification(a: AnalyseLead, origin: string, source: string): Mail {
   const tel = `tel:${a.phone.replace(/[^\d+]/g, "")}`;
@@ -574,6 +574,7 @@ export function analyseTeamNotification(a: AnalyseLead, origin: string, source: 
         )
         .join("")}
     </table>
+    ${a.message ? `${label("Nachricht")}<div style="margin:0 0 26px;padding:16px 20px;background:${C.cream};border-left:3px solid ${C.gold};border-radius:4px 12px 12px 4px;font:400 15px/24px ${SANS};color:${C.ink};white-space:pre-wrap">${esc(a.message)}</div>` : ""}
     <div style="margin:0 0 26px;padding:14px 18px;background:${C.page};border-radius:12px;font:400 14px/22px ${SANS};color:${C.muted}">
       Zugesagt: Anruf mit den Ergebnissen <b style="color:${C.ink}">innerhalb von 24 Stunden</b>.
     </div>
@@ -588,6 +589,7 @@ export function analyseTeamNotification(a: AnalyseLead, origin: string, source: 
     `Gewerk: ${a.gewerk}`,
     `Stadt: ${a.stadt}`,
     `Website: ${a.site || "-"}`,
+    ...(a.message ? ["", "Nachricht:", a.message] : []),
     "",
     "Zugesagt: Anruf mit den Ergebnissen innerhalb von 24 Stunden.",
     "",
