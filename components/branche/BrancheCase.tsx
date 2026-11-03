@@ -122,7 +122,9 @@ export default function BrancheCase({ b }: { b: Branche }) {
         const st = { trigger: card, start: "top 80%", toggleActions: "play none none none" };
         gsap.from(card, { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: st });
         gsap.from(card.querySelectorAll(".bhc-content > *"), { y: 20, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.08, delay: 0.15, scrollTrigger: st });
+        gsap.from(card.querySelectorAll(".bhc-content li"), { x: -14, opacity: 0, duration: 0.6, ease: "power3.out", stagger: 0.09, delay: 0.45, scrollTrigger: st });
         gsap.from(card.querySelector(".bhc-visual"), { y: 30, opacity: 0, scale: 0.96, duration: 1, ease: "power3.out", delay: 0.2, scrollTrigger: st });
+        gsap.from(card.querySelector(".bhc-visual img"), { scale: 1.12, duration: 1.6, ease: "power2.out", delay: 0.2, clearProps: "transform", scrollTrigger: st });
       });
     },
     { scope: root },

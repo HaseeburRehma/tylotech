@@ -10,6 +10,7 @@ import { useT } from "../i18n/LocaleProvider";
 /** `tone="branche"`: industry-page Figma frame (white, 56/72 padding, own caption) */
 export default function TrustStrip({ tone = "home" }: { tone?: "home" | "branche" }) {
   const br = tone === "branche";
+  const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const t = useT();
 
@@ -35,20 +36,30 @@ export default function TrustStrip({ tone = "home" }: { tone?: "home" | "branche
     { scope: track },
   );
 
+  useLazyGSAP(
+    () => {
+      const st = { trigger: root.current, start: "top 85%", toggleActions: "play none none none" };
+      gsap.from(".ts-caption", { y: 16, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: st });
+      gsap.from(".ts-row", { y: 24, opacity: 0, duration: 1, ease: "power3.out", delay: 0.15, scrollTrigger: st });
+    },
+    { scope: root },
+  );
+
   return (
     <section
+      ref={root}
       id="partner"
       className={br ? "border-b border-line bg-white pb-12 pt-10 sm:pb-[72px] sm:pt-14" : "border-b border-line bg-page py-10 sm:py-14"}
     >
       <Container>
-        <p className={`${br ? "mb-8" : "mb-10"} text-center t-body-s text-ink/55`}>
+        <p className={`ts-caption ${br ? "mb-8" : "mb-10"} text-center t-body-s text-ink/55`}>
           {br
             ? t("Vertraut von über 100 Unternehmen, vom Handwerk bis zum Mittelstand", "Trusted by 100+ businesses, from trades to established SMEs")
             : t("Vertraut von über 100 Unternehmen, vom Handwerksbetrieb bis zur Mehrfachgründung", "Trusted by 100+ businesses, from local trades to serial founders")}
         </p>
       </Container>
 
-      <div className="relative overflow-hidden">
+      <div className="ts-row relative overflow-hidden">
         <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-gradient-to-r ${br ? "from-white" : "from-page"} to-transparent`} />
         <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l ${br ? "from-white" : "from-page"} to-transparent`} />
 

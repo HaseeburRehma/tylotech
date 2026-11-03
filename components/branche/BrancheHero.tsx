@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Star } from "lucide-react";
 import Container from "../ui/Container";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, reducedMotion, useGSAP } from "@/lib/gsap";
 import type { Branche } from "@/lib/branchen";
 import { useT } from "../i18n/LocaleProvider";
 import { Accent, BrandLogo, Eyebrow, GlassButton, GoldButton } from "./ui";
@@ -15,12 +15,19 @@ export default function BrancheHero({ b }: { b: Branche }) {
 
   useGSAP(
     () => {
+      if (reducedMotion()) return;
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       // copy and photo enter via CSS (intro-stagger / intro-slide in globals.css)
       // so the headline and photo — the LCP candidates — never wait on JS
       tl.from(".bhh-offset", { x: 30, y: 30, opacity: 0, duration: 0.9 }, 0.15)
         .from(".bhh-card", { y: 18, opacity: 0, scale: 0.94, duration: 0.6, stagger: 0.15 }, 0.65)
         .from(".bhh-chip", { y: 14, opacity: 0, duration: 0.6 }, 0.95);
+      // the visual drifts up slower than the page while the hero scrolls away
+      gsap.to(".bhh-visual", {
+        yPercent: -8,
+        ease: "none",
+        scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
+      });
     },
     { scope: root },
   );
@@ -63,7 +70,7 @@ export default function BrancheHero({ b }: { b: Branche }) {
 
         {/* visual — positions are Figma's 500×560 frame, in % so it scales.
           The float runs on CSS `translate`, so it never fights GSAP's transform. */}
-        <div className="relative mx-auto aspect-[500/560] w-full max-w-[500px]">
+        <div className="bhh-visual relative mx-auto aspect-[500/560] w-full max-w-[500px]">
           <div className="bhh-offset absolute left-[17.6%] top-[7.1%] h-[91.1%] w-[80%] rounded-[28px] bg-[#fbf6ee]" />
           <div className="bhh-photo intro-slide absolute [animation-delay:200ms] left-[12%] top-[2.1%] h-[91.1%] w-[80%] overflow-hidden rounded-[24px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}

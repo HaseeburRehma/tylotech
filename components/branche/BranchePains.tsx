@@ -184,6 +184,8 @@ export default function BranchePains({ b }: { b: Branche }) {
       gsap.from(".bh-head > *", { y: 24, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.1, scrollTrigger: st(".bh-head") });
       gsap.utils.toArray<HTMLElement>(".bhp-card").forEach((card) => {
         gsap.from(card, { y: 44, opacity: 0, duration: 0.9, ease: "power3.out", clearProps: "transform,opacity", scrollTrigger: st(card, "top 88%") });
+        gsap.from(card.querySelectorAll(".bhp-visual > *"), { scale: 1.1, duration: 1.4, ease: "power2.out", clearProps: "transform", scrollTrigger: st(card, "top 88%") });
+        gsap.from(card.querySelectorAll(".bhp-copy > *"), { y: 16, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.07, delay: 0.2, clearProps: "transform,opacity", scrollTrigger: st(card, "top 88%") });
       });
     },
     { scope: root },
@@ -199,10 +201,10 @@ export default function BranchePains({ b }: { b: Branche }) {
               key={i}
               className="bhp-card group flex flex-col overflow-hidden rounded-[24px] border border-[#eeedea] bg-white shadow-[0_1px_2px_rgba(8,34,44,0.04),0_2px_6px_rgba(8,34,44,0.06)] transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_26px_50px_-30px_rgba(8,34,44,0.35)]"
             >
-              <div className="relative h-[240px] shrink-0 overflow-hidden sm:h-[300px]">
+              <div className="bhp-visual relative h-[240px] shrink-0 overflow-hidden sm:h-[300px]">
                 <Visual v={p.visual} />
               </div>
-              <div className="flex flex-col gap-3.5 px-6 pb-9 pt-7 sm:px-8 sm:pt-8">
+              <div className="bhp-copy flex flex-col gap-3.5 px-6 pb-9 pt-7 sm:px-8 sm:pt-8">
                 <p className="eyebrow text-[#7d7973]">{t("Schmerz", "Pain point")}</p>
                 <h3 className="t-h4 text-[#1a1917]">{p.title}</h3>
                 <div className="h-px w-full bg-[#eeedea]" />

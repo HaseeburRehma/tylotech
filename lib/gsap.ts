@@ -47,7 +47,7 @@ export function useLazyGSAP(
 
   return useGSAP(
     () => {
-      if (!near) return;
+      if (!near || reducedMotion()) return;
       const cleanup = callback();
       // Set up late (fast scrolling, anchor jump)? Reveals whose start already
       // lies behind the current scroll position would otherwise never fire:
@@ -64,5 +64,9 @@ export function useLazyGSAP(
     { scope, dependencies: [near] },
   );
 }
+
+/** Visitors who ask for less motion get every section in its final state. */
+export const reducedMotion = () =>
+  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export { gsap, ScrollTrigger, useGSAP };
