@@ -53,7 +53,7 @@ const LS_NEVER = "tylolens-never"; // "Nicht mehr anzeigen"
 // no auto-open where the page has its own form (contact, software application), is legal
 // text, or is the short case-study overview (55 % depth lands right on the cards)
 const NO_AUTO = [
-  "/kontakt", "/impressum", "/datenschutz", "/software", "/software/app-bauplan", "/case-studies",
+  "/kontakt", "/impressum", "/datenschutz", "/software", "/software/app-bauplan", "/case-studies", "/handwerk-anfragen",
   "/en/contact", "/en/imprint", "/en/privacy", "/en/software", "/en/software/app-bauplan", "/en/case-studies",
 ];
 

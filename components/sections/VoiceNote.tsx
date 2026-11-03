@@ -24,7 +24,7 @@ export default function VoiceNote({ voice }: { voice: Voice }) {
   const toggle = () => {
     const a = audio.current;
     if (!a) return;
-    if (a.paused) void a.play();
+    if (a.paused) a.play().catch(() => {});
     else a.pause();
   };
 
@@ -34,7 +34,7 @@ export default function VoiceNote({ voice }: { voice: Voice }) {
     const r = e.currentTarget.getBoundingClientRect();
     a.currentTime = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1) * total;
     setTime(a.currentTime);
-    if (a.paused) void a.play();
+    if (a.paused) a.play().catch(() => {});
   };
 
   return (

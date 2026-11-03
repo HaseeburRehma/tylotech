@@ -15,7 +15,8 @@ import { APPLY, BTN, BTN_BASE } from "./ui";
    with the apply button; the footer has the logo, contact details and the legal
    links (they open in a new tab so the visitor doesn't lose the form). */
 
-export function LandingHeader() {
+/** `cta`/`note` default to the App-Bauplan application; other landing pages pass their own. */
+export function LandingHeader({ cta, note }: { cta?: { href: string; label: string }; note?: string } = {}) {
   const t = useT();
   const [scrolled, setScrolled] = useState(false);
 
@@ -39,10 +40,10 @@ export function LandingHeader() {
         <div className="flex items-center gap-4">
           <p className="hidden items-center gap-2 text-[14px] font-medium leading-5 text-[#5c5954] md:flex">
             <span aria-hidden className="size-2 rounded-full bg-[#2fb36b] shadow-[0_0_0_3px_rgba(47,179,107,0.18)]" />
-            {t("Nur 5 Plätze pro Monat", "Only 5 spots a month")}
+            {note ?? t("Nur 5 Plätze pro Monat", "Only 5 spots a month")}
           </p>
-          <a href={APPLY} className={cn(BTN_BASE, BTN.gold, "h-10 gap-1.5 px-4 sm:h-12 sm:gap-2 sm:px-[22px]")}>
-            {t("Jetzt bewerben", "Apply now")}
+          <a href={cta?.href ?? APPLY} className={cn(BTN_BASE, BTN.gold, "h-10 gap-1.5 px-4 sm:h-12 sm:gap-2 sm:px-[22px]")}>
+            {cta?.label ?? t("Jetzt bewerben", "Apply now")}
             <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 sm:size-[18px]" strokeWidth={2} aria-hidden />
           </a>
         </div>

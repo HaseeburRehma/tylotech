@@ -546,3 +546,57 @@ export function applicationConfirmation(a: Application, origin: string, locale: 
     text,
   };
 }
+
+/* ---------- Free competitor analysis (Handwerk landing page) ---------- */
+
+export type AnalyseLead = { gewerk: string; stadt: string; site: string; name: string; phone: string };
+
+export function analyseTeamNotification(a: AnalyseLead, origin: string, source: string): Mail {
+  const tel = `tel:${a.phone.replace(/[^\d+]/g, "")}`;
+  const url = a.site ? (/^https?:\/\//i.test(a.site) ? a.site : `https://${a.site}`) : "";
+  const rows: [string, string][] = [
+    ["Name", esc(a.name)],
+    ["Telefon", `<a href="${esc(tel)}" style="color:${C.goldText};text-decoration:underline">${esc(a.phone)}</a>`],
+    ["Gewerk", `<b>${esc(a.gewerk)}</b>`],
+    ["Stadt", `<b>${esc(a.stadt)}</b>`],
+    ["Website", url ? `<a href="${esc(url)}" style="color:${C.goldText};text-decoration:underline">${esc(a.site)}</a>` : "-"],
+  ];
+
+  const body = `
+    ${label("Neue Anfrage · Konkurrenz-Analyse")}
+    ${h1(`${esc(a.name)} will wissen, wer in ${accent(esc(a.stadt))} gewinnt.`)}
+    ${p(`${esc(a.gewerk)} · ${esc(a.stadt)}`, "margin-bottom:20px")}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px;border-top:1px solid ${C.line}">
+      ${rows
+        .map(
+          ([k, v]) =>
+            `<tr><td style="padding:11px 0;border-bottom:1px solid ${C.line};width:130px;font:500 13px/20px ${SANS};color:${C.faint};vertical-align:top">${k}</td><td style="padding:11px 0;border-bottom:1px solid ${C.line};font:400 15px/20px ${SANS};color:${C.ink}">${v}</td></tr>`,
+        )
+        .join("")}
+    </table>
+    <div style="margin:0 0 26px;padding:14px 18px;background:${C.page};border-radius:12px;font:400 14px/22px ${SANS};color:${C.muted}">
+      Zugesagt: Anruf mit den Ergebnissen <b style="color:${C.ink}">innerhalb von 24 Stunden</b>.
+    </div>
+    <div>${button(tel, "Jetzt anrufen")}</div>`;
+
+  const footer = `Eingegangen am ${when()} über ${esc(source)}.`;
+  const text = [
+    "Neue Anfrage · Konkurrenz-Analyse",
+    "",
+    `Name: ${a.name}`,
+    `Telefon: ${a.phone}`,
+    `Gewerk: ${a.gewerk}`,
+    `Stadt: ${a.stadt}`,
+    `Website: ${a.site || "-"}`,
+    "",
+    "Zugesagt: Anruf mit den Ergebnissen innerhalb von 24 Stunden.",
+    "",
+    `Eingegangen am ${when()} über ${source}.`,
+  ].join("\n");
+
+  return {
+    subject: `Konkurrenz-Analyse: ${a.gewerk} in ${a.stadt} · ${a.name}`,
+    html: layout({ preheader: `${a.gewerk} in ${a.stadt}, Rückruf an ${a.phone}`, badge: "Analyse", body, footer, origin }),
+    text,
+  };
+}

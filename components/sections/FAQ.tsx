@@ -54,7 +54,10 @@ const ITEMS_EN = [
 ];
 
 /** `tone="branche"` follows the industry-page Figma frames (subtle surface, Accordion Item styling). */
-export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: string; a: string }[]; tone?: "home" | "branche" }) {
+/** Landing pages can swap the headline, the hint card under it and the background. */
+type FAQCopy = { title?: { lead: string; accent: string }; hint?: { text: string; cta: string; href: string }; className?: string };
+
+export default function FAQ({ items: itemsProp, tone = "home", title, hint, className }: { items?: { q: string; a: string }[]; tone?: "home" | "branche" } & FAQCopy) {
   const locale = useLocale();
   const t = useT();
   const lp = useLocalePath();
@@ -89,7 +92,7 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
     <section
       id="faq"
       ref={root}
-      className={br ? "scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-28" : "border-t border-line bg-[#f3f5f6] py-14 sm:py-24"}
+      className={className ?? (br ? "scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-28" : "border-t border-line bg-[#f3f5f6] py-14 sm:py-24")}
     >
       <Container className={br ? "grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[minmax(0,400px)_1fr] lg:grid-rows-[auto_1fr] lg:gap-x-14 lg:gap-y-8 xl:gap-x-20" : "grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[380px_1fr] lg:grid-rows-[auto_1fr] lg:gap-x-14 lg:gap-y-8"}>
         <div className="faq-left lg:col-start-1 lg:row-start-1">
@@ -98,9 +101,9 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
             {t("Häufige Fragen", "Common questions")}
           </p>
           <h2 className="t-h2 mt-5 text-ink">
-            {t("Fragen, die uns", "Questions")}{" "}
+            {title ? title.lead : t("Fragen, die uns", "Questions")}{" "}
             <span className="t-serif tracking-[inherit] text-[#a07d45] max-sm:tracking-[-0.5px]">
-              {t("fast jeder stellt.", "almost everyone asks.")}
+              {title ? title.accent : t("fast jeder stellt.", "almost everyone asks.")}
             </span>
           </h2>
         </div>
@@ -173,23 +176,38 @@ export default function FAQ({ items: itemsProp, tone = "home" }: { items?: { q: 
           <p className="font-display text-[17px] font-medium leading-[24px] tracking-[-0.3px] text-ink max-sm:font-semibold max-sm:tracking-normal">
             {t("Deine Frage steht nicht dabei?", "Your question isn’t here?")}
           </p>
-          <p className="t-body-s mt-2 text-[#5c5954]">
-            {t("Ruf einfach an:", "Just give us a call:")}{" "}
-            <a href="tel:+4921115847097" className="whitespace-nowrap font-medium text-ink underline-offset-2 hover:underline">
-              {t("0211 15847097", "+49 211 15847097")}
-            </a>
-            {t(
-              ". Du sprichst direkt mit jemandem, der antworten kann.",
-              ". You’ll speak directly to someone who can actually answer.",
-            )}
-          </p>
-          <Link
-            href={`${lp("/kontakt")}#formular`}
-            className="group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 sm:w-auto sm:justify-start rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
-          >
-            {t("Erstgespräch sichern", "Book your intro call")}
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-          </Link>
+          {hint ? (
+            <>
+              <p className="t-body-s mt-2 text-[#5c5954]">{hint.text}</p>
+              <a
+                href={hint.href}
+                className="group mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-ink bg-white px-[22px] t-button text-ink transition-colors hover:bg-page sm:w-auto"
+              >
+                {hint.cta}
+                <ArrowRight className="size-[18px] transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </>
+          ) : (
+            <>
+            <p className="t-body-s mt-2 text-[#5c5954]">
+              {t("Ruf einfach an:", "Just give us a call:")}{" "}
+              <a href="tel:+4921115847097" className="whitespace-nowrap font-medium text-ink underline-offset-2 hover:underline">
+                {t("0211 15847097", "+49 211 15847097")}
+              </a>
+              {t(
+                ". Du sprichst direkt mit jemandem, der antworten kann.",
+                ". You’ll speak directly to someone who can actually answer.",
+              )}
+            </p>
+            <Link
+              href={`${lp("/kontakt")}#formular`}
+              className="group mt-5 inline-flex h-11 w-full items-center justify-center gap-2 sm:w-auto sm:justify-start rounded-full border border-line bg-white px-5 t-button text-ink shadow-[0_1px_3px_rgba(15,14,13,0.05)] transition-colors hover:border-ink/20 hover:bg-page"
+            >
+              {t("Erstgespräch sichern", "Book your intro call")}
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            </>
+          )}
         </div>
       </Container>
     </section>

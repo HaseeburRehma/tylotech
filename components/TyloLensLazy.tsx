@@ -10,7 +10,7 @@ const TyloLens = dynamic(() => import("./TyloLens"), { ssr: false });
    so its code loads on the first interaction — or immediately if the menu asks
    for it first (the pending open is handed over on mount). */
 // software landing pages: the application is the only call to action there
-const OFF = /^\/(en\/)?software(\/app-bauplan)?$/;
+const OFF = /^\/((en\/)?software(\/app-bauplan)?|handwerk-anfragen)$/;
 
 export default function TyloLensLazy() {
   const pathname = usePathname();
