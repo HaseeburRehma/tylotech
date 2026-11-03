@@ -114,12 +114,25 @@ export const BRANCHEN_EN: Branche[] = [
       after: [
         "Now #1 on Google and in AI search (GEO) for the key search terms",
         "Predictable enquiries through their own website instead of expensive portals",
+        "Around 5 enquiries a day and 94,034 impressions in 90 days, without any ad budget",
       ],
-      placeholder: "Add concrete figures & a client quote.",
-      extraPlaceholder: "Akmir recruiting case to follow once live.",
       image: img("handwerk", "case"),
       imageFit: "top",
     },
+    moreCases: [
+      {
+        logo: "nouh-wehres",
+        title: "Nouh-Wehres: a master craftsman’s business turned into an _enquiry machine_",
+        before: ["New jobs depended on referrals"],
+        after: [
+          "One website for every trade: heating, bathrooms, ventilation and solar, each service with its own page",
+          "3–5 qualified enquiries every day, predictable instead of luck",
+          "Campaigns that lead straight to enquiries, not just clicks",
+        ],
+        image: img("handwerk", "case-nouh"),
+        imageFit: "top",
+      },
+    ],
     faq: [
       { q: "How do I know this will work for my business?", a: "We’ll answer that honestly in the free initial call. We look at your trade, your region and your order book and tell you plainly whether and how our system works for you." },
       { q: "I’ve already had an agency, with no success. What do you do differently?", a: "We’re not an agency, we’re your growth partner: one joined-up system instead of piecemeal services, full transparency through your own portal, and the GEO head start nobody else offers." },
@@ -229,7 +242,6 @@ export const BRANCHEN_EN: Branche[] = [
       title: "SRS Hausmeisterservice & local businesses in _Düsseldorf/NRW_",
       before: ["Limited local visibility", "Enquiries through referrals"],
       after: ["Local presence established", "Stronger visibility across the region", "More consistent enquiries through their own channels"],
-      placeholder: "Add concrete figures.",
       image: img("lokale-dienstleister", "case"),
     },
     faq: [
@@ -339,7 +351,6 @@ export const BRANCHEN_EN: Branche[] = [
     case: {
       title: "Our own brands _as proof_",
       text: "We build our own brands (TyloTech, Marokko Investment) with exactly these methods: digital visibility, authority and lead generation.",
-      placeholder: "As soon as an external online-services case with figures is available, it will be added here.",
       image: img("online-dienstleistungen", "case"),
       tyloLogo: true,
     },
@@ -451,7 +462,6 @@ export const BRANCHEN_EN: Branche[] = [
     case: {
       title: "Hidaya Nutrition: _e-commerce infrastructure_",
       text: "We’re building Hidaya Nutrition’s complete e-commerce infrastructure (TikTok Shop → Shopify).",
-      placeholder: "As soon as solid revenue and ROAS figures are available, they’ll be added here as a case study.",
       image: img("e-commerce", "case"),
     },
     faq: [
@@ -561,7 +571,6 @@ export const BRANCHEN_EN: Branche[] = [
     case: {
       title: "SCC Sales: _website & lead generation consulting_",
       text: "For SCC Sales, we built the website and advised on lead generation and marketing.",
-      placeholder: "As soon as solid lead generation figures are available, they’ll be added here as a case study.",
       image: img("b2b-dienstleistung", "case"),
     },
     faq: [
@@ -669,7 +678,6 @@ export const BRANCHEN_EN: Branche[] = [
     case: {
       title: "Marokko Investment: _a complete investor funnel_",
       text: "For Marokko Investment, we’re building a complete, reputable investor funnel: landing pages, a confidential investor memorandum, several lead magnets and compliance-aware outreach to qualified investors. Living proof that we build high-quality lead generation in the sensitive world of finance.",
-      placeholder: "Add figures once live.",
       image: img("finanz-investment", "case"),
     },
     faq: [

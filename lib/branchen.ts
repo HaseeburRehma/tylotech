@@ -3,6 +3,22 @@
  * Copy is transcribed 1:1 from Figma. `_…_` marks the Instrument-Serif italic
  * accent (gold) inside headlines; `\n` is a Figma line break (applied from sm up). Images live in /public/branchen/<slug>/. */
 
+import type { Voice } from "./voices";
+
+export type BrancheCaseData = {
+  title: string;
+  logo?: "rohrcleaner" | "nouh-wehres";
+  text?: string;
+  before?: string[];
+  after?: string[];
+  /** client quote with an optional voice message, shown under the results */
+  testimonial?: { quote: string; author: string; voice?: Voice };
+  image?: string;
+  imageFit?: "top";
+  /** TyloTech logo badge over the case image (our own brand as the case) */
+  tyloLogo?: boolean;
+};
+
 export type IconName =
   | "hammer" | "map-pin" | "globe" | "store" | "briefcase" | "shield-check"
   | "chart-line" | "git-branch" | "search" | "users" | "message-circle" | "clock"
@@ -63,19 +79,10 @@ export type Branche = {
     rows: number[]; // tiles per row, e.g. [4, 3]
     tiles: { label: string; image: string }[];
   };
-  case: {
-    title: string;
-    logo?: "rohrcleaner";
-    text?: string;
-    before?: string[];
-    after?: string[];
-    placeholder: string;
-    extraPlaceholder?: string;
-    image?: string;
-    imageFit?: "top";
-    /** TyloTech logo badge over the case image (our own brand as the case) */
-    tyloLogo?: boolean;
-  };
+  case: BrancheCaseData;
+  /** further cases shown under the first one */
+  moreCases?: BrancheCaseData[];
+
   faq: { q: string; a: string }[];
 };
 
@@ -189,12 +196,25 @@ export const BRANCHEN: Branche[] = [
       after: [
         "Heute Platz 1 bei Google und in der KI-Suche (GEO) für die zentralen Suchbegriffe",
         "Planbar Anfragen über die eigene Website statt über teure Portale",
+        "Rund 5 Anfragen am Tag und 94.034 Impressionen in 90 Tagen, ohne Werbebudget",
       ],
-      placeholder: "Konkrete Zahlen & O-Ton ergänzen.",
-      extraPlaceholder: "Recruiting-Case Akmir folgt, sobald live.",
       image: img("handwerk", "case"),
       imageFit: "top",
     },
+    moreCases: [
+      {
+        logo: "nouh-wehres",
+        title: "Nouh-Wehres: Aus dem Meisterbetrieb wurde eine _Anfragen-Maschine_",
+        before: ["Neue Aufträge hingen an Empfehlungen"],
+        after: [
+          "Website für alle Gewerke: Heizung, Bad, Lüftung und Solar, jede Leistung mit eigener Seite",
+          "Täglich 3–5 qualifizierte Anfragen, planbar statt Zufall",
+          "Kampagnen, die direkt zu Anfragen führen statt zu Klicks",
+        ],
+        image: img("handwerk", "case-nouh"),
+        imageFit: "top",
+      },
+    ],
     faq: [
       { q: "Woher weiß ich, dass das für meinen Betrieb funktioniert?", a: "Das klären wir ehrlich im kostenlosen Erstgespräch. Wir schauen uns dein Gewerk, deine Region und deine Auftragslage an und sagen dir klar, ob und wie unser System bei dir greift." },
       { q: "Ich hatte schon eine Agentur, ohne Erfolg. Was macht ihr anders?", a: "Wir sind keine Agentur, sondern dein Wachstumspartner: ein System aus einer Hand statt Einzelleistungen, volle Transparenz über dein eigenes Portal, und der GEO-Vorsprung, den kein anderer bietet." },
@@ -304,7 +324,6 @@ export const BRANCHEN: Branche[] = [
       title: "SRS Hausmeisterservice & lokale Betriebe in _Düsseldorf/NRW_",
       before: ["Begrenzte lokale Sichtbarkeit", "Anfragen über Empfehlung"],
       after: ["Lokale Präsenz aufgebaut", "Stärkere Sichtbarkeit in der Region", "Konstantere Anfragen über eigene Kanäle"],
-      placeholder: "Konkrete Zahlen ergänzen.",
       image: img("lokale-dienstleister", "case"),
     },
     faq: [
@@ -414,7 +433,6 @@ export const BRANCHEN: Branche[] = [
     case: {
       title: "Unsere eigenen Marken _als Beweis_",
       text: "Wir bauen unsere eigenen Marken (TyloTech, Marokko Investment) mit genau diesen Methoden auf: digitale Sichtbarkeit, Autorität und Leadgenerierung.",
-      placeholder: "Sobald ein externer Online-Dienstleister-Case mit Zahlen vorliegt, wird er hier ergänzt.",
       image: img("online-dienstleistungen", "case"),
       tyloLogo: true,
     },
@@ -526,7 +544,6 @@ export const BRANCHEN: Branche[] = [
     case: {
       title: "Hidaya Nutrition: _E-Commerce-Infrastruktur_",
       text: "Wir bauen für Hidaya Nutrition die komplette E-Commerce-Infrastruktur auf (TikTok Shop → Shopify).",
-      placeholder: "Sobald belastbare Umsatz- und ROAS-Zahlen vorliegen, werden sie hier als Case ergänzt.",
       image: img("e-commerce", "case"),
     },
     faq: [
@@ -636,7 +653,6 @@ export const BRANCHEN: Branche[] = [
     case: {
       title: "SCC Sales: _Website & Leadgen-Beratung_",
       text: "Wir haben für SCC Sales den Website-Aufbau und die Beratung zu Leadgenerierung und Marketing übernommen.",
-      placeholder: "Sobald belastbare Leadgen-Zahlen vorliegen, werden sie hier als Case ergänzt.",
       image: img("b2b-dienstleistung", "case"),
     },
     faq: [
@@ -744,7 +760,6 @@ export const BRANCHEN: Branche[] = [
     case: {
       title: "Marokko Investment: _kompletter Investoren-Funnel_",
       text: "Wir bauen für Marokko Investment einen kompletten, seriösen Investoren-Funnel: Landingpages, ein vertrauliches Investoren-Memorandum, mehrere Lead-Magnete und eine compliance-bewusste Ansprache für qualifizierte Investoren. Ein lebender Beweis, dass wir im sensiblen Finanzumfeld hochwertige Leadgen aufbauen.",
-      placeholder: "Zahlen ergänzen, sobald live.",
       image: img("finanz-investment", "case"),
     },
     faq: [

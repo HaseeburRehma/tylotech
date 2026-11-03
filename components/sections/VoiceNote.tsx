@@ -3,15 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Mic, Pause, Play } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
-
-export type Voice = {
-  src: string;
-  /** seconds, shown before the file has loaded (preload="none") */
-  duration: number;
-  /** bar heights 0–1, precomputed from the recording */
-  peaks: number[];
-  label: { de: string; en: string };
-};
+import type { Voice } from "@/lib/voices";
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
