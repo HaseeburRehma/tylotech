@@ -1,4 +1,5 @@
 import type { Branche } from "./branchen";
+import { ROHR_CLEANER_VOICE } from "./voices";
 
 /* English industry pages — same structure, order and slugs (German keys) as lib/branchen.ts.
  * Only the copy is translated. `_…_` marks the serif-italic gold accent inside
@@ -116,6 +117,11 @@ export const BRANCHEN_EN: Branche[] = [
         "Predictable enquiries through their own website instead of expensive portals",
         "Around 5 enquiries a day and 94,034 impressions in 90 days, without any ad budget",
       ],
+      testimonial: {
+        quote: "“In September 2023 we had one customer and €200 in revenue. Today we get several jobs a day and employ an office assistant and a full-time technician. Without the TyloTech team we would never have made it.”",
+        author: "Owner, Rohr Cleaner",
+        voice: ROHR_CLEANER_VOICE,
+      },
       image: img("handwerk", "case"),
       imageFit: "top",
     },

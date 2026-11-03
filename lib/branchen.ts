@@ -3,7 +3,7 @@
  * Copy is transcribed 1:1 from Figma. `_…_` marks the Instrument-Serif italic
  * accent (gold) inside headlines; `\n` is a Figma line break (applied from sm up). Images live in /public/branchen/<slug>/. */
 
-import type { Voice } from "./voices";
+import { ROHR_CLEANER_VOICE, type Voice } from "./voices";
 
 export type BrancheCaseData = {
   title: string;
@@ -198,6 +198,11 @@ export const BRANCHEN: Branche[] = [
         "Planbar Anfragen über die eigene Website statt über teure Portale",
         "Rund 5 Anfragen am Tag und 94.034 Impressionen in 90 Tagen, ohne Werbebudget",
       ],
+      testimonial: {
+        quote: "„Im September 2023 hatten wir einen Kunden und 200 Euro Umsatz. Heute haben wir mehrere Aufträge pro Tag, eine Bürokraft und einen Monteur in Vollzeit. Ohne das Team TyloTech hätten wir das auf gar keinen Fall geschafft.“",
+        author: "Inhaber, Rohr Cleaner",
+        voice: ROHR_CLEANER_VOICE,
+      },
       image: img("handwerk", "case"),
       imageFit: "top",
     },

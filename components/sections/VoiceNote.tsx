@@ -48,7 +48,7 @@ export default function VoiceNote({ voice }: { voice: Voice }) {
         {playing ? <Pause className="size-4" fill="currentColor" aria-hidden /> : <Play className="ml-0.5 size-4" fill="currentColor" aria-hidden />}
       </button>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="flex items-center gap-1.5 truncate font-mono text-[10px] font-medium uppercase tracking-[0.06em] text-[#94713f] sm:tracking-[0.12em]">
+        <span className="flex items-center gap-1.5 truncate font-mono text-[10px] font-medium uppercase tracking-[0.06em] text-[#94713f] xl:tracking-[0.12em]">
           <Mic className="size-3 shrink-0" aria-hidden />
           {t(voice.label.de, voice.label.en)}
         </span>
