@@ -49,13 +49,34 @@ const WAYS = [
 ];
 const OURS = ["Eigene Methode plus eigene Software TyloHQ", "Anfragen landen in Echtzeit in deiner App", "Nur ein Betrieb pro Gewerk und Stadt", "Wir partizipieren an deinem Erfolg", "Ein fester Ansprechpartner, der den Abschluss will"];
 
+/** Leadportale / Agenturen column; TyloTech sits between the two (Figma order). */
+function WayCard({ w }: { w: (typeof WAYS)[number] }) {
+  return (
+    <div className="lpv-card flex h-full flex-col rounded-[24px] border border-[#eeedea] bg-[#f6f5f3] p-6 sm:p-[30px]">
+      <p className="eyebrow text-[#7d7973]">{w.tag}</p>
+      <h3 className="mt-2.5 t-h5 text-[#1a1917] sm:text-[22px] sm:leading-[28px]">{w.title}</h3>
+      <ul className="mt-6 flex flex-col gap-3.5">
+        {w.points.map((p) => (
+          <li key={p} className="t-body-s flex items-start gap-3 text-[#5c5954]">
+            <span className="mt-px grid size-5 shrink-0 place-items-center rounded-full bg-[#eae8e4]">
+              <Minus className="size-3 text-[#7d7973]" strokeWidth={2.2} aria-hidden />
+            </span>
+            {p}
+          </li>
+        ))}
+      </ul>
+      <p className="t-body-s mt-6 text-[#7d7973]">{w.end}</p>
+    </div>
+  );
+}
+
 export function Vergleich() {
   const root = useRef<HTMLElement>(null);
   useLazyGSAP(
     () => {
       head(st);
       gsap.from(".lpv-card", { y: 44, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.12, scrollTrigger: st(".lpv-grid") });
-      gsap.from(".lpv-ours li", { x: 18, opacity: 0, duration: 0.6, ease: "power3.out", stagger: 0.08, delay: 0.5, scrollTrigger: st(".lpv-grid") });
+      gsap.from(".lpv-ours li", { x: 18, opacity: 0, duration: 0.55, ease: "power3.out", stagger: 0.07, delay: 0.3, scrollTrigger: st(".lpv-grid") });
     },
     { scope: root },
   );
@@ -63,7 +84,7 @@ export function Vergleich() {
   return (
     <section id="vergleich" ref={root} className="scroll-mt-20 bg-white py-14 sm:py-24 lg:py-28">
       <Container>
-        <div className="lp-head flex max-w-[770px] flex-col items-start gap-[18px]">
+        <div className="lp-head flex max-w-[820px] flex-col items-start gap-[18px]">
           <Pill icon={CircleDot}>Drei Wege zu neuen Aufträgen</Pill>
           <h2 className="t-h2 text-[#1a1917]">
             Leadportale, Agenturen oder ein Partner, <span className="t-serif text-[#94713f]">der mitverdient.</span>
@@ -74,23 +95,7 @@ export function Vergleich() {
         <div className="lpv-grid mt-10 sm:mt-14">
           <SnapSlider label="Drei Wege zu neuen Aufträgen" className="lg:grid-cols-3 lg:items-stretch lg:gap-6">
             {[
-              ...WAYS.map((w) => (
-                <div key={w.tag} className="lpv-card flex h-full flex-col rounded-[24px] border border-[#eeedea] bg-[#f6f5f3] p-6 sm:p-[30px]">
-                  <p className="eyebrow text-[#7d7973]">{w.tag}</p>
-                  <h3 className="mt-2.5 t-h5 text-[#1a1917] sm:text-[22px] sm:leading-[28px]">{w.title}</h3>
-                  <ul className="mt-6 flex flex-col gap-3.5">
-                    {w.points.map((p) => (
-                      <li key={p} className="t-body-s flex items-start gap-3 text-[#5c5954]">
-                        <span className="mt-px grid size-5 shrink-0 place-items-center rounded-full bg-[#eae8e4]">
-                          <Minus className="size-3 text-[#7d7973]" strokeWidth={2.2} aria-hidden />
-                        </span>
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="t-body-s mt-6 text-[#7d7973]">{w.end}</p>
-                </div>
-              )),
+              <WayCard key={WAYS[0].tag} w={WAYS[0]} />,
               <div
                 key="tylo"
                 className="lpv-card lpv-ours relative flex h-full flex-col rounded-[24px] border border-[#d1aa71] bg-[linear-gradient(180deg,#fbf6ee_0%,#f6e9d3_100%)] p-6 shadow-[0_24px_60px_-24px_rgba(168,127,69,0.45)] sm:p-[30px]"
@@ -109,6 +114,7 @@ export function Vergleich() {
                 </ul>
                 <p className="mt-6 font-[family-name:var(--font-instrument)] text-[20px] italic leading-[26px] text-[#94713f]">Wir gewinnen nur, wenn du gewinnst.</p>
               </div>,
+              <WayCard key={WAYS[1].tag} w={WAYS[1]} />,
             ]}
           </SnapSlider>
         </div>
@@ -134,10 +140,10 @@ export function Gruender() {
   return (
     <section id="gruender" ref={root} className="scroll-mt-20 bg-[#f6f5f3] py-14 sm:py-24 lg:py-28">
       <Container className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[520px_1fr] lg:gap-24">
-        <div className="lpg-photo relative mx-auto aspect-[520/600] w-full max-w-[520px] overflow-hidden rounded-[28px] bg-[#eeedea] shadow-[0_6px_20px_rgba(0,0,0,0.18),0_20px_40px_rgba(0,0,0,0.12)]">
+        <div className="lpg-photo relative mx-auto aspect-[520/600] w-full max-w-[520px] overflow-hidden rounded-[32px] border border-[#eeedea] bg-[#0f1b22] shadow-[0_1px_2px_rgba(8,34,44,0.04),0_2px_6px_rgba(8,34,44,0.06)]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/team/ilias-el-aradi-gruender.webp" alt="Ilias El Aradi, Gründer von TyloTech" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-top" />
-          <div className="lpg-name absolute bottom-6 left-6 rounded-[14px] bg-white/95 px-5 py-3.5 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.35)] backdrop-blur">
+          <img src="/lp/handwerk/ilias-gruender.webp" alt="Ilias El Aradi, Gründer von TyloTech" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[50%_11%]" />
+          <div className="lpg-name absolute bottom-6 left-6 rounded-[16px] border border-[rgba(8,34,44,0.08)] bg-white/[0.88] py-3.5 pl-5 pr-6 shadow-[0_8px_24px_rgba(8,34,44,0.08),inset_0_0_0_0.6px_rgba(255,255,255,0.55)] backdrop-blur-md">
             <p className="t-label-l text-[#1a1917]">Ilias El Aradi</p>
             <p className="t-body-s text-[#5c5954]">Gründer, TyloTech</p>
           </div>
@@ -355,13 +361,18 @@ export function Stimmen() {
 
 /* ---------- 10 · Abschluss-CTA ---------- */
 
+const AGENDA = ["Wer in deiner Stadt gerade vorne liegt", "Was dich das jeden Monat kostet", "Ob dein Platz noch frei ist"];
+
 export function Abschluss() {
   const root = useRef<HTMLElement>(null);
   useLazyGSAP(
     () => {
+      const t = st(".lpa-panel", "top 85%");
       gsap.from(".lpa-panel", { y: 50, opacity: 0, scale: 0.97, duration: 1, ease: "power3.out", scrollTrigger: st(".lpa-panel", "top 88%") });
-      gsap.from(".lpa-in > *", { y: 22, opacity: 0, duration: 0.75, ease: "power3.out", stagger: 0.1, delay: 0.2, scrollTrigger: st(".lpa-panel", "top 85%") });
-      gsap.to(".lpa-glow", { x: 60, y: -30, duration: 6, ease: "sine.inOut", yoyo: true, repeat: -1 });
+      gsap.from(".lpa-in > *", { y: 22, opacity: 0, duration: 0.75, ease: "power3.out", stagger: 0.1, delay: 0.2, scrollTrigger: t });
+      gsap.from(".lpa-photo img", { scale: 1.1, opacity: 0, duration: 1.4, ease: "power2.out", delay: 0.1, scrollTrigger: t });
+      gsap.from(".lpa-agenda", { y: 30, opacity: 0, duration: 0.9, ease: "power3.out", delay: 0.5, scrollTrigger: t });
+      gsap.from(".lpa-agenda li", { x: 14, opacity: 0, duration: 0.6, ease: "power3.out", stagger: 0.1, delay: 0.75, scrollTrigger: t });
     },
     { scope: root },
   );
@@ -369,32 +380,57 @@ export function Abschluss() {
   return (
     <section id="kontakt" ref={root} className="bg-white py-14 sm:py-24">
       <Container>
-        <div className="lpa-panel relative overflow-hidden rounded-[28px] bg-[linear-gradient(135deg,#0d4b61_0%,#03303f_45%,#01161f_100%)] px-6 py-14 shadow-[0_30px_70px_-30px_rgba(0,22,32,0.6)] sm:rounded-[32px] sm:px-12 sm:py-[76px]">
-          <div aria-hidden className="lpa-glow pointer-events-none absolute left-[52%] top-[48%] h-[360px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.28),transparent)]" />
-          <div className="lpa-in relative mx-auto flex max-w-[780px] flex-col items-center gap-6 text-center">
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-[14px] leading-5 text-white/90 backdrop-blur">
-              <Search className="size-4 text-[#d8b682]" strokeWidth={1.8} aria-hidden />
+        <div className="lpa-panel relative flex flex-col overflow-hidden rounded-[28px] border border-[rgba(209,170,113,0.28)] shadow-[0_28px_70px_rgba(4,22,29,0.3),inset_0_1.5px_2px_rgba(255,255,255,0.14)] [background:radial-gradient(ellipse_582px_255px_at_175px_102px,rgba(29,115,145,0.28),rgba(29,115,145,0.05)_60%,transparent),linear-gradient(149deg,#0a4157_12%,#012e3e_43%,#00151e_80%)] sm:rounded-[36px] lg:min-h-[560px] lg:flex-row">
+          <div className="lpa-in relative z-10 flex flex-1 flex-col items-start justify-center gap-[26px] px-6 pb-4 pt-12 sm:px-12 sm:pt-16 lg:py-20 lg:pl-20 lg:pr-10">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/[0.22] bg-white/[0.12] py-2 pl-2.5 pr-4 text-[14px] font-medium leading-[18px] tracking-[-0.2px] text-white/[0.92] backdrop-blur-md">
+              <Search className="size-[15px] text-[#d8b682]" strokeWidth={1.8} aria-hidden />
               Kostenlose Konkurrenz-Analyse
             </p>
-            <h2 className="t-h1 [--fs-d:50] [--lh-d:58] text-white">
+            <h2 className="t-h1 [--fs-d:54] [--lh-d:60] [--ls-d:-1.8] text-white">
               Wer gewinnt gerade <span className="t-serif text-white">die Aufträge</span> in deiner Stadt?
             </h2>
-            <p className="t-body-l max-w-[680px] text-white/85">Finde es kostenlos heraus. Wir zeigen dir, welche Betriebe in deiner Stadt vorne liegen, was dich das jeden Monat kostet und ob dein Platz noch frei ist.</p>
+            <p className="t-body-l text-white/[0.94]">Ich schaue mir deinen Markt persönlich an und sage dir ehrlich, ob unser System für deinen Betrieb trägt. Kostenlos und unverbindlich.</p>
             <a
               href={FORM}
-              className="group mt-2 inline-flex h-[58px] items-center gap-3.5 rounded-full py-1.5 pl-1.5 pr-7 t-button text-[#0f0e0d] shadow-[0_0_40px_rgba(209,170,113,0.35),0_4px_14px_rgba(168,127,69,0.32),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 [background:linear-gradient(180deg,rgba(255,255,255,0.42)_0%,rgba(255,255,255,0.02)_55%,rgba(255,255,255,0)_100%),linear-gradient(90deg,#efdcbc_0%,#d8b681_45%,#b4894d_100%)] hover:brightness-105 active:translate-y-px"
+              className="group inline-flex h-[60px] items-center gap-3.5 rounded-full py-2 pl-2 pr-[30px] text-[#04161d] shadow-[0_10px_28px_rgba(168,127,69,0.2),0_4px_14px_rgba(168,127,69,0.32),inset_0_1.5px_1.5px_rgba(255,255,255,0.45),inset_0_-1.5px_1.5px_rgba(109,83,48,0.25)] transition-[filter,translate] duration-200 [background:linear-gradient(90deg,#efdcbc_0%,#d8b681_45%,#b4894d_100%)] hover:brightness-105 active:translate-y-px"
             >
-              <span className="grid size-[46px] place-items-center rounded-full bg-[#03303f] text-white transition-transform duration-300 group-hover:translate-x-0.5">
-                <ArrowRight className="size-[18px]" strokeWidth={2} aria-hidden />
+              <span className="grid size-11 place-items-center rounded-full bg-[linear-gradient(180deg,#17485b,#04161d)] text-white transition-transform duration-300 group-hover:translate-x-0.5">
+                <ArrowRight className="size-[19px]" strokeWidth={2} aria-hidden />
               </span>
-              <span>
-                Jetzt <span className="font-[family-name:var(--font-instrument)] text-[18px] italic">kostenlos</span> prüfen
+              <span className="font-display text-[18px] font-medium leading-6 tracking-[-0.3px]">
+                Jetzt <span className="font-[family-name:var(--font-instrument)] text-[19px] font-normal italic">kostenlos</span> prüfen
               </span>
             </a>
+          </div>
+
+          {/* founder photo fading in from the left, agenda card on glass */}
+          <div className="lpa-photo relative h-[460px] w-full shrink-0 overflow-hidden sm:h-[520px] lg:h-auto lg:w-[540px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/lp/handwerk/ilias-cta.webp"
+              alt="Ilias El Aradi, Gründer von TyloTech"
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover object-[50%_45%] [mask-image:linear-gradient(180deg,transparent_0%,#000_22%)] lg:[mask-image:linear-gradient(90deg,transparent_2%,#000_23%)]"
+            />
+            <div className="lpa-agenda absolute bottom-5 left-5 right-5 rounded-[20px] border border-white/[0.22] bg-[rgba(4,22,29,0.42)] p-[22px] shadow-[inset_0_0_0_0.6px_rgba(255,255,255,0.22)] backdrop-blur-xl sm:left-auto sm:w-[320px] lg:bottom-7 lg:right-7">
+              <p className="t-label-m text-white/[0.72]">Im Gespräch klären wir</p>
+              <ul className="mt-4 flex flex-col gap-3">
+                {AGENDA.map((a, i) => (
+                  <li key={a} className="flex items-center gap-3">
+                    <span className="grid size-[30px] shrink-0 place-items-center rounded-full border border-[rgba(209,170,113,0.45)] bg-[rgba(209,170,113,0.16)] font-mono text-[14px] font-medium leading-[18px] text-[#d1aa71]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="t-body-m text-white/[0.94]">{a}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="my-4 h-px bg-white/[0.16]" />
+              <p className="font-[family-name:var(--font-instrument)] text-[21px] italic leading-[30px] text-white">Ilias El Aradi</p>
+              <p className="t-body-s text-white/70">Gründer, TyloTech</p>
+            </div>
           </div>
         </div>
       </Container>
     </section>
   );
 }
-

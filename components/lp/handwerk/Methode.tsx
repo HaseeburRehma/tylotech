@@ -9,7 +9,7 @@ import { RequestCard } from "./Cases";
 import { HQDashboard, HQPhone } from "./HQDemo";
 import { FORM, Pill, SnapSlider } from "./ui";
 
-/* 04 · Methode: dark section, interactive TyloHQ dashboard (phone app below lg) with live request cards on top. */
+/* 04 · Methode: light section, interactive TyloHQ dashboard (phone app below lg) with live request cards on top. */
 
 const FEATURES = [
   { icon: Layers, title: "Bewährte Methode", text: "Ein Mix aus Online-Marketing, den wir über Jahre in Handwerksbetrieben verfeinert haben. Kein Experiment, kein Baukasten." },
@@ -30,7 +30,7 @@ function StoreBadge({ store }: { store: "apple" | "google" }) {
     <span
       role="img"
       aria-label={apple ? "Laden im App Store" : "Jetzt bei Google Play"}
-      className="inline-flex h-[50px] items-center gap-2 rounded-[11px] border border-[#a6a6a6] bg-black pl-3 pr-4 text-white sm:h-[54px] sm:gap-2.5 sm:rounded-[12px] sm:pl-3.5 sm:pr-5 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:-translate-y-0.5"
+      className="inline-flex h-[50px] items-center gap-2 rounded-[11px] border border-black bg-black pl-3 pr-4 text-white sm:h-[52px] sm:gap-2.5 sm:rounded-[12px] sm:pl-3.5 sm:pr-5 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:-translate-y-0.5"
     >
       {apple ? (
         <svg viewBox="0 0 384 512" className="h-[26px] w-[22px]" aria-hidden>
@@ -68,16 +68,16 @@ export default function Methode() {
   );
 
   return (
-    <section id="methode" ref={root} className="scroll-mt-20 overflow-hidden bg-[#002e3d] py-16 text-white sm:py-24 lg:py-28">
+    <section id="methode" ref={root} className="scroll-mt-20 overflow-hidden bg-[#f6f5f3] py-16 sm:py-24 lg:py-28">
       <Container>
         <div className="lpm-head mx-auto flex max-w-[780px] flex-col items-center gap-5 text-center">
-          <Pill icon={LayoutGrid} dark>
+          <Pill icon={LayoutGrid}>
             Unsere bewährte Methode + eigene Software
           </Pill>
-          <h2 className="t-h2 text-white">
-            Kein Marketing von der Stange. <span className="t-serif text-[#d8b682]">Ein eigenes System,</span> das Anfragen erzeugt.
+          <h2 className="t-h2 text-[#1a1917]">
+            Kein Marketing von der Stange. <span className="t-serif text-[#94713f]">Ein eigenes System,</span> das Anfragen erzeugt.
           </h2>
-          <p className="t-body-l text-white/75">
+          <p className="t-body-l text-[#5c5954]">
             Eine bewährte Methode, ein Mix aus Online-Marketing, plus unsere eigene Software TyloHQ. Sie erfasst jede Anfrage und liefert sie in Echtzeit in die App deines Betriebs. Darum entstehen die Anfragen überhaupt.
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function Methode() {
         <div className="lpm-dash relative mx-auto mt-12 max-w-[1180px] sm:mt-14">
           {/* laptop and up: the interactive dashboard with live cards on top */}
           <div className="hidden lg:block">
-            <div className="rounded-[24px] border border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)]">
+            <div className="rounded-[24px] border border-[#eeedea] shadow-[0_7px_20px_rgba(8,34,44,0.06),0_23px_36px_rgba(8,34,44,0.05),0_51px_49px_rgba(8,34,44,0.03)]">
               <HQDashboard />
             </div>
             <div className="pointer-events-none absolute right-[-3%] top-[27%] flex flex-col items-end gap-3.5">
@@ -97,37 +97,37 @@ export default function Methode() {
                 </div>
               ))}
             </div>
-            <p className="mt-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-white/60">
-              <MousePointerClick className="size-3.5 text-[#d8b682]" strokeWidth={1.8} aria-hidden />
+            <p className="mt-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-[#7d7973]">
+              <MousePointerClick className="size-3.5 text-[#c79a53]" strokeWidth={1.8} aria-hidden />
               Interaktive Demo: klick dich durch TyloHQ
             </p>
           </div>
           {/* phones and tablets: the TyloHQ app */}
           <div className="lg:hidden">
             <HQPhone />
-            <p className="mt-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-white/60">
-              <Hand className="size-3.5 text-[#d8b682]" strokeWidth={1.8} aria-hidden />
+            <p className="mt-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.6px] text-[#7d7973]">
+              <Hand className="size-3.5 text-[#c79a53]" strokeWidth={1.8} aria-hidden />
               Tipp auf Anfragen und Tabs
             </p>
           </div>
         </div>
 
-        <div className="lpm-features mt-12 sm:mt-14 [&_button>span]:bg-white/30 [&_button[aria-current=true]>span]:bg-[#d8b682]">
+        <div className="lpm-features mt-12 sm:mt-14">
           <SnapSlider label="So funktioniert unser System" className="lg:grid-cols-3 lg:gap-10">
             {FEATURES.map((f) => (
-              <div key={f.title} className="lpm-feature flex h-full flex-col items-start gap-4 rounded-[20px] border border-white/10 bg-white/[0.04] p-6 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0">
-                <span className="grid size-[46px] place-items-center rounded-[12px] border border-white/15 bg-white/[0.06]">
-                  <f.icon className="size-[21px] text-[#d8b682]" strokeWidth={1.7} aria-hidden />
+              <div key={f.title} className="lpm-feature flex h-full flex-col items-start gap-4 rounded-[20px] border border-[#eeedea] bg-white p-6 lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0">
+                <span className="grid size-[46px] place-items-center rounded-[12px] border border-[#e2e0dc] bg-white shadow-[0_1px_2px_rgba(8,34,44,0.04)]">
+                  <f.icon className="size-[21px] text-[#94713f]" strokeWidth={1.6} aria-hidden />
                 </span>
-                <h3 className="t-h5 text-white">{f.title}</h3>
-                <p className="t-body-m text-white/70">{f.text}</p>
+                <h3 className="t-h5 text-[#1a1917]">{f.title}</h3>
+                <p className="t-body-m text-[#5c5954]">{f.text}</p>
               </div>
             ))}
           </SnapSlider>
         </div>
 
         <div className="lpm-end mt-12 flex flex-col items-center gap-4 sm:mt-14">
-          <p className="eyebrow text-white/80">TyloHQ gibt es als App für iOS und Android</p>
+          <p className="eyebrow text-[#5c5954]">TyloHQ gibt es als App für iOS und Android</p>
           <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3">
             <StoreBadge store="apple" />
             <StoreBadge store="google" />
@@ -136,7 +136,7 @@ export default function Methode() {
             <GoldButton href={FORM} className="w-full sm:w-auto">
               Kostenlose Konkurrenz-Analyse sichern
             </GoldButton>
-            <a href="#vergleich" className="t-button text-white/90 underline-offset-4 transition-colors hover:text-white hover:underline">
+            <a href="#vergleich" className="t-button text-[#1a1917] underline-offset-4 transition-colors hover:underline">
               So arbeitet unser System
             </a>
           </div>

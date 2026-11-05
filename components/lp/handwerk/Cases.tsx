@@ -164,7 +164,10 @@ function VoiceCard() {
   return (
     <figure className={cn("lpc-voice flex flex-col gap-[18px] rounded-[22px] border border-[#eeedea] bg-white p-[18px] sm:p-[22px]", "shadow-[0_7px_10px_rgba(8,34,44,0.06),0_23px_18px_rgba(8,34,44,0.05),0_51px_24px_rgba(8,34,44,0.03)]")}>
       <div className="flex items-center gap-3">
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#0f0e0d] t-label-m text-white">RC</span>
+        <span className="grid size-11 shrink-0 place-items-center rounded-full border border-[#eeedea] bg-white">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/lp/handwerk/rc-blau.svg" alt="" width={51} height={40} className="h-[22px] w-auto" />
+        </span>
         <div className="min-w-0 flex-1">
           <p className="t-label-m text-[#1a1917]">Rohr Cleaner</p>
           <p className="t-body-xs text-[#7d7973]">Sprachnachricht an TyloTech</p>
