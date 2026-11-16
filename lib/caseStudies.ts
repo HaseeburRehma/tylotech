@@ -1,6 +1,6 @@
 /* Case studies: one entry per project, rendered by components/pages/CaseStudyPage.
  * Copy and images from Figma "Case Study · Crusty Slices" (4970:16) and
- * "Case Study · Fahrschule Abgefahrn" (4972:441). Figma placeholders ("[Zeitraum]",
+ * "Case Study · Fahrschule Abgefahrn" (4972:441) and "Case Study · Selmir Suljkanovic" (5316:8954). Figma placeholders ("[Zeitraum]",
  * "[Erkenntnis 1]", "[Learning 1]", empty story slots …) are left out on purpose;
  * the optional fields below exist so real content can be added later.
  *
@@ -28,7 +28,8 @@ export type Metric = {
 
 export type Testimonial = {
   category: L;
-  quote: L;
+  /** left out until the client has given a real quote */
+  quote?: L;
   name: string;
   place: L;
   /** still photo; without it the card shows the dark gradient */
@@ -67,7 +68,8 @@ export type CaseStudy = {
     text: L;
     metrics: { value: L; label: L }[];
   };
-  results: { wide: Metric; compact: [Metric, Metric]; testimonial: Testimonial };
+  /** only real figures: without `wide` the section shows the compact card(s) next to the testimonial */
+  results: { wide?: Metric; compact: Metric[]; testimonial: Testimonial };
   overview: { situation: L; tasks: L<string[]> };
   challenges: { intro: L; items: Card[] };
   /** "Was wir herausgefunden haben" — only with real research findings */
@@ -76,7 +78,7 @@ export type CaseStudy = {
   brand: {
     intro: L;
     logo: { src: string; w: number; h: number };
-    type: { sample: string; font: "anton" | "tomorrow"; label: string };
+    type: { sample: string; font: "anton" | "tomorrow" | "prata"; label: string };
     colors: { name: L; hex: string }[];
   };
   website: {
@@ -86,8 +88,9 @@ export type CaseStudy = {
     pair: { caption: L; shot: Shot }[];
   };
   mobile: MobileSection;
-  social: { title: L; intro: L; posts: { src: string; alt: L }[] };
-  offline: { title: L; intro: L; main: { src: string; alt: L }; extra?: { src: string; alt: L }[] };
+  /** `eyebrow` overrides the default section label ("Social Media", "Print & Außenwerbung") */
+  social: { eyebrow?: L; title: L; intro: L; posts: { src: string; alt: L }[] };
+  offline: { eyebrow?: L; title: L; intro: L; main: { src: string; alt: L }; extra?: { src: string; alt: L }[] };
   /** "Was wir mitnehmen" — only with real learnings */
   learnings?: { intro: L; items: Card[] };
 };
@@ -96,6 +99,7 @@ const shot = (src: string, w: number, h: number, de: string, en: string): Shot =
 
 const CS = "/case-studies/crusty-slices";
 const FA = "/case-studies/fahrschule-abgefahrn";
+const SS = "/case-studies/selmir-suljkanovic";
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
@@ -560,6 +564,229 @@ export const CASE_STUDIES: CaseStudy[] = [
         { src: `${FA}/print-1.webp`, alt: { de: "Give-away im Einkaufskorb", en: "Giveaway in a shopping basket" } },
         { src: `${FA}/print-2.webp`, alt: { de: "Plakat an einer Bushaltestelle", en: "Poster at a bus stop" } },
       ],
+    },
+  },
+  {
+    slug: "selmir-suljkanovic",
+    client: "Selmir Suljkanovic",
+    domain: "selmir-suljkanovic.de",
+    url: "https://www.selmir-suljkanovic.de",
+    seo: {
+      title: { de: "Case Study Selmir Suljkanovic | TyloTech", en: "Case study Selmir Suljkanovic | TyloTech" },
+      description: {
+        de: "Website, Landingpages, Lead-Magnet und 111 Ad-Creatives für Selmir Suljkanovic, Vertriebs- und Strukturberater für Handwerk, Agenturen und Immobilien.",
+        en: "Website, landing pages, lead magnet and 111 ad creatives for Selmir Suljkanovic, sales and structure consultant for trades, agencies and real estate.",
+      },
+    },
+    hero: {
+      title: { de: "Aus Expertise wird ein _System, das verkauft._", en: "Expertise turned into _a system that sells._" },
+      intro: {
+        de: "Website, Landingpages, Lead-Magnet und Ad-Creatives für Selmir Suljkanovic, Vertriebs- und Strukturberater für Handwerk, Agenturen und Immobilien: ein Auftritt, der Ergebnisse zeigt und Erstgespräche bringt.",
+        en: "Website, landing pages, lead magnet and ad creatives for Selmir Suljkanovic, sales and structure consultant for trades, agencies and real estate: a presence that shows results and books first calls.",
+      },
+      meta: [
+        { label: { de: "Kunde", en: "Client" }, value: { de: "Selmir Suljkanovic", en: "Selmir Suljkanovic" } },
+        { label: { de: "Branche", en: "Industry" }, value: { de: "Beratung, Vertriebstraining", en: "Consulting, sales training" } },
+        { label: { de: "Leistungen", en: "Services" }, value: { de: "Design, Website, Lead-Magnet, Ads", en: "Design, website, lead magnet, ads" } },
+      ],
+      slides: [
+        shot(`${SS}/hero.webp`, 1600, 900, "Startseite von selmir-suljkanovic.de", "selmir-suljkanovic.de home page"),
+        shot(`${SS}/web-cases.webp`, 1600, 805, "Case Studies mit echten Umsatzkurven", "Case studies with real revenue curves"),
+        shot(`${SS}/web-event.webp`, 1600, 805, "Event-Seite der Sales Mastery Days", "Sales Mastery Days event page"),
+        shot(`${SS}/web-buch.webp`, 1600, 805, "Buchseite „Sein. Tun. Haben.“", "Book page “Sein. Tun. Haben.”"),
+      ],
+      slideSmall: `${SS}/hero-720.webp`,
+    },
+    card: {
+      image: `${SS}/card.webp`,
+      gallery: [
+        shot(`${SS}/card.webp`, 1280, 644, "Startseite von selmir-suljkanovic.de", "selmir-suljkanovic.de home page"),
+        shot(`${SS}/offline-card.webp`, 960, 540, "Landingpage für den Verkaufsleitfaden", "Landing page for the sales guide"),
+        shot(`${SS}/web-event.webp`, 1600, 805, "Event-Seite der Sales Mastery Days", "Sales Mastery Days event page"),
+        shot(`${SS}/web-landing.webp`, 1600, 805, "Landingpage Betriebs-Röntgen", "Business X-ray landing page"),
+        shot(`${SS}/web-ueber.webp`, 1600, 805, "Über-Seite von Selmir", "Selmir’s about page"),
+      ],
+      tags: { de: ["Beratung", "Website", "Lead-Magnet"], en: ["Consulting", "Website", "Lead magnet"] },
+      text: {
+        de: "Selmir Suljkanovic, Vertriebs- und Strukturberater: Website, Landingpages, Lead-Magnet und Ads.",
+        en: "Selmir Suljkanovic, sales and structure consultant: website, landing pages, lead magnet and ads.",
+      },
+      metrics: [
+        { value: { de: "111", en: "111" }, label: { de: "Ad-Motive in 3 Formaten", en: "ad creatives in 3 formats" } },
+        { value: { de: "8", en: "8" }, label: { de: "Landingpages für die Potenzialanalyse", en: "landing pages for the potential analysis" } },
+      ],
+    },
+    results: {
+      compact: [{ channel: "tiktok", label: { de: "Ad-Creatives", en: "Ad creatives" }, value: 111, suffix: { de: " Motive", en: " creatives" }, chip: { de: "in 3 Formaten", en: "in 3 formats" } }],
+      testimonial: {
+        category: { de: "Beratung", en: "Consulting" },
+        name: "Selmir Suljkanovic",
+        place: { de: "Vertriebs- und Strukturberater", en: "Sales and structure consultant" },
+        image: `${SS}/testimonial.webp`,
+      },
+    },
+    overview: {
+      situation: {
+        de: "Selmir Suljkanovic bringt Unternehmern aus Handwerk, Agenturen und Immobilien Vertrieb und Struktur bei, damit Wachstum nicht mehr am Inhaber hängt. Seine Kunden haben ihren Umsatz teils mehr als verdoppelt, Hörmann Haustechnik etwa von 4 auf 18 Millionen Euro.",
+        en: "Selmir Suljkanovic teaches business owners in trades, agencies and real estate sales and structure, so growth no longer depends on the owner. Some of his clients have more than doubled their revenue, Hörmann Haustechnik for example from €4 million to €18 million.",
+      },
+      tasks: {
+        de: [
+          "Eine Website, die Selmir als Experten zeigt und Erstgespräche bringt",
+          "Landingpages für die Potenzialanalyse und die Sales Mastery Days",
+          "Ein Lead-Magnet, der aus YouTube-Zuschauern Kontakte macht",
+          "Ad-Creatives, die Inhaber im Feed stoppen, statt zu nerven",
+        ],
+        en: [
+          "A website that presents Selmir as the expert and books first calls",
+          "Landing pages for the potential analysis and the Sales Mastery Days",
+          "A lead magnet that turns YouTube viewers into contacts",
+          "Ad creatives that stop business owners in the feed instead of annoying them",
+        ],
+      },
+    },
+    challenges: {
+      intro: {
+        de: "Drei Dinge mussten gleichzeitig stimmen, sonst wäre es ein schöner Auftritt ohne Anfragen geworden.",
+        en: "Three things had to work at once, or it would have been a nice-looking presence without enquiries.",
+      },
+      items: [
+        {
+          title: { de: "Expertise greifbar machen", en: "Making expertise tangible" },
+          text: {
+            de: "Vertrieb und Struktur sind abstrakt. Die Ergebnisse von Kunden müssen in Sekunden sichtbar sein, in Zahlen statt in Versprechen.",
+            en: "Sales and structure are abstract. Client results have to be visible within seconds, in numbers rather than promises.",
+          },
+        },
+        {
+          title: { de: "Eine Person als Marke", en: "One person as the brand" },
+          text: {
+            de: "Selmir ist das Angebot. Seine Geschichte muss Vertrauen schaffen, ohne nach Coaching-Klischee zu klingen.",
+            en: "Selmir is the offer. His story has to build trust without sounding like a coaching cliché.",
+          },
+        },
+        {
+          title: { de: "Drei Branchen, eine Botschaft", en: "Three industries, one message" },
+          text: {
+            de: "Handwerk, Agenturen und Immobilien haben andere Probleme. Jede Zielgruppe muss sich wiederfinden, ohne dass die Marke zerfällt.",
+            en: "Trades, agencies and real estate have different problems. Every audience has to recognise itself without the brand falling apart.",
+          },
+        },
+      ],
+    },
+    approach: {
+      intro: {
+        de: "Vier Schritte, die ineinandergreifen, statt Einzelleistungen von fünf Dienstleistern.",
+        en: "Four steps that interlock, instead of separate services from five different agencies.",
+      },
+      steps: [
+        {
+          title: { de: "Positionierung & Botschaft", en: "Positioning & message" },
+          text: {
+            de: "Zielgruppen, Engpässe und Einwände verstehen: Wo verlieren Betriebe ihre Aufträge, und wie sagt man das so, dass sich ein Inhaber wiedererkennt?",
+            en: "Understand audiences, bottlenecks and objections: where do businesses lose their jobs, and how do you say it so an owner recognises himself?",
+          },
+        },
+        {
+          title: { de: "Marke & Design-System", en: "Brand & design system" },
+          text: {
+            de: "Dunkle Bühne, violetter Akzent, Prata für Haltung und Inter für Klarheit: ein System für Website, PDF und Ads.",
+            en: "A dark stage, a violet accent, Prata for attitude and Inter for clarity: one system for website, PDF and ads.",
+          },
+        },
+        {
+          title: { de: "Website & Landingpages", en: "Website & landing pages" },
+          text: {
+            de: "Startseite, Über-Seite, Event-Seite für die Sales Mastery Days und acht Landingpage-Varianten für die Potenzialanalyse.",
+            en: "Home page, about page, an event page for the Sales Mastery Days and eight landing page variants for the potential analysis.",
+          },
+        },
+        {
+          title: { de: "Lead-Magnet & Kampagnen", en: "Lead magnet & campaigns" },
+          text: {
+            de: "Ein zehnseitiger Verkaufsleitfaden als PDF und 111 Ad-Motive in neun Themenwelten für Meta.",
+            en: "A ten-page sales guide as a PDF and 111 ad creatives across nine themes for Meta.",
+          },
+        },
+      ],
+    },
+    brand: {
+      intro: {
+        de: "Eine dunkle Bühne, ein violetter Akzent und eine Typografie, die auf Website, PDF und Ads gleich wirken.",
+        en: "A dark stage, a violet accent and a typeface that look the same on the website, PDF and ads.",
+      },
+      logo: { src: `${SS}/logo.svg`, w: 286, h: 92 },
+      type: { sample: "Erfolg durch Klarheit.", font: "prata", label: "Prata, Days One & Inter" },
+      colors: [
+        { name: { de: "Violett", en: "Violet" }, hex: "#B089FF" },
+        { name: { de: "Indigo", en: "Indigo" }, hex: "#6461FC" },
+        { name: { de: "Nacht", en: "Night" }, hex: "#090711" },
+        { name: { de: "Tiefe", en: "Depth" }, hex: "#0E0B19" },
+        { name: { de: "Weiß", en: "White" }, hex: "#FFFFFF" },
+        { name: { de: "Schwarz", en: "Black" }, hex: "#000000" },
+      ],
+    },
+    website: {
+      intro: {
+        de: "Jede Seite hat einen Job: Vertrauen aufbauen, das Problem benennen, das Gespräch buchen.",
+        en: "Every page has one job: build trust, name the problem, book the call.",
+      },
+      feature: {
+        title: { de: "Eine Startseite, die zuerst Ergebnisse zeigt.", en: "A home page that shows results first." },
+        text: {
+          de: "Selmir im Zentrum, Kundenlogos direkt darunter und vier echte Fallstudien mit Umsatzkurven. Wer hier landet, sieht zuerst, was die Zusammenarbeit bringt.",
+          en: "Selmir at the centre, client logos right below and four real case studies with revenue curves. Anyone who lands here first sees what working together delivers.",
+        },
+        shot: shot(`${SS}/web-home.webp`, 1600, 805, "Fallstudie mit Umsatzkurve auf der Startseite", "Case study with revenue curve on the home page"),
+      },
+      wide: {
+        title: { de: "Die Geschichte hinter dem Berater.", en: "The story behind the consultant." },
+        text: {
+          de: "Vom Kriegsflüchtling zum Unternehmer und Investor: Die Über-Seite erzählt Selmirs Weg und macht seine Haltung greifbar.",
+          en: "From war refugee to entrepreneur and investor: the about page tells Selmir’s journey and makes his attitude tangible.",
+        },
+        shot: shot(`${SS}/web-ueber.webp`, 1600, 805, "Über-Seite von Selmir Suljkanovic", "Selmir Suljkanovic’s about page"),
+        height: 760,
+      },
+      pair: [
+        { caption: { de: "Event-Seite für die Sales Mastery Days", en: "Event page for the Sales Mastery Days" }, shot: shot(`${SS}/web-event.webp`, 1600, 805, "Event-Seite der Sales Mastery Days", "Sales Mastery Days event page") },
+        { caption: { de: "Acht Landingpages für die Potenzialanalyse", en: "Eight landing pages for the potential analysis" }, shot: shot(`${SS}/web-landing.webp`, 1600, 805, "Landingpage Betriebs-Röntgen", "Business X-ray landing page") },
+      ],
+    },
+    mobile: {
+      kind: "devices",
+      eyebrow: { de: "Mobile & Stories", en: "Mobile & stories" },
+      title: { de: "Auf dem Handy _zuerst._", en: "On the phone _first._" },
+      text: {
+        de: "Die meisten Unternehmer sehen Selmir zuerst auf Instagram oder YouTube. Website, Landingpages und Leitfaden sind deshalb vom kleinen Bildschirm her gedacht: ein Satz, ein Beweis, ein Button.",
+        en: "Most business owners first see Selmir on Instagram or YouTube. That’s why the website, landing pages and guide are designed from the small screen up: one sentence, one proof, one button.",
+      },
+      phones: [`${SS}/phone-1.webp`, `${SS}/phone-2.webp`, `${SS}/phone-3.webp`],
+    },
+    social: {
+      eyebrow: { de: "Ads & Social", en: "Ads & social" },
+      title: { de: "Ads, die im Feed _stoppen._", en: "Ads that _stop the scroll._" },
+      intro: {
+        de: "111 Motive in neun Themenwelten, jeweils in 4:5, 1:1 und 9:16: von Umsatzkurven über WhatsApp-Mockups bis zu Kunden-Fallstudien als Karussell.",
+        en: "111 creatives across nine themes, each in 4:5, 1:1 and 9:16: from revenue curves and WhatsApp mock-ups to client case studies as carousels.",
+      },
+      posts: [
+        { src: `${SS}/post-1.webp`, alt: { de: "Ad: Inoffizielle Mitteilung", en: "Ad: Unofficial announcement" } },
+        { src: `${SS}/post-2.webp`, alt: { de: "Ad: So hat Hörmann Haustechnik die Wärmepumpen-Verkäufe verzwanzigfacht", en: "Ad: How Hörmann Haustechnik multiplied heat pump sales twentyfold" } },
+        { src: `${SS}/post-3.webp`, alt: { de: "Ad: Das Problem sind nicht die Anfragen", en: "Ad: The problem isn’t the enquiries" } },
+        { src: `${SS}/post-4.webp`, alt: { de: "Ad: Mehr arbeiten ist keine Strategie. Struktur ist eine.", en: "Ad: Working more isn’t a strategy. Structure is." } },
+        { src: `${SS}/post-5.webp`, alt: { de: "Ad: Wann genau soll dein Betrieb wachsen?", en: "Ad: When exactly is your business supposed to grow?" } },
+        { src: `${SS}/post-6.webp`, alt: { de: "Ad: Planbarkeit ist kein Zufall", en: "Ad: Predictability is no accident" } },
+      ],
+    },
+    offline: {
+      eyebrow: { de: "Lead-Magnet", en: "Lead magnet" },
+      title: { de: "Ein Leitfaden, der _Kontakte bringt._", en: "A guide that _brings in contacts._" },
+      intro: {
+        de: "Der Verkaufsleitfaden aus Selmirs YouTube-Rollenspiel als zehnseitiges PDF, mit eigener Landingpage zum Anfordern.",
+        en: "The sales guide from Selmir’s YouTube role-play as a ten-page PDF, with its own landing page to request it.",
+      },
+      main: { src: `${SS}/offline.webp`, alt: { de: "Landingpage für den Rollenspiel-Leitfaden", en: "Landing page for the role-play guide" } },
     },
   },
 ];

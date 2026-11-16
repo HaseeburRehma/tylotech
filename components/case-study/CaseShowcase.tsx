@@ -133,7 +133,7 @@ export function CaseSocial({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-10 lg:gap-14">
-        <CsHead icon={InstagramIcon} eyebrow="Social Media" title={c.social.title[locale]} sub={c.social.intro[locale]} />
+        <CsHead icon={InstagramIcon} eyebrow={c.social.eyebrow?.[locale] ?? "Social Media"} title={c.social.title[locale]} sub={c.social.intro[locale]} />
         <ul data-rv-group className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3">
           {c.social.posts.map((p) => (
             <li key={p.src} className="group relative aspect-[413/516] overflow-hidden rounded-2xl border border-[#eeedea] bg-white">
@@ -165,7 +165,7 @@ export function CaseOffline({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-white py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-10 lg:gap-14">
-        <CsHead icon={Megaphone} eyebrow={t("Print & Außenwerbung", "Print & outdoor")} title={o.title[locale]} sub={o.intro[locale]} />
+        <CsHead icon={Megaphone} eyebrow={o.eyebrow?.[locale] ?? t("Print & Außenwerbung", "Print & outdoor")} title={o.title[locale]} sub={o.intro[locale]} />
         <div data-rv className="relative aspect-[4/3] overflow-hidden rounded-[18px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)] sm:aspect-[1280/720] sm:rounded-[24px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={o.main.src} alt={o.main.alt[locale]} loading="lazy" decoding="async" sizes="(min-width: 1440px) 1280px, 100vw" data-parallax="4" className="absolute inset-0 h-full w-full scale-110 object-cover" />

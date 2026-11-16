@@ -143,6 +143,7 @@ const PROJECTS: Project[] = [
       { icon: Megaphone, label: "111 Ad-Creatives in 3 Formaten", desc: "Posts und Stories, die seine Erfolgsgeschichten erzählen, zuerst fürs Handy gedacht." },
     ],
     tiles: ["/referenzen/selmir-1.webp", "/referenzen/selmir-2.webp", "/referenzen/selmir-3.webp", "/referenzen/selmir-4.webp"],
+    caseStudy: "selmir-suljkanovic",
   },
   {
     client: "LokShift",

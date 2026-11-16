@@ -140,7 +140,7 @@ export function CaseBrand({ c }: { c: CaseStudy }) {
             <img src={b.logo.src} alt={c.client} width={b.logo.w} height={b.logo.h} loading="lazy" className="h-auto w-[240px] max-w-full sm:w-[280px]" />
           </div>
           <div className="flex h-[154px] flex-col justify-center gap-3.5 overflow-hidden rounded-[20px] border border-[#eeedea] bg-[#f6f5f3] px-7 sm:px-10">
-            <p className={cn("whitespace-nowrap text-[34px] leading-none text-[#1a1917] sm:text-[44px]", BRAND_FONTS[b.type.font], b.type.font === "tomorrow" && "font-bold")}>
+            <p className={cn("text-[34px] leading-[1.1] text-[#1a1917] sm:whitespace-nowrap sm:text-[44px] sm:leading-none", BRAND_FONTS[b.type.font], b.type.font === "tomorrow" && "font-bold")}>
               {b.type.sample}
             </p>
             <p className="eyebrow text-[#7d7973]">{b.type.label}</p>

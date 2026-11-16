@@ -170,14 +170,14 @@ function Voice({ v }: { v: Testimonial }) {
         </span>
       </div>
 
-      <blockquote
+      {v.quote && <blockquote
         className={cn(
           "absolute inset-x-4 t-serif text-white",
           v.image ? "top-[65px] text-[22px] leading-[30px] tracking-[-0.3px] sm:text-[24px] sm:leading-8" : "top-1/2 -translate-y-1/2 text-[26px] leading-[34px] sm:inset-x-10 sm:text-[34px] sm:leading-[42px] lg:inset-x-14",
         )}
       >
         {v.quote[locale]}
-      </blockquote>
+      </blockquote>}
 
       <figcaption className="absolute inset-x-4 bottom-4 flex h-[68px] items-center justify-between gap-3 rounded-xl border border-white/15 bg-white/10 px-4 backdrop-blur-md">
         <span className="flex min-w-0 flex-col gap-0.5">
@@ -228,23 +228,34 @@ export default function CaseResults({ c }: { c: CaseStudy }) {
       <Container className="flex flex-col gap-10 lg:gap-14">
         <CsHead icon={TrendingUp} eyebrow={t("Ergebnisse", "Results")} title={t("Was sich _verändert_ hat.", "What _changed._")} />
 
-        <div className="flex flex-col gap-5 lg:gap-6">
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-[820fr_436fr] lg:gap-6">
-            <div className="sm:col-span-2 lg:col-span-1">
-              <WideCard m={r.wide} />
+        {r.wide && r.compact.length === 2 ? (
+          <div className="flex flex-col gap-5 lg:gap-6">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-[820fr_436fr] lg:gap-6">
+              <div className="sm:col-span-2 lg:col-span-1">
+                <WideCard m={r.wide} />
+              </div>
+              <CompactCard m={r.compact[0]} />
+              <div className="lg:hidden">
+                <CompactCard m={r.compact[1]} />
+              </div>
             </div>
-            <CompactCard m={r.compact[0]} />
-            <div className="lg:hidden">
-              <CompactCard m={r.compact[1]} />
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-[436fr_820fr] lg:gap-6">
+              <div className="max-lg:hidden">
+                <CompactCard m={r.compact[1]} tall />
+              </div>
+              <Voice v={r.testimonial} />
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[436fr_820fr] lg:gap-6">
-            <div className="max-lg:hidden">
-              <CompactCard m={r.compact[1]} tall />
-            </div>
+        ) : (
+          // fewer real figures: the ones there are, next to the testimonial
+          <div className={cn("grid grid-cols-1 gap-5 lg:gap-6", r.compact.length > 0 && "lg:grid-cols-[436fr_820fr]")}>
+            {r.wide && <WideCard m={r.wide} />}
+            {r.compact.map((m) => (
+              <CompactCard key={m.label.de} m={m} tall />
+            ))}
             <Voice v={r.testimonial} />
           </div>
-        </div>
+        )}
 
         <p className="t-body-s max-w-[720px] text-[#7d7973]">
           {t(
