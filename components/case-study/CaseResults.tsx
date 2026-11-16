@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { ChartLine, Plus, TrendingUp } from "lucide-react";
+import { ChartLine, Monitor, Plus, Smartphone, TrendingUp } from "lucide-react";
 import Container from "../ui/Container";
 import PartnerLogo from "../PartnerLogo";
 import { cn } from "@/lib/cn";
@@ -39,6 +39,8 @@ function tick(v: number, locale: Locale) {
 }
 
 function ChannelIcon({ channel }: { channel: Channel }) {
+  if (channel === "app") return <Smartphone className="size-[22px] text-[#5c5954]" strokeWidth={1.6} aria-hidden />;
+  if (channel === "web") return <Monitor className="size-[22px] text-[#5c5954]" strokeWidth={1.6} aria-hidden />;
   if (channel === "organic") return <ChartLine className="size-[22px] text-[#5c5954]" strokeWidth={1.6} aria-hidden />;
   // eslint-disable-next-line @next/next/no-img-element
   return <img src={`/icons/brands/${channel}.svg`} alt="" width={22} height={22} className="size-[22px] object-contain" />;
@@ -243,6 +245,16 @@ export default function CaseResults({ c }: { c: CaseStudy }) {
               <div className="max-lg:hidden">
                 <CompactCard m={r.compact[1]} tall />
               </div>
+              <Voice v={r.testimonial} />
+            </div>
+          </div>
+        ) : !r.wide && r.compact.length === 2 ? (
+          // two figures, no chart: both next to the testimonial
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-[436fr_436fr_820fr] lg:gap-6">
+            {r.compact.map((m) => (
+              <CompactCard key={m.label.de} m={m} tall />
+            ))}
+            <div className="sm:col-span-2 lg:col-span-1">
               <Voice v={r.testimonial} />
             </div>
           </div>

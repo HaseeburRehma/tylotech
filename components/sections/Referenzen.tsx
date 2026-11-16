@@ -70,6 +70,7 @@ const PROJECTS: Project[] = [
       { icon: HeartPulse, label: "Alltagshilfe mit Nachweis", desc: "Leistungsnachweise und Pflegegrad für die Abrechnung mit den Kassen." },
     ],
     tiles: ["/referenzen/priya-1-v2.webp", "/referenzen/priya-2-v2.webp", "/referenzen/priya-3.webp", "/referenzen/priya-4-v2.webp"],
+    caseStudy: "priyas-cleaning-service",
   },
   {
     client: "Oh My Açaí",
@@ -156,6 +157,7 @@ const PROJECTS: Project[] = [
       { icon: Smartphone, label: "Web-App und Mobile-App", desc: "Disponenten am Rechner, Lokführer unterwegs: Schichtänderungen erreichen jeden in unter 60 Sekunden." },
     ],
     tiles: ["/referenzen/lokshift-1.webp", "/referenzen/lokshift-2.webp", "/referenzen/lokshift-3.webp", "/referenzen/lokshift-4.webp"],
+    caseStudy: "lokshift",
   },
   {
     client: "FairPflegeBox",
@@ -375,7 +377,7 @@ export default function Referenzen() {
   // must exist from the start so anchor jumps past this section stay stable
   useGSAP(
     () => {
-      gsap.from(".ref-head > *", {
+      gsap.from(".ref-head > *, .ref-all", {
         y: 24,
         opacity: 0,
         duration: 0.8,
@@ -471,7 +473,7 @@ export default function Referenzen() {
 
   return (
     <section id="referenzen" ref={root} className="overflow-x-clip bg-white py-14 sm:py-24 lg:overflow-hidden lg:py-0">
-      <Container>
+      <Container className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
         <div className="ref-head max-w-[720px] lg:pt-24">
           <p className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3.5 py-1.5 eyebrow text-[#94713f] shadow-[0_1px_0_rgba(15,14,13,0.02)]">
             <FolderOpen className="size-3.5 text-accent" />
@@ -491,6 +493,13 @@ export default function Referenzen() {
             )}
           </p>
         </div>
+        <Link
+          href={lp("/case-studies")}
+          className="ref-all group inline-flex h-12 w-fit shrink-0 items-center gap-2 rounded-full border-[1.5px] border-ink bg-white px-[22px] t-button text-ink transition-colors duration-200 hover:bg-ink hover:text-white"
+        >
+          {t("Alle Case Studies", "All case studies")}
+          <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={1.8} aria-hidden />
+        </Link>
       </Container>
 
       {/* Pinned deck: a fixed-height stage centred in the viewport, all cards

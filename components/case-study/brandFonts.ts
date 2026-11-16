@@ -6,4 +6,5 @@ const anton = Anton({ subsets: ["latin"], weight: "400", display: "swap", preloa
 const tomorrow = Tomorrow({ subsets: ["latin"], weight: "700", display: "swap", preload: false });
 const prata = Prata({ subsets: ["latin"], weight: "400", display: "swap", preload: false });
 
-export const BRAND_FONTS = { anton: anton.className, tomorrow: tomorrow.className, prata: prata.className } as const;
+// "inter" is the site font already
+export const BRAND_FONTS = { anton: anton.className, tomorrow: tomorrow.className, prata: prata.className, inter: "font-sans font-bold tracking-[-1px]" } as const;

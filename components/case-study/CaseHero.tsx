@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Award, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Award, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Container from "../ui/Container";
 import { cn } from "@/lib/cn";
 import type { CaseStudy } from "@/lib/caseStudies";
 import { Accent } from "../branche/ui";
-import { useLocale, useT } from "../i18n/LocaleProvider";
+import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
 import { BrowserBar, CsEyebrow } from "./ui";
 
 const AUTOPLAY_MS = 6000;
@@ -17,6 +18,7 @@ const AUTOPLAY_MS = 6000;
 export default function CaseHero({ c }: { c: CaseStudy }) {
   const locale = useLocale();
   const t = useT();
+  const lp = useLocalePath();
   const slides = c.hero.slides;
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -68,15 +70,17 @@ export default function CaseHero({ c }: { c: CaseStudy }) {
             </h1>
             <p className="t-body-xl intro-up max-w-[680px] text-[#5c5954] [animation-delay:160ms]">{c.hero.intro[locale]}</p>
           </div>
-          <a
-            href={c.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="intro-up group inline-flex h-12 w-fit shrink-0 items-center gap-2 rounded-full border-[1.5px] border-[#1a1917] bg-white px-[22px] t-button text-[#1a1917] transition-colors duration-200 [animation-delay:240ms] hover:bg-[#1a1917] hover:text-white lg:mb-1.5"
-          >
-            {t("Website ansehen", "Visit website")}
-            <ArrowUpRight className="size-[18px] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
-          </a>
+          {c.url ? (
+            <a href={c.url} target="_blank" rel="noopener noreferrer" className="intro-up group inline-flex h-12 w-fit shrink-0 items-center gap-2 rounded-full border-[1.5px] border-[#1a1917] bg-white px-[22px] t-button text-[#1a1917] transition-colors duration-200 [animation-delay:240ms] hover:bg-[#1a1917] hover:text-white lg:mb-1.5">
+              {t("Website ansehen", "Visit website")}
+              <ArrowUpRight className="size-[18px] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.8} />
+            </a>
+          ) : (
+            <Link href={lp("/kontakt")} className="intro-up group inline-flex h-12 w-fit shrink-0 items-center gap-2 rounded-full border-[1.5px] border-[#1a1917] bg-white px-[22px] t-button text-[#1a1917] transition-colors duration-200 [animation-delay:240ms] hover:bg-[#1a1917] hover:text-white lg:mb-1.5">
+              {t("Ähnliches Projekt anfragen", "Request a similar project")}
+              <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={1.8} />
+            </Link>
+          )}
         </div>
 
         <dl className="intro-up grid grid-cols-1 gap-x-8 gap-y-5 border-t border-[#eeedea] pt-7 [animation-delay:300ms] sm:grid-cols-3">

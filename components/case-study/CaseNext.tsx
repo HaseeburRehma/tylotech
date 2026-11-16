@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, LayoutGrid } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Container from "../ui/Container";
 import { CASE_STUDIES, plainTitle, type CaseStudy } from "@/lib/caseStudies";
 import { useLocale, useLocalePath, useT } from "../i18n/LocaleProvider";
@@ -39,11 +39,10 @@ export function CaseCard({ c }: { c: CaseStudy }) {
   );
 }
 
-/* Figma "13 · Nächstes Projekt" — the other case studies plus a link to all of them. */
+/* Figma "13 · Nächstes Projekt" — the other case studies. */
 export default function CaseNext({ current }: { current: CaseStudy }) {
   const root = useRef<HTMLElement>(null);
   const t = useT();
-  const lp = useLocalePath();
   const others = CASE_STUDIES.filter((c) => c.slug !== current.slug);
   useCaseReveal(root);
 
@@ -58,25 +57,6 @@ export default function CaseNext({ current }: { current: CaseStudy }) {
           {others.map((c) => (
             <CaseCard key={c.slug} c={c} />
           ))}
-          <Link
-            href={lp("/case-studies")}
-            className="group relative flex min-h-[260px] flex-col justify-between overflow-hidden rounded-[20px] border border-[#e2e0dc] bg-[#f6f5f3] p-7 transition-[translate,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-[#e3c79e] hover:shadow-[0_22px_44px_-26px_rgba(8,34,44,0.35)] sm:p-8"
-          >
-            <span aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-[340px] rounded-full bg-[radial-gradient(closest-side,rgba(209,170,113,0.28),transparent)]" />
-            <span className="relative grid size-12 place-items-center rounded-[13px] bg-white text-[#c79a53] shadow-[0_1px_2px_rgba(8,34,44,0.06)]">
-              <LayoutGrid className="size-[22px]" strokeWidth={1.7} aria-hidden />
-            </span>
-            <span className="relative flex flex-col gap-3">
-              <span className="t-h4 font-display font-semibold text-[#1a1917]">{t("Alle Case Studies", "All case studies")}</span>
-              <span className="t-body-s text-[#5c5954]">
-                {t("Alle Projekte im Überblick, mit Ausgangslage, Vorgehen und Ergebnissen.", "Every project at a glance, with starting point, approach and results.")}
-              </span>
-              <span className="mt-2 inline-flex items-center gap-2 t-button text-[#1a1917]">
-                {t("Zur Übersicht", "See the overview")}
-                <ArrowRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-1" strokeWidth={1.8} />
-              </span>
-            </span>
-          </Link>
         </div>
       </Container>
     </section>

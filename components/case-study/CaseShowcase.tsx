@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Lightbulb, Megaphone, Monitor, Smartphone } from "lucide-react";
+import { LayoutDashboard, Lightbulb, Megaphone, Monitor, Smartphone } from "lucide-react";
 import Container from "../ui/Container";
 import { cn } from "@/lib/cn";
 import { gsap } from "@/lib/gsap";
@@ -21,7 +21,7 @@ export function CaseWebsite({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-12 lg:gap-14">
-        <CsHead icon={Monitor} eyebrow={t("Lösung", "Solution")} title={t("Die _Website._", "The _website._")} sub={w.intro[locale]} />
+        <CsHead icon={Monitor} eyebrow={t("Lösung", "Solution")} title={w.title?.[locale] ?? t("Die _Website._", "The _website._")} sub={w.intro[locale]} />
 
         <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[440fr_776fr] lg:gap-16">
           <div data-rv className="flex flex-col gap-4">
@@ -133,7 +133,16 @@ export function CaseSocial({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-10 lg:gap-14">
-        <CsHead icon={InstagramIcon} eyebrow={c.social.eyebrow?.[locale] ?? "Social Media"} title={c.social.title[locale]} sub={c.social.intro[locale]} />
+        <CsHead icon={c.social.phones ? Smartphone : InstagramIcon} eyebrow={c.social.eyebrow?.[locale] ?? "Social Media"} title={c.social.title[locale]} sub={c.social.intro[locale]} />
+        {c.social.phones ? (
+          <ul data-rv-group className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2 md:-mx-10 md:px-10 lg:mx-0 lg:grid lg:overflow-visible lg:px-0" style={{ gridTemplateColumns: `repeat(${c.social.posts.length}, minmax(0, 1fr))` }}>
+            {c.social.posts.map((p) => (
+              <li key={p.src} className="w-[220px] shrink-0 snap-center lg:w-auto">
+                <PhoneFrame src={p.src} alt={p.alt[locale]} sizes="(min-width: 1024px) 296px, 220px" className="w-full [&>div:first-child]:border-[#d9d6d0]" />
+              </li>
+            ))}
+          </ul>
+        ) : (
         <ul data-rv-group className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3">
           {c.social.posts.map((p) => (
             <li key={p.src} className="group relative aspect-[413/516] overflow-hidden rounded-2xl border border-[#eeedea] bg-white">
@@ -149,6 +158,7 @@ export function CaseSocial({ c }: { c: CaseStudy }) {
             </li>
           ))}
         </ul>
+        )}
       </Container>
     </section>
   );
@@ -165,11 +175,17 @@ export function CaseOffline({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-white py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-10 lg:gap-14">
-        <CsHead icon={Megaphone} eyebrow={o.eyebrow?.[locale] ?? t("Print & Außenwerbung", "Print & outdoor")} title={o.title[locale]} sub={o.intro[locale]} />
+        <CsHead icon={o.browser ? LayoutDashboard : Megaphone} eyebrow={o.eyebrow?.[locale] ?? t("Print & Außenwerbung", "Print & outdoor")} title={o.title[locale]} sub={o.intro[locale]} />
+        {o.browser ? (
+          <div data-rv>
+            <BrowserFrame domain={c.domain} shot={{ src: o.main.src, w: o.main.w ?? 1440, h: o.main.h ?? 900, alt: o.main.alt }} ratio={(o.main.w ?? 1440) / (o.main.h ?? 900)} parallax />
+          </div>
+        ) : (
         <div data-rv className="relative aspect-[4/3] overflow-hidden rounded-[18px] shadow-[0_6px_20px_rgba(0,0,0,0.3),0_10px_30px_rgba(0,0,0,0.45)] sm:aspect-[1280/720] sm:rounded-[24px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={o.main.src} alt={o.main.alt[locale]} loading="lazy" decoding="async" sizes="(min-width: 1440px) 1280px, 100vw" data-parallax="4" className="absolute inset-0 h-full w-full scale-110 object-cover" />
         </div>
+        )}
         {o.extra && (
           <div data-rv-group className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
             {o.extra.map((x) => (

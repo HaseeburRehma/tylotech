@@ -135,7 +135,7 @@ export function CaseBrand({ c }: { c: CaseStudy }) {
       <Container className="flex flex-col gap-10 lg:gap-14">
         <CsHead icon={Palette} eyebrow={t("Design-Richtung", "Design direction")} title={t("Marke und _Design-Richtung._", "Brand and _design direction._")} sub={b.intro[locale]} />
         <div data-rv-group className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <div className="grid h-[154px] place-items-center overflow-hidden rounded-[20px] border border-[#eeedea] bg-[#0f0e0d] p-10">
+          <div className="grid h-[154px] place-items-center overflow-hidden rounded-[20px] border border-[#eeedea] p-10" style={{ backgroundColor: b.logo.bg ?? "#0f0e0d" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={b.logo.src} alt={c.client} width={b.logo.w} height={b.logo.h} loading="lazy" className="h-auto w-[240px] max-w-full sm:w-[280px]" />
           </div>

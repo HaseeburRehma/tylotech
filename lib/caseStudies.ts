@@ -1,6 +1,7 @@
 /* Case studies: one entry per project, rendered by components/pages/CaseStudyPage.
  * Copy and images from Figma "Case Study · Crusty Slices" (4970:16) and
- * "Case Study · Fahrschule Abgefahrn" (4972:441) and "Case Study · Selmir Suljkanovic" (5316:8954). Figma placeholders ("[Zeitraum]",
+ * "Case Study · Fahrschule Abgefahrn" (4972:441) and "Case Study · Selmir Suljkanovic" (5316:8954), "Case Study · LokShift" (5353:9463) and
+ * "Case Study · Priya's Cleaning Service" (5353:9721). Figma placeholders ("[Zeitraum]",
  * "[Erkenntnis 1]", "[Learning 1]", empty story slots …) are left out on purpose;
  * the optional fields below exist so real content can be added later.
  *
@@ -14,7 +15,8 @@ export type L<T = string> = { de: T; en: T };
 /** `pos`: crop anchor in fixed-ratio frames (screenshots stay top-aligned, photos centred) */
 export type Shot = { src: string; w: number; h: number; alt: L; pos?: "top" | "center" };
 
-export type Channel = "organic" | "tiktok" | "meta";
+/** "app" / "web" = software figures (smartphone / monitor icon) */
+export type Channel = "organic" | "tiktok" | "meta" | "app" | "web";
 
 export type Metric = {
   channel: Channel;
@@ -49,7 +51,8 @@ export type CaseStudy = {
   client: string;
   /** shown in the browser frames */
   domain: string;
-  url: string;
+  /** live website; without it the hero button asks for a similar project (software cases) */
+  url?: string;
   seo: { title: L; description: L };
   hero: {
     title: L;
@@ -77,11 +80,14 @@ export type CaseStudy = {
   approach: { intro: L; steps: Card[] };
   brand: {
     intro: L;
-    logo: { src: string; w: number; h: number };
-    type: { sample: string; font: "anton" | "tomorrow" | "prata"; label: string };
+    /** `bg`: logo tile colour (default near-black) */
+    logo: { src: string; w: number; h: number; bg?: string };
+    type: { sample: string; font: "anton" | "tomorrow" | "prata" | "inter"; label: string };
     colors: { name: L; hex: string }[];
   };
   website: {
+    /** software projects: "Die Web-App." instead of "Die Website." */
+    title?: L;
     intro: L;
     feature: { title: L; text: L; shot: Shot };
     wide: { title: L; text: L; shot: Shot; height: number };
@@ -89,8 +95,10 @@ export type CaseStudy = {
   };
   mobile: MobileSection;
   /** `eyebrow` overrides the default section label ("Social Media", "Print & Außenwerbung") */
-  social: { eyebrow?: L; title: L; intro: L; posts: { src: string; alt: L }[] };
-  offline: { eyebrow?: L; title: L; intro: L; main: { src: string; alt: L }; extra?: { src: string; alt: L }[] };
+  /** `phones`: the posts are app screens, shown in phone frames */
+  social: { eyebrow?: L; title: L; intro: L; phones?: boolean; posts: { src: string; alt: L }[] };
+  /** `browser`: the main image is a screen, shown in a browser frame */
+  offline: { eyebrow?: L; title: L; intro: L; browser?: boolean; main: { src: string; alt: L; w?: number; h?: number }; extra?: { src: string; alt: L }[] };
   /** "Was wir mitnehmen" — only with real learnings */
   learnings?: { intro: L; items: Card[] };
 };
@@ -100,6 +108,8 @@ const shot = (src: string, w: number, h: number, de: string, en: string): Shot =
 const CS = "/case-studies/crusty-slices";
 const FA = "/case-studies/fahrschule-abgefahrn";
 const SS = "/case-studies/selmir-suljkanovic";
+const LS = "/case-studies/lokshift";
+const PC = "/case-studies/priyas-cleaning-service";
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
@@ -787,6 +797,443 @@ export const CASE_STUDIES: CaseStudy[] = [
         en: "The sales guide from Selmir’s YouTube role-play as a ten-page PDF, with its own landing page to request it.",
       },
       main: { src: `${SS}/offline.webp`, alt: { de: "Landingpage für den Rollenspiel-Leitfaden", en: "Landing page for the role-play guide" } },
+    },
+  },
+  {
+    slug: "lokshift",
+    client: "LokShift",
+    domain: "LokShift Web-App",
+    seo: {
+      title: { de: "Case Study LokShift | TyloTech", en: "Case study LokShift | TyloTech" },
+      description: {
+        de: "Web-App und Mobile App für LokShift: Einsatzplanung, Zeiterfassung, Zeitkonten und Spesen für Lokführer und Disposition im Schienengüterverkehr.",
+        en: "Web app and mobile app for LokShift: shift planning, time tracking, time accounts and expenses for train drivers and dispatch in rail freight.",
+      },
+    },
+    hero: {
+      title: { de: "Dienstpläne, Zeiten und Spesen _in einer App._", en: "Rosters, hours and expenses _in one app._" },
+      intro: {
+        de: "Web-App und Mobile App für LokShift: Einsatzplanung, Zeiterfassung, Zeitkonten und Spesen für Lokführer und Disposition, im Büro und unterwegs auf dem Handy.",
+        en: "Web app and mobile app for LokShift: shift planning, time tracking, time accounts and expenses for train drivers and dispatch, in the office and on the phone on the move.",
+      },
+      meta: [
+        { label: { de: "Kunde", en: "Client" }, value: { de: "LokShift", en: "LokShift" } },
+        { label: { de: "Branche", en: "Industry" }, value: { de: "Schienenverkehr", en: "Rail transport" } },
+        { label: { de: "Leistungen", en: "Services" }, value: { de: "UX/UI-Design, Web-App, Mobile App", en: "UX/UI design, web app, mobile app" } },
+      ],
+      slides: [
+        shot(`${LS}/hero.webp`, 1440, 900, "Dashboard der LokShift Web-App", "LokShift web app dashboard"),
+        shot(`${LS}/web-plans.webp`, 1440, 900, "Dienstpläne in der LokShift Web-App", "Shift plans in the LokShift web app"),
+        shot(`${LS}/web-times.webp`, 1440, 900, "Zeiterfassung mit Freigabe", "Time tracking with approval"),
+        shot(`${LS}/web-reports.webp`, 1440, 900, "Berichte in der LokShift Web-App", "Reports in the LokShift web app"),
+      ],
+      slideSmall: `${LS}/hero-720.webp`,
+    },
+    card: {
+      image: `${LS}/card.webp`,
+      gallery: [
+        shot(`${LS}/card.webp`, 1280, 800, "Dashboard der LokShift Web-App", "LokShift web app dashboard"),
+        shot(`${LS}/web-plans.webp`, 1440, 900, "Dienstpläne in der LokShift Web-App", "Shift plans in the LokShift web app"),
+        shot(`${LS}/web-accounts.webp`, 1440, 900, "Zeitkonten pro Mitarbeiter", "Time accounts per employee"),
+        shot(`${LS}/web-perdiem.webp`, 1440, 900, "Spesen und Verpflegungspauschalen", "Expenses and meal allowances"),
+      ],
+      tags: { de: ["Software", "Web-App", "Mobile App"], en: ["Software", "Web app", "Mobile app"] },
+      text: {
+        de: "LokShift, Disposition im Schienengüterverkehr: Web-App und Mobile App für Dienstpläne, Zeiten und Spesen.",
+        en: "LokShift, dispatch in rail freight: web app and mobile app for rosters, hours and expenses.",
+      },
+      metrics: [
+        { value: { de: "56", en: "56" }, label: { de: "Screens in der Mobile App", en: "screens in the mobile app" } },
+        { value: { de: "11", en: "11" }, label: { de: "Bereiche in der Web-App", en: "areas in the web app" } },
+      ],
+    },
+    results: {
+      compact: [
+        { channel: "app", label: { de: "Mobile App", en: "Mobile app" }, value: 56, suffix: { de: " Screens", en: " screens" }, chip: { de: "für Lokführer", en: "for train drivers" } },
+        { channel: "web", label: { de: "Web-App", en: "Web app" }, value: 11, suffix: { de: " Bereiche", en: " areas" }, chip: { de: "für die Disposition", en: "for dispatch" } },
+      ],
+      testimonial: {
+        category: { de: "Software", en: "Software" },
+        name: "LokShift",
+        place: { de: "Schienenverkehr", en: "Rail transport" },
+      },
+    },
+    overview: {
+      situation: {
+        de: "LokShift plant den Einsatz von Lokführern bei Kunden im Schienengüterverkehr. Dafür braucht es jeden Tag verlässliche Dienstpläne, korrekt erfasste Arbeitszeiten und eine saubere Abrechnung von Spesen und Zeitkonten.",
+        en: "LokShift schedules train drivers for clients in rail freight. That takes reliable rosters every day, correctly recorded working hours and clean accounting for expenses and time accounts.",
+      },
+      tasks: {
+        de: [
+          "Eine Web-App, in der die Disposition alle Einsätze plant und freigibt",
+          "Eine Mobile App, mit der Lokführer ihren Tagesplan sehen und Zeiten erfassen",
+          "Zeitkonten, Spesen und Urlaubsgeld ohne Excel-Listen",
+          "Berichte, die sich mit einem Klick exportieren lassen",
+        ],
+        en: [
+          "A web app in which dispatch plans and approves every assignment",
+          "A mobile app in which train drivers see their daily plan and log their hours",
+          "Time accounts, expenses and holiday pay without Excel sheets",
+          "Reports that export with one click",
+        ],
+      },
+    },
+    challenges: {
+      intro: {
+        de: "Drei Dinge mussten gleichzeitig stimmen, sonst wäre es eine weitere App geworden, die niemand öffnet.",
+        en: "Three things had to work at once, or it would have become yet another app nobody opens.",
+      },
+      items: [
+        {
+          title: { de: "Zwei Rollen, ein System", en: "Two roles, one system" },
+          text: {
+            de: "Die Disposition plant am Schreibtisch, Lokführer arbeiten unterwegs. Beide brauchen dieselben Daten, aber eine andere Ansicht.",
+            en: "Dispatch plans at the desk, train drivers work on the move. Both need the same data, but a different view of it.",
+          },
+        },
+        {
+          title: { de: "Regeln, die stimmen müssen", en: "Rules that have to be right" },
+          text: {
+            de: "Arbeitszeiten, Pausen, Spesen und Urlaubsgeld folgen festen Regeln. Ein falscher Wert kostet Geld und Vertrauen.",
+            en: "Working hours, breaks, expenses and holiday pay follow fixed rules. One wrong value costs money and trust.",
+          },
+        },
+        {
+          title: { de: "Bedienung im Schichtalltag", en: "Built for shift work" },
+          text: {
+            de: "Zwischen zwei Fahrten bleibt kaum Zeit. Eine Zeit zu erfassen muss in wenigen Sekunden gehen.",
+            en: "There is hardly any time between two runs. Logging hours has to take a few seconds.",
+          },
+        },
+      ],
+    },
+    approach: {
+      intro: { de: "Vier Schritte, von den Abläufen im Betrieb bis zur fertigen App.", en: "Four steps, from how the business runs to the finished app." },
+      steps: [
+        {
+          title: { de: "Abläufe & Rollen", en: "Processes & roles" },
+          text: {
+            de: "Wie wird heute geplant, erfasst und abgerechnet? Wer braucht welche Information, und wann?",
+            en: "How are planning, time tracking and accounting done today? Who needs which information, and when?",
+          },
+        },
+        {
+          title: { de: "Design-System", en: "Design system" },
+          text: {
+            de: "Farben, Typografie und Komponenten, die in Web-App und Mobile App gleich funktionieren.",
+            en: "Colours, typography and components that work the same in the web app and the mobile app.",
+          },
+        },
+        {
+          title: { de: "Web-App für die Disposition", en: "Web app for dispatch" },
+          text: {
+            de: "Dashboard, Dienstpläne, Zeiterfassung, Zeitkonten, Spesen und Berichte an einem Ort.",
+            en: "Dashboard, rosters, time tracking, time accounts, expenses and reports in one place.",
+          },
+        },
+        {
+          title: { de: "Mobile App für unterwegs", en: "Mobile app on the move" },
+          text: {
+            de: "Tagesplan, Kalender, Zeiten, Chat und Live-Ansicht für die Lokführer auf dem Handy.",
+            en: "Daily plan, calendar, hours, chat and a live view for train drivers on their phones.",
+          },
+        },
+      ],
+    },
+    brand: {
+      intro: {
+        de: "Ein klares Blau, viel Weiß und Inter: ruhig genug für lange Schichten, deutlich genug für Status und Warnungen.",
+        en: "A clear blue, lots of white and Inter: calm enough for long shifts, clear enough for statuses and warnings.",
+      },
+      logo: { src: `${LS}/logo.svg`, w: 302, h: 64, bg: "#E6F2FF" },
+      type: { sample: "Jede Schicht im Blick.", font: "inter", label: "Inter" },
+      colors: [
+        { name: { de: "Blau", en: "Blue" }, hex: "#0064E0" },
+        { name: { de: "Hellblau", en: "Light blue" }, hex: "#E6F2FF" },
+        { name: { de: "Tinte", en: "Ink" }, hex: "#191919" },
+        { name: { de: "Grau", en: "Grey" }, hex: "#777777" },
+        { name: { de: "Grün", en: "Green" }, hex: "#28A745" },
+        { name: { de: "Weiß", en: "White" }, hex: "#FFFFFF" },
+      ],
+    },
+    website: {
+      title: { de: "Die _Web-App._", en: "The _web app._" },
+      intro: { de: "Jede Ansicht hat einen Job: planen, erfassen, abrechnen.", en: "Every view has one job: plan, record, settle." },
+      feature: {
+        title: { de: "Dienstpläne in einer Liste.", en: "Rosters in one list." },
+        text: {
+          de: "Wer fährt wann, für welchen Kunden und wo: Pläne anlegen, zuweisen und bestätigen, gefiltert nach Status und Woche.",
+          en: "Who drives when, for which client and where: create, assign and confirm plans, filtered by status and week.",
+        },
+        shot: shot(`${LS}/web-plans.webp`, 1440, 900, "Dienstpläne in der LokShift Web-App", "Shift plans in the LokShift web app"),
+      },
+      wide: {
+        title: { de: "Zeiterfassung mit Freigabe.", en: "Time tracking with approval." },
+        text: {
+          de: "Beginn, Ende, Pause und Kunde pro Eintrag. Die Disposition gibt Stunden frei oder lehnt sie ab, bevor sie ins Zeitkonto laufen.",
+          en: "Start, end, break and client per entry. Dispatch approves or rejects hours before they go into the time account.",
+        },
+        shot: shot(`${LS}/web-times.webp`, 1440, 900, "Zeiterfassung in der LokShift Web-App", "Time tracking in the LokShift web app"),
+        height: 837,
+      },
+      pair: [
+        { caption: { de: "Zeitkonten pro Mitarbeiter", en: "Time accounts per employee" }, shot: shot(`${LS}/web-accounts.webp`, 1440, 900, "Zeitkonten in der LokShift Web-App", "Time accounts in the LokShift web app") },
+        { caption: { de: "Spesen und Verpflegungspauschalen", en: "Expenses and meal allowances" }, shot: shot(`${LS}/web-perdiem.webp`, 1440, 900, "Spesen in der LokShift Web-App", "Expenses in the LokShift web app") },
+      ],
+    },
+    mobile: {
+      kind: "devices",
+      eyebrow: { de: "Mobile App", en: "Mobile app" },
+      title: { de: "Für unterwegs _gebaut._", en: "Built for _the road._" },
+      text: {
+        de: "Lokführer sehen ihren Tagesplan, erfassen Zeiten und schreiben mit der Disposition, direkt auf dem Handy und ohne Umweg über das Büro.",
+        en: "Train drivers see their daily plan, log their hours and message dispatch, right on their phone and without going through the office.",
+      },
+      phones: [`${LS}/phone-1.webp`, `${LS}/phone-2.webp`, `${LS}/phone-3.webp`],
+    },
+    social: {
+      eyebrow: { de: "App-Screens", en: "App screens" },
+      title: { de: "Jede Funktion _auf dem Handy._", en: "Every feature _on the phone._" },
+      intro: {
+        de: "Live-Ansicht, Zeitkonten, Berichte und Chat: dieselben Daten wie in der Web-App, gebaut für den kleinen Bildschirm.",
+        en: "Live view, time accounts, reports and chat: the same data as in the web app, built for the small screen.",
+      },
+      phones: true,
+      posts: [
+        { src: `${LS}/screen-1.webp`, alt: { de: "Live-Ansicht ohne aktive Schicht", en: "Live view with no active shift" } },
+        { src: `${LS}/screen-2.webp`, alt: { de: "Zeitkonto in der App", en: "Time account in the app" } },
+        { src: `${LS}/screen-3.webp`, alt: { de: "Berichte in der App", en: "Reports in the app" } },
+        { src: `${LS}/screen-4.webp`, alt: { de: "Chats mit der Disposition", en: "Chats with dispatch" } },
+      ],
+    },
+    offline: {
+      eyebrow: { de: "Berichte", en: "Reports" },
+      title: { de: "Berichte auf _Knopfdruck._", en: "Reports at _the push of a button._" },
+      intro: {
+        de: "Arbeitszeitberichte für Mitarbeiter und Kunden, in der Vorschau prüfen und direkt exportieren.",
+        en: "Working-time reports for employees and clients: check them in the preview and export them straight away.",
+      },
+      browser: true,
+      main: { src: `${LS}/web-reports.webp`, w: 1440, h: 900, alt: { de: "Berichte in der LokShift Web-App", en: "Reports in the LokShift web app" } },
+    },
+  },
+  {
+    slug: "priyas-cleaning-service",
+    client: "Priya's Cleaning Service",
+    domain: "Priya's Web-App",
+    seo: {
+      title: { de: "Case Study Priya's Cleaning Service | TyloTech", en: "Case study Priya's Cleaning Service | TyloTech" },
+      description: {
+        de: "Web-App und Mobile App für Priya's Cleaning Service in Berlin: Einsätze planen, Check-ins des Teams, Kunden und Rechnungen und die Abrechnung der Alltagshilfe.",
+        en: "Web app and mobile app for Priya's Cleaning Service in Berlin: scheduling, team check-ins, clients and invoices, and billing for home help.",
+      },
+    },
+    hero: {
+      title: { de: "Reinigung und Alltagshilfe _aus einer Hand geplant._", en: "Cleaning and home help, _planned in one place._" },
+      intro: {
+        de: "Web-App und Mobile App für Priya's Cleaning Service: Einsätze planen, Check-ins des Teams sehen, Kunden und Rechnungen verwalten und die Alltagshilfe sauber abrechnen.",
+        en: "Web app and mobile app for Priya's Cleaning Service: plan assignments, see team check-ins, manage clients and invoices, and bill home help cleanly.",
+      },
+      meta: [
+        { label: { de: "Kunde", en: "Client" }, value: { de: "Priya's Cleaning Service", en: "Priya's Cleaning Service" } },
+        { label: { de: "Branche", en: "Industry" }, value: { de: "Reinigung, Alltagshilfe", en: "Cleaning, home help" } },
+        { label: { de: "Leistungen", en: "Services" }, value: { de: "UX/UI-Design, Web-App, Mobile App", en: "UX/UI design, web app, mobile app" } },
+      ],
+      slides: [
+        shot(`${PC}/hero.webp`, 1440, 900, "Dashboard der Priya's Web-App", "Priya's web app dashboard"),
+        shot(`${PC}/web-schedule.webp`, 1440, 900, "Einsatzplan für alle Teams", "Schedule for every team"),
+        shot(`${PC}/web-clients.webp`, 1440, 900, "Kunden und Objekte", "Clients and properties"),
+        shot(`${PC}/web-report.webp`, 1440, 900, "Monatsbericht für die Alltagshilfe", "Monthly home-help report"),
+      ],
+      slideSmall: `${PC}/hero-720.webp`,
+    },
+    card: {
+      image: `${PC}/card.webp`,
+      gallery: [
+        shot(`${PC}/card.webp`, 1280, 800, "Dashboard der Priya's Web-App", "Priya's web app dashboard"),
+        shot(`${PC}/web-schedule.webp`, 1440, 900, "Einsatzplan für alle Teams", "Schedule for every team"),
+        shot(`${PC}/web-clients.webp`, 1440, 900, "Kunden und Objekte", "Clients and properties"),
+        shot(`${PC}/web-invoices.webp`, 1440, 900, "Rechnungen mit Status", "Invoices with status"),
+      ],
+      tags: { de: ["Software", "Web-App", "Mobile App"], en: ["Software", "Web app", "Mobile app"] },
+      text: {
+        de: "Priya's Cleaning Service, Reinigung und Alltagshilfe in Berlin: Web-App und Mobile App für Einsätze, Kunden und Abrechnung.",
+        en: "Priya's Cleaning Service, cleaning and home help in Berlin: web app and mobile app for assignments, clients and billing.",
+      },
+      metrics: [
+        { value: { de: "26", en: "26" }, label: { de: "Screens in der Mobile App", en: "screens in the mobile app" } },
+        { value: { de: "17", en: "17" }, label: { de: "Ansichten in der Web-App", en: "views in the web app" } },
+      ],
+    },
+    results: {
+      compact: [
+        { channel: "app", label: { de: "Mobile App", en: "Mobile app" }, value: 26, suffix: { de: " Screens", en: " screens" }, chip: { de: "für das Team", en: "for the team" } },
+        { channel: "web", label: { de: "Web-App", en: "Web app" }, value: 17, suffix: { de: " Ansichten", en: " views" }, chip: { de: "für die Leitung", en: "for management" } },
+      ],
+      testimonial: {
+        category: { de: "Software", en: "Software" },
+        name: "Priya's Cleaning Service",
+        place: { de: "Reinigung und Alltagshilfe, Berlin", en: "Cleaning and home help, Berlin" },
+      },
+    },
+    overview: {
+      situation: {
+        de: "Priya's Cleaning Service betreut in Berlin zwei Geschäftsbereiche: Reinigung für Firmen und Objekte sowie Alltagshilfe für Menschen mit Pflegegrad, abgerechnet mit den Pflegekassen.",
+        en: "Priya's Cleaning Service runs two lines of business in Berlin: cleaning for companies and properties, and home help for people with a care grade, billed to the care insurers.",
+      },
+      tasks: {
+        de: [
+          "Ein Einsatzplan für beide Bereiche, mit Teams, Objekten und Zeiten",
+          "Check-in und Check-out des Teams direkt am Einsatzort",
+          "Kunden, Objekte und Rechnungen an einem Ort",
+          "Monatsberichte für die Alltagshilfe ohne Papierkram",
+        ],
+        en: [
+          "One schedule for both lines of business, with teams, properties and times",
+          "Team check-in and check-out right at the job site",
+          "Clients, properties and invoices in one place",
+          "Monthly home-help reports without paperwork",
+        ],
+      },
+    },
+    challenges: {
+      intro: {
+        de: "Drei Dinge mussten gleichzeitig stimmen, sonst wäre es eine weitere App geworden, die niemand öffnet.",
+        en: "Three things had to work at once, or it would have become yet another app nobody opens.",
+      },
+      items: [
+        {
+          title: { de: "Zwei Geschäftsbereiche, eine App", en: "Two lines of business, one app" },
+          text: {
+            de: "Reinigung und Alltagshilfe folgen anderen Regeln. Die App muss beide trennen, ohne zwei Systeme daraus zu machen.",
+            en: "Cleaning and home help follow different rules. The app has to keep them apart without turning them into two systems.",
+          },
+        },
+        {
+          title: { de: "Nachweise, die halten müssen", en: "Records that have to hold up" },
+          text: {
+            de: "In der Alltagshilfe zählen Leistungsnachweis und Pflegegrad. Jeder Einsatz muss für die Abrechnung mit der Pflegekasse belegbar sein.",
+            en: "In home help, service records and care grades are what count. Every visit has to be provable when billing the care insurer.",
+          },
+        },
+        {
+          title: { de: "Ein Team, das unterwegs ist", en: "A team on the move" },
+          text: {
+            de: "Die Mitarbeitenden sind bei Kunden vor Ort. Plan, Adresse und Check-in müssen auf dem Handy sofort da sein.",
+            en: "Staff work on site at clients. Plan, address and check-in have to be on the phone instantly.",
+          },
+        },
+      ],
+    },
+    approach: {
+      intro: { de: "Vier Schritte, von den Abläufen im Betrieb bis zur fertigen App.", en: "Four steps, from how the business runs to the finished app." },
+      steps: [
+        {
+          title: { de: "Abläufe & Rollen", en: "Processes & roles" },
+          text: {
+            de: "Wie werden Einsätze heute geplant, belegt und abgerechnet? Was braucht die Leitung, was das Team vor Ort?",
+            en: "How are visits planned, documented and billed today? What does management need, and what does the team on site need?",
+          },
+        },
+        {
+          title: { de: "Design-System", en: "Design system" },
+          text: {
+            de: "Priya-Grün, klare Typografie und Komponenten, die in Web-App und Mobile App gleich funktionieren.",
+            en: "Priya green, clear typography and components that work the same in the web app and the mobile app.",
+          },
+        },
+        {
+          title: { de: "Web-App für die Leitung", en: "Web app for management" },
+          text: {
+            de: "Dashboard, Einsatzplan, Kunden, Mitarbeitende, Rechnungen und Berichte an einem Ort.",
+            en: "Dashboard, schedule, clients, staff, invoices and reports in one place.",
+          },
+        },
+        {
+          title: { de: "Mobile App für das Team", en: "Mobile app for the team" },
+          text: {
+            de: "Tagesplan, Check-in am Einsatzort, Kundendetails, Team-Chat und Meldungen auf dem Handy.",
+            en: "Daily plan, on-site check-in, client details, team chat and reports on the phone.",
+          },
+        },
+      ],
+    },
+    brand: {
+      intro: {
+        de: "Das Grün aus dem Priya-Logo, viel Weißraum und Inter: freundlich für das Team, klar für die Abrechnung.",
+        en: "The green from the Priya logo, lots of white space and Inter: friendly for the team, clear for billing.",
+      },
+      logo: { src: `${PC}/logo.svg`, w: 179, h: 72, bg: "#EEF5E8" },
+      type: { sample: "Leistung mit Herz.", font: "inter", label: "Inter" },
+      colors: [
+        { name: { de: "Grün", en: "Green" }, hex: "#5D8E3F" },
+        { name: { de: "Hellgrün", en: "Light green" }, hex: "#72A94F" },
+        { name: { de: "Salbei", en: "Sage" }, hex: "#EEF5E8" },
+        { name: { de: "Petrol", en: "Petrol" }, hex: "#16587C" },
+        { name: { de: "Tiefgrün", en: "Deep green" }, hex: "#2A322A" },
+        { name: { de: "Weiß", en: "White" }, hex: "#FFFFFF" },
+      ],
+    },
+    website: {
+      title: { de: "Die _Web-App._", en: "The _web app._" },
+      intro: { de: "Jede Ansicht hat einen Job: planen, einsetzen, abrechnen.", en: "Every view has one job: plan, assign, bill." },
+      feature: {
+        title: { de: "Der Einsatzplan für alle Teams.", en: "One schedule for every team." },
+        text: {
+          de: "Reinigung und Alltagshilfe in einer Ansicht, gefiltert nach Team, Kunde und Status. Neue Einsätze sind mit wenigen Klicks verteilt.",
+          en: "Cleaning and home help in one view, filtered by team, client and status. New visits are assigned in a few clicks.",
+        },
+        shot: shot(`${PC}/web-schedule.webp`, 1440, 900, "Einsatzplan in der Priya's Web-App", "Schedule in the Priya's web app"),
+      },
+      wide: {
+        title: { de: "Kunden und Objekte an einem Ort.", en: "Clients and properties in one place." },
+        text: {
+          de: "Ansprechpartner, Objekte, Leistungen und offene Rechnungen pro Kunde, ohne zwischen Tabellen zu springen.",
+          en: "Contacts, properties, services and open invoices per client, without jumping between spreadsheets.",
+        },
+        shot: shot(`${PC}/web-clients.webp`, 1440, 900, "Kundenliste in der Priya's Web-App", "Client list in the Priya's web app"),
+        height: 837,
+      },
+      pair: [
+        { caption: { de: "Mitarbeitende und Auslastung", en: "Staff and workload" }, shot: shot(`${PC}/web-employees.webp`, 1440, 900, "Mitarbeitende in der Priya's Web-App", "Staff in the Priya's web app") },
+        { caption: { de: "Rechnungen mit Status", en: "Invoices with status" }, shot: shot(`${PC}/web-invoices.webp`, 1440, 900, "Rechnungen in der Priya's Web-App", "Invoices in the Priya's web app") },
+      ],
+    },
+    mobile: {
+      kind: "devices",
+      eyebrow: { de: "Mobile App", en: "Mobile app" },
+      title: { de: "Für das Team _vor Ort._", en: "For the team _on site._" },
+      text: {
+        de: "Die Mitarbeitenden sehen ihren Plan, checken am Einsatzort ein und melden Schäden oder fehlende Reinigungsmittel direkt aus der App.",
+        en: "Staff see their plan, check in at the job site and report damage or missing cleaning supplies straight from the app.",
+      },
+      phones: [`${PC}/phone-1.webp`, `${PC}/phone-2.webp`, `${PC}/phone-3.webp`],
+    },
+    social: {
+      eyebrow: { de: "App-Screens", en: "App screens" },
+      title: { de: "Jede Rolle hat _ihre Ansicht._", en: "Every role has _its own view._" },
+      intro: {
+        de: "Anmeldung, Kundendetails, Team-Chat, Alarme und der Monatsbericht für die Alltagshilfe, alles in derselben App.",
+        en: "Sign-in, client details, team chat, alerts and the monthly home-help report, all in the same app.",
+      },
+      phones: true,
+      posts: [
+        { src: `${PC}/screen-1.webp`, alt: { de: "Anmeldung in der App", en: "App sign-in" } },
+        { src: `${PC}/screen-2.webp`, alt: { de: "Kundendetails", en: "Client details" } },
+        { src: `${PC}/screen-3.webp`, alt: { de: "Team-Chat", en: "Team chat" } },
+        { src: `${PC}/screen-4.webp`, alt: { de: "Alarme", en: "Alerts" } },
+        { src: `${PC}/screen-5.webp`, alt: { de: "Monatsbericht für die Alltagshilfe", en: "Monthly home-help report" } },
+      ],
+    },
+    offline: {
+      eyebrow: { de: "Alltagshilfe", en: "Home help" },
+      title: { de: "Monatsberichte für die _Pflegekasse._", en: "Monthly reports for _the care insurer._" },
+      intro: {
+        de: "Alle Einsätze eines Monats mit Leistungsnachweis, geprüft und bereit für die Abrechnung.",
+        en: "Every visit of the month with its service record, checked and ready for billing.",
+      },
+      browser: true,
+      main: { src: `${PC}/web-report.webp`, w: 1440, h: 900, alt: { de: "Monatsbericht in der Priya's Web-App", en: "Monthly report in the Priya's web app" } },
     },
   },
 ];
