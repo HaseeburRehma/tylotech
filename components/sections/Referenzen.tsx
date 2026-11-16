@@ -4,18 +4,24 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  CalendarClock,
+  ClipboardCheck,
+  Clock,
   Eye,
   FileText,
   FolderOpen,
   Handshake,
+  HeartHandshake,
   HeartPulse,
   Inbox,
   LayoutDashboard,
   MapPin,
   Megaphone,
   Monitor,
+  Package,
   PiggyBank,
   Send,
+  Smartphone,
   Store,
   ShieldCheck,
   Target,
@@ -52,7 +58,7 @@ type Project = {
   voice?: Voice;
 };
 
-// Copy and images from Figma "15 · Referenzen" (Referenz-Stapel, 6 cards).
+// Copy and images from Figma "15 · Referenzen" (Referenz-Stapel); Selmir, LokShift and FairPflegeBox follow the same card layout.
 const PROJECTS: Project[] = [
   {
     client: "Priya's Cleaning Service",
@@ -64,6 +70,17 @@ const PROJECTS: Project[] = [
       { icon: HeartPulse, label: "Alltagshilfe mit Nachweis", desc: "Leistungsnachweise und Pflegegrad für die Abrechnung mit den Kassen." },
     ],
     tiles: ["/referenzen/priya-1-v2.webp", "/referenzen/priya-2-v2.webp", "/referenzen/priya-3.webp", "/referenzen/priya-4-v2.webp"],
+  },
+  {
+    client: "Oh My Açaí",
+    lead: "Zwei Städte, eine Bowl,",
+    accent: "ein Auftritt, der Appetit macht.",
+    bullets: [
+      { icon: Store, label: "Bestellen ohne Umweg", desc: "Uber Eats, Wolt und Lieferando direkt aus der Seite heraus." },
+      { icon: MapPin, label: "Standorte, die man findet", desc: "Düsseldorf und Köln mit Öffnungszeiten und Karte." },
+      { icon: Handshake, label: "Großhandel und Franchise", desc: "ein Weg für Bars, Cafés und künftige Partner." },
+    ],
+    tiles: ["/referenzen/acai-1-v2.webp", "/referenzen/acai-2-v2.webp", "/referenzen/acai-3-v2.webp", "/referenzen/acai-4-v2.webp"],
   },
   {
     client: "Fahrschule Abgefahrn",
@@ -116,15 +133,40 @@ const PROJECTS: Project[] = [
     tiles: ["/referenzen/nouh-1-v2.webp", "/referenzen/nouh-2-v2.webp", "/referenzen/nouh-3-v2.webp", "/referenzen/nouh-4-v2.webp"],
   },
   {
-    client: "Oh My Açaí",
-    lead: "Zwei Städte, eine Bowl,",
-    accent: "ein Auftritt, der Appetit macht.",
+    client: "Selmir Suljkanovic",
+    lead: "Aus Expertise wird ein",
+    accent: "System, das verkauft.",
+    result: "Website, Landingpages, Lead-Magnet und 111 Ad-Creatives in 3 Formaten: ein Auftritt, der Erstgespräche bringt.",
     bullets: [
-      { icon: Store, label: "Bestellen ohne Umweg", desc: "Uber Eats, Wolt und Lieferando direkt aus der Seite heraus." },
-      { icon: MapPin, label: "Standorte, die man findet", desc: "Düsseldorf und Köln mit Öffnungszeiten und Karte." },
-      { icon: Handshake, label: "Großhandel und Franchise", desc: "ein Weg für Bars, Cafés und künftige Partner." },
+      { icon: Monitor, label: "Website, die Ergebnisse zeigt", desc: "Ein Auftritt für Handwerk, Agenturen und Immobilien, vom ersten Eindruck bis zur Potenzialanalyse." },
+      { icon: FileText, label: "Lead-Magnet aus dem Rollenspiel-Video", desc: "Aus YouTube-Zuschauern werden Kontakte: Leitfaden als PDF gegen E-Mail, sofort zugestellt." },
+      { icon: Megaphone, label: "111 Ad-Creatives in 3 Formaten", desc: "Posts und Stories, die seine Erfolgsgeschichten erzählen, zuerst fürs Handy gedacht." },
     ],
-    tiles: ["/referenzen/acai-1-v2.webp", "/referenzen/acai-2-v2.webp", "/referenzen/acai-3-v2.webp", "/referenzen/acai-4-v2.webp"],
+    tiles: ["/referenzen/selmir-1.webp", "/referenzen/selmir-2.webp", "/referenzen/selmir-3.webp", "/referenzen/selmir-4.webp"],
+  },
+  {
+    client: "LokShift",
+    lead: "Disposition für Bahnbetriebe,",
+    accent: "in einer Oberfläche.",
+    result: "120+ Schichten täglich live disponiert und 80 % weniger Verwaltungsaufwand, im Web und als App.",
+    bullets: [
+      { icon: CalendarClock, label: "Smarte Disposition", desc: "Schichten in Sekunden zuweisen, mit Qualifikations- und Verfügbarkeitscheck in Echtzeit." },
+      { icon: Clock, label: "Zeitkonto und Spesen automatisch", desc: "Soll/Ist, Überstunden und Verpflegungsspesen gesetzeskonform berechnet, Berichte per Klick als PDF." },
+      { icon: Smartphone, label: "Web-App und Mobile-App", desc: "Disponenten am Rechner, Lokführer unterwegs: Schichtänderungen erreichen jeden in unter 60 Sekunden." },
+    ],
+    tiles: ["/referenzen/lokshift-1.webp", "/referenzen/lokshift-2.webp", "/referenzen/lokshift-3.webp", "/referenzen/lokshift-4.webp"],
+  },
+  {
+    client: "FairPflegeBox",
+    lead: "Pflegehilfsmittel,",
+    accent: "kostenlos bis vor die Tür.",
+    result: "300+ Pflegeboxen geliefert, 100 % über die Pflegekasse abgerechnet.",
+    bullets: [
+      { icon: ClipboardCheck, label: "Bewerbung in wenigen Minuten", desc: "Online-Antrag ohne Papierformulare, die Abrechnung mit der Pflegekasse läuft im Hintergrund." },
+      { icon: Package, label: "Jeden Monat geliefert", desc: "Bis zu 42 € Budget im Monat, Produkte frei wählbar und jederzeit anpassbar." },
+      { icon: HeartHandshake, label: "Vertrauen bei Familien", desc: "Ein Auftritt, der Angehörigen Sicherheit gibt, mit echten Stimmen und klaren Antworten." },
+    ],
+    tiles: ["/referenzen/fairpflegebox-1.webp", "/referenzen/fairpflegebox-2.webp", "/referenzen/fairpflegebox-3.webp", "/referenzen/fairpflegebox-4.webp"],
   },
 ];
 
@@ -194,6 +236,36 @@ const PROJECTS_EN: Record<string, ProjectText> = {
       { label: "Ordering without detours", desc: "Uber Eats, Wolt and Lieferando straight from the site." },
       { label: "Locations people can find", desc: "Düsseldorf and Cologne with opening hours and a map." },
       { label: "Wholesale and franchise", desc: "one route for bars, cafés and future partners." },
+    ],
+  },
+  "Selmir Suljkanovic": {
+    lead: "Expertise turned into",
+    accent: "a system that sells.",
+    result: "Website, landing pages, lead magnet and 111 ad creatives in 3 formats: a presence that books first calls.",
+    bullets: [
+      { label: "A website that shows results", desc: "One presence for trades, agencies and real estate, from first impression to the potential analysis." },
+      { label: "Lead magnet from the role-play video", desc: "YouTube viewers become contacts: the guide as a PDF in exchange for an email, delivered instantly." },
+      { label: "111 ad creatives in 3 formats", desc: "Posts and stories that tell his success stories, designed for the phone first." },
+    ],
+  },
+  LokShift: {
+    lead: "Dispatching for rail operators,",
+    accent: "in one interface.",
+    result: "120+ shifts dispatched live every day and 80 % less admin work, on the web and as an app.",
+    bullets: [
+      { label: "Smart dispatching", desc: "Assign shifts in seconds, with real-time qualification and availability checks." },
+      { label: "Time accounts and expenses, automatic", desc: "Planned vs actual, overtime and meal allowances calculated by the rules, reports as PDF in one click." },
+      { label: "Web app and mobile app", desc: "Dispatchers at the desk, drivers on the move: shift changes reach everyone in under 60 seconds." },
+    ],
+  },
+  FairPflegeBox: {
+    lead: "Care supplies,",
+    accent: "free to the front door.",
+    result: "300+ care boxes delivered, 100 % billed through the statutory care insurance.",
+    bullets: [
+      { label: "Apply in a few minutes", desc: "An online application with no paper forms; billing with the care insurer runs in the background." },
+      { label: "Delivered every month", desc: "Up to €42 budget a month, products freely chosen and adjustable at any time." },
+      { label: "Trust with families", desc: "A presence that reassures relatives, with real voices and clear answers." },
     ],
   },
 };
@@ -266,7 +338,7 @@ function Bento({ p }: { p: Project }) {
 
 // Small horizontal offsets keep the stack readable as a deck (Figma staggers
 // the cards 10px each).
-const OFFSETS = [0, 10, -8, 6, -4, 8];
+const OFFSETS = [0, 10, -8, 6, -4, 8, -6, 4, -2];
 
 export default function Referenzen() {
   const root = useRef<HTMLDivElement>(null);
@@ -344,7 +416,7 @@ export default function Referenzen() {
           });
 
           // REST: card alone on top · TRANS: next card rises. Each unit maps to
-          // SCROLL_PER_UNIT viewports of scroll (6 cards ≈ 5.4 screens).
+          // SCROLL_PER_UNIT viewports of scroll (9 cards ≈ 8.6 screens).
           const REST = 0.7;
           const TRANS = 1.6;
           const SCROLL_PER_UNIT = 0.45;
@@ -413,8 +485,8 @@ export default function Referenzen() {
           </h2>
           <p className="t-body-l mt-4 max-w-[560px] text-[#5c5954]">
             {t(
-              "Sechs Projekte aus der Zusammenarbeit mit Unternehmen, die du im Zweifel selbst anrufen kannst.",
-              "Six projects with businesses you can simply call yourself if you have any doubts.",
+              "Neun Projekte aus der Zusammenarbeit mit Unternehmen, die du im Zweifel selbst anrufen kannst.",
+              "Nine projects with businesses you can simply call yourself if you have any doubts.",
             )}
           </p>
         </div>
