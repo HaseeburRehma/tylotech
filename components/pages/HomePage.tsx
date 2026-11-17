@@ -17,6 +17,7 @@ import Gruender from "@/components/sections/Gruender";
 import Podcast from "@/components/sections/Podcast";
 import Branchen from "@/components/sections/Branchen";
 import Referenzen from "@/components/sections/Referenzen";
+import CaseStudiesHome from "@/components/sections/CaseStudiesHome";
 import OToene from "@/components/sections/OToene";
 import Stimmen from "@/components/sections/Stimmen";
 import Passt from "@/components/sections/Passt";
@@ -34,6 +35,7 @@ export default function HomePage() {
         <Hero />
         <TrustStrip />
         <TyloHQ />
+        <CaseStudiesHome />
         <Warum />
         <Wachstum />
         {/* <Praxis /> */}
