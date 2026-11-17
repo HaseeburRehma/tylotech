@@ -228,7 +228,7 @@ export default function CaseResults({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-10 lg:gap-14">
-        <CsHead icon={TrendingUp} eyebrow={t("Ergebnisse", "Results")} title={t("Was sich _verändert_ hat.", "What _changed._")} />
+        <CsHead icon={TrendingUp} eyebrow={t("Ergebnisse", "Results")} title={t("Ergebnisse & _Business Impact._", "Results & _business impact._")} />
 
         {r.wide && r.compact.length === 2 ? (
           <div className="flex flex-col gap-5 lg:gap-6">

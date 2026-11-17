@@ -9,14 +9,13 @@ import CaseNext from "@/components/case-study/CaseNext";
 import CaseCTA from "@/components/case-study/CaseCTA";
 import type { CaseStudy } from "@/lib/caseStudies";
 
-/* Figma "Case Study · …" template, section order 01–14. */
+/* Figma "Case Study · …" template. Order: client overview, challenge, approach, then results & business impact. */
 export default function CaseStudyPage({ c }: { c: CaseStudy }) {
   return (
     <>
       <Nav />
       <main>
         <CaseHero c={c} />
-        <CaseResults c={c} />
         <CaseOverview c={c} />
         <CaseChallenges c={c} />
         <CaseInsights c={c} />
@@ -27,6 +26,7 @@ export default function CaseStudyPage({ c }: { c: CaseStudy }) {
         <CaseSocial c={c} />
         <CaseOffline c={c} />
         <CaseLearnings c={c} />
+        <CaseResults c={c} />
         <CaseNext current={c} />
         <CaseCTA />
       </main>

@@ -20,7 +20,7 @@ export function CaseOverview({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-10 lg:gap-14">
-        <CsHead icon={Lightbulb} eyebrow={t("Überblick", "Overview")} title={t("Worum es _ging._", "What it was _about._")} />
+        <CsHead icon={Lightbulb} eyebrow={t("Überblick", "Overview")} title={t("Der _Kundenüberblick._", "Client _overview._")} />
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-20">
           <div data-rv className="flex flex-col gap-4">
             <p className="eyebrow text-[#7d7973]">{t("Ausgangslage", "Starting point")}</p>
@@ -100,7 +100,7 @@ export function CaseApproach({ c }: { c: CaseStudy }) {
   return (
     <section ref={root} className="bg-[#f6f5f3] py-16 sm:py-24 lg:py-28">
       <Container className="flex flex-col gap-10 lg:gap-14">
-        <CsHead icon={Workflow} eyebrow={t("Vorgehen", "Approach")} title={t("So sind wir _vorgegangen._", "How we _went about it._")} sub={c.approach.intro[locale]} />
+        <CsHead icon={Workflow} eyebrow={t("Lösung", "Solution")} title={t("Unser _Vorgehen._", "Our _approach._")} sub={c.approach.intro[locale]} />
         <ol data-rv-group className="cs-steps grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {c.approach.steps.map((s, i) => (
             <li key={i} className="flex flex-col gap-5">
